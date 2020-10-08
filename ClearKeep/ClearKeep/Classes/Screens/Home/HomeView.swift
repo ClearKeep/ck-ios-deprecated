@@ -6,10 +6,27 @@
 //
 
 import SwiftUI
+import SwiftProtobuf
+import NIO
+import GRPC
+import SignalProtocol
 
 struct HomeView: View {
+    
+    
+    private func testSignal() {
+        
+        Backend.shared.authenticator.authenticated { (result, error) in
+            
+        }
+        
+    }
+    
+    
     var body: some View {
-        Text("ClearKeep")
+        Text("ClearKeep").onAppear(perform: {
+            self.testSignal()
+        })
     }
 }
 
