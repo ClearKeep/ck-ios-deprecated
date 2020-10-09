@@ -13,11 +13,13 @@ class Backend: ObservableObject {
     
     private let group: MultiThreadedEventLoopGroup
     
-    private let client: GRPCClient
+    private let client: Signalc_SignalKeyDistributionClient
     
     private let connection: ClientConnection
     
     var authenticator: Authenticator
+    
+    var signalService: SignalService
     
     
     init(host: String = "localhost", port: Int = 50051) {
@@ -27,9 +29,11 @@ class Backend: ObservableObject {
         
         connection = ClientConnection(configuration: configuration)
         
-        client = GRPC.AnyServiceClient(channel: connection)
+        client = Signalc_SignalKeyDistributionClient(channel: connection)
         
         authenticator = Authenticator(client)
+        
+        signalService = SignalService(client, authenticator)
     }
     
     deinit {
@@ -50,8 +54,10 @@ class Backend: ObservableObject {
     }
     
     
-    func authenticated(signAddresss: SignalAddress, bundleStore: CKBundleStore, _ completion: @escaping (Bool, Error?) -> Void) {
+    func authenticated(_ completion: @escaping (Bool, Error?) -> Void) {
        
+//        signalService.listen(heard: <#T##((String, Signalc_Publication) -> Void)##((String, Signalc_Publication) -> Void)##(String, Signalc_Publication) -> Void#>)
+        signalService.subscribe(clientID: authenticator.clientID, completion)
         
     }
 }

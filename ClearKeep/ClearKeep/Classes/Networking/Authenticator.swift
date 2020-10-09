@@ -8,20 +8,22 @@ import GRPC
 
 class Authenticator {
     
-    private let client: GRPCClient
+    private let client: Signalc_SignalKeyDistributionClient
+    
+    var clientID: String = ""
     
     
-    init(_ client: GRPCClient) {
+    init(_ client: Signalc_SignalKeyDistributionClient) {
         self.client = client
-
     }
     
     
-    private func authenticate(signalAddess: SignalAddress = SignalAddress(identifier: "bob", deviceId: 1),
-                      bundleStore: CKBundleStore = CKBundleStore(),
+    // call register
+    private func authenticate(signalAddess: SignalAddress,
+                      bundleStore: CKBundleStore,
                       _ completion: @escaping (Bool, Error?) -> Void,
                       submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
-                        -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_SignalKeysUserResponse>) {
+                        -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
         
         
         let request: Signalc_SignalRegisterKeysRequest = .with {
@@ -36,14 +38,75 @@ class Authenticator {
         
         submit(request, nil).response.whenComplete { (result) in
             
-            print(result)
-            self.authenticated (completion)
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    print(response)
+                    completion(true, nil)
+                case .failure(_):
+                    self.nauthenticate(completion)
+                }
+            }
         }
     }
     
     
-    func authenticated(_ completion: @escaping (Bool, Error?) -> Void) {
+    
+    private func authenticated(cliendID: String,
+                               _ completion: @escaping (Bool, Error?) -> Void) {
+        
+        self.clientID = cliendID
+        Backend.shared.authenticated(completion)
+    }
+    
+    
+    private func nauthenticate(_ completion: @escaping (Bool, Error?) -> Void) {
+        print("auth failed")
+        clientID = ""
+        completion(false, nil)
+    }
+    
+    
+    private func login(_ clientID: String,
+               _ completion: @escaping (Bool, Error?) -> Void,
+               submit: @escaping (Signalc_SignalKeysUserRequest, CallOptions?)
+                -> UnaryCall<Signalc_SignalKeysUserRequest, Signalc_SignalKeysUserResponse>) {
+        
+        let request: Signalc_SignalKeysUserRequest = .with {
+            $0.clientID = clientID
+        }
+        
+        submit(request, nil).response.whenComplete { (result) in
 
-      
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    print(response)
+                    self.clientID = response.clientID
+                    self.authenticated(cliendID: self.clientID,
+                                       completion)
+                completion(true, nil)
+                case .failure(_):
+                    self.nauthenticate(completion)
+                }
+            }
+        }
+    }
+    
+}
+
+extension Authenticator {
+    
+    func register(_ signalAddess: SignalAddress, bundleStore: CKBundleStore, completion: @escaping (Bool, Error?) -> Void) {
+        authenticate(signalAddess: signalAddess, bundleStore: bundleStore, completion, submit: client.registerBundleKey)
+    }
+    
+}
+
+extension Authenticator {
+    
+    func login(_ clientID: String, _ completion: @escaping (Bool, Error?) -> Void) {
+        
+        login(clientID, completion, submit: client.getKeyBundleByUserId)
     }
 }

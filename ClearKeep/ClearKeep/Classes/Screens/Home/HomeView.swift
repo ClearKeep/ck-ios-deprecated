@@ -16,10 +16,23 @@ struct HomeView: View {
     
     private func testSignal() {
         
-        Backend.shared.authenticator.authenticated { (result, error) in
-            
-        }
         
+        
+
+
+//
+//        Backend.shared.authenticated(signAddresss: signalAddress, bundleStore: bobStore) { (result, error) in
+//            
+//            print(result)
+//        }
+        
+        
+        
+     
+        
+        
+        
+      
     }
     
     

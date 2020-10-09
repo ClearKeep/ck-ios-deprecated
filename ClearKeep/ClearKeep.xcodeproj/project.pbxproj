@@ -26,10 +26,14 @@
 		1664F1C1252C6B4900FF37AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1664F1BF252C6B4900FF37AD /* LaunchScreen.storyboard */; };
 		1664F1CC252C6B4900FF37AD /* ClearKeepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1CB252C6B4900FF37AD /* ClearKeepTests.swift */; };
 		1664F1D7252C6B4900FF37AD /* ClearKeepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1D6252C6B4900FF37AD /* ClearKeepUITests.swift */; };
-		1664F1FA252C79CF00FF37AD /* signalc.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1F9252C79CF00FF37AD /* signalc.pb.swift */; };
 		1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1664F22A252C7CBF00FF37AD /* SwiftProtobuf */; };
-		1664F25A252C809A00FF37AD /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 1664F259252C809A00FF37AD /* GRPC */; };
-		1664F25C252C809A00FF37AD /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = 1664F25B252C809A00FF37AD /* CGRPCZlib */; };
+		16BDC85125306BC400552C48 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BDC85025306BC400552C48 /* LoginView.swift */; };
+		16BDC85625306C1200552C48 /* UX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BDC85525306C1200552C48 /* UX.swift */; };
+		16C83CB425300887002E3115 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB325300887002E3115 /* GRPC */; };
+		16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB525300887002E3115 /* CGRPCZlib */; };
+		16C83CBF25301AAB002E3115 /* signalc.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CBD25301AAB002E3115 /* signalc.grpc.swift */; };
+		16C83CC025301AAB002E3115 /* signalc.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CBE25301AAB002E3115 /* signalc.pb.swift */; };
+		16C83CC525303F20002E3115 /* SignalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CC425303F20002E3115 /* SignalService.swift */; };
 		4228CC8408FD5A0518514892 /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17D1259E10243B82A06C4CB4 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
 		496333856452C2030BC6EC6B /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CC991D5B6C57114B32866C /* Pods_ClearKeepTests.framework */; };
 		7FFAF1CC007BE50BCB892A02 /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF80F3B19386AA6DDD457AD3 /* Pods_ClearKeep.framework */; };
@@ -79,7 +83,11 @@
 		1664F1D2252C6B4900FF37AD /* ClearKeepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClearKeepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1664F1D6252C6B4900FF37AD /* ClearKeepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearKeepUITests.swift; sourceTree = "<group>"; };
 		1664F1D8252C6B4900FF37AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1664F1F9252C79CF00FF37AD /* signalc.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc.pb.swift; sourceTree = "<group>"; };
+		16BDC85025306BC400552C48 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		16BDC85525306C1200552C48 /* UX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UX.swift; sourceTree = "<group>"; };
+		16C83CBD25301AAB002E3115 /* signalc.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc.grpc.swift; sourceTree = "<group>"; };
+		16C83CBE25301AAB002E3115 /* signalc.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc.pb.swift; sourceTree = "<group>"; };
+		16C83CC425303F20002E3115 /* SignalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalService.swift; sourceTree = "<group>"; };
 		17D1259E10243B82A06C4CB4 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26419A88B8516003A26B1BDE /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		27E434FBCD7DDEA6CCC933EC /* Pods-ClearKeep-ClearKeepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -95,10 +103,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1664F25A252C809A00FF37AD /* GRPC in Frameworks */,
 				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
-				1664F25C252C809A00FF37AD /* CGRPCZlib in Frameworks */,
+				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
 				7FFAF1CC007BE50BCB892A02 /* Pods_ClearKeep.framework in Frameworks */,
+				16C83CB425300887002E3115 /* GRPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +158,7 @@
 		16208E33252D63DC000A6CE7 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				16BDC85525306C1200552C48 /* UX.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -182,6 +191,7 @@
 		16208E38252D6430000A6CE7 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				16C83CC425303F20002E3115 /* SignalService.swift */,
 				165D590C252DABE600AA1E80 /* Message */,
 			);
 			path = Service;
@@ -220,6 +230,7 @@
 		16208E43252D7339000A6CE7 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				16BDC85025306BC400552C48 /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -302,7 +313,8 @@
 		1664F1EA252C6D0400FF37AD /* protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				1664F1F9252C79CF00FF37AD /* signalc.pb.swift */,
+				16C83CBD25301AAB002E3115 /* signalc.grpc.swift */,
+				16C83CBE25301AAB002E3115 /* signalc.pb.swift */,
 			);
 			path = protobuf;
 			sourceTree = "<group>";
@@ -350,8 +362,8 @@
 			name = ClearKeep;
 			packageProductDependencies = (
 				1664F22A252C7CBF00FF37AD /* SwiftProtobuf */,
-				1664F259252C809A00FF37AD /* GRPC */,
-				1664F25B252C809A00FF37AD /* CGRPCZlib */,
+				16C83CB325300887002E3115 /* GRPC */,
+				16C83CB525300887002E3115 /* CGRPCZlib */,
 			);
 			productName = ClearKeep;
 			productReference = 1664F1B1252C6B4700FF37AD /* ClearKeep.app */;
@@ -429,7 +441,7 @@
 			mainGroup = 1664F1A8252C6B4700FF37AD;
 			packageReferences = (
 				1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */,
-				1664F258252C809A00FF37AD /* XCRemoteSwiftPackageReference "grpc-swift" */,
+				16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */,
 			);
 			productRefGroup = 1664F1B2252C6B4700FF37AD /* Products */;
 			projectDirPath = "";
@@ -577,7 +589,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1664F1FA252C79CF00FF37AD /* signalc.pb.swift in Sources */,
 				165D5920252DB5F200AA1E80 /* CKPreKeyStore.swift in Sources */,
 				1655502A252EBE74008E66D0 /* CKSignedPreKeyStore.swift in Sources */,
 				16555014252EB1F9008E66D0 /* CKBundleStore.swift in Sources */,
@@ -588,9 +599,14 @@
 				165D591B252DB4D200AA1E80 /* CKIdentityKeyStore.swift in Sources */,
 				165D590E252DAD4D00AA1E80 /* SignalAddress.swift in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
+				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				1664F1B7252C6B4700FF37AD /* SceneDelegate.swift in Sources */,
+				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				165D5916252DAF5500AA1E80 /* SignalSenderKeyName.swift in Sources */,
+				16C83CC025301AAB002E3115 /* signalc.pb.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
+				16C83CBF25301AAB002E3115 /* signalc.grpc.swift in Sources */,
+				16BDC85625306C1200552C48 /* UX.swift in Sources */,
 				1655500F252E2C33008E66D0 /* CKCryptoProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -938,7 +954,7 @@
 				minimumVersion = 1.12.0;
 			};
 		};
-		1664F258252C809A00FF37AD /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
+		16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/grpc/grpc-swift";
 			requirement = {
@@ -954,14 +970,14 @@
 			package = 1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */;
 			productName = SwiftProtobuf;
 		};
-		1664F259252C809A00FF37AD /* GRPC */ = {
+		16C83CB325300887002E3115 /* GRPC */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1664F258252C809A00FF37AD /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
 			productName = GRPC;
 		};
-		1664F25B252C809A00FF37AD /* CGRPCZlib */ = {
+		16C83CB525300887002E3115 /* CGRPCZlib */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1664F258252C809A00FF37AD /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
 			productName = CGRPCZlib;
 		};
 /* End XCSwiftPackageProductDependency section */
