@@ -21,11 +21,10 @@ class Authenticator {
     // call register
     private func authenticate(signalAddess: SignalAddress,
                       bundleStore: CKBundleStore,
-                      _ completion: @escaping (Bool, Error?) -> Void,
+                      _ completion: @escaping (Any?, Error?) -> Void,
                       submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
                         -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
-        
-        
+                
         let request: Signalc_SignalRegisterKeysRequest = .with {
             $0.clientID = signalAddess.identifier
             $0.deviceID = Int32(signalAddess.deviceId)
@@ -41,8 +40,7 @@ class Authenticator {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    print(response)
-                    completion(true, nil)
+                    completion(response, nil)
                 case .failure(_):
                     self.nauthenticate(completion)
                 }
@@ -53,22 +51,22 @@ class Authenticator {
     
     
     private func authenticated(cliendID: String,
-                               _ completion: @escaping (Bool, Error?) -> Void) {
+                               _ completion: @escaping (Any?, Error?) -> Void) {
         
         self.clientID = cliendID
         Backend.shared.authenticated(completion)
     }
     
     
-    private func nauthenticate(_ completion: @escaping (Bool, Error?) -> Void) {
+    private func nauthenticate(_ completion: @escaping (Any?, Error?) -> Void) {
         print("auth failed")
         clientID = ""
-        completion(false, nil)
+        completion(nil, nil)
     }
     
     
     private func login(_ clientID: String,
-               _ completion: @escaping (Bool, Error?) -> Void,
+               _ completion: @escaping (Any?, Error?) -> Void,
                submit: @escaping (Signalc_SignalKeysUserRequest, CallOptions?)
                 -> UnaryCall<Signalc_SignalKeysUserRequest, Signalc_SignalKeysUserResponse>) {
         
@@ -81,11 +79,34 @@ class Authenticator {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    print(response)
                     self.clientID = response.clientID
                     self.authenticated(cliendID: self.clientID,
                                        completion)
-                completion(true, nil)
+                    completion(response, nil)
+                case .failure(_):
+                    self.nauthenticate(completion)
+                }
+            }
+        }
+    }
+    
+    private func pushMessage(_ senderId: String,_ receiveID: String,_ message: Data,
+               _ completion: @escaping (Any?, Error?) -> Void,
+               submit: @escaping (Signalc_PublishRequest, CallOptions?)
+                -> UnaryCall<Signalc_PublishRequest, Signalc_BaseResponse>) {
+        
+        let request: Signalc_PublishRequest = .with {
+            $0.senderID = senderId
+            $0.receiveID = receiveID
+            $0.message = message
+        }
+        
+        submit(request, nil).response.whenComplete { (result) in
+
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    completion(response, nil)
                 case .failure(_):
                     self.nauthenticate(completion)
                 }
@@ -97,7 +118,7 @@ class Authenticator {
 
 extension Authenticator {
     
-    func register(_ signalAddess: SignalAddress, bundleStore: CKBundleStore, completion: @escaping (Bool, Error?) -> Void) {
+    func register(_ signalAddess: SignalAddress, bundleStore: CKBundleStore, completion: @escaping (Any?, Error?) -> Void) {
         authenticate(signalAddess: signalAddess, bundleStore: bundleStore, completion, submit: client.registerBundleKey)
     }
     
@@ -105,8 +126,15 @@ extension Authenticator {
 
 extension Authenticator {
     
-    func login(_ clientID: String, _ completion: @escaping (Bool, Error?) -> Void) {
+    func login(_ clientID: String, _ completion: @escaping (Any?, Error?) -> Void) {
         
         login(clientID, completion, submit: client.getKeyBundleByUserId)
+    }
+}
+
+extension Authenticator {
+    
+    func pushMessage(_ senderId: String,_ receiveID: String,_ message: Data, _ completion: @escaping (Any?, Error?) -> Void) {
+        pushMessage(senderId, receiveID, message, completion, submit: client.publish)
     }
 }

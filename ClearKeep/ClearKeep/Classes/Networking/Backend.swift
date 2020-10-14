@@ -54,10 +54,16 @@ class Backend: ObservableObject {
     }
     
     
-    func authenticated(_ completion: @escaping (Bool, Error?) -> Void) {
+    func authenticated(_ completion: @escaping (Any?, Error?) -> Void) {
        
-//        signalService.listen(heard: <#T##((String, Signalc_Publication) -> Void)##((String, Signalc_Publication) -> Void)##(String, Signalc_Publication) -> Void#>)
+//        signalService.listen(heard: heard)
         signalService.subscribe(clientID: authenticator.clientID, completion)
         
     }
+    
+//    func heard(_ senderId: String, _ response: Signalc_Publication) {
+//        print(senderId ?? "test")
+//        print(response ?? "test")
+//
+//    }
 }
