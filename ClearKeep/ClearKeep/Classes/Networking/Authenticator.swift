@@ -10,30 +10,42 @@ class Authenticator {
     
     private let client: Signalc_SignalKeyDistributionClient
     
-    var clientID: String = ""
+    var recipientStore: Signalc_SignalKeysUserResponse?
     
+    var recipientID: String = ""
+    
+    var clientStore: CKClientStore!
     
     init(_ client: Signalc_SignalKeyDistributionClient) {
         self.client = client
     }
     
+    func loggedIn() -> Bool {
+        
+        if clientStore == nil {
+            return false
+        }
+        
+        return true
+    }
     
     // call register
-    private func authenticate(signalAddess: SignalAddress,
-                      bundleStore: CKBundleStore,
-                      _ completion: @escaping (Bool, Error?) -> Void,
-                      submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
-                        -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
+    private func authenticate(bundleStore: CKClientStore,
+                              _ completion: @escaping (Bool, Error?) -> Void,
+                              submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
+                                -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
         
         
         let request: Signalc_SignalRegisterKeysRequest = .with {
-            $0.clientID = signalAddess.identifier
-            $0.deviceID = Int32(signalAddess.deviceId)
-            $0.identityKeyPublic = try! bundleStore.identityKeyStore.getIdentityKeyPublicData()
-            $0.registrationID = Int32(bundleStore.preKeyStore.lastId)
-            $0.preKey = try! bundleStore.preKeyStore.preKey(for: bundleStore.preKeyStore.lastId)
-            $0.signedPreKeyID = Int32(bundleStore.signedPreKeyStore.lastId)
-            $0.signedPreKey = try! bundleStore.signedPreKeyStore.signedPreKey(for: bundleStore.signedPreKeyStore.lastId)
+            $0.clientID = bundleStore.address.name
+            $0.deviceID = bundleStore.address.deviceId
+            $0.registrationID = bundleStore.localRegistrationId
+            $0.identityKeyPublic = bundleStore.identityKeyPair.publicKey
+            $0.preKeyID = Int32(bundleStore.preKey1.preKeyId)
+            $0.preKey = bundleStore.preKey1.serializedData()!
+            $0.signedPreKeyID = Int32(bundleStore.signedPreKey.preKeyId)
+            $0.signedPreKey = bundleStore.signedPreKey.serializedData()!
+            $0.signedPreKeySignature = bundleStore.signedPreKey.signature
         }
         
         submit(request, nil).response.whenComplete { (result) in
@@ -44,7 +56,9 @@ class Authenticator {
                     print(response)
                     completion(true, nil)
                 case .failure(_):
-                    self.nauthenticate(completion)
+                    self.authenticated(cliendID: "") { (_, _, _) in
+                        
+                    }
                 }
             }
         }
@@ -53,22 +67,24 @@ class Authenticator {
     
     
     private func authenticated(cliendID: String,
-                               _ completion: @escaping (Bool, Error?) -> Void) {
+                               _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
         
-        self.clientID = cliendID
-        Backend.shared.authenticated(completion)
+        if recipientID.isEmpty || recipientStore == nil {
+            Backend.shared.authenticated(completion)
+        }
+    
     }
     
     
-    private func nauthenticate(_ completion: @escaping (Bool, Error?) -> Void) {
+    private func nauthenticate(_ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
         print("auth failed")
-        clientID = ""
-        completion(false, nil)
+        recipientID = ""
+        completion(false, nil, nil)
     }
     
     
     private func login(_ clientID: String,
-               _ completion: @escaping (Bool, Error?) -> Void,
+               _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void,
                submit: @escaping (Signalc_SignalKeysUserRequest, CallOptions?)
                 -> UnaryCall<Signalc_SignalKeysUserRequest, Signalc_SignalKeysUserResponse>) {
         
@@ -81,11 +97,9 @@ class Authenticator {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    print(response)
-                    self.clientID = response.clientID
-                    self.authenticated(cliendID: self.clientID,
+                    self.authenticated(cliendID: response.clientID,
                                        completion)
-                completion(true, nil)
+                completion(true, nil, response)
                 case .failure(_):
                     self.nauthenticate(completion)
                 }
@@ -97,16 +111,15 @@ class Authenticator {
 
 extension Authenticator {
     
-    func register(_ signalAddess: SignalAddress, bundleStore: CKBundleStore, completion: @escaping (Bool, Error?) -> Void) {
-        authenticate(signalAddess: signalAddess, bundleStore: bundleStore, completion, submit: client.registerBundleKey)
+    func register(bundleStore: CKClientStore, completion: @escaping (Bool, Error?) -> Void) {
+        authenticate(bundleStore: bundleStore, completion, submit: client.registerBundleKey)
     }
     
 }
 
 extension Authenticator {
     
-    func login(_ clientID: String, _ completion: @escaping (Bool, Error?) -> Void) {
-        
+    func login(_ clientID: String, _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
         login(clientID, completion, submit: client.getKeyBundleByUserId)
     }
 }

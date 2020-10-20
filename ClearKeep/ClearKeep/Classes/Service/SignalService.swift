@@ -11,14 +11,11 @@ class SignalService {
     
     fileprivate let client: Signalc_SignalKeyDistributionClient
     
-    fileprivate let authenticator: Authenticator
     
-    
-    init(_ client: Signalc_SignalKeyDistributionClient, _ authenticator: Authenticator) {
+    init(_ client: Signalc_SignalKeyDistributionClient) {
         self.client = client
-        self.authenticator = authenticator
     }
-    
+
     
 }
 
@@ -28,7 +25,7 @@ extension SignalService {
     func listen(heard: @escaping ((String, Signalc_Publication) -> Void)) {
         
         let request: Signalc_SubscribeAndListenRequest = .with {
-            $0.clientID = authenticator.clientID
+            $0.clientID = Backend.shared.authenticator.clientStore.address.name
         }
         
         
@@ -59,7 +56,7 @@ extension SignalService {
     
     
     func subscribe(clientID: String,
-                   _ completion: @escaping (Bool, Error?) -> Void) {
+                   _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
         
         print("subscribe to \(clientID)")
         
