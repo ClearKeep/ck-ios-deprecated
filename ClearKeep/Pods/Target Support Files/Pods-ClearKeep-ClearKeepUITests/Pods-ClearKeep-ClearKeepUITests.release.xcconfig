@@ -1,11 +1,9 @@
-ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
 CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CCurve25519" "${PODS_CONFIGURATION_BUILD_DIR}/CommonCryptoModule" "${PODS_CONFIGURATION_BUILD_DIR}/Curve25519" "${PODS_CONFIGURATION_BUILD_DIR}/LibSignalProtocolSwift" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SignalProtocolC" "${PODS_CONFIGURATION_BUILD_DIR}/SignalProtocolObjC"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CCurve25519/CCurve25519.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/CommonCryptoModule/CommonCryptoModule.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Curve25519/Curve25519.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/LibSignalProtocolSwift/SignalProtocol.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf/SwiftProtobuf.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SignalProtocolC/SignalProtocolC.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SignalProtocolObjC/SignalProtocolObjC.framework/Headers" $(PODS_ROOT)/SignalProtocolC/src $(PODS_ROOT)/SignalProtocolC/src/curve25519 $(PODS_ROOT)/SignalProtocolC/src/curve25519/ed25519 $(PODS_ROOT)/SignalProtocolC/src/protobuf-c
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_LDFLAGS = $(inherited) -framework "CCurve25519" -framework "CommonCryptoModule" -framework "Curve25519" -framework "SignalProtocol" -framework "SwiftProtobuf"
-OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
+OTHER_LDFLAGS = $(inherited) -framework "SignalProtocolC" -framework "SignalProtocolObjC"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.

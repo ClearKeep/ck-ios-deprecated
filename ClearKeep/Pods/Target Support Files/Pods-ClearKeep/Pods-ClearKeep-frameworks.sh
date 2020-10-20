@@ -175,18 +175,12 @@ code_sign_if_enabled() {
 }
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/CCurve25519/CCurve25519.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/CommonCryptoModule/CommonCryptoModule.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Curve25519/Curve25519.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SignalProtocolC/SignalProtocolC.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SignalProtocolObjC/SignalProtocolObjC.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/CCurve25519/CCurve25519.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/CommonCryptoModule/CommonCryptoModule.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Curve25519/Curve25519.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/LibSignalProtocolSwift/SignalProtocol.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SignalProtocolC/SignalProtocolC.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SignalProtocolObjC/SignalProtocolObjC.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
