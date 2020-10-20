@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+        /*
         let contentView = LoginView()
 
         // Use a UIHostingController as window root view controller.
@@ -23,9 +23,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
+        } */
+        
+        show(scene)
+
+    }
+    
+    private func show(_ scene: UIScene) {
+        let contentView = MotherView()
+            .environmentObject(ViewRouter())
+
+        if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            window.rootViewController = UIHostingController(rootView: contentView)
+            self.window = window
+            window.makeKeyAndVisible()
         }
-
-
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

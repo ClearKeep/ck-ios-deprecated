@@ -4,11 +4,11 @@ import SwiftUI
 struct LoginView: View {
     
     @State var username: String = ""
-    @State var password: String = ""
+    @State var deviceID: String = ""
 
     @State var authenticationDidFail: Bool = false
     @State var authenticationDidSucceed: Bool = false
-//    @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var viewRouter: ViewRouter
     
     
     var body: some View {
@@ -18,7 +18,9 @@ struct LoginView: View {
             TextFieldContent(key: "Username", value: $username)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-            PasswordSecureField(password: $password)
+            TextFieldContent(key: "DeviceID", value: $deviceID)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
             HStack {
                 Button(action: login) {
                     ButtonContent("LOGIN")
@@ -38,41 +40,33 @@ extension LoginView {
     
     private func register() {
         
-        let signalAddress = SignalAddress(identifier: "bob", deviceId: 111)
-
-        let bobStore = CKBundleStore()
-
-        do {
-
-            let prekey = try bobStore.createPreKeys(count: 1)[0]
-
-            try bobStore.preKeyStore.store(preKey: prekey, for: 11)
-
-            ///
-            let signedPreKey = try bobStore.updateSignedPrekey()
-
-            try bobStore.signedPreKeyStore.store(signedPreKey: signedPreKey, for: 22)
-
-        } catch {
-            print(error.localizedDescription)
+        guard let deviceID: Int32 = Int32(deviceID) else {
+            print("DeviceID always number")
+            return
         }
         
+        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
         
-        Backend.shared.authenticator.register(signalAddress, bundleStore: bobStore) { (result, error) in
+        Backend.shared.authenticator.clientStore = clientStore
+        
+        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
             
+            print(result)
         }
     }
-    
 }
 
 extension LoginView {
     
     private func login() {
         
-        Backend.shared.authenticator.login("bob") { (result, error) in
+        Backend.shared.authenticator.login(username) { (result, error, response) in
             
-            
+            if result {
+                self.viewRouter.current = .masterDetail
+            }
         }
+        
     }
 
 }

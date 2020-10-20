@@ -9,42 +9,112 @@ import SwiftUI
 import SwiftProtobuf
 import NIO
 import GRPC
-import SignalProtocol
+
 
 struct HomeView: View {
     
+    @State private var nextMessage: String = ""
     
-    private func testSignal() {
+    private let selectedRoom: String
+    
+    @ObservedObject var resource = Backend.shared
+    
+    
+    init(clientID: String) {
+        self.selectedRoom = clientID
         
-        
-        
-
-
-//
-//        Backend.shared.authenticated(signAddresss: signalAddress, bundleStore: bobStore) { (result, error) in
-//            
-//            print(result)
-//        }
-        
-        
-        
-     
-        
-        
-        
-      
+        Backend.shared.authenticator.login(clientID) { (result, error, response) in
+            
+            guard let recipientStore = response else { return }
+            
+            Backend.shared.authenticator.recipientID = recipientStore.clientID
+            Backend.shared.authenticator.recipientStore = recipientStore
+        }
     }
     
     
     var body: some View {
-        Text("ClearKeep").onAppear(perform: {
-            self.testSignal()
-        })
+        List(resource.messages, id: \.newID) { landmark in
+            PostView(postModel: landmark)
+        }
+        .navigationBarTitle(Text(self.selectedRoom))
+        HStack {
+            TextFieldContent(key: "Next message", value: self.$nextMessage)
+            Button( action: {
+                self.send()
+            }){
+                Image(systemName: "paperplane")
+            }.padding(.trailing)
+        }
+    }
+    
+}
+
+extension HomeView {
+    
+    private func send() {
+        
+        guard let payload = $nextMessage.wrappedValue.data(using: .utf8) else {
+            return
+        }
+        
+        let post = PostModel(from: Backend.shared.authenticator.clientStore.address.name, message: payload)
+        
+        Backend.shared.messages.append(post)
+        
+        Backend.shared.send(nextMessage, to: selectedRoom) { (result, error) in
+            
+            print(result, " ----->")
+            
+        }
+        
+        nextMessage = ""
+    }
+}
+
+struct PostView: View {
+    
+    var postModel: PostModel
+    
+    var body: some View {
+        
+        let checkSender = postModel.from == Backend.shared.authenticator.clientStore.address.name
+        
+        if checkSender {
+            
+            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
+                Text(sender()).bold().foregroundColor(Color.red)
+                Text(stringValue()).alignmentGuide(.trailing) { d in
+                    d[.leading]
+                }
+            }
+            
+            return senderView
+            
+        } else {
+            
+            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
+                Text(sender()).bold().foregroundColor(Color.green)
+                Text(stringValue()).alignmentGuide(.trailing) { d in
+                    d[.trailing]
+                }
+            }
+            
+            return receiveView
+        }
+    }
+
+    private func stringValue() -> String {
+        return String(data: postModel.message, encoding: .utf8) ?? "x"
+    }
+    
+    private func sender() -> String {
+        return postModel.from
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(clientID: "A Room with a View")
     }
 }
