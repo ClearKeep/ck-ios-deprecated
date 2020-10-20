@@ -50,8 +50,11 @@ extension LoginView {
         Backend.shared.authenticator.clientStore = clientStore
         
         Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
-            
             print(result)
+            
+            if result {
+                self.viewRouter.current = .masterDetail
+            }
         }
     }
 }
