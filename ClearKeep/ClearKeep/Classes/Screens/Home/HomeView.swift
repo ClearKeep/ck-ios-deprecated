@@ -25,7 +25,10 @@ struct HomeView: View {
         
         Backend.shared.authenticator.login(clientID) { (result, error, response) in
             
-            guard let recipientStore = response else { return }
+            guard let recipientStore = response else {
+                print("Request prekey \(clientID) fail")
+                return
+            }
             
             Backend.shared.authenticator.recipientID = recipientStore.clientID
             Backend.shared.authenticator.recipientStore = recipientStore
@@ -45,6 +48,8 @@ struct HomeView: View {
             }){
                 Image(systemName: "paperplane")
             }.padding(.trailing)
+        }.onAppear() {
+            self.resource.messages.removeAll()
         }
     }
     
