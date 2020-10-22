@@ -45,11 +45,15 @@ struct Signalc_SignalRegisterKeysRequest {
 
   var identityKeyPublic: Data = Data()
 
+  var preKeyID: Int32 = 0
+
   var preKey: Data = Data()
 
   var signedPreKeyID: Int32 = 0
 
   var signedPreKey: Data = Data()
+
+  var signedPreKeySignature: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -81,11 +85,15 @@ struct Signalc_SignalKeysUserResponse {
 
   var identityKeyPublic: Data = Data()
 
+  var preKeyID: Int32 = 0
+
   var preKey: Data = Data()
 
   var signedPreKeyID: Int32 = 0
 
   var signedPreKey: Data = Data()
+
+  var signedPreKeySignature: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -177,9 +185,11 @@ extension Signalc_SignalRegisterKeysRequest: SwiftProtobuf.Message, SwiftProtobu
     2: .same(proto: "registrationId"),
     3: .same(proto: "deviceId"),
     4: .same(proto: "identityKeyPublic"),
-    5: .same(proto: "preKey"),
-    6: .same(proto: "signedPreKeyId"),
-    7: .same(proto: "signedPreKey"),
+    5: .same(proto: "preKeyId"),
+    6: .same(proto: "preKey"),
+    7: .same(proto: "signedPreKeyId"),
+    8: .same(proto: "signedPreKey"),
+    9: .same(proto: "signedPreKeySignature"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -192,9 +202,11 @@ extension Signalc_SignalRegisterKeysRequest: SwiftProtobuf.Message, SwiftProtobu
       case 2: try { try decoder.decodeSingularInt32Field(value: &self.registrationID) }()
       case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.identityKeyPublic) }()
-      case 5: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
-      case 6: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
-      case 7: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.preKeyID) }()
+      case 6: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
+      case 7: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
+      case 8: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 9: try { try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature) }()
       default: break
       }
     }
@@ -213,14 +225,20 @@ extension Signalc_SignalRegisterKeysRequest: SwiftProtobuf.Message, SwiftProtobu
     if !self.identityKeyPublic.isEmpty {
       try visitor.visitSingularBytesField(value: self.identityKeyPublic, fieldNumber: 4)
     }
+    if self.preKeyID != 0 {
+      try visitor.visitSingularInt32Field(value: self.preKeyID, fieldNumber: 5)
+    }
     if !self.preKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.preKey, fieldNumber: 5)
+      try visitor.visitSingularBytesField(value: self.preKey, fieldNumber: 6)
     }
     if self.signedPreKeyID != 0 {
-      try visitor.visitSingularInt32Field(value: self.signedPreKeyID, fieldNumber: 6)
+      try visitor.visitSingularInt32Field(value: self.signedPreKeyID, fieldNumber: 7)
     }
     if !self.signedPreKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.signedPreKey, fieldNumber: 7)
+      try visitor.visitSingularBytesField(value: self.signedPreKey, fieldNumber: 8)
+    }
+    if !self.signedPreKeySignature.isEmpty {
+      try visitor.visitSingularBytesField(value: self.signedPreKeySignature, fieldNumber: 9)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -230,9 +248,11 @@ extension Signalc_SignalRegisterKeysRequest: SwiftProtobuf.Message, SwiftProtobu
     if lhs.registrationID != rhs.registrationID {return false}
     if lhs.deviceID != rhs.deviceID {return false}
     if lhs.identityKeyPublic != rhs.identityKeyPublic {return false}
+    if lhs.preKeyID != rhs.preKeyID {return false}
     if lhs.preKey != rhs.preKey {return false}
     if lhs.signedPreKeyID != rhs.signedPreKeyID {return false}
     if lhs.signedPreKey != rhs.signedPreKey {return false}
+    if lhs.signedPreKeySignature != rhs.signedPreKeySignature {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -277,9 +297,11 @@ extension Signalc_SignalKeysUserResponse: SwiftProtobuf.Message, SwiftProtobuf._
     2: .same(proto: "registrationId"),
     3: .same(proto: "deviceId"),
     4: .same(proto: "identityKeyPublic"),
-    5: .same(proto: "preKey"),
-    6: .same(proto: "signedPreKeyId"),
-    7: .same(proto: "signedPreKey"),
+    5: .same(proto: "preKeyId"),
+    6: .same(proto: "preKey"),
+    7: .same(proto: "signedPreKeyId"),
+    8: .same(proto: "signedPreKey"),
+    9: .same(proto: "signedPreKeySignature"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -292,9 +314,11 @@ extension Signalc_SignalKeysUserResponse: SwiftProtobuf.Message, SwiftProtobuf._
       case 2: try { try decoder.decodeSingularInt32Field(value: &self.registrationID) }()
       case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self.identityKeyPublic) }()
-      case 5: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
-      case 6: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
-      case 7: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.preKeyID) }()
+      case 6: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
+      case 7: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
+      case 8: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 9: try { try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature) }()
       default: break
       }
     }
@@ -313,14 +337,20 @@ extension Signalc_SignalKeysUserResponse: SwiftProtobuf.Message, SwiftProtobuf._
     if !self.identityKeyPublic.isEmpty {
       try visitor.visitSingularBytesField(value: self.identityKeyPublic, fieldNumber: 4)
     }
+    if self.preKeyID != 0 {
+      try visitor.visitSingularInt32Field(value: self.preKeyID, fieldNumber: 5)
+    }
     if !self.preKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.preKey, fieldNumber: 5)
+      try visitor.visitSingularBytesField(value: self.preKey, fieldNumber: 6)
     }
     if self.signedPreKeyID != 0 {
-      try visitor.visitSingularInt32Field(value: self.signedPreKeyID, fieldNumber: 6)
+      try visitor.visitSingularInt32Field(value: self.signedPreKeyID, fieldNumber: 7)
     }
     if !self.signedPreKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.signedPreKey, fieldNumber: 7)
+      try visitor.visitSingularBytesField(value: self.signedPreKey, fieldNumber: 8)
+    }
+    if !self.signedPreKeySignature.isEmpty {
+      try visitor.visitSingularBytesField(value: self.signedPreKeySignature, fieldNumber: 9)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -330,9 +360,11 @@ extension Signalc_SignalKeysUserResponse: SwiftProtobuf.Message, SwiftProtobuf._
     if lhs.registrationID != rhs.registrationID {return false}
     if lhs.deviceID != rhs.deviceID {return false}
     if lhs.identityKeyPublic != rhs.identityKeyPublic {return false}
+    if lhs.preKeyID != rhs.preKeyID {return false}
     if lhs.preKey != rhs.preKey {return false}
     if lhs.signedPreKeyID != rhs.signedPreKeyID {return false}
     if lhs.signedPreKey != rhs.signedPreKey {return false}
+    if lhs.signedPreKeySignature != rhs.signedPreKeySignature {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
