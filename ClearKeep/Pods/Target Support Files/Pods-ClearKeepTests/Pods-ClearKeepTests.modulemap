@@ -1,6 +1,0 @@
-framework module Pods_ClearKeepTests {
-  umbrella header "Pods-ClearKeepTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -21,20 +21,17 @@
 		1664F1C1252C6B4900FF37AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1664F1BF252C6B4900FF37AD /* LaunchScreen.storyboard */; };
 		1664F1CC252C6B4900FF37AD /* ClearKeepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1CB252C6B4900FF37AD /* ClearKeepTests.swift */; };
 		1664F1D7252C6B4900FF37AD /* ClearKeepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1D6252C6B4900FF37AD /* ClearKeepUITests.swift */; };
-		1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 1664F22A252C7CBF00FF37AD /* SwiftProtobuf */; };
+		1664F22B252C7CBF00FF37AD /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 1664F22A252C7CBF00FF37AD /* SwiftPackageProductDependency */; };
 		16BDC85125306BC400552C48 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BDC85025306BC400552C48 /* LoginView.swift */; };
 		16BDC85625306C1200552C48 /* UX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BDC85525306C1200552C48 /* UX.swift */; };
-		16C83CB425300887002E3115 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB325300887002E3115 /* GRPC */; };
-		16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB525300887002E3115 /* CGRPCZlib */; };
+		16C83CB425300887002E3115 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB325300887002E3115 /* SwiftPackageProductDependency */; };
+		16C83CB625300887002E3115 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB525300887002E3115 /* SwiftPackageProductDependency */; };
 		16C83CC525303F20002E3115 /* SignalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CC425303F20002E3115 /* SignalService.swift */; };
 		16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC6425253B59C400A4E20C /* CKClientStore.swift */; };
 		16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6525383157007ED99A /* MasterDetailView.swift */; };
 		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
 		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
-		549A162AC249695C89A2D622 /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A8538523FF4F9C479FC9680 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
-		653D432059D8FC43EE07C0A2 /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDB30BB8246DAF664E20D2C /* Pods_ClearKeep.framework */; };
-		847478F8FC2C71CEAD956E40 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22EA8F0094E88AEA052723CB /* Pods_ClearKeepTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +52,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0BCAB73B68A466D0AF79851A /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
@@ -86,14 +82,6 @@
 		16E32C6D2538330D007ED99A /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
 		16E32C7225383372007ED99A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		16E32C772538338D007ED99A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		22EA8F0094E88AEA052723CB /* Pods_ClearKeepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A6E3A2C517FC8881BD99FDE /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
-		6A8538523FF4F9C479FC9680 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FDE4ED6ADCBB5586C9D7743 /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
-		903E314FE631C4F38851F955 /* Pods-ClearKeep-ClearKeepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		9BDB30BB8246DAF664E20D2C /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B6E584D4AB7B2B3BF66DB395 /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
-		D19C5F46F7272045428E645A /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +89,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
-				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
-				16C83CB425300887002E3115 /* GRPC in Frameworks */,
-				653D432059D8FC43EE07C0A2 /* Pods_ClearKeep.framework in Frameworks */,
+				1664F22B252C7CBF00FF37AD /* BuildFile in Frameworks */,
+				16C83CB625300887002E3115 /* BuildFile in Frameworks */,
+				16C83CB425300887002E3115 /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				847478F8FC2C71CEAD956E40 /* Pods_ClearKeepTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +106,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				549A162AC249695C89A2D622 /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,22 +226,6 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
-		165D590C252DABE600AA1E80 /* Message */ = {
-			isa = PBXGroup;
-			children = (
-				165D590D252DAD4D00AA1E80 /* SignalAddress.swift */,
-				165D5915252DAF5500AA1E80 /* SignalSenderKeyName.swift */,
-				165D591A252DB4D200AA1E80 /* CKIdentityKeyStore.swift */,
-				165D5944252DCEE800AA1E80 /* CKSenderKeyStore.swift */,
-				165D591F252DB5F200AA1E80 /* CKPreKeyStore.swift */,
-				165D5929252DB82F00AA1E80 /* CKSessionStore.swift */,
-				1655500E252E2C33008E66D0 /* CKCryptoProvider.swift */,
-				16555013252EB1F9008E66D0 /* CKBundleStore.swift */,
-				16555029252EBE74008E66D0 /* CKSignedPreKeyStore.swift */,
-			);
-			path = Message;
-			sourceTree = "<group>";
-		};
 		1664F1A8252C6B4700FF37AD = {
 			isa = PBXGroup;
 			children = (
@@ -265,7 +234,6 @@
 				1664F1D5252C6B4900FF37AD /* ClearKeepUITests */,
 				1664F1B2252C6B4700FF37AD /* Products */,
 				4D5008D40039CDE8F00309F5 /* Pods */,
-				1DAF017102C6E5A213A580C3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -325,25 +293,9 @@
 			path = protobuf;
 			sourceTree = "<group>";
 		};
-		1DAF017102C6E5A213A580C3 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				9BDB30BB8246DAF664E20D2C /* Pods_ClearKeep.framework */,
-				6A8538523FF4F9C479FC9680 /* Pods_ClearKeep_ClearKeepUITests.framework */,
-				22EA8F0094E88AEA052723CB /* Pods_ClearKeepTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		4D5008D40039CDE8F00309F5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8FDE4ED6ADCBB5586C9D7743 /* Pods-ClearKeep.debug.xcconfig */,
-				4A6E3A2C517FC8881BD99FDE /* Pods-ClearKeep.release.xcconfig */,
-				903E314FE631C4F38851F955 /* Pods-ClearKeep-ClearKeepUITests.debug.xcconfig */,
-				B6E584D4AB7B2B3BF66DB395 /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */,
-				0BCAB73B68A466D0AF79851A /* Pods-ClearKeepTests.debug.xcconfig */,
-				D19C5F46F7272045428E645A /* Pods-ClearKeepTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -355,11 +307,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1664F1DB252C6B4900FF37AD /* Build configuration list for PBXNativeTarget "ClearKeep" */;
 			buildPhases = (
-				03CF114D4E8164F9C32B9CF0 /* [CP] Check Pods Manifest.lock */,
 				1664F1AD252C6B4700FF37AD /* Sources */,
 				1664F1AE252C6B4700FF37AD /* Frameworks */,
 				1664F1AF252C6B4700FF37AD /* Resources */,
-				2A94BB258F7610CC1BB9FA3B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -367,9 +317,9 @@
 			);
 			name = ClearKeep;
 			packageProductDependencies = (
-				1664F22A252C7CBF00FF37AD /* SwiftProtobuf */,
-				16C83CB325300887002E3115 /* GRPC */,
-				16C83CB525300887002E3115 /* CGRPCZlib */,
+				1664F22A252C7CBF00FF37AD /* SwiftPackageProductDependency */,
+				16C83CB325300887002E3115 /* SwiftPackageProductDependency */,
+				16C83CB525300887002E3115 /* SwiftPackageProductDependency */,
 			);
 			productName = ClearKeep;
 			productReference = 1664F1B1252C6B4700FF37AD /* ClearKeep.app */;
@@ -379,7 +329,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1664F1DE252C6B4900FF37AD /* Build configuration list for PBXNativeTarget "ClearKeepTests" */;
 			buildPhases = (
-				9A94949DB1FC4AAB35BE3FD4 /* [CP] Check Pods Manifest.lock */,
 				1664F1C3252C6B4900FF37AD /* Sources */,
 				1664F1C4252C6B4900FF37AD /* Frameworks */,
 				1664F1C5252C6B4900FF37AD /* Resources */,
@@ -398,11 +347,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1664F1E1252C6B4900FF37AD /* Build configuration list for PBXNativeTarget "ClearKeepUITests" */;
 			buildPhases = (
-				8610E32002BA658309C17A53 /* [CP] Check Pods Manifest.lock */,
 				1664F1CE252C6B4900FF37AD /* Sources */,
 				1664F1CF252C6B4900FF37AD /* Frameworks */,
 				1664F1D0252C6B4900FF37AD /* Resources */,
-				66D38A3BD67473A1647F0927 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -447,8 +394,8 @@
 			);
 			mainGroup = 1664F1A8252C6B4700FF37AD;
 			packageReferences = (
-				1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */,
-				16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */,
+				1664F229252C7CBF00FF37AD /* RemoteSwiftPackageReference */,
+				16C83CB225300887002E3115 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 1664F1B2252C6B4700FF37AD /* Products */;
 			projectDirPath = "";
@@ -487,109 +434,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		03CF114D4E8164F9C32B9CF0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ClearKeep-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2A94BB258F7610CC1BB9FA3B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		66D38A3BD67473A1647F0927 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8610E32002BA658309C17A53 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ClearKeep-ClearKeepUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9A94949DB1FC4AAB35BE3FD4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ClearKeepTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1664F1AD252C6B4700FF37AD /* Sources */ = {
@@ -777,7 +621,6 @@
 		};
 		1664F1DC252C6B4900FF37AD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FDE4ED6ADCBB5586C9D7743 /* Pods-ClearKeep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -803,7 +646,6 @@
 		};
 		1664F1DD252C6B4900FF37AD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A6E3A2C517FC8881BD99FDE /* Pods-ClearKeep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -828,7 +670,6 @@
 		};
 		1664F1DF252C6B4900FF37AD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0BCAB73B68A466D0AF79851A /* Pods-ClearKeepTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -851,7 +692,6 @@
 		};
 		1664F1E0252C6B4900FF37AD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D19C5F46F7272045428E645A /* Pods-ClearKeepTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -874,7 +714,6 @@
 		};
 		1664F1E2252C6B4900FF37AD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 903E314FE631C4F38851F955 /* Pods-ClearKeep-ClearKeepUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -895,7 +734,6 @@
 		};
 		1664F1E3252C6B4900FF37AD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B6E584D4AB7B2B3BF66DB395 /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -956,7 +794,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+		1664F229252C7CBF00FF37AD /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-protobuf.git";
 			requirement = {
@@ -964,7 +802,7 @@
 				minimumVersion = 1.12.0;
 			};
 		};
-		16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
+		16C83CB225300887002E3115 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/grpc/grpc-swift";
 			requirement = {
@@ -975,19 +813,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1664F22A252C7CBF00FF37AD /* SwiftProtobuf */ = {
+		1664F22A252C7CBF00FF37AD /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			package = 1664F229252C7CBF00FF37AD /* RemoteSwiftPackageReference */;
 			productName = SwiftProtobuf;
 		};
-		16C83CB325300887002E3115 /* GRPC */ = {
+		16C83CB325300887002E3115 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			package = 16C83CB225300887002E3115 /* RemoteSwiftPackageReference */;
 			productName = GRPC;
 		};
-		16C83CB525300887002E3115 /* CGRPCZlib */ = {
+		16C83CB525300887002E3115 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			package = 16C83CB225300887002E3115 /* RemoteSwiftPackageReference */;
 			productName = CGRPCZlib;
 		};
 /* End XCSwiftPackageProductDependency section */
