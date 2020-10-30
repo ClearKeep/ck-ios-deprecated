@@ -3,3 +3,10 @@
 //
 
 #import "SignalStoreInMemoryStorage.h"
+#import "CKSignalObject.h"
+#import "CKSignalSession.h"
+#import "CKSignalSignedPreKey.h"
+#import "CKAccountSignalIdentity.h"
+#import "CKSignalPreKey.h"
+#import "CKSignalSenderKey.h"
+#import "CKDatabaseManager.h"

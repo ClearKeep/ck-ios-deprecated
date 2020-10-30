@@ -1,11 +1,17 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
+use_modular_headers!
+
 target 'ClearKeep' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   pod 'SignalProtocolObjC'
+  # Waiting on merge https://github.com/yapstudios/YapDatabase/pull/492
+  pod 'YapDatabase/SQLCipher', '~> 4.0'
+  pod 'YapTaskQueue/SQLCipher', :git => 'https://github.com/davidchiles/YapTaskQueue.git'
+  pod 'Mantle', '~> 2.1.6'
 
   target 'ClearKeepTests' do
     inherit! :search_paths

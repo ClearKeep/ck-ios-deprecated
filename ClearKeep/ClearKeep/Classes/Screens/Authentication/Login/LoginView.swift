@@ -62,7 +62,12 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
-        
+//        guard let deviceID: Int32 = Int32(deviceID) else {
+//            print("DeviceID always number")
+//            return
+//        }
+//        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
+//        Backend.shared.authenticator.clientStore = clientStore
         Backend.shared.authenticator.login(username) { (result, error, response) in
             
             if result {

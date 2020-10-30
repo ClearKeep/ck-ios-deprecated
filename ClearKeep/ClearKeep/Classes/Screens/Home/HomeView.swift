@@ -22,8 +22,7 @@ struct HomeView: View {
     
     init(clientID: String) {
         self.selectedRoom = clientID
-        
-        Backend.shared.authenticator.login(clientID) { (result, error, response) in
+        Backend.shared.authenticator.requestKey(byClientID: clientID) { (result, error, response) in
             
             guard let recipientStore = response else {
                 print("Request prekey \(clientID) fail")

@@ -97,11 +97,41 @@ class Authenticator {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
+                    let address = SignalAddress(name: response.clientID, deviceId: response.deviceID)
+                    let memStore = SignalStoreInMemoryStorage()
+                    memStore.storePreKey(response.preKey, preKeyId: UInt32(response.preKeyID))
+                    memStore.storeSignedPreKey(response.signedPreKey, signedPreKeyId: UInt32(response.signedPreKeyID))
+                    memStore.saveIdentity(address, identityKey: response.identityKeyPublic)
+//                    memStore.storeSenderKey(<#T##senderKey: Data##Data#>, address: <#T##SignalAddress#>, groupId: <#T##String#>)
+                    self.clientStore = CKClientStore(clientID: response.clientID, deviceID: address.deviceId, memStore: memStore)
                     self.authenticated(cliendID: response.clientID,
                                        completion)
                 completion(true, nil, response)
                 case .failure(_):
                     self.nauthenticate(completion)
+                }
+            }
+        }
+    }
+    
+    private func requestKey(byClientID clientID: String,
+               _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void,
+               submit: @escaping (Signalc_SignalKeysUserRequest, CallOptions?)
+                -> UnaryCall<Signalc_SignalKeysUserRequest, Signalc_SignalKeysUserResponse>) {
+        
+        let request: Signalc_SignalKeysUserRequest = .with {
+            $0.clientID = clientID
+        }
+        
+        submit(request, nil).response.whenComplete { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                self.authenticated(cliendID: response.clientID,
+                                       completion)
+                completion(true, nil, response)
+                case .failure(_):
+                completion(false, nil, nil)
                 }
             }
         }
@@ -123,3 +153,11 @@ extension Authenticator {
         login(clientID, completion, submit: client.getKeyBundleByUserId)
     }
 }
+
+extension Authenticator {
+    
+    func requestKey(byClientID clientID: String, _ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
+        requestKey(byClientID: clientID, completion, submit: client.getKeyBundleByUserId)
+    }
+}
+

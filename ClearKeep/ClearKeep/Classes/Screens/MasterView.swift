@@ -10,7 +10,7 @@ struct MasterView: View {
             List {
                 ForEach(resource.rooms, id: \.self) { room in
                     NavigationLink(
-                        destination: HomeView(clientID: room.id)
+                        destination: MessageChatView(clientId: room.id)
                     ) {
                         Text(room.id)
                     }

@@ -20,6 +20,7 @@ class Backend: ObservableObject {
     var authenticator: Authenticator
     
     var signalService: SignalService?
+    var heardCallback: ((String, Signalc_Publication) -> Void)?
     
     private var queueHandShake: [String: String] = [:]
     
@@ -63,8 +64,10 @@ class Backend: ObservableObject {
     
     func authenticated(_ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
        
+//        if let heard = self.heardCallback {
+//            signalService?.listen(heard: heard)
+//        }
         signalService?.listen(heard: heard)
-        
         signalService?.subscribe(clientID: authenticator.clientStore.address.name, { (result, error, response) in
             
         })
@@ -72,24 +75,29 @@ class Backend: ObservableObject {
     
     
     private func heard(_ clienID: String, publication: Signalc_Publication) {
+        let userInfo: [String : Any] = ["clientId": clienID, "publication": publication]
+        NotificationCenter.default.post(name: NSNotification.Name("DidReceiveMessage"),
+                                        object: nil,
+                                        userInfo: userInfo)
         
-        if authenticator.clientStore == nil {
-            return
-        }
-        
-        let remoteAddress = SignalAddress(name: publication.senderID, deviceId: authenticator.recipientStore!.deviceID)
-        
-        do {
-            let messageData = try authenticator.clientStore.decrypt(remoteAddress: remoteAddress, cipherData: publication.message)
-            
-            let postModel = PostModel(from: publication.senderID, message: messageData)
-            
-            self.messages.append(postModel)
-            
-        } catch {
-            print(error)
-        }
-        
+        // Save message
+//        if authenticator.clientStore == nil {
+//            return
+//        }
+//
+//        let remoteAddress = SignalAddress(name: publication.senderID, deviceId: authenticator.recipientStore!.deviceID)
+//
+//        do {
+//            let messageData = try authenticator.clientStore.decrypt(remoteAddress: remoteAddress, cipherData: publication.message)
+//
+//            let postModel = PostModel(from: publication.senderID, message: messageData)
+//
+//            self.messages.append(postModel)
+//
+//        } catch {
+//            print(error)
+//        }
+
     }
     
     
