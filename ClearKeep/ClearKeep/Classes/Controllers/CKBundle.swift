@@ -16,15 +16,17 @@ public enum CKBundleError: Error {
 
 class CKBundle: NSObject {
     let deviceId: UInt32
+    let registrationId: UInt32
     let identityKey: Data
     let signedPreKey: CKSignedPreKey
     let preKeys: [CKPreKey]
     
-    init(deviceId: UInt32, identityKey: Data, signedPreKey: CKSignedPreKey, preKeys: [CKPreKey]) {
+    init(deviceId: UInt32, registrationId: UInt32, identityKey: Data, signedPreKey: CKSignedPreKey, preKeys: [CKPreKey]) {
         self.deviceId = deviceId
         self.identityKey = identityKey
         self.signedPreKey = signedPreKey
         self.preKeys = preKeys
+        self.registrationId = registrationId
     }
 }
 
@@ -32,7 +34,7 @@ extension CKBundle {
     
     /// Returns copy of bundle with new preKeys
     func copyBundle(newPreKeys: [CKPreKey]) -> CKBundle {
-        let bundle = CKBundle(deviceId: deviceId, identityKey: identityKey, signedPreKey: signedPreKey, preKeys: newPreKeys)
+        let bundle = CKBundle(deviceId: deviceId, registrationId: registrationId, identityKey: identityKey, signedPreKey: signedPreKey, preKeys: newPreKeys)
         return bundle
     }
     
@@ -40,7 +42,7 @@ extension CKBundle {
     func signalBundle() throws -> SignalPreKeyBundle {
         let index = Int(arc4random_uniform(UInt32(preKeys.count)))
         let preKey = preKeys[index]
-        let preKeyBundle = try SignalPreKeyBundle(registrationId: 0,
+        let preKeyBundle = try SignalPreKeyBundle(registrationId: registrationId,
                                                   deviceId: deviceId,
                                                   preKeyId: preKey.preKeyId,
                                                   preKeyPublic: preKey.publicKey,
@@ -50,7 +52,7 @@ extension CKBundle {
         return preKeyBundle
     }
     
-    convenience init(deviceId: UInt32, identity: SignalIdentityKeyPair, signedPreKey: SignalSignedPreKey, preKeys: [SignalPreKey]) throws {
+    convenience init(deviceId: UInt32, registrationId: UInt32, identity: SignalIdentityKeyPair, signedPreKey: SignalSignedPreKey, preKeys: [SignalPreKey]) throws {
 
         let omemoSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
         let omemoPreKeys = CKPreKey.preKeysFromSignal(preKeys)
@@ -63,7 +65,7 @@ extension CKBundle {
             throw CKBundleError.invalid
         }
         
-        self.init(deviceId: deviceId, identityKey: identity.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
+        self.init(deviceId: deviceId, registrationId: registrationId, identityKey: identity.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
     }
     
     convenience init(identity: CKAccountSignalIdentity, signedPreKey: CKSignalSignedPreKey, preKeys: [CKSignalPreKey]) throws {
@@ -91,6 +93,6 @@ extension CKBundle {
             throw CKBundleError.invalid
         }
         
-        self.init(deviceId: identity.registrationId, identityKey: identity.identityKeyPair.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
+        self.init(deviceId: identity.registrationId, registrationId: identity.registrationId, identityKey: identity.identityKeyPair.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
     }
 }

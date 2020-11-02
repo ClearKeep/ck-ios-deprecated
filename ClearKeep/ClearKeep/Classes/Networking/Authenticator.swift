@@ -64,6 +64,53 @@ class Authenticator {
         }
     }
     
+    // call register
+    private func registerUser(byAddress address: SignalAddress,
+                              _ completion: @escaping (Bool, Error?) -> Void,
+                              submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
+                                -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
+        
+        if let connectionDb = CKDatabaseManager.shared.database?.newConnection() {
+            do {
+                let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: address.name,
+                                                                              databaseConnection: connectionDb)
+                let clientId = address.name
+                let ckBundle = try ourSignalEncryptionMng.generateOutgoingBundle(10)
+                let preKey = ckBundle.preKeys.first
+                CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
+                
+                // set parameters request register account
+                let request: Signalc_SignalRegisterKeysRequest = .with {
+                    $0.clientID = clientId
+                    $0.deviceID = Int32(ckBundle.deviceId)
+                    $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
+                    $0.identityKeyPublic = ckBundle.identityKey
+                    $0.preKeyID = Int32(preKey!.preKeyId)
+                    $0.preKey = preKey!.publicKey
+                    $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
+                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
+                    $0.signedPreKeySignature = ckBundle.signedPreKey.signature
+                }
+                
+                submit(request, nil).response.whenComplete { (result) in
+                    
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let response):
+                            print(response)
+                            completion(true, nil)
+                        case .failure(_):
+                            self.authenticated(cliendID: "") { (_, _, _) in
+                                
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("registerUser error: \(error.localizedDescription)")
+            }
+        }
+    }
     
     
     private func authenticated(cliendID: String,
@@ -72,7 +119,6 @@ class Authenticator {
         if recipientID.isEmpty || recipientStore == nil {
             Backend.shared.authenticated(completion)
         }
-    
     }
     
     
@@ -97,15 +143,9 @@ class Authenticator {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    let address = SignalAddress(name: response.clientID, deviceId: response.deviceID)
-                    let memStore = SignalStoreInMemoryStorage()
-                    memStore.storePreKey(response.preKey, preKeyId: UInt32(response.preKeyID))
-                    memStore.storeSignedPreKey(response.signedPreKey, signedPreKeyId: UInt32(response.signedPreKeyID))
-                    memStore.saveIdentity(address, identityKey: response.identityKeyPublic)
-//                    memStore.storeSenderKey(<#T##senderKey: Data##Data#>, address: <#T##SignalAddress#>, groupId: <#T##String#>)
-                    self.clientStore = CKClientStore(clientID: response.clientID, deviceID: address.deviceId, memStore: memStore)
-                    self.authenticated(cliendID: response.clientID,
-                                       completion)
+//                    self.authenticated(cliendID: response.clientID,
+//                                       completion)
+                    Backend.shared.subscrible(username: clientID, completion: completion)
                 completion(true, nil, response)
                 case .failure(_):
                     self.nauthenticate(completion)
@@ -143,6 +183,10 @@ extension Authenticator {
     
     func register(bundleStore: CKClientStore, completion: @escaping (Bool, Error?) -> Void) {
         authenticate(bundleStore: bundleStore, completion, submit: client.registerBundleKey)
+    }
+    
+    func register(address: SignalAddress, completion: @escaping (Bool, Error?) -> Void) {
+        registerUser(byAddress: address, completion, submit: client.registerBundleKey)
     }
     
 }

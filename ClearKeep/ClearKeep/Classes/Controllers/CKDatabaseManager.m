@@ -65,14 +65,14 @@ NSString *const CKYapDatabaseName = @"CKYap.sqlite";
 {
     YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
     options.corruptAction = YapDatabaseCorruptAction_Fail;
-    options.cipherKeyBlock = ^{
-        NSString *passphrase = [self databasePassphrase];
-        NSData *keyData = [passphrase dataUsingEncoding:NSUTF8StringEncoding];
-        if (!keyData.length) {
-            [NSException raise:@"Must have passphrase of length > 0" format:@"password length is %d.", (int)keyData.length];
-        }
-        return keyData;
-    };
+//    options.cipherKeyBlock = ^{
+//        NSString *passphrase = [self databasePassphrase];
+//        NSData *keyData = [passphrase dataUsingEncoding:NSUTF8StringEncoding];
+//        if (!keyData.length) {
+//            [NSException raise:@"Must have passphrase of length > 0" format:@"password length is %d.", (int)keyData.length];
+//        }
+//        return keyData;
+//    };
     options.cipherCompatability = YapDatabaseCipherCompatability_Version3;
     _databaseDirectory = [directory copy];
     if (!_databaseDirectory) {

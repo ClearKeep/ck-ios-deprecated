@@ -22,12 +22,11 @@ class SignalService {
 extension SignalService {
     
     
-    func listen(heard: @escaping ((String, Signalc_Publication) -> Void)) {
+    func listen(username: String, heard: @escaping ((String, Signalc_Publication) -> Void)) {
         
         let request: Signalc_SubscribeAndListenRequest = .with {
-            $0.clientID = Backend.shared.authenticator.clientStore.address.name
+            $0.clientID = username
         }
-        
         
         DispatchQueue.global(qos: .background).async {
             

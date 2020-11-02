@@ -32,7 +32,7 @@ struct MessageChatView: View {
                 Image(systemName: "paperplane")
             }.padding(.trailing)
         }.onAppear() {
-            viewModel.messages.removeAll()
+            self.viewModel.messages.removeAll()
         }
     }
 }
@@ -51,7 +51,7 @@ struct MessageView: View {
     
     var body: some View {
         
-        let checkSender = mesgModel.from == Backend.shared.authenticator.clientStore.address.name
+        let checkSender = mesgModel.from == CKSignalCoordinate.shared.ourEncryptionManager?.storage.accountKey
         
         if checkSender {
             

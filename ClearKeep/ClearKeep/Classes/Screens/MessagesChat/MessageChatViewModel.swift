@@ -10,8 +10,8 @@ import Combine
 
 class MessageChatViewModel: ObservableObject, Identifiable {
     let clientId: String
-    var otherEncryptionManager: CKAccountSignalEncryptionManager?
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    var otherEncryptionManager: CKAccountSignalEncryptionManager?
     @Published var messages: [MessageModel] = []
     
     init(clientId: String) {
@@ -20,6 +20,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             otherEncryptionManager = try! CKAccountSignalEncryptionManager(accountKey: clientId,
                                                                            databaseConnection: connectionDb)
         }
+        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+        requestBundleRecipient(byClientId: clientId)
 //        Backend.shared.heard = { (clientId, publication) in
 //
 //        }
@@ -35,7 +37,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
            let clientId = userInfo["clientId"] as? String,
            let publication = userInfo["publication"] as? Signalc_Publication,
            clientId == self.clientId {
-            if let ourEncryptionMng = self.ourEncryptionManager, let otherEncryptionMng = self.otherEncryptionManager {
+            if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager,
+               let otherEncryptionMng = self.otherEncryptionManager {
                 do {
                     let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
                                                                                      name: clientId,
@@ -57,26 +60,24 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 print("Request prekey \(clientId) fail")
                 return
             }
-            
             // create CKBundle
-//            let signedPreKey = CKSignedPreKey(signedPreKey: recipientStore.signedPreKey)
-            let signedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientStore.preKeyID),
-                                              publicKey: recipientStore.signedPreKey,
-                                              signature: recipientStore.signedPreKeySignature)
-            let preKey = CKPreKey(withPreKeyId: UInt32(recipientStore.preKeyID), publicKey: recipientStore.identityKeyPublic)
-            
-            let otherBundle = CKBundle(deviceId: UInt32(recipientStore.deviceID),
-                                       identityKey: recipientStore.identityKeyPublic,
-                                       signedPreKey: signedPreKey,
-                                       preKeys: [preKey])
             do {
-                try self?.otherEncryptionManager?.consumeIncomingBundle(recipientStore.clientID, bundle: otherBundle)
+                let signedPreKey = try SignalSignedPreKey.init(serializedData: recipientStore.signedPreKey)
+                let preKey = try SignalPreKey.init(serializedData: recipientStore.preKey)
+                
+                let ckSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
+                let ckPreKeys = CKPreKey.preKeysFromSignal([preKey])
+                
+                let bundle = CKBundle(deviceId: UInt32(recipientStore.deviceID),
+                                      registrationId: UInt32(recipientStore.registrationID),
+                                          identityKey: recipientStore.identityKeyPublic,
+                                          signedPreKey: ckSignedPreKey,
+                                          preKeys: ckPreKeys)
+                
+                try self?.ourEncryptionManager?.consumeIncomingBundle(recipientStore.clientID, bundle: bundle)
             } catch {
                 print("consumeIncomingBundle Error: \(error)")
             }
-            
-            Backend.shared.authenticator.recipientID = recipientStore.clientID
-            Backend.shared.authenticator.recipientStore = recipientStore
         }
     }
     
@@ -88,8 +89,17 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         let post = MessageModel(from: clientId, data: payload)
         
         messages.append(post)
-        Backend.shared.send(messageStr, to: clientId) { (result, error) in
-            print("Send message: \(result)")
+        if let ourUsername = CKSignalCoordinate.shared.ourEncryptionManager?.storage.accountKey {
+            do {
+                let encryptedData = try ourEncryptionManager?.encryptToAddress(payload, name: ourUsername, deviceId: 1)
+                Backend.shared.send(encryptedData!.data, from: ourUsername, to: clientId) { (result, error) in
+                    print("Send message: \(result)")
+                }
+            } catch {
+                print("Send message error: \(error)")
+            }
         }
+        
+        
     }
 }

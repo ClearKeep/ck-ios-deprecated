@@ -44,14 +44,25 @@ extension LoginView {
             print("DeviceID always number")
             return
         }
+        registerByAddress()
+//        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
+//
+//        Backend.shared.authenticator.clientStore = clientStore
+//
+//        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
+//            print(result)
+//
+//            if result {
+//                self.viewRouter.current = .masterDetail
+//            }
+//        }
         
-        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
-        
-        Backend.shared.authenticator.clientStore = clientStore
-        
-        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
-            print(result)
-            
+    }
+    
+    private func registerByAddress() {
+        let address = SignalAddress(name: username, deviceId: Int32(deviceID)!)
+        Backend.shared.authenticator.register(address: address) { (result, error) in
+            print("Register result: \(result)")
             if result {
                 self.viewRouter.current = .masterDetail
             }
@@ -69,9 +80,16 @@ extension LoginView {
 //        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
 //        Backend.shared.authenticator.clientStore = clientStore
         Backend.shared.authenticator.login(username) { (result, error, response) in
-            
-            if result {
-                self.viewRouter.current = .masterDetail
+            guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
+            do {
+                let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: username, databaseConnection: dbConnection)
+                
+                CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                if result {
+                    self.viewRouter.current = .masterDetail
+                }
+            } catch {
+                print("Login with error: \(error)")
             }
         }
         

@@ -67,8 +67,19 @@ class Backend: ObservableObject {
 //        if let heard = self.heardCallback {
 //            signalService?.listen(heard: heard)
 //        }
-        signalService?.listen(heard: heard)
-        signalService?.subscribe(clientID: authenticator.clientStore.address.name, { (result, error, response) in
+//        signalService?.listen(heard: heard)
+//        signalService?.subscribe(clientID: authenticator.clientStore.address.name, { (result, error, response) in
+//
+//        })
+    }
+    
+    func subscrible(username: String, completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
+       
+//        if let heard = self.heardCallback {
+//            signalService?.listen(heard: heard)
+//        }
+        signalService?.listen(username: username, heard: heard)
+        signalService?.subscribe(clientID: username, { (result, error, response) in
             
         })
     }
@@ -130,6 +141,22 @@ class Backend: ObservableObject {
         }
     }
     
+    func send(_ message: Data, from ourUsername: String,
+              to recipient: String,
+              _ completion: @escaping (Bool, Error?) -> Void) {
+        do {
+            let request: Signalc_PublishRequest = .with {
+                $0.receiveID = recipient
+                $0.senderID = ourUsername
+                $0.message = message
+            }
+            
+            try self.send(request, to: recipient)
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
     
     private func send(_ request: Signalc_PublishRequest,
                         to recipient: String,
