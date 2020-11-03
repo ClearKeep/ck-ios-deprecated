@@ -48,6 +48,10 @@
 		56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */; };
 		56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA87E254C0ADC00B72317 /* MessageModel.swift */; };
 		56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */; };
+		56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CBE2550FF270012E831 /* CKDevice.m */; };
+		56BF0CC82551060A0012E831 /* CKAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CC72551060A0012E831 /* CKAccount.m */; };
+		56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CD025510B920012E831 /* YapDatabase+Extension.swift */; };
+		56BF0CD9255147320012E831 /* CKBuddy.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CD8255147310012E831 /* CKBuddy.m */; };
 		56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */; };
 		56C7F349254AC55800737C5F /* CKBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F348254AC55800737C5F /* CKBundle.swift */; };
 		56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F358254ACC5B00737C5F /* CKPreKey.swift */; };
@@ -132,6 +136,13 @@
 		56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageChatViewModel.swift; sourceTree = "<group>"; };
 		56BDA87E254C0ADC00B72317 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessageModel.swift; path = ClearKeep/Classes/Screens/MessagesChat/MessageModel.swift; sourceTree = SOURCE_ROOT; };
 		56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignalCoordinate.swift; sourceTree = "<group>"; };
+		56BF0CBE2550FF270012E831 /* CKDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDevice.m; sourceTree = "<group>"; };
+		56BF0CC32550FF3A0012E831 /* CKDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKDevice.h; sourceTree = "<group>"; };
+		56BF0CC72551060A0012E831 /* CKAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAccount.m; sourceTree = "<group>"; };
+		56BF0CCC2551061B0012E831 /* CKAccount.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKAccount.h; sourceTree = "<group>"; };
+		56BF0CD025510B920012E831 /* YapDatabase+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "YapDatabase+Extension.swift"; sourceTree = "<group>"; };
+		56BF0CD8255147310012E831 /* CKBuddy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKBuddy.m; sourceTree = "<group>"; };
+		56BF0CDD2551473C0012E831 /* CKBuddy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKBuddy.h; sourceTree = "<group>"; };
 		56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignalStorageManager.swift; sourceTree = "<group>"; };
 		56C7F348254AC55800737C5F /* CKBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKBundle.swift; sourceTree = "<group>"; };
 		56C7F358254ACC5B00737C5F /* CKPreKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKPreKey.swift; sourceTree = "<group>"; };
@@ -213,6 +224,8 @@
 		16208E34252D63EB000A6CE7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				56BF0CE12551571E0012E831 /* CK_Storage */,
+				569FFB88254BCB0800C487F5 /* Signal_Storage */,
 				56BDA87E254C0ADC00B72317 /* MessageModel.swift */,
 			);
 			path = Model;
@@ -401,21 +414,42 @@
 			path = MessagesChat;
 			sourceTree = "<group>";
 		};
-		56C7F319254A709300737C5F /* Controllers */ = {
+		56BF0CE12551571E0012E831 /* CK_Storage */ = {
 			isa = PBXGroup;
 			children = (
-				569FFB88254BCB0800C487F5 /* Signal_Storage */,
-				56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */,
-				56C7F348254AC55800737C5F /* CKBundle.swift */,
+				56BF0CC32550FF3A0012E831 /* CKDevice.h */,
+				56BF0CBE2550FF270012E831 /* CKDevice.m */,
+				56BF0CCC2551061B0012E831 /* CKAccount.h */,
+				56BF0CC72551060A0012E831 /* CKAccount.m */,
+				56BF0CDD2551473C0012E831 /* CKBuddy.h */,
+				56BF0CD8255147310012E831 /* CKBuddy.m */,
 				56C7F358254ACC5B00737C5F /* CKPreKey.swift */,
 				56C7F35D254ACCC600737C5F /* CKSignedPreKey.swift */,
 				569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */,
 				569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */,
+			);
+			path = CK_Storage;
+			sourceTree = "<group>";
+		};
+		56BF0CE22551576A0012E831 /* YapDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */,
 				569FFBB6254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift */,
+				56BF0CD025510B920012E831 /* YapDatabase+Extension.swift */,
+			);
+			path = YapDatabase;
+			sourceTree = "<group>";
+		};
+		56C7F319254A709300737C5F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				56BF0CE22551576A0012E831 /* YapDatabase */,
+				56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */,
+				56C7F348254AC55800737C5F /* CKBundle.swift */,
 				569FFBBB254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift */,
 				569FFBC5254BE96C00C487F5 /* CKDatabaseManager.h */,
 				569FFBC0254BE94E00C487F5 /* CKDatabaseManager.m */,
-				569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */,
 				569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */,
 				56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */,
 			);
@@ -693,23 +727,27 @@
 				569FFBCA254BEC0E00C487F5 /* SecondaryIndexes.swift in Sources */,
 				56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */,
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
+				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
 				569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
+				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
+				56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */,
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
 				569FFB92254BCB1E00C487F5 /* CKSignalObject.m in Sources */,
 				569FFBBC254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
+				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				160A08BC253D6C9F0030D28E /* signalc.pb.swift in Sources */,

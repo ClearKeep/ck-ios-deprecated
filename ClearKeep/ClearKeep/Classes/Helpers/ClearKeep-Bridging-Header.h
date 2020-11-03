@@ -10,3 +10,6 @@
 #import "CKSignalPreKey.h"
 #import "CKSignalSenderKey.h"
 #import "CKDatabaseManager.h"
+#import "CKDevice.h"
+#import "CKAccount.h"
+#import "CKBuddy.h"

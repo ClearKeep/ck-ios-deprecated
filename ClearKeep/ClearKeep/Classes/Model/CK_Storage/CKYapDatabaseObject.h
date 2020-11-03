@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)refetchWithTransaction:(YapDatabaseReadTransaction *)transaction;
 
 + (nullable instancetype)fetchObjectWithUniqueID:(NSString*)uniqueID transaction:(YapDatabaseReadTransaction*)transaction;
-
 /// Shortcut for self.class.collection
 - (NSString*) yapCollection;
 

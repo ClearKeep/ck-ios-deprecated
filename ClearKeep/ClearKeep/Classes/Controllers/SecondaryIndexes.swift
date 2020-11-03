@@ -19,6 +19,26 @@ extension YapDatabaseSecondaryIndexOptions {
 }
 
 extension YapDatabaseSecondaryIndex {
+    @objc public static var buddyIndex: YapDatabaseSecondaryIndex {
+        let columns: [String:YapDatabaseSecondaryIndexType] = [
+            BuddyIndexColumnName.accountKey: .text,
+            BuddyIndexColumnName.username: .text
+        ]
+        let setup = YapDatabaseSecondaryIndexSetup(capacity: UInt(columns.count))
+        columns.forEach { (key, value) in
+            setup.addColumn(key, with: value)
+        }
+        let handler = YapDatabaseSecondaryIndexHandler.withObjectBlock { (transaction, dict, collection, key, object) in
+            guard let buddy = object as? CKBuddy else {
+                return
+            }
+            dict[BuddyIndexColumnName.accountKey] = buddy.accountUniqueId
+            dict[BuddyIndexColumnName.username] = buddy.username
+        }
+        let options = YapDatabaseSecondaryIndexOptions(whitelist: [CKBuddy.collection])
+        let secondaryIndex = YapDatabaseSecondaryIndex(setup: setup, handler: handler, versionTag: "2", options: options)
+        return secondaryIndex
+    }
     
     @objc public static var signalIndex: YapDatabaseSecondaryIndex {
         let columns: [String:YapDatabaseSecondaryIndexType] = [
@@ -46,6 +66,51 @@ extension YapDatabaseSecondaryIndex {
         let options = YapDatabaseSecondaryIndexOptions(whitelist: [CKSignalPreKey.collection,CKSignalSession.collection])
         let secondaryIndex = YapDatabaseSecondaryIndex(setup: setup, handler: handler, versionTag: "6", options: options)
         return secondaryIndex
+    }
+}
+
+extension CKBuddy {
+    /// This function should only be used when the secondary index is not ready
+    private static func slowLookup(username: String,
+                                   accountUniqueId: String,
+                                   transaction: YapDatabaseReadTransaction) -> CKBuddy? {
+        NSLog("WARN: Using slow O(n) lookup for CKBuddy: \(username)")
+        var buddy: CKBuddy? = nil
+        transaction.iterateKeysAndObjects(inCollection: CKBuddy.collection) { (key, potentialMatch: CKBuddy, stop) in
+            if potentialMatch.username == username {
+                buddy = potentialMatch
+                stop = true
+            }
+        }
+        return buddy
+    }
+    
+    
+    /// Fetch buddy matching JID using secondary index
+    @objc public static func fetchBuddy(username: String,
+                                        accountUniqueId: String,
+                                        transaction: YapDatabaseReadTransaction) -> CKBuddy? {
+        guard let indexTransaction = transaction.ext(SecondaryIndexName.buddy) as? YapDatabaseSecondaryIndexTransaction else {
+            NSLog("Error looking up CKBuddy via SecondaryIndex: Extension not ready.")
+            return self.slowLookup(username: username, accountUniqueId:accountUniqueId, transaction: transaction)
+        }
+        let queryString = "Where \(BuddyIndexColumnName.accountKey) == ? AND \(BuddyIndexColumnName.username) == ?"
+        let query = YapDatabaseQuery(string: queryString, parameters: [accountUniqueId, username])
+        
+        var matchingBuddies: [CKBuddy] = []
+        let success = indexTransaction.iterateKeysAndObjects(matching: query) { (collection, key, object, stop) in
+            if let matchingBuddy = object as? CKBuddy {
+                matchingBuddies.append(matchingBuddy)
+            }
+        }
+        if !success {
+            NSLog("Error looking up CKBuddy with query \(query) \(username) \(accountUniqueId)")
+            return nil
+        }
+        if matchingBuddies.count > 1 {
+            NSLog("WARN: More than one CKBuddy matching query \(query) \(username) \(accountUniqueId): \(matchingBuddies.count)")
+        }
+        return matchingBuddies.first
     }
 }
 

@@ -7,7 +7,8 @@
 //
 
 #import "CKSignalObject.h"
-//#import "CKAccount.h"
+#import "CKAccount.h"
+#import "ClearKeep-Swift.h"
 
 @implementation CKSignalObject
 
@@ -16,10 +17,10 @@
  */
 - (nullable NSArray<YapDatabaseRelationshipEdge *> *)yapDatabaseRelationshipEdges
 {
-//    YapDatabaseRelationshipEdge *accountEdge = [[YapDatabaseRelationshipEdge alloc] initWithName:@"" destinationKey:self.accountKey collection:[CKAccount collection] nodeDeleteRules:YDB_DeleteSourceIfDestinationDeleted];
-//    if (accountEdge) {
-//        return @[accountEdge];
-//    }
+    YapDatabaseRelationshipEdge *accountEdge = [[YapDatabaseRelationshipEdge alloc] initWithName:@"" destinationKey:self.accountKey collection:[CKAccount collection] nodeDeleteRules:YDB_DeleteSourceIfDestinationDeleted];
+    if (accountEdge) {
+        return @[accountEdge];
+    }
     return nil;
 }
 

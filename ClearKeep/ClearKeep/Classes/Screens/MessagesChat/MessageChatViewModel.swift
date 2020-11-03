@@ -11,6 +11,7 @@ import Combine
 class MessageChatViewModel: ObservableObject, Identifiable {
     let clientId: String
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    var recipientDeviceId: UInt32 = 0
     @Published var messages: [MessageModel] = []
     
     init(clientId: String) {
@@ -61,69 +62,67 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             }
             // create CKBundle
             do {
-//                let remotePrekey = try SignalPreKey.init(serializedData: recipientStore.preKey)
-//                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientStore.signedPreKey)
-//                
-//                guard let preKeyKeyPair = remotePrekey.keyPair, let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-//                    return
-//                }
-//                
-//                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
-//                                                                deviceId: UInt32(recipientStore.deviceID),
-//                                                                preKeyId: UInt32(recipientStore.preKeyID),
-//                                                                preKeyPublic: preKeyKeyPair.publicKey,
-//                                                                signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
-//                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-//                                                                signature: recipientStore.signedPreKeySignature,
-//                                                                identityKey: recipientStore.identityKeyPublic)
-//                
-//                
-//                let remoteAddress = SignalAddress(name: recipientStore.clientID, deviceId: recipientStore.deviceID)
-//                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: Backend.shared.authenticator.clientStore.context)
-//                
-//                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-                
-                
-                let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientStore.signedPreKeyID),
-                                                         publicKey: recipientStore.signedPreKey,
-                                                         signature: recipientStore.signedPreKeySignature)
-                let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientStore.preKeyID),
-                                        publicKey: recipientStore.preKey)
+                if let ourEncryptionMng = self?.ourEncryptionManager,
+                   let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+                   let myAccount = CKSignalCoordinate.shared.myAccount {
+                    self?.recipientDeviceId = UInt32(recipientStore.deviceID)
+                    // save devcice by recipient account
+                    connectionDb.readWrite ({ (transaction) in
+                        if let _ = myAccount.refetch(with: transaction) {
+                            let buddy = CKBuddy()!
+                            buddy.accountUniqueId = myAccount.uniqueId
+                            buddy.username = recipientStore.clientID
+                            buddy.save(with:transaction)
+                            
+                            let device = CKDevice(deviceId: NSNumber(value:recipientStore.deviceID),
+                                                  trustLevel: .trustedTofu,
+                                                  parentKey: buddy.uniqueId,
+                                                  parentCollection: CKBuddy.collection,
+                                                  publicIdentityKeyData: nil,
+                                                  lastSeenDate:nil)
+                            device.save(with:transaction)
+                        }
+                    })
+                    
+                    let remotePrekey = try SignalPreKey.init(serializedData: recipientStore.preKey)
+                    let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientStore.signedPreKey)
 
-                let bundle = CKBundle(deviceId: UInt32(recipientStore.deviceID),
-                                      registrationId: UInt32(recipientStore.registrationID),
-                                          identityKey: recipientStore.identityKeyPublic,
-                                          signedPreKey: ckSignedPreKey,
-                                          preKeys: [ckPreKey])
+                    guard let preKeyKeyPair = remotePrekey.keyPair, let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
+                        return
+                    }
 
-                try self?.ourEncryptionManager?.consumeIncomingBundle(recipientStore.clientID, bundle: bundle)
-                
-                
-//                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
-//                                                                deviceId: UInt32(recipientStore.deviceID),
-//                                                                preKeyId: UInt32(recipientStore.preKeyID),
-//                                                                preKeyPublic: recipientStore.preKey,
-//                                                                signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
-//                                                                signedPreKeyPublic: recipientStore.signedPreKey,
-//                                                                signature: recipientStore.signedPreKeySignature,
-//                                                                identityKey: recipientStore.identityKeyPublic)
+                    let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
+                                                                    deviceId: UInt32(recipientStore.deviceID),
+                                                                    preKeyId: UInt32(recipientStore.preKeyID),
+                                                                    preKeyPublic: preKeyKeyPair.publicKey,
+                                                                    signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
+                                                                    signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
+                                                                    signature: recipientStore.signedPreKeySignature,
+                                                                    identityKey: recipientStore.identityKeyPublic)
+
+
+                    let remoteAddress = SignalAddress(name: recipientStore.clientID, deviceId: recipientStore.deviceID)
+                    let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: ourEncryptionMng.signalContext)
+                    try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
+                    
+                    
+//                    let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientStore.signedPreKeyID),
+//                                                             publicKey: recipientStore.signedPreKey,
+//                                                             signature: recipientStore.signedPreKeySignature)
+//                    let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientStore.preKeyID),
+//                                            publicKey: recipientStore.preKey)
 //
+//                    let bundle = CKBundle(deviceId: UInt32(recipientStore.deviceID),
+//                                          registrationId: UInt32(recipientStore.registrationID),
+//                                              identityKey: recipientStore.identityKeyPublic,
+//                                              signedPreKey: ckSignedPreKey,
+//                                              preKeys: [ckPreKey])
 //
-//                let remoteAddress = SignalAddress(name: recipientStore.clientID, deviceId: recipientStore.deviceID)
-//                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: self!.otherEncryptionManager!.signalContext)
-//
-//                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-//
-//                let remoteSessionCipher = SignalSessionCipher(address: remoteAddress, context: self!.ourEncryptionManager!.signalContext)
-//
-//                guard let messageUTF8 = "message".data(using: .utf8) else {
-//                    return
-//                }
-//
-//                let cipherText = try remoteSessionCipher.encryptData(messageUTF8)
-                print("")
+//                    try ourEncryptionMng.consumeIncomingBundle(recipientStore.clientID, bundle: bundle)
+                    print("")
+                }
             } catch {
-                print("consumeIncomingBundle Error: \(error)")
+                print("requestBundleRecipient Error: \(error)")
             }
         }
     }
@@ -136,10 +135,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         let post = MessageModel(from: clientId, data: payload)
         
         messages.append(post)
-        if let ourUsername = CKSignalCoordinate.shared.ourEncryptionManager?.storage.accountKey {
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
-                let encryptedData = try ourEncryptionManager?.encryptToAddress(payload, name: ourUsername, deviceId: 1)
-                Backend.shared.send(encryptedData!.data, from: ourUsername, to: clientId) { (result, error) in
+                let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                                                                               name: clientId,
+                                                                               deviceId: recipientDeviceId)
+                Backend.shared.send(encryptedData!.data,
+                                    from: myAccount.username,
+                                    to: clientId) { (result, error) in
                     print("Send message: \(result)")
                 }
             } catch {

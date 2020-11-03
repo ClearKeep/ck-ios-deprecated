@@ -11,6 +11,7 @@ class CKSignalCoordinate {
     static let shared = CKSignalCoordinate()
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    var myAccount: CKAccount?
     var othersEncryptionManager: [String: CKAccountSignalEncryptionManager] = [:]
     
     func getOtherEncryptionManager(byClientId clientId: String) -> CKAccountSignalEncryptionManager? {

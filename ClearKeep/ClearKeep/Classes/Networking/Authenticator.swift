@@ -69,26 +69,44 @@ class Authenticator {
                               _ completion: @escaping (Bool, Error?) -> Void,
                               submit: @escaping (Signalc_SignalRegisterKeysRequest, CallOptions?)
                                 -> UnaryCall<Signalc_SignalRegisterKeysRequest, Signalc_BaseResponse>) {
-        
-        if let connectionDb = CKDatabaseManager.shared.database?.newConnection() {
-            do {
-                let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: address.name,
+        do {
+            if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+               let myAccount = CKAccount(username: address.name, accountType: .none) {
+                // save account
+                connectionDb.readWrite({ (transaction) in
+                    myAccount.save(with:transaction)
+                })
+                let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
                                                                               databaseConnection: connectionDb)
                 let clientId = address.name
-                let ckBundle = try ourSignalEncryptionMng.generateOutgoingBundle(10)
+                let ckBundle = try ourSignalEncryptionMng.generateOutgoingBundle(2)
                 let preKey = ckBundle.preKeys.first
+                
+                CKSignalCoordinate.shared.myAccount = myAccount
                 CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
                 
+                let signalBundle = try ckBundle.signalBundle()
                 // set parameters request register account
+//                let request: Signalc_SignalRegisterKeysRequest = .with {
+//                    $0.clientID = clientId
+//                    $0.deviceID = Int32(address.deviceId)
+//                    $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
+//                    $0.identityKeyPublic = ckBundle.identityKey
+//                    $0.preKeyID = Int32(preKey!.preKeyId)
+//                    $0.preKey = preKey!.publicKey
+//                    $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
+//                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
+//                    $0.signedPreKeySignature = ckBundle.signedPreKey.signature
+//                }
                 let request: Signalc_SignalRegisterKeysRequest = .with {
                     $0.clientID = clientId
                     $0.deviceID = Int32(address.deviceId)
                     $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
                     $0.identityKeyPublic = ckBundle.identityKey
                     $0.preKeyID = Int32(preKey!.preKeyId)
-                    $0.preKey = preKey!.publicKey
+                    $0.preKey = (ourSignalEncryptionMng.myPreKey?.serializedData())!
                     $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
-                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
+                    $0.signedPreKey = (ourSignalEncryptionMng.mySignalPreKey?.serializedData())!
                     $0.signedPreKeySignature = ckBundle.signedPreKey.signature
                 }
                 
@@ -106,9 +124,9 @@ class Authenticator {
                         }
                     }
                 }
-            } catch {
-                print("registerUser error: \(error.localizedDescription)")
             }
+        } catch {
+            print("registerUser error: \(error.localizedDescription)")
         }
     }
     

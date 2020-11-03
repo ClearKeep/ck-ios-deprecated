@@ -39,12 +39,15 @@ struct LoginView: View {
 extension LoginView {
     
     private func register() {
-        
+        registerByAddress()
+//        registerOld()
+    }
+    
+    private func registerOld() {
         guard let deviceID: Int32 = Int32(deviceID) else {
             print("DeviceID always number")
             return
         }
-//        registerByAddress()
         
         let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
 
@@ -57,11 +60,14 @@ extension LoginView {
                 self.viewRouter.current = .masterDetail
             }
         }
-        
     }
     
     private func registerByAddress() {
-        let address = SignalAddress(name: username, deviceId: Int32(deviceID)!)
+        guard let deviceID: Int32 = Int32(deviceID) else {
+            print("DeviceID always number")
+            return
+        }
+        let address = SignalAddress(name: username, deviceId: Int32(deviceID))
         Backend.shared.authenticator.register(address: address) { (result, error) in
             print("Register result: \(result)")
             if result {
@@ -83,9 +89,31 @@ extension LoginView {
         Backend.shared.authenticator.login(username) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
-                let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: self.username, databaseConnection: dbConnection)
-                let _ = try ourEncryptionManager.generateOutgoingBundle(1)
-                CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                if let receiveStore = response,
+                   let myAccount = CKAccount(username: receiveStore.clientID, accountType: .none) {
+                    // save account
+                    dbConnection.readWrite({ (transaction) in
+                        myAccount.save(with:transaction)
+                    })
+                    
+                    let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId, databaseConnection: dbConnection)
+                    
+                    let _ = try ourEncryptionManager.generateOutgoingBundle(1)
+//
+//                    // save devcice
+//                    dbConnection.readWrite ({ (transaction) in
+//                        let device = CKDevice(deviceId: NSNumber(value: receiveStore.registrationID),
+//                                              trustLevel: .trustedTofu,
+//                                              parentKey: "CKDevice",
+//                                              parentCollection: "CKDevice.collection",
+//                                              publicIdentityKeyData: nil,
+//                                              lastSeenDate:nil)
+//                        device.save(with:transaction)
+//                    })
+                    CKSignalCoordinate.shared.myAccount = myAccount
+                    CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                }
+                
                 if result {
                     self.viewRouter.current = .masterDetail
                 }
@@ -93,9 +121,7 @@ extension LoginView {
                 print("Login with error: \(error)")
             }
         }
-        
     }
-
 }
 
 struct LoginView_Previews: PreviewProvider {

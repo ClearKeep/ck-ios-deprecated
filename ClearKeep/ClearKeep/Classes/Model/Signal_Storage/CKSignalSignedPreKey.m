@@ -7,8 +7,8 @@
 //
 
 #import "CKSignalSignedPreKey.h"
-//#import "CKAccount.h"
-//#import "ChatSecureCoreCompat-Swift.h"
+#import "CKAccount.h"
+#import "ClearKeep-Swift.h"
 
 @implementation CKSignalSignedPreKey
 
@@ -25,11 +25,11 @@
 
 - (nullable NSArray<YapDatabaseRelationshipEdge *> *)yapDatabaseRelationshipEdges
 {
-//    NSString *edgeName = [YapDatabaseConstants edgeName:RelationshipEdgeNameSignalSignedPreKey];
-//    YapDatabaseRelationshipEdge *edge = [YapDatabaseRelationshipEdge edgeWithName:edgeName destinationKey:self.accountKey collection:[OTRAccount collection] nodeDeleteRules:YDB_DeleteSourceIfDestinationDeleted];
-//    if (edge) {
-//        return @[edge];
-//    }
+    NSString *edgeName = [YapDatabaseConstants edgeName:RelationshipEdgeNameSignalSignedPreKey];
+    YapDatabaseRelationshipEdge *edge = [YapDatabaseRelationshipEdge edgeWithName:edgeName destinationKey:self.accountKey collection:[CKAccount collection] nodeDeleteRules:YDB_DeleteSourceIfDestinationDeleted];
+    if (edge) {
+        return @[edge];
+    }
     return nil;
 }
 

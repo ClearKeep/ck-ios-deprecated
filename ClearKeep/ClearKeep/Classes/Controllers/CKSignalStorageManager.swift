@@ -110,13 +110,13 @@ class CKSignalStorageManager: NSObject {
     internal func currentMaxPreKeyId() ->  UInt32? {
         var maxId:UInt32?
         self.databaseConnection.read { (transaction) in
-//            guard let secondaryIndexTransaction = transaction.ext(SecondaryIndexName.signal) as? YapDatabaseSecondaryIndexTransaction else {
-//                return
-//            }
-//            let query = YapDatabaseQuery.init(aggregateFunction: "MAX(\(SignalIndexColumnName.preKeyId))", string: "WHERE \(SignalIndexColumnName.preKeyAccountKey) = ?", parameters: ["\(self.accountKey)"])
-//            if let result = secondaryIndexTransaction.performAggregateQuery(query) as? NSNumber {
-//                maxId = result.uint32Value
-//            }
+            guard let secondaryIndexTransaction = transaction.ext(SecondaryIndexName.signal) as? YapDatabaseSecondaryIndexTransaction else {
+                return
+            }
+            let query = YapDatabaseQuery.init(aggregateFunction: "MAX(\(SignalIndexColumnName.preKeyId))", string: "WHERE \(SignalIndexColumnName.preKeyAccountKey) = ?", parameters: ["\(self.accountKey)"])
+            if let result = secondaryIndexTransaction.performAggregateQuery(query) as? NSNumber {
+                maxId = result.uint32Value
+            }
         }
         return maxId
     }
@@ -131,20 +131,20 @@ class CKSignalStorageManager: NSObject {
     internal func fetchAllPreKeys(_ includeDeleted:Bool) -> [CKSignalPreKey] {
         var preKeys = [CKSignalPreKey]()
         self.databaseConnection.read { (transaction) in
-//            guard let secondaryIndexTransaction = transaction.ext(SecondaryIndexName.signal) as? YapDatabaseSecondaryIndexTransaction else {
-//                return
-//            }
-//
-//            let query = YapDatabaseQuery(string: "WHERE (CKYapDatabaseSignalPreKeyAccountKeySecondaryIndexColumnName) = ?", parameters:  ["\(self.accountKey)"])
-//            let _ = secondaryIndexTransaction.iterateKeysAndObjects(matching: query, using: { (collection, key, object, stop) in
-//                guard let preKey = object as? CKSignalPreKey else {
-//                    return
-//                }
-//
-//                if(preKey.keyData != nil || includeDeleted) {
-//                    preKeys.append(preKey)
-//                }
-//            })
+            guard let secondaryIndexTransaction = transaction.ext(SecondaryIndexName.signal) as? YapDatabaseSecondaryIndexTransaction else {
+                return
+            }
+
+            let query = YapDatabaseQuery(string: "WHERE (CKYapDatabaseSignalPreKeyAccountKeySecondaryIndexColumnName) = ?", parameters:  ["\(self.accountKey)"])
+            let _ = secondaryIndexTransaction.iterateKeysAndObjects(matching: query, using: { (collection, key, object, stop) in
+                guard let preKey = object as? CKSignalPreKey else {
+                    return
+                }
+
+                if(preKey.keyData != nil || includeDeleted) {
+                    preKeys.append(preKey)
+                }
+            })
         }
         return preKeys
     }
@@ -177,33 +177,31 @@ class CKSignalStorageManager: NSObject {
         return bundle
     }
 
-//    fileprivate func fetchDeviceForSignalAddress(_ signalAddress:SignalAddress) -> OMEMODevice? {
-//        guard let parentEntry = self.parentKeyAndCollectionForSignalAddress(signalAddress, transaction: transaction) else {
-//            return nil
-//        }
-//
-//        let deviceNumber = NSNumber(value: signalAddress.deviceId as Int32)
-//        let deviceYapKey = OMEMODevice.yapKey(withDeviceId: deviceNumber, parentKey: parentEntry.key, parentCollection: parentEntry.collection)
-//        guard let device = OMEMODevice.fetchObject(withUniqueID: deviceYapKey, transaction: transaction) else {
-//            return nil
-//        }
-//        return device
-//    }
+    fileprivate func fetchDeviceForSignalAddress(_ signalAddress:SignalAddress, transaction:YapDatabaseReadTransaction) -> CKDevice? {
+        guard let parentEntry = self.parentKeyAndCollectionForSignalAddress(signalAddress, transaction: transaction) else {
+            return nil
+        }
+
+        let deviceNumber = NSNumber(value: signalAddress.deviceId as Int32)
+        let deviceYapKey = CKDevice.yapKey(withDeviceId: deviceNumber, parentKey: parentEntry.key, parentCollection: parentEntry.collection)
+        guard let device = CKDevice.fetchObject(withUniqueID: deviceYapKey, transaction: transaction) else {
+            return nil
+        }
+        return device
+    }
     
-    fileprivate func parentKeyAndCollectionForSignalAddress(_ signalAddress:SignalAddress) -> (key: String, collection: String)? {
+    fileprivate func parentKeyAndCollectionForSignalAddress(_ signalAddress:SignalAddress, transaction:YapDatabaseReadTransaction) -> (key: String, collection: String)? {
         var parentKey:String? = nil
         var parentCollection:String? = nil
         
-//        let ourAccount = CKAccount.fetchObject(withUniqueID: self.accountKey, transaction: transaction)
-//        if ourAccount?.username == signalAddress.name {
-//
-//            parentKey = self.accountKey
-//            parentCollection = CKAccount.collection
-//
-//        } else if let jid = XMPPJID(string: signalAddress.name), let buddy = CKXMPPBuddy.fetchBuddy(jid: jid, accountUniqueId: self.accountKey, transaction: transaction) {
-//            parentKey = buddy.uniqueId
-//            parentCollection = CKBuddy.collection
-//        }
+        let ourAccount = CKAccount.fetchObject(withUniqueID: self.accountKey, transaction: transaction)
+        if ourAccount?.username == signalAddress.name {
+            parentKey = self.accountKey
+            parentCollection = CKAccount.collection
+        } else if let buddy = CKBuddy.fetchBuddy(username: signalAddress.name, accountUniqueId: self.accountKey, transaction: transaction) {
+            parentKey = buddy.uniqueId
+            parentCollection = CKBuddy.collection
+        }
         
         guard let key = parentKey, let collection = parentCollection else {
             return nil
@@ -212,6 +210,7 @@ class CKSignalStorageManager: NSObject {
         return (key: key, collection: collection)
     }
 }
+
 //MARK: SignalStore
 extension CKSignalStorageManager: SignalStore {
     
@@ -287,7 +286,7 @@ extension CKSignalStorageManager: SignalStore {
         }
         return preKeyData
     }
-        
+    
     public func storePreKey(_ preKey: Data, preKeyId: UInt32) -> Bool {
         var result = false
         self.databaseConnection.readWrite { (transaction) in
@@ -314,7 +313,6 @@ extension CKSignalStorageManager: SignalStore {
                 preKey.save(with: transaction)
                 result = true
             }
-
         }
         return result
     }
@@ -335,7 +333,6 @@ extension CKSignalStorageManager: SignalStore {
         guard let signedPreKeyDatabaseObject = CKSignalSignedPreKey(accountKey: self.accountKey, keyId: signedPreKeyId, keyData: signedPreKey) else {
             return false
         }
-        //save signedPreKey to database
         self.databaseConnection.readWrite { (transaction) in
             signedPreKeyDatabaseObject.save(with: transaction)
         }
@@ -381,32 +378,31 @@ extension CKSignalStorageManager: SignalStore {
     
     public func saveIdentity(_ address: SignalAddress, identityKey: Data?) -> Bool {
         var result = false
-        // TODO: save Identity to database
-//        self.databaseConnection.readWrite { (transaction) in
-//            if let device = self.fetchDeviceForSignalAddress(address, transaction: transaction) {
-//                let newDevice = OMEMODevice(deviceId: device.deviceId, trustLevel: device.trustLevel, parentKey: device.parentKey, parentCollection: device.parentCollection, publicIdentityKeyData: identityKey, lastSeenDate:device.lastSeenDate)
-//                newDevice.save(with: transaction)
-//                result = true
-//            } else if let parentEntry = self.parentKeyAndCollectionForSignalAddress(address, transaction: transaction) {
-//
-//                //See if we have any devices
-//                var hasDevices = false
-//                OMEMODevice.enumerateDevices(forParentKey: parentEntry.key, collection: parentEntry.collection, transaction: transaction, using: { (device, stop) in
-//                    hasDevices = true
-//                    stop.pointee = true
-//                })
-//
-//                var trustLevel = OMEMCKustLevel.untrustedNew
-//                if (!hasDevices) {
-//                    //This is the first time we're seeing a device list for this account/buddy so it should be saved as TOFU
-//                    trustLevel = .trustedTofu
-//                }
-//                let deviceIdNumber = NSNumber(value: address.deviceId as Int32)
-//                let newDevice = OMEMODevice(deviceId: deviceIdNumber, trustLevel: trustLevel, parentKey: parentEntry.key, parentCollection: parentEntry.collection, publicIdentityKeyData: identityKey, lastSeenDate:Date())
-//                newDevice.save(with: transaction)
-//                result = true
-//            }
-//        }
+        self.databaseConnection.readWrite { (transaction) in
+            if let device = self.fetchDeviceForSignalAddress(address, transaction: transaction) {
+                let newDevice = CKDevice(deviceId: device.deviceId, trustLevel: device.trustLevel, parentKey: device.parentKey, parentCollection: device.parentCollection, publicIdentityKeyData: identityKey, lastSeenDate:device.lastSeenDate)
+                newDevice.save(with: transaction)
+                result = true
+            } else if let parentEntry = self.parentKeyAndCollectionForSignalAddress(address, transaction: transaction) {
+
+                //See if we have any devices
+                var hasDevices = false
+                CKDevice.enumerateDevices(forParentKey: parentEntry.key, collection: parentEntry.collection, transaction: transaction, using: { (device, stop) in
+                    hasDevices = true
+                    stop.pointee = true
+                })
+
+                var trustLevel = CKTrustLevel.untrustedNew
+                if (!hasDevices) {
+                    //This is the first time we're seeing a device list for this account/buddy so it should be saved as TOFU
+                    trustLevel = .trustedTofu
+                }
+                let deviceIdNumber = NSNumber(value: address.deviceId as Int32)
+                let newDevice = CKDevice(deviceId: deviceIdNumber, trustLevel: trustLevel, parentKey: parentEntry.key, parentCollection: parentEntry.collection, publicIdentityKeyData: identityKey, lastSeenDate:Date())
+                newDevice.save(with: transaction)
+                result = true
+            }
+        }
         return result
     }
     
@@ -457,7 +453,6 @@ extension CKSignalStorageManager: SignalStore {
         return senderKeyData
     }
 }
-
 
 extension CKSignalSession {
     /// "\(accountKey)-\(name)", only used for SecondaryIndex lookups

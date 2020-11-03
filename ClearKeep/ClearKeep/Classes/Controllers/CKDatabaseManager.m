@@ -7,7 +7,7 @@
 //
 
 #import "CKDatabaseManager.h"
-
+#import "ClearKeep-Swift.h"
 @import YapDatabase;
 
 #import "CKSignalSession.h"
@@ -105,18 +105,21 @@ NSString *const CKYapDatabaseName = @"CKYap.sqlite";
         // Register realtionship extension
         YapDatabaseRelationship *databaseRelationship = [[YapDatabaseRelationship alloc] initWithVersionTag:@"1"];
         
-//        [self.database registerExtension:databaseRelationship withName:[YapDatabaseConstants extensionName:DatabaseExtensionNameRelationshipExtensionName]];
+        [self.database registerExtension:databaseRelationship withName:[YapDatabaseConstants extensionName:DatabaseExtensionNameRelationshipExtensionName]];
 //
 //        // Register Secondary Indexes
-//        YapDatabaseSecondaryIndex *signalIndex = YapDatabaseSecondaryIndex.signalIndex;
-//        [self.database registerExtension:signalIndex withName:SecondaryIndexName.signal];
+        YapDatabaseSecondaryIndex *signalIndex = YapDatabaseSecondaryIndex.signalIndex;
+        [self.database registerExtension:signalIndex withName:SecondaryIndexName.signal];
         
 //        YapDatabaseSecondaryIndex *messageIndex = YapDatabaseSecondaryIndex.messageIndex;
 //        [self.database registerExtension:messageIndex withName:SecondaryIndexName.messages];
+        
 //        YapDatabaseSecondaryIndex *roomOccupantIndex = YapDatabaseSecondaryIndex.roomOccupantIndex;
 //        [self.database registerExtension:roomOccupantIndex withName:SecondaryIndexName.roomOccupants];
-//        YapDatabaseSecondaryIndex *buddyIndex = YapDatabaseSecondaryIndex.buddyIndex;
-//        [self.database registerExtension:buddyIndex withName:SecondaryIndexName.buddy];
+        
+        YapDatabaseSecondaryIndex *buddyIndex = YapDatabaseSecondaryIndex.buddyIndex;
+        [self.database registerExtension:buddyIndex withName:SecondaryIndexName.buddy];
+        
 //        YapDatabaseSecondaryIndex *mediaItemIndex = YapDatabaseSecondaryIndex.mediaItemIndex;
 //        [self.database registerExtension:mediaItemIndex withName:SecondaryIndexName.mediaItems];
 //

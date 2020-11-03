@@ -168,6 +168,7 @@ class Backend: ObservableObject {
                 print(response)
                 completion?(false, nil)
             case .failure(let error):
+                print(error)
                 completion?(false, error)
             }
         }

@@ -16,6 +16,8 @@ public enum SignalEncryptionError:Error {
 class CKAccountSignalEncryptionManager {
     let storage: CKSignalStorageManager
     var signalContext: SignalContext
+    var mySignalPreKey: SignalSignedPreKey?
+    var myPreKey: SignalPreKey?
     
     //In OMEMO world the registration ID is used as the device id and all devices have registration ID of 0.
     open var registrationId:UInt32 {
@@ -89,13 +91,19 @@ extension CKAccountSignalEncryptionManager {
         if signalSignedPreKey == nil {
             signalSignedPreKey = self.generateRandomSignedPreKey()
         }
-        guard let signedPreKey = signalSignedPreKey, let data = signedPreKey.serializedData() else {
+        guard let signedPreKey = signalSignedPreKey,
+              let data = signedPreKey.serializedData() else {
             throw CKBundleError.keyGeneration
         }
-        guard let preKeys = self.generatePreKeys(1, count: preKeyCount) else {
+        guard let preKeys = self.generatePreKeys(1, count: preKeyCount),
+              let preKeyFirst = preKeys.first,
+              let dataPreKey = preKeyFirst.serializedData() else {
             throw CKBundleError.keyGeneration
         }
+        myPreKey = preKeyFirst
+        mySignalPreKey = signalSignedPreKey
         let bundle = try CKBundle(deviceId: deviceId, registrationId: self.registrationId, identity: identityKeyPair, signedPreKey: signedPreKey, preKeys: preKeys)
+        _ = self.storage.storePreKey(dataPreKey, preKeyId: preKeyFirst.preKeyId)
         _ = self.storage.storeSignedPreKey(data, signedPreKeyId: signedPreKey.preKeyId)
         return bundle
     }
