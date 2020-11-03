@@ -21,7 +21,11 @@ class CKBundle: NSObject {
     let signedPreKey: CKSignedPreKey
     let preKeys: [CKPreKey]
     
-    init(deviceId: UInt32, registrationId: UInt32, identityKey: Data, signedPreKey: CKSignedPreKey, preKeys: [CKPreKey]) {
+    init(deviceId: UInt32,
+         registrationId: UInt32,
+         identityKey: Data,
+         signedPreKey: CKSignedPreKey,
+         preKeys: [CKPreKey]) {
         self.deviceId = deviceId
         self.identityKey = identityKey
         self.signedPreKey = signedPreKey
@@ -34,7 +38,11 @@ extension CKBundle {
     
     /// Returns copy of bundle with new preKeys
     func copyBundle(newPreKeys: [CKPreKey]) -> CKBundle {
-        let bundle = CKBundle(deviceId: deviceId, registrationId: registrationId, identityKey: identityKey, signedPreKey: signedPreKey, preKeys: newPreKeys)
+        let bundle = CKBundle(deviceId: deviceId,
+                              registrationId: registrationId,
+                              identityKey: identityKey,
+                              signedPreKey: signedPreKey,
+                              preKeys: newPreKeys)
         return bundle
     }
     
@@ -52,33 +60,50 @@ extension CKBundle {
         return preKeyBundle
     }
     
-    convenience init(deviceId: UInt32, registrationId: UInt32, identity: SignalIdentityKeyPair, signedPreKey: SignalSignedPreKey, preKeys: [SignalPreKey]) throws {
+    convenience init(deviceId: UInt32,
+                     registrationId: UInt32,
+                     identity: SignalIdentityKeyPair,
+                     signedPreKey: SignalSignedPreKey,
+                     preKeys: [SignalPreKey]) throws {
 
-        let omemoSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
-        let omemoPreKeys = CKPreKey.preKeysFromSignal(preKeys)
+        let ckSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
+        let ckPreKeys = CKPreKey.preKeysFromSignal(preKeys)
         
         // Double check that this bundle is valid
         if let preKey = preKeys.first,
             let preKeyPublic = preKey.keyPair?.publicKey {
-            let _ = try SignalPreKeyBundle(registrationId: 0, deviceId: deviceId, preKeyId: preKey.preKeyId, preKeyPublic: preKeyPublic, signedPreKeyId: omemoSignedPreKey.preKeyId, signedPreKeyPublic: omemoSignedPreKey.publicKey, signature: omemoSignedPreKey.signature, identityKey: identity.publicKey)
+            let _ = try SignalPreKeyBundle(registrationId: 0,
+                                           deviceId: deviceId,
+                                           preKeyId: preKey.preKeyId,
+                                           preKeyPublic: preKeyPublic,
+                                           signedPreKeyId: ckSignedPreKey.preKeyId,
+                                           signedPreKeyPublic: ckSignedPreKey.publicKey,
+                                           signature: ckSignedPreKey.signature,
+                                           identityKey: identity.publicKey)
         } else {
             throw CKBundleError.invalid
         }
         
-        self.init(deviceId: deviceId, registrationId: registrationId, identityKey: identity.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
+        self.init(deviceId: deviceId,
+                  registrationId: registrationId,
+                  identityKey: identity.publicKey,
+                  signedPreKey: ckSignedPreKey,
+                  preKeys: ckPreKeys)
     }
     
-    convenience init(identity: CKAccountSignalIdentity, signedPreKey: CKSignalSignedPreKey, preKeys: [CKSignalPreKey]) throws {
-        let omemoSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
+    convenience init(identity: CKAccountSignalIdentity,
+                     signedPreKey: CKSignalSignedPreKey,
+                     preKeys: [CKSignalPreKey]) throws {
+        let ckSignedPreKey = try CKSignedPreKey(signedPreKey: signedPreKey)
         
-        var omemoPreKeys: [CKPreKey] = []
+        var ckPreKeys: [CKPreKey] = []
         preKeys.forEach { (preKey) in
             guard let keyData = preKey.keyData, keyData.count > 0 else { return }
             do {
                 let signalPreKey = try SignalPreKey(serializedData: keyData)
                 guard let pk = signalPreKey.keyPair?.publicKey else { return }
-                let omemoPreKey = CKPreKey(withPreKeyId: preKey.keyId, publicKey: pk)
-                omemoPreKeys.append(omemoPreKey)
+                let ckPreKey = CKPreKey(withPreKeyId: preKey.keyId, publicKey: pk)
+                ckPreKeys.append(ckPreKey)
             } catch let error {
                 NSLog("Found invalid prekey: \(error)")
             }
@@ -88,11 +113,22 @@ extension CKBundle {
         if let preKey = preKeys.first, let preKeyData = preKey.keyData,
             let signalPreKey = try? SignalPreKey(serializedData: preKeyData),
             let preKeyPublic = signalPreKey.keyPair?.publicKey {
-            let _ = try SignalPreKeyBundle(registrationId: 0, deviceId: identity.registrationId, preKeyId: preKey.keyId, preKeyPublic: preKeyPublic, signedPreKeyId: omemoSignedPreKey.preKeyId, signedPreKeyPublic: omemoSignedPreKey.publicKey, signature: omemoSignedPreKey.signature, identityKey: identity.identityKeyPair.publicKey)
+            let _ = try SignalPreKeyBundle(registrationId: 0,
+                                           deviceId: identity.registrationId,
+                                           preKeyId: preKey.keyId,
+                                           preKeyPublic: preKeyPublic,
+                                           signedPreKeyId: ckSignedPreKey.preKeyId,
+                                           signedPreKeyPublic: ckSignedPreKey.publicKey,
+                                           signature: ckSignedPreKey.signature,
+                                           identityKey: identity.identityKeyPair.publicKey)
         } else {
             throw CKBundleError.invalid
         }
         
-        self.init(deviceId: identity.registrationId, registrationId: identity.registrationId, identityKey: identity.identityKeyPair.publicKey, signedPreKey: omemoSignedPreKey, preKeys: omemoPreKeys)
+        self.init(deviceId: identity.registrationId,
+                  registrationId: identity.registrationId,
+                  identityKey: identity.identityKeyPair.publicKey,
+                  signedPreKey: ckSignedPreKey,
+                  preKeys: ckPreKeys)
     }
 }

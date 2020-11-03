@@ -101,7 +101,7 @@ extension CKAccountSignalEncryptionManager {
             throw CKBundleError.keyGeneration
         }
         myPreKey = preKeyFirst
-        mySignalPreKey = signalSignedPreKey
+        mySignalPreKey = signedPreKey
         let bundle = try CKBundle(deviceId: deviceId, registrationId: self.registrationId, identity: identityKeyPair, signedPreKey: signedPreKey, preKeys: preKeys)
         _ = self.storage.storePreKey(dataPreKey, preKeyId: preKeyFirst.preKeyId)
         _ = self.storage.storeSignedPreKey(data, signedPreKeyId: signedPreKey.preKeyId)
@@ -129,7 +129,7 @@ extension CKAccountSignalEncryptionManager {
     public func decryptFromAddress(_ data:Data, name:String, deviceId:UInt32) throws -> Data {
         let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
-        let cipherText = SignalCiphertext(data: data, type: .unknown)
+        let cipherText = SignalCiphertext(data: data, type: .preKeyMessage)
         return try sessionCipher.decryptCiphertext(cipherText)
     }
     

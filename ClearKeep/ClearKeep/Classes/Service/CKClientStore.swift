@@ -96,7 +96,6 @@ extension CKClientStore {
                                                             identityKey: recipientStore.identityKeyPublic)
             
             
-            
             let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: context)
             
             try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)

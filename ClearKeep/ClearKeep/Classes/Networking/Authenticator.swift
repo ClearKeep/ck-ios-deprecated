@@ -85,30 +85,29 @@ class Authenticator {
                 CKSignalCoordinate.shared.myAccount = myAccount
                 CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
                 
-                let signalBundle = try ckBundle.signalBundle()
                 // set parameters request register account
-//                let request: Signalc_SignalRegisterKeysRequest = .with {
-//                    $0.clientID = clientId
-//                    $0.deviceID = Int32(address.deviceId)
-//                    $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
-//                    $0.identityKeyPublic = ckBundle.identityKey
-//                    $0.preKeyID = Int32(preKey!.preKeyId)
-//                    $0.preKey = preKey!.publicKey
-//                    $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
-//                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
-//                    $0.signedPreKeySignature = ckBundle.signedPreKey.signature
-//                }
                 let request: Signalc_SignalRegisterKeysRequest = .with {
                     $0.clientID = clientId
                     $0.deviceID = Int32(address.deviceId)
                     $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
                     $0.identityKeyPublic = ckBundle.identityKey
                     $0.preKeyID = Int32(preKey!.preKeyId)
-                    $0.preKey = (ourSignalEncryptionMng.myPreKey?.serializedData())!
+                    $0.preKey = preKey!.publicKey
                     $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
-                    $0.signedPreKey = (ourSignalEncryptionMng.mySignalPreKey?.serializedData())!
+                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
                     $0.signedPreKeySignature = ckBundle.signedPreKey.signature
                 }
+//                let request: Signalc_SignalRegisterKeysRequest = .with {
+//                    $0.clientID = clientId
+//                    $0.deviceID = Int32(address.deviceId)
+//                    $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
+//                    $0.identityKeyPublic = ckBundle.identityKey
+//                    $0.preKeyID = Int32(ourSignalEncryptionMng.myPreKey!.preKeyId)
+//                    $0.preKey = (ourSignalEncryptionMng.myPreKey?.serializedData())!
+//                    $0.signedPreKeyID = Int32(ourSignalEncryptionMng.mySignalPreKey!.preKeyId)
+//                    $0.signedPreKey = (ourSignalEncryptionMng.mySignalPreKey?.serializedData())!
+//                    $0.signedPreKeySignature = ckBundle.signedPreKey.signature
+//                }
                 
                 submit(request, nil).response.whenComplete { (result) in
 

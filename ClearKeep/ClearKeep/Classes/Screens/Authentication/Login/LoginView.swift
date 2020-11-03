@@ -99,17 +99,7 @@ extension LoginView {
                     let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId, databaseConnection: dbConnection)
                     
                     let _ = try ourEncryptionManager.generateOutgoingBundle(1)
-//
-//                    // save devcice
-//                    dbConnection.readWrite ({ (transaction) in
-//                        let device = CKDevice(deviceId: NSNumber(value: receiveStore.registrationID),
-//                                              trustLevel: .trustedTofu,
-//                                              parentKey: "CKDevice",
-//                                              parentCollection: "CKDevice.collection",
-//                                              publicIdentityKeyData: nil,
-//                                              lastSeenDate:nil)
-//                        device.save(with:transaction)
-//                    })
+
                     CKSignalCoordinate.shared.myAccount = myAccount
                     CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                 }
