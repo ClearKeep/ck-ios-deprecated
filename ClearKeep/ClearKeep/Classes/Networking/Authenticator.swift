@@ -82,7 +82,7 @@ class Authenticator {
                 // set parameters request register account
                 let request: Signalc_SignalRegisterKeysRequest = .with {
                     $0.clientID = clientId
-                    $0.deviceID = Int32(ckBundle.deviceId)
+                    $0.deviceID = Int32(address.deviceId)
                     $0.registrationID = Int32(ourSignalEncryptionMng.registrationId)
                     $0.identityKeyPublic = ckBundle.identityKey
                     $0.preKeyID = Int32(preKey!.preKeyId)
@@ -93,7 +93,7 @@ class Authenticator {
                 }
                 
                 submit(request, nil).response.whenComplete { (result) in
-                    
+
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let response):
@@ -101,7 +101,7 @@ class Authenticator {
                             completion(true, nil)
                         case .failure(_):
                             self.authenticated(cliendID: "") { (_, _, _) in
-                                
+
                             }
                         }
                     }

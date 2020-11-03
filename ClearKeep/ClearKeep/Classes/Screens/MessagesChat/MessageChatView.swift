@@ -20,19 +20,21 @@ struct MessageChatView: View {
     
     
     var body: some View {
-        List(viewModel.messages, id: \.newID) { model in
-            MessageView(mesgModel: model)
-        }
-        .navigationBarTitle(Text(self.selectedRoom))
-        HStack {
-            TextFieldContent(key: "Next message", value: self.$nextMessage)
-            Button( action: {
-                self.send()
-            }){
-                Image(systemName: "paperplane")
-            }.padding(.trailing)
-        }.onAppear() {
-            self.viewModel.messages.removeAll()
+        VStack {
+            List(viewModel.messages, id: \.newID) { model in
+                MessageView(mesgModel: model)
+            }
+            .navigationBarTitle(Text(self.selectedRoom))
+            HStack {
+                TextFieldContent(key: "Next message", value: self.$nextMessage)
+                Button( action: {
+                    self.send()
+                }){
+                    Image(systemName: "paperplane")
+                }.padding(.trailing)
+            }.onAppear() {
+                self.viewModel.messages.removeAll()
+            }
         }
     }
 }

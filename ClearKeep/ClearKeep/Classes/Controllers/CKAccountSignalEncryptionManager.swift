@@ -31,7 +31,9 @@ class CKAccountSignalEncryptionManager {
     }
     
     init(accountKey:String, databaseConnection:YapDatabaseConnection) throws {
-        self.storage = CKSignalStorageManager(accountKey: accountKey, databaseConnection: databaseConnection, delegate: nil)
+        self.storage = CKSignalStorageManager(accountKey: accountKey,
+                                              databaseConnection: databaseConnection,
+                                              delegate: nil)
         let signalStorage = SignalStorage(signalStore: self.storage)
         guard let context = SignalContext(storage: signalStorage) else {
             throw SignalEncryptionError.unableToCreateSignalContext

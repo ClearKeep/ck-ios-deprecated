@@ -44,18 +44,19 @@ extension LoginView {
             print("DeviceID always number")
             return
         }
-        registerByAddress()
-//        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
-//
-//        Backend.shared.authenticator.clientStore = clientStore
-//
-//        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
-//            print(result)
-//
-//            if result {
-//                self.viewRouter.current = .masterDetail
-//            }
-//        }
+//        registerByAddress()
+        
+        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
+
+        Backend.shared.authenticator.clientStore = clientStore
+
+        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
+            print(result)
+
+            if result {
+                self.viewRouter.current = .masterDetail
+            }
+        }
         
     }
     
@@ -82,8 +83,8 @@ extension LoginView {
         Backend.shared.authenticator.login(username) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
-                let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: username, databaseConnection: dbConnection)
-                
+                let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: self.username, databaseConnection: dbConnection)
+                let _ = try ourEncryptionManager.generateOutgoingBundle(1)
                 CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                 if result {
                     self.viewRouter.current = .masterDetail

@@ -62,35 +62,6 @@ class CKClientStore {
         inMemoryStore.storeSignedPreKey(signedPreKey!.serializedData()!, signedPreKeyId: signedPreKey!.preKeyId)
         
     }
-    
-    init(clientID: String, deviceID: Int32, memStore: SignalStoreInMemoryStorage) {
-        self.address = SignalAddress(name: clientID, deviceId: deviceID)
-        
-        inMemoryStore = memStore
-        
-        let storage = SignalStorage.init(signalStore: inMemoryStore)
-        
-        context = SignalContext(storage: storage)
-        
-        keyHelper = SignalKeyHelper(context: context!)!
-        keyHelper.generateIdentityKeyPair()
-        
-        identityKeyPair = keyHelper.generateIdentityKeyPair()
-        
-        localRegistrationId = Int32(keyHelper.generateRegistrationId())
-        
-        inMemoryStore.identityKeyPair = identityKeyPair
-        inMemoryStore.localRegistrationId = UInt32(localRegistrationId)
-        
-        let preKeys = keyHelper.generatePreKeys(withStartingPreKeyId: 0, count: 2)
-        
-        preKey1 = preKeys.first!
-        
-        signedPreKey = keyHelper.generateSignedPreKey(withIdentity: identityKeyPair!, signedPreKeyId: 1)
-        inMemoryStore.storePreKey(preKey1.serializedData()!, preKeyId: preKey1.preKeyId)
-        
-        inMemoryStore.storeSignedPreKey(signedPreKey!.serializedData()!, signedPreKeyId: signedPreKey!.preKeyId)
-    }
 }
 
 // MARK: Encrypt + decrypt message

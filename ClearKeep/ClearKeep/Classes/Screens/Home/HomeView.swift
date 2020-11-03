@@ -36,19 +36,21 @@ struct HomeView: View {
     
     
     var body: some View {
-        List(resource.messages, id: \.newID) { landmark in
-            PostView(postModel: landmark)
-        }
-        .navigationBarTitle(Text(self.selectedRoom))
-        HStack {
-            TextFieldContent(key: "Next message", value: self.$nextMessage)
-            Button( action: {
-                self.send()
-            }){
-                Image(systemName: "paperplane")
-            }.padding(.trailing)
-        }.onAppear() {
-            self.resource.messages.removeAll()
+        VStack {
+            List(resource.messages, id: \.newID) { landmark in
+                PostView(postModel: landmark)
+            }
+            .navigationBarTitle(Text(self.selectedRoom))
+            HStack {
+                TextFieldContent(key: "Next message", value: self.$nextMessage)
+                Button( action: {
+                    self.send()
+                }){
+                    Image(systemName: "paperplane")
+                }.padding(.trailing)
+            }.onAppear() {
+                self.resource.messages.removeAll()
+            }
         }
     }
     
