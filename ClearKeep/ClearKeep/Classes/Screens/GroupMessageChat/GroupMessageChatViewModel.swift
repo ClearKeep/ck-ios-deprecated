@@ -26,8 +26,8 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     @objc func didReceiveMessage(notification: NSNotification) {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
-           let publication = userInfo["publication"] as? SignalcGroup_GroupPublication,
-           publication.groupID == self.groupId {
+            let publication = userInfo["publication"] as? SignalcGroup_GroupPublication,
+           publication.groupID == self.groupId { // need check groupId
             decryptionMessage(publication: publication)
         }
     }

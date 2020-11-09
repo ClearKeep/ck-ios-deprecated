@@ -85,6 +85,10 @@ extension LoginView {
         }
         let groupId = "test_group"
         do {
+            // save my Account
+            connectionDb.readWrite { (transaction) in
+                myAccount.save(with: transaction)
+            }
             let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
                                                                               databaseConnection: connectionDb)
             
@@ -102,10 +106,6 @@ extension LoginView {
                                                        senderKeyData: signalSKDM.serializedData()) { (result, error) in
                 print("Register group with result: \(result)")
                 if result {
-                    // save my Account
-                    connectionDb.readWrite { (transaction) in
-                        myAccount.save(with: transaction)
-                    }
                     self.viewRouter.current = .masterDetail
                 }
             }
@@ -165,6 +165,9 @@ extension LoginView {
                     let accounts = CKAccount.allAccounts(withUsername: self.username, transaction: transaction)
                     if accounts.count > 0 {
                         myAccount = accounts.first
+                    } else {
+                        myAccount = CKAccount(username: self.username, deviceId: (response?.senderKey.deviceID)!, accountType: .none)
+                        myAccount?.save(with: transaction)
                     }
                 })
                 if let account = myAccount {

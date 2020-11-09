@@ -28,7 +28,7 @@ class CKAccountSignalEncryptionManager {
     
     open var identityKeyPair: SignalIdentityKeyPair {
         get {
-            return self.storage.getIdentityKeyPair()!
+            return self.storage.getIdentityKeyPair()
         }
     }
     
@@ -105,7 +105,7 @@ extension CKAccountSignalEncryptionManager {
         mySignalPreKey = signedPreKey
         let bundle = try CKBundle(deviceId: deviceId,
                                   registrationId: self.registrationId,
-                                  identity: identityKeyPair!,
+                                  identity: identityKeyPair,
                                   signedPreKey: signedPreKey,
                                   preKeys: preKeys)
         _ = self.storage.storePreKey(dataPreKey, preKeyId: preKeyFirst.preKeyId)
