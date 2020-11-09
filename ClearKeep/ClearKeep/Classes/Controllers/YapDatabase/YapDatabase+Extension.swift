@@ -47,7 +47,11 @@ public class DatabaseConnections: NSObject {
 
 extension YapDatabase {
     
-     @objc func asyncRegisterView(_ grouping:YapDatabaseViewGrouping, sorting:YapDatabaseViewSorting, version:String, whiteList:Set<String>, name:DatabaseExtensionName, completionQueue:DispatchQueue?, completionBlock:((Bool) ->Void)?) {
+     @objc func asyncRegisterView(_ grouping:YapDatabaseViewGrouping,
+                                  sorting:YapDatabaseViewSorting,
+                                  version:String, whiteList:Set<String>,
+                                  name:DatabaseExtensionName,
+                                  completionQueue:DispatchQueue?, completionBlock:((Bool) ->Void)?) {
         
         if (self.registeredExtension(name.name()) != nil ) {
             let queue:DispatchQueue = completionQueue ?? DispatchQueue.main

@@ -84,7 +84,6 @@ extension LoginView {
             return
         }
         let groupId = "test_group"
-        
         do {
             let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
                                                                               databaseConnection: connectionDb)
@@ -96,29 +95,6 @@ extension LoginView {
             
             CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
             CKSignalCoordinate.shared.myAccount = myAccount
-            
-            // test store SenderKey
-//            connectionDb.readWrite { (transaction) in
-//                guard let senderKey = CKSignalSenderKey(accountKey: myAccount.uniqueId,
-//                                                        name: senderKeyName.address.name,
-//                                                        deviceId: senderKeyName.address.deviceId,
-//                                                        groupId: senderKeyName.groupId,
-//                                                        senderKey: signalSKDM.serializedData()) else {
-//                    return
-//                }
-//                senderKey.save(with: transaction)
-//                print("")
-//            }
-            
-            // test fetch senderKey
-//            connectionDb.readWrite { (transaction) in
-//                let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: myAccount.uniqueId,
-//                                                         name: senderKeyName.address.name,
-//                                                         deviceId: senderKeyName.address.deviceId,
-//                                                         groupId: senderKeyName.groupId)
-//                let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
-//                print("")
-//            }
             
             Backend.shared.authenticator.registerGroup(byGroupId: groupId,
                                                        clientId: username,

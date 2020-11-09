@@ -189,8 +189,10 @@ extension CKAccountSignalEncryptionManager {
     }
     
     public func decryptFromGroup(_ data:Data, groupId: String, name: String, deviceId: UInt32) throws -> Data {
+        
         let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
         let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+        
         let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
         let cipherText = SignalCiphertext(data: data, type: .unknown)
         return try groupCipher.decryptCiphertext(cipherText)

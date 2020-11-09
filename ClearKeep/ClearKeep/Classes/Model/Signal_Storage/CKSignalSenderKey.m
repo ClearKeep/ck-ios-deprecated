@@ -17,7 +17,8 @@
                          senderKey:(NSData *)senderKey
 {
     if (self = [super initWithUniqueId:[[self class] uniqueKeyFromAccountKey:accountKey
-                                                                        name:name deviceId:deviceId
+                                                                        name:name
+                                                                    deviceId:deviceId
                                                                      groupId:groupId]]) {
         self.accountKey = accountKey;
         self.name = name;
@@ -32,7 +33,7 @@
                                  name:(NSString *)name
                              deviceId:(int32_t)deviceId
                               groupId:(NSString *)groupId {
-    return [NSString stringWithFormat:@"%@-%@-%d-%@",accountKey,name,deviceId,groupId];
+    return [NSString stringWithFormat:@"%@-%@-%d-%@", accountKey, name, deviceId, groupId];
 }
 
 @end

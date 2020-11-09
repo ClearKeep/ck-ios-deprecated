@@ -476,29 +476,43 @@ extension CKSignalStorageManager: SignalStore {
     
     //MARK: SignalSenderKeyStore
     func storeSenderKey(_ senderKey: Data, senderKeyName: SignalSenderKeyName) -> Bool {
-        self.databaseConnection.readWrite { (transaction) in
-            guard let senderKey = CKSignalSenderKey(accountKey: self.accountKey,
-                                                    name: senderKeyName.address.name,
-                                                    deviceId: senderKeyName.address.deviceId,
-                                                    groupId: senderKeyName.groupId,
-                                                    senderKey: senderKey) else {
-                return
-            }
-            senderKey.save(with: transaction)
-        }
+//        self.databaseConnection.readWrite { (transaction) in
+//            guard let senderKeyObj = CKSignalSenderKey(accountKey: self.accountKey,
+//                                                    name: senderKeyName.address.name,
+//                                                    deviceId: senderKeyName.address.deviceId,
+//                                                    groupId: senderKeyName.groupId,
+//                                                    senderKey: senderKey) else {
+//                return
+//            }
+//            senderKeyObj.save(with: transaction)
+//        }
+        guard let senderKeyObj = CKSignalSenderKey(accountKey: self.accountKey,
+                                                            name: senderKeyName.address.name,
+                                                            deviceId: senderKeyName.address.deviceId,
+                                                            groupId: senderKeyName.groupId,
+                                                            senderKey: senderKey) else {
+                        return false
+                    }
+        UserDefaults.standard.set(senderKey, forKey: senderKeyObj.uniqueId)
+        UserDefaults.standard.synchronize()
         return true
     }
     
     func loadSenderKey(for senderKeyName: SignalSenderKeyName) -> Data? {
         var senderKeyData:Data? = nil
-        self.databaseConnection.read { (transaction) in
-            let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey,
-                                                     name: senderKeyName.address.name,
-                                                     deviceId: senderKeyName.address.deviceId,
-                                                     groupId: senderKeyName.groupId)
-            let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
-            senderKeyData = senderKey?.senderKey
-        }
+//        self.databaseConnection.read { (transaction) in
+//            let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey,
+//                                                     name: senderKeyName.address.name,
+//                                                     deviceId: senderKeyName.address.deviceId,
+//                                                     groupId: senderKeyName.groupId)
+//            let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
+//            senderKeyData = senderKey?.senderKey
+//        }
+        let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey,
+        name: senderKeyName.address.name,
+        deviceId: senderKeyName.address.deviceId,
+        groupId: senderKeyName.groupId)
+        senderKeyData = UserDefaults.standard.data(forKey: yapKey)
         return senderKeyData
     }
     

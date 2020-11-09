@@ -9,7 +9,9 @@
 
 @implementation CKAccountSignalIdentity
 
-- (nullable instancetype)initWithAccountKey:(NSString *)accountKey identityKeyPair:(SignalIdentityKeyPair *)identityKeyPair registrationId:(uint32_t)registrationId
+- (nullable instancetype)initWithAccountKey:(NSString *)accountKey
+                            identityKeyPair:(SignalIdentityKeyPair *)identityKeyPair
+                             registrationId:(uint32_t)registrationId
 {
     if (self = [super initWithUniqueId:accountKey]) {
         self.accountKey = accountKey;

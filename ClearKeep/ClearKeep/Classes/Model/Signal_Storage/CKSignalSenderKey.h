@@ -17,9 +17,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) NSData *senderKey;
 
-- (nullable instancetype)initWithAccountKey:(NSString *)accountKey name:(NSString *)name deviceId:(int32_t)deviceId groupId:(NSString *)groupId senderKey:(NSData *)senderKey;
+- (nullable instancetype)initWithAccountKey:(NSString *)accountKey
+                                       name:(NSString *)name
+                                   deviceId:(int32_t)deviceId
+                                    groupId:(NSString *)groupId
+                                  senderKey:(NSData *)senderKey;
 
-+ (NSString *)uniqueKeyFromAccountKey:(NSString *)accountKey name:(NSString *)name deviceId:(int32_t)deviceId groupId:(NSString *)groupId;
++ (NSString *)uniqueKeyFromAccountKey:(NSString *)accountKey
+                                 name:(NSString *)name
+                             deviceId:(int32_t)deviceId
+                              groupId:(NSString *)groupId;
 
 @end
 

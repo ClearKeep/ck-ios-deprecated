@@ -16,7 +16,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     init(groupId: String) {
         self.groupId = groupId
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-//        requestAllKeyInGroup(byGroupId: groupId)
+        requestAllKeyInGroup(byGroupId: groupId)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMessage),
                                                name: NSNotification.Name("DidReceiveMessageGroup"),
@@ -26,22 +26,46 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     @objc func didReceiveMessage(notification: NSNotification) {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
-           let clientId = userInfo["clientId"] as? String,
-           let myAccount = CKSignalCoordinate.shared.myAccount,
            let publication = userInfo["publication"] as? SignalcGroup_GroupPublication,
            publication.groupID == self.groupId {
-            if let ourEncryptionMng = self.ourEncryptionManager {
-                do {
-                    let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                              groupId: self.groupId,
-                                                                              name: myAccount.username,
-                                                                              deviceId: UInt32(myAccount.deviceId))
-                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                    print("Message decryption: \(messageDecryption ?? "Empty error")")
-                    let post = MessageModel(from: clientId, data: decryptedData)
-                    messages.append(post)
-                } catch {
-                    print("Decryption message error: \(error)")
+            decryptionMessage(publication: publication)
+        }
+    }
+    
+    func decryptionMessage(publication: SignalcGroup_GroupPublication) {
+        if let ourEncryptionMng = self.ourEncryptionManager {
+            do {
+                let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
+                                                                          groupId: self.groupId,
+                                                                          name: publication.senderID,
+                                                                          deviceId: UInt32(1))
+                let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                print("Message decryption: \(messageDecryption ?? "Empty error")")
+                let post = MessageModel(from: publication.senderID, data: decryptedData)
+                messages.append(post)
+            } catch {
+                print("Decryption message error: \(error)")
+                requestKeyInGroup(byGroupId: self.groupId, publication: publication)
+            }
+        }
+    }
+    
+    func requestKeyInGroup(byGroupId groupId: String, publication: SignalcGroup_GroupPublication) {
+        Backend.shared.authenticator.requestKeyGroup(bySenderId: publication.senderID,
+                                                     groupId: groupId) { [weak self](result, error, response) in
+            guard let groupResponse = response else {
+                print("Request prekey \(groupId) fail")
+                return
+            }
+            if let ourEncryptionMng = self?.ourEncryptionManager {
+                if !ourEncryptionMng.senderKeyExistsForUsername(groupResponse.senderKey.senderID,
+                                                                    deviceId: 1,
+                                                                    groupId: groupId) {
+                    self?.processSenderKey(byGroupId: groupResponse.groupID,
+                                           responseSenderKey: groupResponse.senderKey)
+                    
+                    // decrypt message again
+                    self?.decryptionMessage(publication: publication)
                 }
             }
         }
