@@ -1,9 +1,9 @@
 //
 //  CKAccount.m
-//  Off the Record
+//  ClearKeep
 //
-//  Created by David Chiles on 3/28/14.
-//  Copyright (c) 2014 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 3/28/20.
+//  Copyright (c) 2020 Luan Nguyen. All rights reserved.
 //
 
 #import "CKAccount.h"
@@ -18,6 +18,7 @@
 @synthesize accountType = _accountType;
 
 - (nullable instancetype)initWithUsername:(NSString*)username
+                                 deviceId:(int32_t) deviceId
                               accountType:(CKAccountType)accountType {
     NSParameterAssert(username != nil);
     if (!username) {
@@ -26,6 +27,7 @@
     if (self = [super init]) {
         _username = [username copy];
         _accountType = accountType;
+        _deviceId = deviceId;
     }
     return self;
 }
@@ -55,11 +57,12 @@
 #pragma - mark Class Methods
 
 + (nullable instancetype)accountWithUsername:(NSString*)username
+                                    deviceId:(int32_t) deviceId
                                  accountType:(CKAccountType)accountType
 {
     NSParameterAssert(username != nil);
     if (!username) { return nil; }
-    CKAccount *account = [[CKAccount alloc] initWithUsername:username accountType:accountType];
+    CKAccount *account = [[CKAccount alloc] initWithUsername:username deviceId: deviceId accountType:accountType];
     return account;
 }
 

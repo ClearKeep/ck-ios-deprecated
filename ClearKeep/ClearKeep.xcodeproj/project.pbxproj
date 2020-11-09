@@ -32,6 +32,10 @@
 		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
 		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
+		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
+		566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */; };
+		5687680F255395FD006D2C4B /* signalc_group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5687680D255395FD006D2C4B /* signalc_group.grpc.swift */; };
+		56876810255395FD006D2C4B /* signalc_group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5687680E255395FD006D2C4B /* signalc_group.pb.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
 		569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8A254BCB1C00C487F5 /* CKSignalSignedPreKey.m */; };
@@ -112,6 +116,10 @@
 		1D1A7615AE34C5F264B3034C /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
 		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
+		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
+		566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatViewModel.swift; sourceTree = "<group>"; };
+		5687680D255395FD006D2C4B /* signalc_group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc_group.grpc.swift; sourceTree = "<group>"; };
+		5687680E255395FD006D2C4B /* signalc_group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc_group.pb.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
 		569FFB89254BCB1C00C487F5 /* CKSignalSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSignalSession.m; sourceTree = "<group>"; };
@@ -243,6 +251,7 @@
 		16208E36252D63F9000A6CE7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				566DA9A42553D6F20076F2F0 /* GroupMessageChat */,
 				56BDA86D254C02F300B72317 /* MessagesChat */,
 				16208E41252D72EB000A6CE7 /* Authentication */,
 				16208E42252D732C000A6CE7 /* Home */,
@@ -367,6 +376,8 @@
 		1664F1EA252C6D0400FF37AD /* protobuf */ = {
 			isa = PBXGroup;
 			children = (
+				5687680D255395FD006D2C4B /* signalc_group.grpc.swift */,
+				5687680E255395FD006D2C4B /* signalc_group.pb.swift */,
 				160A08BB253D6C9F0030D28E /* signalc.grpc.swift */,
 				160A08BA253D6C9F0030D28E /* signalc.pb.swift */,
 			);
@@ -384,6 +395,15 @@
 				EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		566DA9A42553D6F20076F2F0 /* GroupMessageChat */ = {
+			isa = PBXGroup;
+			children = (
+				566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */,
+				566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */,
+			);
+			path = GroupMessageChat;
 			sourceTree = "<group>";
 		};
 		569FFB88254BCB0800C487F5 /* Signal_Storage */ = {
@@ -446,11 +466,11 @@
 			children = (
 				56BF0CE22551576A0012E831 /* YapDatabase */,
 				56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */,
-				56C7F348254AC55800737C5F /* CKBundle.swift */,
 				569FFBBB254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift */,
 				569FFBC5254BE96C00C487F5 /* CKDatabaseManager.h */,
 				569FFBC0254BE94E00C487F5 /* CKDatabaseManager.m */,
 				569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */,
+				56C7F348254AC55800737C5F /* CKBundle.swift */,
 				56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */,
 			);
 			path = Controllers;
@@ -714,9 +734,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5687680F255395FD006D2C4B /* signalc_group.grpc.swift in Sources */,
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
+				56876810255395FD006D2C4B /* signalc_group.pb.swift in Sources */,
 				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
@@ -738,6 +760,8 @@
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
+				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
+				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,

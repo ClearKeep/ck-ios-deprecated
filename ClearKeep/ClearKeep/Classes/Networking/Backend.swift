@@ -14,6 +14,7 @@ class Backend: ObservableObject {
     private let group: MultiThreadedEventLoopGroup
     
     private let client: Signalc_SignalKeyDistributionClient
+    private let clientGroup: SignalcGroup_GroupSenderKeyDistributionClient
     
     private let connection: ClientConnection
     
@@ -29,7 +30,7 @@ class Backend: ObservableObject {
     @Published var rooms = [RoomModel]()
     
     
-    init(host: String = "localhost", port: Int = 50051) {
+    init(host: String = "localhost", port: Int = 50052) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -37,10 +38,11 @@ class Backend: ObservableObject {
         connection = ClientConnection(configuration: configuration)
         
         client = Signalc_SignalKeyDistributionClient(channel: connection)
+        clientGroup = SignalcGroup_GroupSenderKeyDistributionClient(channel: connection)
         
-        authenticator = Authenticator(client)
+        authenticator = Authenticator(client, clientGroup: clientGroup)
         
-        signalService = SignalService(client)
+        signalService = SignalService(client, clientGroup: clientGroup)
         
     }
     
@@ -63,27 +65,22 @@ class Backend: ObservableObject {
     
     
     func authenticated(_ completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
-       
-//        if let heard = self.heardCallback {
-//            signalService?.listen(heard: heard)
-//        }
+
 //        signalService?.listen(heard: heard)
 //        signalService?.subscribe(clientID: authenticator.clientStore.address.name, { (result, error, response) in
 //
 //        })
     }
     
-    func subscrible(username: String, completion: @escaping (Bool, Error?, Signalc_SignalKeysUserResponse?) -> Void) {
-       
-//        if let heard = self.heardCallback {
-//            signalService?.listen(heard: heard)
-//        }
+    func subscrible(username: String) -> Void {
         signalService?.listen(username: username, heard: heard)
-        signalService?.subscribe(clientID: username, { (result, error, response) in
-            
-        })
+        signalService?.subscribe(clientID: username)
     }
     
+    func subscribleGroup(username: String) -> Void {
+        signalService?.listenGroup(username: username, heard: heardGroup)
+        signalService?.subscribeGroup(clientID: username)
+    }
     
     private func heard(_ clienID: String, publication: Signalc_Publication) {
         let userInfo: [String : Any] = ["clientId": clienID, "publication": publication]
@@ -110,6 +107,13 @@ class Backend: ObservableObject {
 //        }
 
     }
+    private func heardGroup(_ clienID: String, publication: SignalcGroup_GroupPublication) {
+        let userInfo: [String : Any] = ["clientId": clienID, "publication": publication]
+        NotificationCenter.default.post(name: NSNotification.Name("DidReceiveMessageGroup"),
+                                        object: nil,
+                                        userInfo: userInfo)
+        
+    }
     
     
     func send(_ message: String,
@@ -134,14 +138,15 @@ class Backend: ObservableObject {
                 $0.message = cipherText.data
             }
             
-            try self.send(request, to: recipient)
+            try self.send(request)
             
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    func send(_ message: Data, from ourUsername: String,
+    func send(_ message: Data,
+              from ourUsername: String,
               to recipient: String,
               _ completion: @escaping (Bool, Error?) -> Void) {
         do {
@@ -151,7 +156,25 @@ class Backend: ObservableObject {
                 $0.message = message
             }
             
-            try self.send(request, to: recipient)
+            try self.send(request)
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func send(toGroup groupId: String,
+              message: Data,
+              senderId: String,
+              _ completion: @escaping (Bool, Error?) -> Void) {
+        do {
+            let request: SignalcGroup_GroupPublishRequest = .with {
+                $0.groupID = groupId
+                $0.senderID = senderId
+                $0.message = message
+            }
+            
+            try self.sendGroup(request)
             
         } catch {
             print(error.localizedDescription)
@@ -159,10 +182,24 @@ class Backend: ObservableObject {
     }
     
     private func send(_ request: Signalc_PublishRequest,
-                        to recipient: String,
                         _ completion: ((Bool, Error?) -> Void)? = nil) throws {
         
         client.publish(request).response.whenComplete { result in
+            switch result {
+            case .success(let response):
+                print(response)
+                completion?(false, nil)
+            case .failure(let error):
+                print(error)
+                completion?(false, error)
+            }
+        }
+    }
+    
+    private func sendGroup(_ request: SignalcGroup_GroupPublishRequest,
+                        _ completion: ((Bool, Error?) -> Void)? = nil) throws {
+        
+        clientGroup.publish(request).response.whenComplete { result in
             switch result {
             case .success(let response):
                 print(response)

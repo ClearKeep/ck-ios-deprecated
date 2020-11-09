@@ -33,11 +33,12 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             if let ourEncryptionMng = self.ourEncryptionManager {
                 do {
                     let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                                     name: clientId,
-                                                                                     deviceId: recipientDeviceId)
+                                                                                name: clientId,
+                                                                                deviceId: recipientDeviceId)
                     let messageDecryption = String(data: decryptedData, encoding: .utf8)
                     print("Message decryption: \(messageDecryption ?? "Empty error")")
-
+                    let post = MessageModel(from: clientId, data: decryptedData)
+                    messages.append(post)
                 } catch {
                     print("Decryption message error: \(error)")
                 }
@@ -46,77 +47,101 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func requestBundleRecipient(byClientId clientId: String) {
-        Backend.shared.authenticator.requestKey(byClientID: clientId) { [weak self](result, error, response) in
-            
-            guard let recipientStore = response else {
-                print("Request prekey \(clientId) fail")
-                return
-            }
-            // create CKBundle
-            do {
-                if let ourEncryptionMng = self?.ourEncryptionManager,
-                   let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                   let myAccount = CKSignalCoordinate.shared.myAccount {
-                    self?.recipientDeviceId = UInt32(recipientStore.deviceID)
-                    // save devcice by recipient account
-                    connectionDb.readWrite ({ (transaction) in
-                        if let _ = myAccount.refetch(with: transaction) {
-                            let buddy = CKBuddy()!
-                            buddy.accountUniqueId = myAccount.uniqueId
-                            buddy.username = recipientStore.clientID
-                            buddy.save(with:transaction)
-                            
-                            let device = CKDevice(deviceId: NSNumber(value:recipientStore.deviceID),
-                                                  trustLevel: .trustedTofu,
-                                                  parentKey: buddy.uniqueId,
-                                                  parentCollection: CKBuddy.collection,
-                                                  publicIdentityKeyData: nil,
-                                                  lastSeenDate:nil)
-                            device.save(with:transaction)
-                        }
-                    })
-                    
-                    // Case: 1
-//                    let remotePrekey = try SignalPreKey.init(serializedData: recipientStore.preKey)
-//                    let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientStore.signedPreKey)
-//
-//                    guard let preKeyKeyPair = remotePrekey.keyPair, let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-//                        return
-//                    }
-//
-//                    let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
-//                                                                    deviceId: UInt32(recipientStore.deviceID),
-//                                                                    preKeyId: UInt32(recipientStore.preKeyID),
-//                                                                    preKeyPublic: preKeyKeyPair.publicKey,
-//                                                                    signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
-//                                                                    signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-//                                                                    signature: recipientStore.signedPreKeySignature,
-//                                                                    identityKey: recipientStore.identityKeyPublic)
-//
-//
-//                    let remoteAddress = SignalAddress(name: recipientStore.clientID,
-//                                                      deviceId: recipientStore.deviceID)
-//                    let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
-//                                                                    context: ourEncryptionMng.signalContext)
-//                    try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-                    
-                    // Case: 2
-                    let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientStore.signedPreKeyID),
-                                                             publicKey: recipientStore.signedPreKey,
-                                                             signature: recipientStore.signedPreKeySignature)
-                    let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientStore.preKeyID),
-                                            publicKey: recipientStore.preKey)
-
-                    let bundle = CKBundle(deviceId: UInt32(recipientStore.deviceID),
-                                          registrationId: UInt32(recipientStore.registrationID),
-                                              identityKey: recipientStore.identityKeyPublic,
-                                              signedPreKey: ckSignedPreKey,
-                                              preKeys: [ckPreKey])
-                    try ourEncryptionMng.consumeIncomingBundle(recipientStore.clientID, bundle: bundle)
-                    print("processPreKeyBundle recipient finish")
+        Backend.shared.authenticator
+            .requestKey(byClientID: clientId) { [weak self](result, error, response) in
+                
+                guard let recipientResponse = response else {
+                    print("Request prekey \(clientId) fail")
+                    return
                 }
+                // check exist session recipient in database
+                if let ourAccountEncryptMng = self?.ourEncryptionManager {
+                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
+                        if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+                           let myAccount = CKSignalCoordinate.shared.myAccount {
+                            self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
+                            // save devcice by recipient account
+                            connectionDb.readWrite ({ (transaction) in
+                                if let _ = myAccount.refetch(with: transaction) {
+                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID, accountUniqueId: myAccount.uniqueId, transaction: transaction)
+                                    if myBuddy == nil {
+                                        let buddy = CKBuddy()!
+                                        buddy.accountUniqueId = myAccount.uniqueId
+                                        buddy.username = recipientResponse.clientID
+                                        buddy.save(with:transaction)
+                                        
+                                        let device = CKDevice(deviceId: NSNumber(value:recipientResponse.deviceID),
+                                                              trustLevel: .trustedTofu,
+                                                              parentKey: buddy.uniqueId,
+                                                              parentCollection: CKBuddy.collection,
+                                                              publicIdentityKeyData: nil,
+                                                              lastSeenDate:nil)
+                                        device.save(with:transaction)
+                                    }
+                                }
+                            })
+                            
+                            // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
+                            self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
+                            
+                            // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
+                            //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
+                            print("processPreKeyBundle recipient finished")
+                        }
+                    }
+                }
+                
+            }
+    }
+    
+    private func processKeyStoreHasPrivateKey(recipientResponse: Signalc_SignalKeysUserResponse) {
+        if let ourEncryptionMng = self.ourEncryptionManager {
+            do {
+                let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
+                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientResponse.signedPreKey)
+                
+                guard let preKeyKeyPair = remotePrekey.keyPair,
+                      let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
+                    return
+                }
+                
+                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
+                                                                deviceId: UInt32(recipientResponse.deviceID),
+                                                                preKeyId: UInt32(recipientResponse.preKeyID),
+                                                                preKeyPublic: preKeyKeyPair.publicKey,
+                                                                signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
+                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
+                                                                signature: recipientResponse.signedPreKeySignature,
+                                                                identityKey: recipientResponse.identityKeyPublic)
+                
+                let remoteAddress = SignalAddress(name: recipientResponse.clientID,
+                                                  deviceId: recipientResponse.deviceID)
+                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
+                                                                context: ourEncryptionMng.signalContext)
+                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
             } catch {
-                print("requestBundleRecipient Error: \(error)")
+                print("processKeyStoreHasPrivateKey exception: \(error)")
+            }
+        }
+    }
+    
+    private func processKeyStoreOnlyPublicKey(recipientResponse: Signalc_SignalKeysUserResponse) {
+        if let ourEncryptionMng = self.ourEncryptionManager {
+            do {
+                let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientResponse.signedPreKeyID),
+                                                    publicKey: recipientResponse.signedPreKey,
+                                                    signature: recipientResponse.signedPreKeySignature)
+                let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
+                                        publicKey: recipientResponse.preKey)
+                
+                let bundle = CKBundle(deviceId: UInt32(recipientResponse.deviceID),
+                                      registrationId: UInt32(recipientResponse.registrationID),
+                                      identityKey: recipientResponse.identityKeyPublic,
+                                      signedPreKey: ckSignedPreKey,
+                                      preKeys: [ckPreKey])
+                try ourEncryptionMng.consumeIncomingBundle(recipientResponse.clientID, bundle: bundle)
+            } catch {
+                print("processKeyStoreOnlyPublicKey exception: \(error)")
             }
         }
     }
@@ -126,11 +151,11 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             return
         }
         
-        let post = MessageModel(from: clientId, data: payload)
-        
-        messages.append(post)
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
+                let post = MessageModel(from: myAccount.username, data: payload)
+                messages.append(post)
+                
                 let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
                                                                                name: clientId,
                                                                                deviceId: recipientDeviceId)
@@ -143,7 +168,5 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 print("Send message error: \(error)")
             }
         }
-        
-        
     }
 }

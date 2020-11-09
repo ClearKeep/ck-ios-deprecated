@@ -39,8 +39,8 @@ struct LoginView: View {
 extension LoginView {
     
     private func register() {
-        registerByAddress()
-//        registerOld()
+//        registerByAddress()
+        registerWithGroup()
     }
     
     private func registerOld() {
@@ -75,32 +75,127 @@ extension LoginView {
             }
         }
     }
+    
+    private func registerWithGroup() {
+        guard let deviceID: Int32 = Int32(deviceID),
+              let myAccount = CKAccount(username: username, deviceId: deviceID, accountType: .none),
+              let connectionDb = CKDatabaseManager.shared.database?.newConnection() else {
+            print("DeviceID always number")
+            return
+        }
+        let groupId = "test_group"
+        
+        do {
+            let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
+                                                                              databaseConnection: connectionDb)
+            
+            let address = SignalAddress(name: username, deviceId: deviceID)
+            let groupSessionBuilder = SignalGroupSessionBuilder(context: ourSignalEncryptionMng.signalContext)
+            let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+            let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
+            
+            CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
+            CKSignalCoordinate.shared.myAccount = myAccount
+            
+            // test store SenderKey
+//            connectionDb.readWrite { (transaction) in
+//                guard let senderKey = CKSignalSenderKey(accountKey: myAccount.uniqueId,
+//                                                        name: senderKeyName.address.name,
+//                                                        deviceId: senderKeyName.address.deviceId,
+//                                                        groupId: senderKeyName.groupId,
+//                                                        senderKey: signalSKDM.serializedData()) else {
+//                    return
+//                }
+//                senderKey.save(with: transaction)
+//                print("")
+//            }
+            
+            // test fetch senderKey
+//            connectionDb.readWrite { (transaction) in
+//                let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: myAccount.uniqueId,
+//                                                         name: senderKeyName.address.name,
+//                                                         deviceId: senderKeyName.address.deviceId,
+//                                                         groupId: senderKeyName.groupId)
+//                let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
+//                print("")
+//            }
+            
+            Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                                                       clientId: username,
+                                                       deviceId: deviceID,
+                                                       senderKeyData: signalSKDM.serializedData()) { (result, error) in
+                print("Register group with result: \(result)")
+                if result {
+                    // save my Account
+                    connectionDb.readWrite { (transaction) in
+                        myAccount.save(with: transaction)
+                    }
+                    self.viewRouter.current = .masterDetail
+                }
+            }
+        } catch {
+            print("Register group error: \(error)")
+        }
+    }
 }
 
 extension LoginView {
     
     private func login() {
-//        guard let deviceID: Int32 = Int32(deviceID) else {
-//            print("DeviceID always number")
-//            return
-//        }
-//        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
-//        Backend.shared.authenticator.clientStore = clientStore
+//        loginForUser()
+        getSenderKeyInGroupTest()
+    }
+    
+    private func loginForUser() {
         Backend.shared.authenticator.login(username) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
-                if let receiveStore = response,
-                   let myAccount = CKAccount(username: receiveStore.clientID, accountType: .none) {
+                if let receiveStore = response {
                     // save account
+                    var myAccount: CKAccount?
                     dbConnection.readWrite({ (transaction) in
-                        myAccount.save(with:transaction)
+                        let accounts = CKAccount.allAccounts(withUsername: receiveStore.clientID,
+                                                             transaction: transaction)
+                        if accounts.count > 0 {
+                            myAccount = accounts.first
+                        }
                     })
+                    if let account = myAccount {
+                        let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
+                                                                                        databaseConnection: dbConnection)
+                        
+                        CKSignalCoordinate.shared.myAccount = account
+                        CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                    }
+                }
+                
+                if result {
+                    self.viewRouter.current = .masterDetail
+                }
+            } catch {
+                print("Login with error: \(error)")
+            }
+        }
+    }
+    
+    private func getSenderKeyInGroupTest() {
+        let groupId = "test_group"
+        Backend.shared.authenticator.checkRegisterInGroup(groupId: groupId, clientId: username) { (result, error, response) in
+            guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
+            do {
+                // save account
+                var myAccount: CKAccount?
+                dbConnection.readWrite({ (transaction) in
+                    let accounts = CKAccount.allAccounts(withUsername: self.username, transaction: transaction)
+                    if accounts.count > 0 {
+                        myAccount = accounts.first
+                    }
+                })
+                if let account = myAccount {
+                    let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
+                                                                                    databaseConnection: dbConnection)
                     
-                    let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId, databaseConnection: dbConnection)
-                    
-                    let _ = try ourEncryptionManager.generateOutgoingBundle(1)
-
-                    CKSignalCoordinate.shared.myAccount = myAccount
+                    CKSignalCoordinate.shared.myAccount = account
                     CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                 }
                 

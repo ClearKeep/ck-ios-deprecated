@@ -1,9 +1,9 @@
 //
 //  CKDatabaseManager.m
-//  Off the Record
+//  ClearKeep
 //
-//  Created by Christopher Ballinger on 10/17/13.
-//  Copyright (c) 2013 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/27/20.
+//  Copyright (c) 2020 Luan Nguyen. All rights reserved.
 //
 
 #import "CKDatabaseManager.h"
@@ -83,7 +83,7 @@ NSString *const CKYapDatabaseName = @"CKYap.sqlite";
         [[NSFileManager defaultManager] createDirectoryAtPath:self.databaseDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     NSString *databasePath = [self.databaseDirectory stringByAppendingPathComponent:name];
-    
+    NSLog(@"Database path: %@", databasePath);
     self.database = [[YapDatabase alloc] initWithURL:[NSURL fileURLWithPath:databasePath] options:options];
     
     // Stop trying to setup up the database. Something went wrong. Most likely the password is incorrect.
@@ -202,25 +202,25 @@ NSString *const CKYapDatabaseName = @"CKYap.sqlite";
     return [self.database newConnection];
 }
 
-+ (void) deleteLegacyXMPPFiles {
-    NSString *xmppCapabilities = @"XMPPCapabilities";
-    NSString *xmppvCard = @"XMPPvCard";
-    NSString *applicationSupportDirectory = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
-    NSError *error = nil;
-    NSArray *paths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationSupportDirectory error:&error];
-    if (error) {
-        NSLog(@"Error listing app support contents: %@", error);
-    }
-    for (NSString *path in paths) {
-        if ([path rangeOfString:xmppCapabilities].location != NSNotFound || [path rangeOfString:xmppvCard].location != NSNotFound) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
-            if (error) {
-                NSLog(@"Error deleting legacy store: %@", error);
-            }
-        }
-    }
-}
+//+ (void) deleteLegacyXMPPFiles {
+//    NSString *xmppCapabilities = @"XMPPCapabilities";
+//    NSString *xmppvCard = @"XMPPvCard";
+//    NSString *applicationSupportDirectory = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
+//    NSError *error = nil;
+//    NSArray *paths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationSupportDirectory error:&error];
+//    if (error) {
+//        NSLog(@"Error listing app support contents: %@", error);
+//    }
+//    for (NSString *path in paths) {
+//        if ([path rangeOfString:xmppCapabilities].location != NSNotFound || [path rangeOfString:xmppvCard].location != NSNotFound) {
+//            NSError *error = nil;
+//            [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+//            if (error) {
+//                NSLog(@"Error deleting legacy store: %@", error);
+//            }
+//        }
+//    }
+//}
 
 + (NSString *)defaultYapDatabaseDirectory {
     NSString *applicationSupportDirectory = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];

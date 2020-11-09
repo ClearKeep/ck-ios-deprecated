@@ -1,9 +1,9 @@
 //
 //  CKBuddy.h
-//  Off the Record
+//  ClearKeep
 //
-//  Created by David Chiles on 3/28/14.
-//  Copyright (c) 2014 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/28/20.
+//  Copyright (c) 2020 Luan Nguyen. All rights reserved.
 //
 
 #import "CKYapDatabaseObject.h"

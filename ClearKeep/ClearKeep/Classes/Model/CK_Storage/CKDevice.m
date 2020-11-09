@@ -1,9 +1,9 @@
 //
 //  CKDevice.m
-//  ChatSecure
+//  ClearKeep
 //
-//  Created by David Chiles on 9/14/16.
-//  Copyright © 2016 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 9/14/20.
+//  Copyright © 2020 Luan Nguyen. All rights reserved.
 //
 
 #import "CKDevice.h"

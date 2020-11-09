@@ -2,7 +2,7 @@
 //  MessageModel.swift
 //  ClearKeep
 //
-//  Created by VietAnh on 10/30/20.
+//  Created by Luan Nguyen on 10/30/20.
 //
 
 import Foundation

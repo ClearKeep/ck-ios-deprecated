@@ -2,7 +2,7 @@
 //  CKSignalStorageManager.swift
 //  ClearKeep
 //
-//  Created by VietAnh on 10/29/20.
+//  Created by Luan Nguyen on 10/29/20.
 //
 
 import Foundation
@@ -24,7 +24,8 @@ class CKSignalStorageManager: NSObject {
      - parameter databaseConnection: The yap connection to use internally
      - parameter delegate: An object that handles CKSignalStorageManagerDelegate
      */
-    public init(accountKey:String, databaseConnection: YapDatabaseConnection, delegate: CKSignalStorageManagerDelegate?) {
+    public init(accountKey:String, databaseConnection: YapDatabaseConnection,
+                delegate: CKSignalStorageManagerDelegate?) {
         self.accountKey = accountKey
         self.databaseConnection = databaseConnection
         self.delegate = delegate
@@ -57,14 +58,19 @@ class CKSignalStorageManager: NSObject {
         var identityKeyPair:CKAccountSignalIdentity? = nil
         
         self.databaseConnection.read { (transaction) in
-            identityKeyPair = CKAccountSignalIdentity.fetchObject(withUniqueID: self.accountKey, transaction: transaction)
+            identityKeyPair = CKAccountSignalIdentity.fetchObject(withUniqueID: self.accountKey,
+                                                                  transaction: transaction)
         }
         
         return identityKeyPair
     }
     
-    fileprivate func storePreKey(_ preKey: Data, preKeyId: UInt32, transaction: YapDatabaseReadWriteTransaction) -> Bool {
-        guard let preKeyDatabaseObject = CKSignalPreKey(accountKey: self.accountKey, keyId: preKeyId, keyData: preKey) else {
+    fileprivate func storePreKey(_ preKey: Data,
+                                 preKeyId: UInt32,
+                                 transaction: YapDatabaseReadWriteTransaction) -> Bool {
+        guard let preKeyDatabaseObject = CKSignalPreKey(accountKey: self.accountKey,
+                                                        keyId: preKeyId,
+                                                        keyData: preKey) else {
             return false
         }
         preKeyDatabaseObject.save(with: transaction)
@@ -88,7 +94,8 @@ class CKSignalStorageManager: NSObject {
         self.databaseConnection.readWrite { (transaction) in
             for pKey in preKeys {
                 if let data = pKey.serializedData() {
-                    success = self.storePreKey(data, preKeyId: pKey.preKeyId, transaction: transaction)
+                    success = self.storePreKey(data, preKeyId: pKey.preKeyId,
+                                               transaction: transaction)
                 } else {
                     success = false
                 }
@@ -136,7 +143,8 @@ class CKSignalStorageManager: NSObject {
             }
 
             let query = YapDatabaseQuery(string: "WHERE (CKYapDatabaseSignalPreKeyAccountKeySecondaryIndexColumnName) = ?", parameters:  ["\(self.accountKey)"])
-            let _ = secondaryIndexTransaction.iterateKeysAndObjects(matching: query, using: { (collection, key, object, stop) in
+            let _ = secondaryIndexTransaction.iterateKeysAndObjects(matching: query,
+                                                                    using: { (collection, key, object, stop) in
                 guard let preKey = object as? CKSignalPreKey else {
                     return
                 }
@@ -160,8 +168,10 @@ class CKSignalStorageManager: NSObject {
 
         //Fetch and create the base bundle
         self.databaseConnection.read { (transaction) in
-            _identity = CKAccountSignalIdentity.fetchObject(withUniqueID: self.accountKey, transaction: transaction)
-            _signedPreKey = CKSignalSignedPreKey.fetchObject(withUniqueID: self.accountKey, transaction: transaction)
+            _identity = CKAccountSignalIdentity.fetchObject(withUniqueID: self.accountKey,
+                                                            transaction: transaction)
+            _signedPreKey = CKSignalSignedPreKey.fetchObject(withUniqueID: self.accountKey,
+                                                             transaction: transaction)
         }
         
         guard let signedPreKey = _signedPreKey,
@@ -177,20 +187,26 @@ class CKSignalStorageManager: NSObject {
         return bundle
     }
 
-    fileprivate func fetchDeviceForSignalAddress(_ signalAddress:SignalAddress, transaction:YapDatabaseReadTransaction) -> CKDevice? {
-        guard let parentEntry = self.parentKeyAndCollectionForSignalAddress(signalAddress, transaction: transaction) else {
+    fileprivate func fetchDeviceForSignalAddress(_ signalAddress:SignalAddress,
+                                                 transaction:YapDatabaseReadTransaction) -> CKDevice? {
+        guard let parentEntry = self.parentKeyAndCollectionForSignalAddress(signalAddress,
+                                                                            transaction: transaction) else {
             return nil
         }
 
         let deviceNumber = NSNumber(value: signalAddress.deviceId as Int32)
-        let deviceYapKey = CKDevice.yapKey(withDeviceId: deviceNumber, parentKey: parentEntry.key, parentCollection: parentEntry.collection)
-        guard let device = CKDevice.fetchObject(withUniqueID: deviceYapKey, transaction: transaction) else {
+        let deviceYapKey = CKDevice.yapKey(withDeviceId: deviceNumber,
+                                           parentKey: parentEntry.key,
+                                           parentCollection: parentEntry.collection)
+        guard let device = CKDevice.fetchObject(withUniqueID: deviceYapKey,
+                                                transaction: transaction) else {
             return nil
         }
         return device
     }
     
-    fileprivate func parentKeyAndCollectionForSignalAddress(_ signalAddress:SignalAddress, transaction:YapDatabaseReadTransaction) -> (key: String, collection: String)? {
+    fileprivate func parentKeyAndCollectionForSignalAddress(_ signalAddress:SignalAddress,
+                                                            transaction:YapDatabaseReadTransaction) -> (key: String, collection: String)? {
         var parentKey:String? = nil
         var parentCollection:String? = nil
         
@@ -198,7 +214,9 @@ class CKSignalStorageManager: NSObject {
         if ourAccount?.username == signalAddress.name {
             parentKey = self.accountKey
             parentCollection = CKAccount.collection
-        } else if let buddy = CKBuddy.fetchBuddy(username: signalAddress.name, accountUniqueId: self.accountKey, transaction: transaction) {
+        } else if let buddy = CKBuddy.fetchBuddy(username: signalAddress.name,
+                                                 accountUniqueId: self.accountKey,
+                                                 transaction: transaction) {
             parentKey = buddy.uniqueId
             parentCollection = CKBuddy.collection
         }
@@ -216,16 +234,21 @@ extension CKSignalStorageManager: SignalStore {
     
     //MARK: SignalSessionStore
     public func sessionRecord(for address: SignalAddress) -> Data? {
-        let yapKey = CKSignalSession.uniqueKey(forAccountKey: self.accountKey, name: address.name, deviceId: address.deviceId)
+        let yapKey = CKSignalSession.uniqueKey(forAccountKey: self.accountKey,
+                                               name: address.name,
+                                               deviceId: address.deviceId)
         var sessionData:Data? = nil
         self.databaseConnection.read { (transaction) in
-            sessionData = CKSignalSession.fetchObject(withUniqueID: yapKey, transaction: transaction)?.sessionData
+            sessionData = CKSignalSession.fetchObject(withUniqueID: yapKey,
+                                                      transaction: transaction)?.sessionData
         }
         return sessionData
     }
     
     public func storeSessionRecord(_ recordData: Data, for address: SignalAddress) -> Bool {
-        guard let session = CKSignalSession(accountKey: self.accountKey, name: address.name, deviceId: address.deviceId, sessionData: recordData) else {
+        guard let session = CKSignalSession(accountKey: self.accountKey,
+                                            name: address.name, deviceId: address.deviceId,
+                                            sessionData: recordData) else {
             return false
         }
         self.databaseConnection.readWrite { (transaction) in
@@ -243,7 +266,9 @@ extension CKSignalStorageManager: SignalStore {
     }
     
     public func deleteSessionRecord(for address: SignalAddress) -> Bool {
-        let yapKey = CKSignalSession.uniqueKey(forAccountKey: self.accountKey, name: address.name, deviceId: address.deviceId)
+        let yapKey = CKSignalSession.uniqueKey(forAccountKey: self.accountKey,
+                                               name: address.name,
+                                               deviceId: address.deviceId)
         self.databaseConnection.readWrite { (transaction) in
             transaction.removeObject(forKey: yapKey, inCollection: CKSignalSession.collection)
         }
@@ -253,7 +278,9 @@ extension CKSignalStorageManager: SignalStore {
     public func allDeviceIds(forAddressName addressName: String) -> [NSNumber] {
         var addresses = [NSNumber]()
         self.databaseConnection.read { (transaction) in
-            transaction.enumerateSessions(accountKey: self.accountKey, signalAddressName: addressName, block: { (session, stop) in
+            transaction.enumerateSessions(accountKey: self.accountKey,
+                                          signalAddressName: addressName,
+                                          block: { (session, stop) in
                 addresses.append(NSNumber(value: session.deviceId as Int32))
             })
         }
@@ -264,7 +291,8 @@ extension CKSignalStorageManager: SignalStore {
         var count:Int32 = 0
         self.databaseConnection.readWrite( { (transaction) in
             var sessionKeys = [String]()
-            transaction.enumerateSessions(accountKey: self.accountKey, signalAddressName: addressName, block: { (session, stop) in
+            transaction.enumerateSessions(accountKey: self.accountKey,
+                                          signalAddressName: addressName, block: { (session, stop) in
                 sessionKeys.append(session.uniqueId)
             })
             count = Int32(sessionKeys.count)
@@ -321,7 +349,8 @@ extension CKSignalStorageManager: SignalStore {
     public func loadSignedPreKey(withId signedPreKeyId: UInt32) -> Data? {
         var preKeyData:Data? = nil
         self.databaseConnection.read { (transaction) in
-            if let signedPreKey = CKSignalSignedPreKey.fetchObject(withUniqueID: self.accountKey, transaction: transaction) {
+            if let signedPreKey = CKSignalSignedPreKey.fetchObject(withUniqueID: self.accountKey,
+                                                                   transaction: transaction) {
                 preKeyData = signedPreKey.keyData
             }
         }
@@ -330,7 +359,9 @@ extension CKSignalStorageManager: SignalStore {
     }
     
     public func storeSignedPreKey(_ signedPreKey: Data, signedPreKeyId: UInt32) -> Bool {
-        guard let signedPreKeyDatabaseObject = CKSignalSignedPreKey(accountKey: self.accountKey, keyId: signedPreKeyId, keyData: signedPreKey) else {
+        guard let signedPreKeyDatabaseObject = CKSignalSignedPreKey(accountKey: self.accountKey,
+                                                                    keyId: signedPreKeyId,
+                                                                    keyData: signedPreKey) else {
             return false
         }
         self.databaseConnection.readWrite { (transaction) in
@@ -356,7 +387,7 @@ extension CKSignalStorageManager: SignalStore {
     }
     
     //MARK: SignalIdentityKeyStore
-    public func getIdentityKeyPair() -> SignalIdentityKeyPair {
+    public func getIdentityKeyPair() -> SignalIdentityKeyPair? {
         
         if let result = self.accountSignalIdentity() {
             return result.identityKeyPair
@@ -375,19 +406,26 @@ extension CKSignalStorageManager: SignalStore {
         }
     }
     
-    
     public func saveIdentity(_ address: SignalAddress, identityKey: Data?) -> Bool {
         var result = false
         self.databaseConnection.readWrite { (transaction) in
             if let device = self.fetchDeviceForSignalAddress(address, transaction: transaction) {
-                let newDevice = CKDevice(deviceId: device.deviceId, trustLevel: device.trustLevel, parentKey: device.parentKey, parentCollection: device.parentCollection, publicIdentityKeyData: identityKey, lastSeenDate:device.lastSeenDate)
+                let newDevice = CKDevice(deviceId: device.deviceId,
+                                         trustLevel: device.trustLevel,
+                                         parentKey: device.parentKey,
+                                         parentCollection: device.parentCollection,
+                                         publicIdentityKeyData: identityKey,
+                                         lastSeenDate:device.lastSeenDate)
                 newDevice.save(with: transaction)
                 result = true
             } else if let parentEntry = self.parentKeyAndCollectionForSignalAddress(address, transaction: transaction) {
 
                 //See if we have any devices
                 var hasDevices = false
-                CKDevice.enumerateDevices(forParentKey: parentEntry.key, collection: parentEntry.collection, transaction: transaction, using: { (device, stop) in
+                CKDevice.enumerateDevices(forParentKey: parentEntry.key,
+                                          collection: parentEntry.collection,
+                                          transaction: transaction,
+                                          using: { (device, stop) in
                     hasDevices = true
                     stop.pointee = true
                 })
@@ -398,7 +436,12 @@ extension CKSignalStorageManager: SignalStore {
                     trustLevel = .trustedTofu
                 }
                 let deviceIdNumber = NSNumber(value: address.deviceId as Int32)
-                let newDevice = CKDevice(deviceId: deviceIdNumber, trustLevel: trustLevel, parentKey: parentEntry.key, parentCollection: parentEntry.collection, publicIdentityKeyData: identityKey, lastSeenDate:Date())
+                let newDevice = CKDevice(deviceId: deviceIdNumber,
+                                         trustLevel: trustLevel,
+                                         parentKey: parentEntry.key,
+                                         parentCollection: parentEntry.collection,
+                                         publicIdentityKeyData: identityKey,
+                                         lastSeenDate:Date())
                 newDevice.save(with: transaction)
                 result = true
             }
@@ -432,10 +475,13 @@ extension CKSignalStorageManager: SignalStore {
     }
     
     //MARK: SignalSenderKeyStore
-    
-    public func storeSenderKey(_ senderKey: Data, address: SignalAddress, groupId: String) -> Bool {
+    func storeSenderKey(_ senderKey: Data, senderKeyName: SignalSenderKeyName) -> Bool {
         self.databaseConnection.readWrite { (transaction) in
-            guard let senderKey = CKSignalSenderKey(accountKey: self.accountKey, name: address.name, deviceId: address.deviceId, groupId: groupId, senderKey: senderKey) else {
+            guard let senderKey = CKSignalSenderKey(accountKey: self.accountKey,
+                                                    name: senderKeyName.address.name,
+                                                    deviceId: senderKeyName.address.deviceId,
+                                                    groupId: senderKeyName.groupId,
+                                                    senderKey: senderKey) else {
                 return
             }
             senderKey.save(with: transaction)
@@ -443,15 +489,52 @@ extension CKSignalStorageManager: SignalStore {
         return true
     }
     
-    public func loadSenderKey(for address: SignalAddress, groupId: String) -> Data? {
+    func loadSenderKey(for senderKeyName: SignalSenderKeyName) -> Data? {
         var senderKeyData:Data? = nil
         self.databaseConnection.read { (transaction) in
-            let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey, name: address.name, deviceId: address.deviceId, groupId: groupId)
+            let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey,
+                                                     name: senderKeyName.address.name,
+                                                     deviceId: senderKeyName.address.deviceId,
+                                                     groupId: senderKeyName.groupId)
             let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
             senderKeyData = senderKey?.senderKey
         }
         return senderKeyData
     }
+    
+    public func senderKeyExists(for senderKeyName: SignalSenderKeyName) -> Bool {
+        if let _ = self.loadSenderKey(for: senderKeyName) {
+            return true
+        } else {
+            return false
+        }
+    }
+//    public func storeSenderKey(_ senderKey: Data, address: SignalAddress, groupId: String) -> Bool {
+//        self.databaseConnection.readWrite { (transaction) in
+//            guard let senderKey = CKSignalSenderKey(accountKey: self.accountKey,
+//                                                    name: address.name,
+//                                                    deviceId: address.deviceId,
+//                                                    groupId: groupId,
+//                                                    senderKey: senderKey) else {
+//                return
+//            }
+//            senderKey.save(with: transaction)
+//        }
+//        return true
+//    }
+//
+//    public func loadSenderKey(for address: SignalAddress, groupId: String) -> Data? {
+//        var senderKeyData:Data? = nil
+//        self.databaseConnection.read { (transaction) in
+//            let yapKey = CKSignalSenderKey.uniqueKey(fromAccountKey: self.accountKey,
+//                                                     name: address.name,
+//                                                     deviceId: address.deviceId,
+//                                                     groupId: groupId)
+//            let senderKey = CKSignalSenderKey.fetchObject(withUniqueID: yapKey, transaction: transaction)
+//            senderKeyData = senderKey?.senderKey
+//        }
+//        return senderKeyData
+//    }
 }
 
 extension CKSignalSession {

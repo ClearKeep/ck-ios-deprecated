@@ -1,9 +1,9 @@
 //
 //  CKDatabaseManager.h
-//  Off the Record
+//  ClearKeep
 //
-//  Created by Christopher Ballinger on 10/17/13.
-//  Copyright (c) 2013 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/29/20.
+//  Copyright (c) 2020 Luan Nguyen. All rights reserved.
 //
 
 @import Foundation;
@@ -41,13 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)setupDatabaseWithName:(NSString*)databaseName
                     directory:(nullable NSString*)directory
                   withMediaStorage:(BOOL)withMediaStorage;
-
-- (BOOL)setDatabasePassphrase:(NSString *)passphrase remember:(BOOL)rememeber error:(NSError *_Nullable*)error;
-
-
-- (BOOL)hasPassphrase;
-
-- (nullable NSString *)databasePassphrase;
 
 /** Checks for database at default path */
 + (BOOL)existsYapDatabase;

@@ -1,9 +1,9 @@
 //
 //  YapDatabaseConstants.swift
-//  ChatSecure
+//  ClearKeep
 //
-//  Created by David Chiles on 4/15/16.
-//  Copyright © 2016 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 11/01/20.
+//  Copyright © 2020 Luan Nguyen. All rights reserved.
 //
 
 import Foundation

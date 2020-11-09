@@ -1,9 +1,9 @@
 //
 //  CKSignalSession.m
-//  ChatSecure
+//  ClearKeep
 //
-//  Created by David Chiles on 7/26/16.
-//  Copyright © 2016 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/26/20.
+//  Copyright © 2020 Luan Nguyen. All rights reserved.
 //
 
 #import "CKSignalSession.h"

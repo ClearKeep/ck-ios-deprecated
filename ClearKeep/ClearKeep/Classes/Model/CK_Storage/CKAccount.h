@@ -1,9 +1,9 @@
 //
 //  CKAccount.h
-//  Off the Record
+//  ClearKeep
 //
-//  Created by David Chiles on 3/28/14.
-//  Copyright (c) 2014 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/28/20.
+//  Copyright (c) 2020 Luan Nguyen. All rights reserved.
 //
 @import UIKit;
 #import "CKYapDatabaseObject.h"
@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CKAccount : CKYapDatabaseObject
 
 @property (nonatomic, strong) NSString *username;
+@property (nonatomic, readonly) int32_t deviceId;
 @property (nonatomic, readonly) CKAccountType accountType;
 
 /** Whether or not user would like to auto fetch media messages */
@@ -27,10 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Will return nil if accountType does not match class type. @see accountClassForAccountType: */
 - (nullable instancetype)initWithUsername:(NSString*)username
+                                 deviceId:(int32_t) deviceId
                               accountType:(CKAccountType)accountType NS_DESIGNATED_INITIALIZER;
 
 /** Will return a concrete subclass of CKAccount. @see accountClassForAccountType: */
 + (nullable __kindof CKAccount*)accountWithUsername:(NSString*)username
+                                           deviceId:(int32_t) deviceId
                                          accountType:(CKAccountType)accountType;
 
 /** Not available, use designated initializer */

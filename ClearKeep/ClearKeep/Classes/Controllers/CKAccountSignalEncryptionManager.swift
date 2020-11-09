@@ -2,7 +2,7 @@
 //  CKAccountSignalEncryptionManager.swift
 //  ClearKeep
 //
-//  Created by VietAnh on 10/30/20.
+//  Created by Luan Nguyen on 10/30/20.
 //
 
 import UIKit
@@ -28,7 +28,7 @@ class CKAccountSignalEncryptionManager {
     
     open var identityKeyPair: SignalIdentityKeyPair {
         get {
-            return self.storage.getIdentityKeyPair()
+            return self.storage.getIdentityKeyPair()!
         }
     }
     
@@ -78,7 +78,8 @@ extension CKAccountSignalEncryptionManager {
         // will break things.
         var signalSignedPreKey: SignalSignedPreKey? = nil
         self.storage.databaseConnection.read { (transaction) in
-            guard let signedPreKeyDataObject = CKSignalSignedPreKey.fetchObject(withUniqueID: self.storage.accountKey, transaction: transaction) else {
+            guard let signedPreKeyDataObject = CKSignalSignedPreKey.fetchObject(withUniqueID: self.storage.accountKey,
+                                                                                transaction: transaction) else {
                 return
             }
             do {
@@ -102,12 +103,46 @@ extension CKAccountSignalEncryptionManager {
         }
         myPreKey = preKeyFirst
         mySignalPreKey = signedPreKey
-        let bundle = try CKBundle(deviceId: deviceId, registrationId: self.registrationId, identity: identityKeyPair, signedPreKey: signedPreKey, preKeys: preKeys)
+        let bundle = try CKBundle(deviceId: deviceId,
+                                  registrationId: self.registrationId,
+                                  identity: identityKeyPair!,
+                                  signedPreKey: signedPreKey,
+                                  preKeys: preKeys)
         _ = self.storage.storePreKey(dataPreKey, preKeyId: preKeyFirst.preKeyId)
         _ = self.storage.storeSignedPreKey(data, signedPreKeyId: signedPreKey.preKeyId)
         return bundle
     }
     
+    public func generatePreKeys(_ start:UInt, count:UInt) -> [SignalPreKey]? {
+        guard let preKeys = self.keyHelper()?.generatePreKeys(withStartingPreKeyId: start,
+                                                              count: count) else {
+            return nil
+        }
+        if self.storage.storeSignalPreKeys(preKeys) {
+            return preKeys
+        }
+        return nil
+    }
+    
+    public func sessionRecordExistsForUsername(_ username:String, deviceId:Int32) -> Bool {
+        let address = SignalAddress(name: username.lowercased(), deviceId: deviceId)
+        return self.storage.sessionRecordExists(for: address)
+    }
+    
+    public func removeSessionRecordForUsername(_ username:String, deviceId:Int32) -> Bool {
+        let address = SignalAddress(name: username.lowercased(), deviceId: deviceId)
+        return self.storage.deleteSessionRecord(for: address)
+    }
+    
+    public func senderKeyExistsForUsername(_ username:String, deviceId:Int32, groupId: String) -> Bool {
+        let address = SignalAddress(name: username.lowercased(), deviceId: deviceId)
+        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+        return self.storage.senderKeyExists(for: senderKeyName)
+    }
+}
+
+// MARK: - Single user
+extension CKAccountSignalEncryptionManager {
     /**
      * This processes fetched OMEMO bundles. After you consume a bundle you can then create preKeyMessages to send to the contact.
      */
@@ -129,29 +164,36 @@ extension CKAccountSignalEncryptionManager {
     public func decryptFromAddress(_ data:Data, name:String, deviceId:UInt32) throws -> Data {
         let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
-        let cipherText = SignalCiphertext(data: data, type: .preKeyMessage)
+        let cipherText = SignalCiphertext(data: data, type: .unknown)
         return try sessionCipher.decryptCiphertext(cipherText)
     }
-    
-    
-    public func generatePreKeys(_ start:UInt, count:UInt) -> [SignalPreKey]? {
-        guard let preKeys = self.keyHelper()?.generatePreKeys(withStartingPreKeyId: start, count: count) else {
-            return nil
-        }
-        if self.storage.storeSignalPreKeys(preKeys) {
-            return preKeys
-        }
-        return nil
+}
+
+// MARK: - Group user
+extension CKAccountSignalEncryptionManager {
+    public func consumeIncoming(toGroup groupId: String,
+                                address: SignalAddress,
+                                skdmDtata: Data) throws {
+        let sessionBuilder = SignalGroupSessionBuilder(context: self.signalContext)
+        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+        
+        let signalSKDM = try SignalSKDM(data: skdmDtata, context: self.signalContext)
+        return try sessionBuilder.processSession(with: senderKeyName, skdm: signalSKDM)
     }
     
-    public func sessionRecordExistsForUsername(_ username:String, deviceId:Int32) -> Bool {
-        let address = SignalAddress(name: username.lowercased(), deviceId: deviceId)
-        return self.storage.sessionRecordExists(for: address)
+    public func encryptToGroup(_ data:Data, groupId: String, name:String, deviceId:UInt32) throws -> SignalCiphertext {
+        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
+        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+        let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
+        return try groupCipher.encryptData(data)
     }
     
-    public func removeSessionRecordForUsername(_ username:String, deviceId:Int32) -> Bool {
-        let address = SignalAddress(name: username.lowercased(), deviceId: deviceId)
-        return self.storage.deleteSessionRecord(for: address)
+    public func decryptFromGroup(_ data:Data, groupId: String, name: String, deviceId: UInt32) throws -> Data {
+        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
+        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+        let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
+        let cipherText = SignalCiphertext(data: data, type: .unknown)
+        return try groupCipher.decryptCiphertext(cipherText)
     }
 }
 
@@ -161,6 +203,8 @@ extension CKAccountSignalEncryptionManager: CKSignalStorageManagerDelegate {
         let keyHelper = self.keyHelper()!
         let keyPair = keyHelper.generateIdentityKeyPair()!
         let registrationId = keyHelper.generateRegistrationId()
-        return CKAccountSignalIdentity(accountKey: accountKey, identityKeyPair: keyPair, registrationId: registrationId)!
+        return CKAccountSignalIdentity(accountKey: accountKey,
+                                       identityKeyPair: keyPair,
+                                       registrationId: registrationId)!
     }
 }

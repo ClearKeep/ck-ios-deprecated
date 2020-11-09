@@ -18,7 +18,6 @@ struct MessageChatView: View {
         viewModel = MessageChatViewModel(clientId: clientId)
     }
     
-    
     var body: some View {
         VStack {
             List(viewModel.messages, id: \.newID) { model in
@@ -53,7 +52,7 @@ struct MessageView: View {
     
     var body: some View {
         
-        let checkSender = mesgModel.from == CKSignalCoordinate.shared.ourEncryptionManager?.storage.accountKey
+        let checkSender = mesgModel.from == CKSignalCoordinate.shared.myAccount?.username
         
         if checkSender {
             

@@ -1,9 +1,9 @@
 //
 //  SecondaryIndexes.swift
-//  ChatSecureCore
+//  ClearKeep
 //
-//  Created by Chris Ballinger on 11/7/17.
-//  Copyright © 2017 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 10/27/20.
+//  Copyright © 2020 Luan Nguyen. All rights reserved.
 //
 
 import Foundation
@@ -44,7 +44,8 @@ extension YapDatabaseSecondaryIndex {
         let columns: [String:YapDatabaseSecondaryIndexType] = [
             SignalIndexColumnName.session: .text,
             SignalIndexColumnName.preKeyId: .integer,
-            SignalIndexColumnName.preKeyAccountKey: .text
+            SignalIndexColumnName.preKeyAccountKey: .text,
+            SignalIndexColumnName.testModelKey: .text,
         ]
         let setup = YapDatabaseSecondaryIndexSetup(capacity: UInt(columns.count))
         columns.forEach { (key, value) in
@@ -63,7 +64,7 @@ extension YapDatabaseSecondaryIndex {
                 }
             }
         }
-        let options = YapDatabaseSecondaryIndexOptions(whitelist: [CKSignalPreKey.collection,CKSignalSession.collection])
+        let options = YapDatabaseSecondaryIndexOptions(whitelist: [CKSignalPreKey.collection, CKSignalSession.collection])
         let secondaryIndex = YapDatabaseSecondaryIndex(setup: setup, handler: handler, versionTag: "6", options: options)
         return secondaryIndex
     }
@@ -155,6 +156,7 @@ extension CKBuddy {
     @objc public static let session = "CKYapDatabaseSignalSessionSecondaryIndexColumnName"
     @objc public static let preKeyId = "CKYapDatabaseSignalPreKeyIdSecondaryIndexColumnName"
     @objc public static let preKeyAccountKey = "CKYapDatabaseSignalPreKeyAccountKeySecondaryIndexColumnName"
+    @objc public static let testModelKey = "testModelKey"
 }
 
 @objc public class MediaItemIndexColumnName: NSObject {

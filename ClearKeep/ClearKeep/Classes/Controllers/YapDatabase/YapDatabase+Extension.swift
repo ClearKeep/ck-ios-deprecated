@@ -1,9 +1,9 @@
 //
 //  YapDatabse+ChatSecure.swift
-//  ChatSecure
+//  ClearKeep
 //
-//  Created by David Chiles on 10/20/15.
-//  Copyright © 2015 Chris Ballinger. All rights reserved.
+//  Created by Luan Nguyen on 11/02/20.
+//  Copyright © 2020 Luan Nguyen. All rights reserved.
 //
 
 import Foundation
