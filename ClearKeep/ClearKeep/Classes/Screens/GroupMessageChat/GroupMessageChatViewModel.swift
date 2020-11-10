@@ -50,11 +50,12 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
                     print("Message decryption: \(messageDecryption ?? "Empty error")")
                     let post = MessageModel(from: publication.senderID, data: decryptedData)
                     messages.append(post)
+                } else {
+                    requestKeyInGroup(byGroupId: self.groupId, publication: publication)
                 }
-                
             } catch {
                 print("Decryption message error: \(error)")
-                requestKeyInGroup(byGroupId: self.groupId, publication: publication)
+                
             }
         }
     }
