@@ -20,7 +20,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         requestBundleRecipient(byClientId: clientId)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMessage),
-                                               name: NSNotification.Name("DidReceiveMessage"),
+                                               name: NSNotification.Name("DidReceiveSignalMessage"),
                                                object: nil)
     }
     
@@ -28,7 +28,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
            let clientId = userInfo["clientId"] as? String,
-           let publication = userInfo["publication"] as? Signalc_Publication,
+           let publication = userInfo["publication"] as? Signal_Publication,
            clientId == self.clientId {
             if let ourEncryptionMng = self.ourEncryptionManager {
                 do {
@@ -48,7 +48,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     
     func requestBundleRecipient(byClientId clientId: String) {
         Backend.shared.authenticator
-            .requestKey(byClientID: clientId) { [weak self](result, error, response) in
+            .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
                 guard let recipientResponse = response else {
                     print("Request prekey \(clientId) fail")
@@ -56,14 +56,16 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 }
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
+                    self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
                     if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {
-                            self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
                             // save devcice by recipient account
                             connectionDb.readWrite ({ (transaction) in
                                 if let _ = myAccount.refetch(with: transaction) {
-                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID, accountUniqueId: myAccount.uniqueId, transaction: transaction)
+                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
+                                                                     accountUniqueId: myAccount.uniqueId,
+                                                                     transaction: transaction)
                                     if myBuddy == nil {
                                         let buddy = CKBuddy()!
                                         buddy.accountUniqueId = myAccount.uniqueId
@@ -80,21 +82,19 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                     }
                                 }
                             })
-                            
-                            // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
-                            self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-                            
-                            // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-                            //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-                            print("processPreKeyBundle recipient finished")
                         }
+                        // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
+                        self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
+                        
+                        // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
+                        //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
                     }
+                    print("processPreKeyBundle recipient finished")
                 }
-                
             }
     }
     
-    private func processKeyStoreHasPrivateKey(recipientResponse: Signalc_SignalKeysUserResponse) {
+    private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
         if let ourEncryptionMng = self.ourEncryptionManager {
             do {
                 let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
@@ -125,7 +125,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    private func processKeyStoreOnlyPublicKey(recipientResponse: Signalc_SignalKeysUserResponse) {
+    private func processKeyStoreOnlyPublicKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
         if let ourEncryptionMng = self.ourEncryptionManager {
             do {
                 let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientResponse.signedPreKeyID),
@@ -156,12 +156,10 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 let post = MessageModel(from: myAccount.username, data: payload)
                 messages.append(post)
                 
-                let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
                                                                                name: clientId,
-                                                                               deviceId: recipientDeviceId)
-                Backend.shared.send(encryptedData!.data,
-                                    from: myAccount.username,
-                                    to: clientId) { (result, error) in
+                                                                               deviceId: recipientDeviceId) else { return }
+                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: clientId) { (result, error) in
                     print("Send message: \(result)")
                 }
             } catch {

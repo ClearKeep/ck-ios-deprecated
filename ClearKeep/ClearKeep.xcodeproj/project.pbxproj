@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
 		160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
-		160A08BC253D6C9F0030D28E /* signalc.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A08BA253D6C9F0030D28E /* signalc.pb.swift */; };
-		160A08BD253D6C9F0030D28E /* signalc.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A08BB253D6C9F0030D28E /* signalc.grpc.swift */; };
 		16208E62252D7906000A6CE7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16208E61252D7906000A6CE7 /* HomeView.swift */; };
 		1655502F252F02F3008E66D0 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1655502E252F02F3008E66D0 /* Backend.swift */; };
 		16555034252F0B20008E66D0 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16555033252F0B20008E66D0 /* Authenticator.swift */; };
@@ -32,10 +30,10 @@
 		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
 		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
+		564D0402255A698400DD2A0A /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564D0400255A698300DD2A0A /* signal.grpc.swift */; };
+		564D0403255A698400DD2A0A /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564D0401255A698400DD2A0A /* signal.pb.swift */; };
 		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
 		566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */; };
-		5687680F255395FD006D2C4B /* signalc_group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5687680D255395FD006D2C4B /* signalc_group.grpc.swift */; };
-		56876810255395FD006D2C4B /* signalc_group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5687680E255395FD006D2C4B /* signalc_group.pb.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
 		569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8A254BCB1C00C487F5 /* CKSignalSignedPreKey.m */; };
@@ -60,6 +58,7 @@
 		56C7F349254AC55800737C5F /* CKBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F348254AC55800737C5F /* CKBundle.swift */; };
 		56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F358254ACC5B00737C5F /* CKPreKey.swift */; };
 		56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F35D254ACCC600737C5F /* CKSignedPreKey.swift */; };
+		56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */; };
 		AACA7258848E78382F486218 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */; };
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
@@ -87,8 +86,6 @@
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
 		160A08AF253D36CF0030D28E /* SignalStoreInMemoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalStoreInMemoryStorage.h; sourceTree = "<group>"; };
-		160A08BA253D6C9F0030D28E /* signalc.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc.pb.swift; sourceTree = "<group>"; };
-		160A08BB253D6C9F0030D28E /* signalc.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc.grpc.swift; sourceTree = "<group>"; };
 		16208E61252D7906000A6CE7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1655502E252F02F3008E66D0 /* Backend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
 		16555033252F0B20008E66D0 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
@@ -116,10 +113,10 @@
 		1D1A7615AE34C5F264B3034C /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
 		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
+		564D0400255A698300DD2A0A /* signal.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.grpc.swift; sourceTree = "<group>"; };
+		564D0401255A698400DD2A0A /* signal.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.pb.swift; sourceTree = "<group>"; };
 		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
 		566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatViewModel.swift; sourceTree = "<group>"; };
-		5687680D255395FD006D2C4B /* signalc_group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc_group.grpc.swift; sourceTree = "<group>"; };
-		5687680E255395FD006D2C4B /* signalc_group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signalc_group.pb.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
 		569FFB89254BCB1C00C487F5 /* CKSignalSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSignalSession.m; sourceTree = "<group>"; };
@@ -155,6 +152,7 @@
 		56C7F348254AC55800737C5F /* CKBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKBundle.swift; sourceTree = "<group>"; };
 		56C7F358254ACC5B00737C5F /* CKPreKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKPreKey.swift; sourceTree = "<group>"; };
 		56C7F35D254ACCC600737C5F /* CKSignedPreKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignedPreKey.swift; sourceTree = "<group>"; };
+		56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerViewModel.swift; sourceTree = "<group>"; };
 		5AFE6B55ED5368114005EC34 /* Pods-ClearKeep-ClearKeepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,6 +249,7 @@
 		16208E36252D63F9000A6CE7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				56E7EE5C255A3D0F0060C146 /* MessengerView */,
 				566DA9A42553D6F20076F2F0 /* GroupMessageChat */,
 				56BDA86D254C02F300B72317 /* MessagesChat */,
 				16208E41252D72EB000A6CE7 /* Authentication */,
@@ -376,10 +375,8 @@
 		1664F1EA252C6D0400FF37AD /* protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				5687680D255395FD006D2C4B /* signalc_group.grpc.swift */,
-				5687680E255395FD006D2C4B /* signalc_group.pb.swift */,
-				160A08BB253D6C9F0030D28E /* signalc.grpc.swift */,
-				160A08BA253D6C9F0030D28E /* signalc.pb.swift */,
+				564D0400255A698300DD2A0A /* signal.grpc.swift */,
+				564D0401255A698400DD2A0A /* signal.pb.swift */,
 			);
 			path = protobuf;
 			sourceTree = "<group>";
@@ -474,6 +471,14 @@
 				56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		56E7EE5C255A3D0F0060C146 /* MessengerView */ = {
+			isa = PBXGroup;
+			children = (
+				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
+			);
+			path = MessengerView;
 			sourceTree = "<group>";
 		};
 		7510310A1AC48EF5487B6EBC /* Frameworks */ = {
@@ -734,14 +739,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5687680F255395FD006D2C4B /* signalc_group.grpc.swift in Sources */,
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
-				56876810255395FD006D2C4B /* signalc_group.pb.swift in Sources */,
 				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
+				564D0403255A698400DD2A0A /* signal.pb.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
@@ -750,7 +754,9 @@
 				56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */,
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
+				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
+				564D0402255A698400DD2A0A /* signal.grpc.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
 				569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
@@ -774,10 +780,8 @@
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
-				160A08BC253D6C9F0030D28E /* signalc.pb.swift in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
 				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
-				160A08BD253D6C9F0030D28E /* signalc.grpc.swift in Sources */,
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

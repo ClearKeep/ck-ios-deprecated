@@ -74,47 +74,47 @@ extension CKClientStore {
     ///   - message: message
     /// - Throws: Error
     /// - Returns: SignalCiphertext
-    func encrypt(remoteAddress: SignalAddress,
-                 recipientStore: Signalc_SignalKeysUserResponse,
-                 message: String) throws -> SignalCiphertext {
-        
-        do {
-            let remotePrekey = try SignalPreKey.init(serializedData: recipientStore.preKey)
-            let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientStore.signedPreKey)
-            
-            guard let preKeyKeyPair = remotePrekey.keyPair, let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-                throw CKClientError.initKeyPair(message: "Init KeyPair error")
-            }
-            
-            let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
-                                                            deviceId: UInt32(recipientStore.deviceID),
-                                                            preKeyId: UInt32(recipientStore.preKeyID),
-                                                            preKeyPublic: preKeyKeyPair.publicKey,
-                                                            signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
-                                                            signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-                                                            signature: recipientStore.signedPreKeySignature,
-                                                            identityKey: recipientStore.identityKeyPublic)
-            
-            
-            let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: context)
-            
-            try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-            
-            let remoteSessionCipher = SignalSessionCipher(address: remoteAddress, context: context)
-            
-            guard let messageUTF8 = message.data(using: .utf8) else {
-                throw CKClientError.encoding(message: "Encoding message utf8 fail")
-            }
-            
-            let cipherText = try remoteSessionCipher.encryptData(messageUTF8)
-            
-            return cipherText
-            
-        } catch {
-            
-            throw CKClientError.encrypt(message: "Encrypt message error --> \(error.localizedDescription)")
-        }
-    }
+//    func encrypt(remoteAddress: SignalAddress,
+//                 recipientStore: Signalc_SignalKeysUserResponse,
+//                 message: String) throws -> SignalCiphertext {
+//        
+//        do {
+//            let remotePrekey = try SignalPreKey.init(serializedData: recipientStore.preKey)
+//            let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientStore.signedPreKey)
+//            
+//            guard let preKeyKeyPair = remotePrekey.keyPair, let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
+//                throw CKClientError.initKeyPair(message: "Init KeyPair error")
+//            }
+//            
+//            let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientStore.registrationID),
+//                                                            deviceId: UInt32(recipientStore.deviceID),
+//                                                            preKeyId: UInt32(recipientStore.preKeyID),
+//                                                            preKeyPublic: preKeyKeyPair.publicKey,
+//                                                            signedPreKeyId: UInt32(recipientStore.signedPreKeyID),
+//                                                            signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
+//                                                            signature: recipientStore.signedPreKeySignature,
+//                                                            identityKey: recipientStore.identityKeyPublic)
+//            
+//            
+//            let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress, context: context)
+//            
+//            try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
+//            
+//            let remoteSessionCipher = SignalSessionCipher(address: remoteAddress, context: context)
+//            
+//            guard let messageUTF8 = message.data(using: .utf8) else {
+//                throw CKClientError.encoding(message: "Encoding message utf8 fail")
+//            }
+//            
+//            let cipherText = try remoteSessionCipher.encryptData(messageUTF8)
+//            
+//            return cipherText
+//            
+//        } catch {
+//            
+//            throw CKClientError.encrypt(message: "Encrypt message error --> \(error.localizedDescription)")
+//        }
+//    }
     
     
     /// Decrypt message

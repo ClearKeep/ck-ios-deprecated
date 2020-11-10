@@ -22,15 +22,15 @@ struct HomeView: View {
     
     init(clientID: String) {
         self.selectedRoom = clientID
-        Backend.shared.authenticator.requestKey(byClientID: clientID) { (result, error, response) in
+        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
             
             guard let recipientStore = response else {
                 print("Request prekey \(clientID) fail")
                 return
             }
             
-            Backend.shared.authenticator.recipientID = recipientStore.clientID
-            Backend.shared.authenticator.recipientStore = recipientStore
+//            Backend.shared.authenticator.recipientID = recipientStore.clientID
+//            Backend.shared.authenticator.recipientStore = recipientStore
         }
     }
     
@@ -60,21 +60,21 @@ extension HomeView {
     
     private func send() {
         
-        guard let payload = $nextMessage.wrappedValue.data(using: .utf8) else {
-            return
-        }
-        
-        let post = PostModel(from: Backend.shared.authenticator.clientStore.address.name, message: payload)
-        
-        Backend.shared.messages.append(post)
-        
-        Backend.shared.send(nextMessage, to: selectedRoom) { (result, error) in
-            
-            print(result, " ----->")
-            
-        }
-        
-        nextMessage = ""
+//        guard let payload = $nextMessage.wrappedValue.data(using: .utf8) else {
+//            return
+//        }
+//        
+//        let post = PostModel(from: Backend.shared.authenticator.clientStore.address.name, message: payload)
+//        
+//        Backend.shared.messages.append(post)
+//        
+//        Backend.shared.send(nextMessage, to: selectedRoom) { (result, error) in
+//            
+//            print(result, " ----->")
+//            
+//        }
+//        
+//        nextMessage = ""
     }
 }
 

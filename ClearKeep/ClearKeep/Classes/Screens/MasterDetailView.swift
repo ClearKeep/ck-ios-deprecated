@@ -35,7 +35,7 @@ struct MasterDetailView: View {
                 }
                 .gesture(drag)
             }
-            .navigationBarTitle("Rooms", displayMode: .inline)
+            .navigationBarTitle("Messenger", displayMode: .inline)
             .navigationBarItems(leading:
                 Button(action: {
                     withAnimation {

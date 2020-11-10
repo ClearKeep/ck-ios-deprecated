@@ -39,27 +39,8 @@ struct LoginView: View {
 extension LoginView {
     
     private func register() {
-//        registerByAddress()
-        registerWithGroup()
-    }
-    
-    private func registerOld() {
-        guard let deviceID: Int32 = Int32(deviceID) else {
-            print("DeviceID always number")
-            return
-        }
-        
-        let clientStore = CKClientStore.init(clientID: username, deviceID: deviceID)
-
-        Backend.shared.authenticator.clientStore = clientStore
-
-        Backend.shared.authenticator.register(bundleStore: clientStore) { (result, error) in
-            print(result)
-
-            if result {
-                self.viewRouter.current = .masterDetail
-            }
-        }
+        registerByAddress()
+//        registerWithGroup()
     }
     
     private func registerByAddress() {
@@ -71,6 +52,7 @@ extension LoginView {
         Backend.shared.authenticator.register(address: address) { (result, error) in
             print("Register result: \(result)")
             if result {
+                Backend.shared.signalSubscrible(clientId: self.username)
                 self.viewRouter.current = .masterDetail
             }
         }
@@ -106,6 +88,7 @@ extension LoginView {
                                                        senderKeyData: signalSKDM.serializedData()) { (result, error) in
                 print("Register group with result: \(result)")
                 if result {
+                    Backend.shared.signalSubscrible(clientId: self.username)
                     self.viewRouter.current = .masterDetail
                 }
             }
@@ -118,12 +101,12 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
-//        loginForUser()
-        getSenderKeyInGroupTest()
+        loginForUser()
+//        getSenderKeyInGroupTest()
     }
     
     private func loginForUser() {
-        Backend.shared.authenticator.login(username) { (result, error, response) in
+        Backend.shared.authenticator.requestKey(byClientId: username) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
                 if let receiveStore = response {
@@ -146,6 +129,7 @@ extension LoginView {
                 }
                 
                 if result {
+                    Backend.shared.signalSubscrible(clientId: self.username)
                     self.viewRouter.current = .masterDetail
                 }
             } catch {
@@ -156,7 +140,7 @@ extension LoginView {
     
     private func getSenderKeyInGroupTest() {
         let groupId = "test_group"
-        Backend.shared.authenticator.checkRegisterInGroup(groupId: groupId, clientId: username) { (result, error, response) in
+        Backend.shared.authenticator.requestKeyGroup(byClientId: username, groupId: groupId) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
                 // save account
@@ -167,7 +151,7 @@ extension LoginView {
                     if accounts.count > 0 {
                         myAccount = accounts.first
                     } else {
-                        myAccount = CKAccount(username: self.username, deviceId: (response?.senderKey.deviceID)!, accountType: .none)
+                        myAccount = CKAccount(username: self.username, deviceId: (response?.clientKey.deviceID)!, accountType: .none)
                         myAccount?.save(with: transaction)
                         isAddAccount = true
                     }
@@ -175,25 +159,26 @@ extension LoginView {
                 if let account = myAccount {
                     let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
                                                                                     databaseConnection: dbConnection)
-                    
+
                     CKSignalCoordinate.shared.myAccount = account
                     CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                     if isAddAccount,
-                        let deviceId = response?.senderKey.deviceID,
-                        let senderKeyData = response?.senderKey.senderKeyDistribution,
-                        let senderId = response?.senderKey.senderID,
+                        let deviceId = response?.clientKey.deviceID,
+                        let senderKeyData = response?.clientKey.clientKeyDistribution,
+                        let senderId = response?.clientKey.clientID,
                         let groupId = response?.groupID {
                         let address = SignalAddress(name: senderId, deviceId: deviceId)
                         let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
                         if !ourEncryptionManager.senderKeyExistsForUsername(senderId, deviceId: deviceId, groupId: groupId) {
                             let _ = ourEncryptionManager.storage.storeSenderKey(senderKeyData, senderKeyName: senderKeyName)
 //                            try ourEncryptionManager.consumeIncoming(toGroup: groupId, address: address, skdmDtata: senderKeyData)
-                            
+
                         }
                     }
                 }
-                
+
                 if result {
+                    Backend.shared.signalSubscrible(clientId: self.username)
                     self.viewRouter.current = .masterDetail
                 }
             } catch {
