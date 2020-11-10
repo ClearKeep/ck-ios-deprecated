@@ -161,6 +161,7 @@ extension LoginView {
             do {
                 // save account
                 var myAccount: CKAccount?
+                var isAddAccount = false
                 dbConnection.readWrite({ (transaction) in
                     let accounts = CKAccount.allAccounts(withUsername: self.username, transaction: transaction)
                     if accounts.count > 0 {
@@ -168,6 +169,7 @@ extension LoginView {
                     } else {
                         myAccount = CKAccount(username: self.username, deviceId: (response?.senderKey.deviceID)!, accountType: .none)
                         myAccount?.save(with: transaction)
+                        isAddAccount = true
                     }
                 })
                 if let account = myAccount {
@@ -176,6 +178,19 @@ extension LoginView {
                     
                     CKSignalCoordinate.shared.myAccount = account
                     CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                    if isAddAccount,
+                        let deviceId = response?.senderKey.deviceID,
+                        let senderKeyData = response?.senderKey.senderKeyDistribution,
+                        let senderId = response?.senderKey.senderID,
+                        let groupId = response?.groupID {
+                        let address = SignalAddress(name: senderId, deviceId: deviceId)
+                        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+                        if !ourEncryptionManager.senderKeyExistsForUsername(senderId, deviceId: deviceId, groupId: groupId) {
+                            let _ = ourEncryptionManager.storage.storeSenderKey(senderKeyData, senderKeyName: senderKeyName)
+//                            try ourEncryptionManager.consumeIncoming(toGroup: groupId, address: address, skdmDtata: senderKeyData)
+                            
+                        }
+                    }
                 }
                 
                 if result {

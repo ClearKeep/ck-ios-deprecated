@@ -11,6 +11,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     let groupId: String
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var recipientDeviceId: UInt32 = 0
+    let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     @Published var messages: [MessageModel] = []
     
     init(groupId: String) {
@@ -33,16 +34,24 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func decryptionMessage(publication: SignalcGroup_GroupPublication) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
+        if let ourEncryptionMng = self.ourEncryptionManager,
+            let connectionDb = self.connectionDb {
             do {
-                let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                          groupId: self.groupId,
-                                                                          name: publication.senderID,
-                                                                          deviceId: UInt32(1))
-                let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                print("Message decryption: \(messageDecryption ?? "Empty error")")
-                let post = MessageModel(from: publication.senderID, data: decryptedData)
-                messages.append(post)
+                var account: CKAccount?
+                connectionDb.read { (transaction) in
+                    account = CKAccount.allAccounts(withUsername: publication.senderID, transaction: transaction).first
+                }
+                if let senderAccount = account {
+                    let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
+                                                                              groupId: self.groupId,
+                                                                              name: publication.senderID,
+                                                                              deviceId: UInt32(senderAccount.deviceId))
+                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                    print("Message decryption: \(messageDecryption ?? "Empty error")")
+                    let post = MessageModel(from: publication.senderID, data: decryptedData)
+                    messages.append(post)
+                }
+                
             } catch {
                 print("Decryption message error: \(error)")
                 requestKeyInGroup(byGroupId: self.groupId, publication: publication)
@@ -59,7 +68,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
             }
             if let ourEncryptionMng = self?.ourEncryptionManager {
                 if !ourEncryptionMng.senderKeyExistsForUsername(groupResponse.senderKey.senderID,
-                                                                    deviceId: 1,
+                                                                deviceId: groupResponse.senderKey.deviceID,
                                                                     groupId: groupId) {
                     self?.processSenderKey(byGroupId: groupResponse.groupID,
                                            responseSenderKey: groupResponse.senderKey)
@@ -95,7 +104,16 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     
     private func processSenderKey(byGroupId groupId: String,
                                   responseSenderKey: SignalcGroup_GroupSenderKeyObject) {
-        if let ourAccountEncryptMng = self.ourEncryptionManager {
+        if let ourAccountEncryptMng = self.ourEncryptionManager,
+            let connectionDb = self.connectionDb {
+            // save account infor
+            connectionDb.readWrite { (transaction) in
+                var account = CKAccount.allAccounts(withUsername: responseSenderKey.senderID, transaction: transaction).first
+                if account == nil {
+                    account = CKAccount(username: responseSenderKey.senderID, deviceId: responseSenderKey.deviceID, accountType: .none)
+                    account?.save(with: transaction)
+                }
+            }
             do {
                 let addresss = SignalAddress(name: responseSenderKey.senderID,
                                              deviceId: responseSenderKey.deviceID)
