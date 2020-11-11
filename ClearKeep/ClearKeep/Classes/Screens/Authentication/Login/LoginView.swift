@@ -1,6 +1,8 @@
 
 import SwiftUI
 
+let isGroupChat = false
+
 struct LoginView: View {
     
     @State var username: String = ""
@@ -39,8 +41,11 @@ struct LoginView: View {
 extension LoginView {
     
     private func register() {
-        registerByAddress()
-//        registerWithGroup()
+        if isGroupChat {
+            registerWithGroup()
+        } else {
+            registerByAddress()
+        }
     }
     
     private func registerByAddress() {
@@ -101,8 +106,11 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
-        loginForUser()
-//        getSenderKeyInGroupTest()
+        if isGroupChat {
+            getSenderKeyInGroupTest()
+        } else {
+            loginForUser()
+        }
     }
     
     private func loginForUser() {

@@ -28,7 +28,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
            let clientId = userInfo["clientId"] as? String,
-           let publication = userInfo["publication"] as? Signal_Publication,
+            let publication = userInfo["publication"] as? Signal_Publication,
+            publication.groupID.isEmpty,
            clientId == self.clientId {
             if let ourEncryptionMng = self.ourEncryptionManager {
                 do {

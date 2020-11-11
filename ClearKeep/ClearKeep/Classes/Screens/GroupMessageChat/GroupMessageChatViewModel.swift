@@ -42,21 +42,23 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
                     account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
                 }
                 if let senderAccount = account {
-                    let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                              groupId: self.groupId,
-                                                                              name: publication.fromClientID,
-                                                                              deviceId: UInt32(senderAccount.deviceId))
-                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                    print("Message decryption: \(messageDecryption ?? "Empty error")")
-                    let post = MessageModel(from: publication.fromClientID, data: decryptedData)
-                    messages.append(post)
-                } else {
-                    requestKeyInGroup(byGroupId: self.groupId, publication: publication)
+                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupId) {
+                        let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
+                                                                                  groupId: self.groupId,
+                                                                                  name: publication.fromClientID,
+                                                                                  deviceId: UInt32(senderAccount.deviceId))
+                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                        print("Message decryption: \(messageDecryption ?? "Empty error")")
+                        let post = MessageModel(from: publication.fromClientID, data: decryptedData)
+                        messages.append(post)
+                        return
+                    }
                 }
             } catch {
                 print("Decryption message error: \(error)")
-                
+                requestKeyInGroup(byGroupId: self.groupId, publication: publication)
             }
+            requestKeyInGroup(byGroupId: self.groupId, publication: publication)
         }
     }
     
