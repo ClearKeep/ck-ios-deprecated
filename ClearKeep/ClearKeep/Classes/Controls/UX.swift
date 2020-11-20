@@ -61,6 +61,21 @@ struct TextFieldContent : View {
     }
 }
 
+struct TextFieldProfile: View {
+    var key: String
+    @Binding var value: String
+    @Binding var disable: Bool
+    
+    var body: some View {
+        return TextField(key, text: $value)
+            .padding()
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+            .disabled(disable)
+    }
+}
+
 
 struct PasswordSecureField : View {
 
@@ -70,6 +85,5 @@ struct PasswordSecureField : View {
         return SecureField("Password", text: $password)
             .padding()
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.bottom, 50)
     }
 }

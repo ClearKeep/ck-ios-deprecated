@@ -10,14 +10,15 @@ import Combine
 
 class MessageChatViewModel: ObservableObject, Identifiable {
     let clientId: String
+    let chatWithUser: String
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var recipientDeviceId: UInt32 = 0
     @Published var messages: [MessageModel] = []
     
-    init(clientId: String) {
+    init(clientId: String ,chatWithUser: String) {
         self.clientId = clientId
+        self.chatWithUser = chatWithUser
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-        requestBundleRecipient(byClientId: clientId)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMessage),
                                                name: NSNotification.Name("DidReceiveSignalMessage"),
@@ -154,6 +155,20 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
+                requestBundleRecipient(byClientId: clientId)
+                var req = Group_CreateGroupRequest()
+                let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+                req.groupName = "\(self.chatWithUser)-\(userNameLogin)"
+                req.groupType = "peer"
+                req.createdByClientID = myAccount.username
+                req.lstClientID = [myAccount.username , self.clientId]
+                
+                if messages.isEmpty {
+                    Backend.shared.createRoom(req) { (result) in
+                        print(result.groupID)
+                    }
+                }
+                
                 let post = MessageModel(from: myAccount.username, data: payload)
                 messages.append(post)
                 

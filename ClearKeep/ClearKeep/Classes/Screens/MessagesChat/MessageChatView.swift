@@ -13,15 +13,18 @@ struct MessageChatView: View {
     
     private let selectedRoom: String
     
-    init(clientId: String) {
-        self.selectedRoom = clientId
-        viewModel = MessageChatViewModel(clientId: clientId)
+    private let chatWithUserID: String
+    
+    init(clientId: String , userName : String) {
+        self.selectedRoom = userName
+        self.chatWithUserID = clientId
+        viewModel = MessageChatViewModel(clientId: clientId,chatWithUser: userName)
     }
     
     var body: some View {
         VStack {
             List(viewModel.messages, id: \.newID) { model in
-                MessageView(mesgModel: model)
+                MessageView(mesgModel: model,chatWithUserID: self.chatWithUserID,chatWithUserName: self.selectedRoom)
             }
             .navigationBarTitle(Text(self.selectedRoom))
             HStack {
@@ -49,6 +52,10 @@ extension MessageChatView {
 struct MessageView: View {
     
     var mesgModel: MessageModel
+    
+    var chatWithUserID: String
+    
+    var chatWithUserName: String
     
     var body: some View {
         
@@ -83,12 +90,13 @@ struct MessageView: View {
     }
     
     private func sender() -> String {
-        return mesgModel.from
+        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+        return mesgModel.from == self.chatWithUserID ? self.chatWithUserName : userNameLogin
     }
 }
 
 struct MessageChat_Previews: PreviewProvider {
     static var previews: some View {
-        MessageChatView(clientId: "")
+        MessageChatView(clientId: "" , userName: "")
     }
 }

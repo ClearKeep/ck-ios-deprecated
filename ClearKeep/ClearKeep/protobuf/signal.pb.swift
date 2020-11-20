@@ -221,6 +221,8 @@ struct Signal_PublishRequest {
 
   var groupID: String = String()
 
+  var groupType: String = String()
+
   var message: Data = SwiftProtobuf.Internal.emptyData
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -249,6 +251,8 @@ struct Signal_Publication {
   var fromClientID: String = String()
 
   var groupID: String = String()
+
+  var groupType: String = String()
 
   var message: Data = SwiftProtobuf.Internal.emptyData
 
@@ -701,7 +705,8 @@ extension Signal_PublishRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     1: .same(proto: "fromClientId"),
     2: .same(proto: "clientId"),
     3: .same(proto: "groupId"),
-    4: .same(proto: "message"),
+    4: .same(proto: "groupType"),
+    5: .same(proto: "message"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -710,7 +715,8 @@ extension Signal_PublishRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       case 1: try decoder.decodeSingularStringField(value: &self.fromClientID)
       case 2: try decoder.decodeSingularStringField(value: &self.clientID)
       case 3: try decoder.decodeSingularStringField(value: &self.groupID)
-      case 4: try decoder.decodeSingularBytesField(value: &self.message)
+      case 4: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 5: try decoder.decodeSingularBytesField(value: &self.message)
       default: break
       }
     }
@@ -726,8 +732,11 @@ extension Signal_PublishRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if !self.groupID.isEmpty {
       try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 3)
     }
+    if !self.groupType.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 4)
+    }
     if !self.message.isEmpty {
-      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 4)
+      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 5)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -736,6 +745,7 @@ extension Signal_PublishRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.fromClientID != rhs.fromClientID {return false}
     if lhs.clientID != rhs.clientID {return false}
     if lhs.groupID != rhs.groupID {return false}
+    if lhs.groupType != rhs.groupType {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -776,7 +786,8 @@ extension Signal_Publication: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "fromClientId"),
     2: .same(proto: "groupId"),
-    3: .same(proto: "message"),
+    3: .same(proto: "groupType"),
+    4: .same(proto: "message"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -784,7 +795,8 @@ extension Signal_Publication: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.fromClientID)
       case 2: try decoder.decodeSingularStringField(value: &self.groupID)
-      case 3: try decoder.decodeSingularBytesField(value: &self.message)
+      case 3: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 4: try decoder.decodeSingularBytesField(value: &self.message)
       default: break
       }
     }
@@ -797,8 +809,11 @@ extension Signal_Publication: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if !self.groupID.isEmpty {
       try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 2)
     }
+    if !self.groupType.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 3)
+    }
     if !self.message.isEmpty {
-      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 3)
+      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -806,6 +821,7 @@ extension Signal_Publication: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   static func ==(lhs: Signal_Publication, rhs: Signal_Publication) -> Bool {
     if lhs.fromClientID != rhs.fromClientID {return false}
     if lhs.groupID != rhs.groupID {return false}
+    if lhs.groupType != rhs.groupType {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

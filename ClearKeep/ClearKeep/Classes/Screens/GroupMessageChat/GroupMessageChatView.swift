@@ -21,7 +21,7 @@ struct GroupMessageChatView: View {
     var body: some View {
         VStack {
             List(viewModel.messages, id: \.newID) { model in
-                MessageView(mesgModel: model)
+                MessageView(mesgModel: model, chatWithUserID: "", chatWithUserName: "")
             }
             .navigationBarTitle(Text(self.selectedRoom))
             HStack {

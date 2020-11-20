@@ -12,11 +12,21 @@ struct MotherView: View {
     var body: some View {
         VStack {
             if viewRouter.current == .login {
-                LoginView()
+                if CKExtensions.getUserToken().isEmpty {
+                    LoginView()
+                } else {
+                    TabViewContainer().transition(.move(edge: .trailing))
+                }
             } else if viewRouter.current == .masterDetail {
                 MasterDetailView().transition(.move(edge: .trailing))
             } else if viewRouter.current == .profile {
                 ProfileView()
+            } else if viewRouter.current == .register {
+                RegisterView()
+            } else if viewRouter.current == .tabview {
+                TabViewContainer().transition(.move(edge: .trailing))
+            } else if viewRouter.current == .search {
+                SearchPeopleView()
             }
         }
     }
@@ -34,6 +44,9 @@ class ViewRouter: ObservableObject {
         case login
         case masterDetail
         case profile
+        case register
+        case tabview
+        case search
     }
 
     private static func initialPage() -> Page {
