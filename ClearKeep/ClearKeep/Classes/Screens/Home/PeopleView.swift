@@ -18,7 +18,7 @@ struct PeopleView: View {
                 List(viewModel.users){ user in
                     NavigationLink(destination:  MessageChatView(clientId: user.id, userName: user.userName))
                     {
-                        Image(systemName: "car.fill")
+                        Image(systemName: "person.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
                         VStack(alignment: .leading) {

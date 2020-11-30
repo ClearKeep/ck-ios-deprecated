@@ -16,6 +16,28 @@ class CKExtensions {
             return ""
         }
     }
+    
+//    static var getAllGroup: [GroupModel] {
+//          let defaultObject = GroupModel(id: 0, groupID: "", groupName: "", groupAvatar: "", groupType: "", createdByClientID: "", createdAt: 1, updatedByClientID: "", lstClientID: [""], updatedAt: 1)
+//          if let objects = UserDefaults.standard.value(forKey: "user_groups") as? Data {
+//             let decoder = JSONDecoder()
+//             if let objectsDecoded = try? decoder.decode(Array.self, from: objects) as [GroupModel] {
+//                return objectsDecoded
+//             } else {
+//                return [defaultObject]
+//             }
+//          } else {
+//             return [defaultObject]
+//          }
+//       }
+
+     static func saveAllGroup(allGroup: [GroupModel]) {
+          let encoder = JSONEncoder()
+          if let encoded = try? encoder.encode(allGroup){
+             UserDefaults.standard.set(encoded, forKey: "user_groups")
+          }
+     }
+    
 }
 
 extension UserDefaults: ObjectSavable {

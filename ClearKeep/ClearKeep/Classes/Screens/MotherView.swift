@@ -6,27 +6,25 @@ import SwiftUI
 import Combine
 
 struct MotherView: View {
-
+    
     @EnvironmentObject var viewRouter: ViewRouter
-
+    
     var body: some View {
         VStack {
-            if viewRouter.current == .login {
+            switch viewRouter.current {
+            case .login:
                 if CKExtensions.getUserToken().isEmpty {
                     LoginView()
                 } else {
                     TabViewContainer().transition(.move(edge: .trailing))
                 }
-            } else if viewRouter.current == .masterDetail {
-                MasterDetailView().transition(.move(edge: .trailing))
-            } else if viewRouter.current == .profile {
-                ProfileView()
-            } else if viewRouter.current == .register {
-                RegisterView()
-            } else if viewRouter.current == .tabview {
-                TabViewContainer().transition(.move(edge: .trailing))
-            } else if viewRouter.current == .search {
-                SearchPeopleView()
+            case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
+            case .profile: ProfileView()
+            case .register: RegisterView()
+            case .tabview: TabViewContainer().transition(.move(edge: .trailing))
+            case .search: SearchPeopleView()
+            case .createRoom: CreateRoomView()
+            case .history: HistoryChatView(groups: RealmGroups())
             }
         }
     }
@@ -39,7 +37,7 @@ struct MotherView_Previews : PreviewProvider {
 }
 
 class ViewRouter: ObservableObject {
-
+    
     enum Page {
         case login
         case masterDetail
@@ -47,18 +45,22 @@ class ViewRouter: ObservableObject {
         case register
         case tabview
         case search
+        case createRoom
+        case history
     }
-
+    
     private static func initialPage() -> Page {
         
         return Backend.shared.authenticator.loggedIn() ? .masterDetail : .login
     }
-
+    
     let objectWillChange = PassthroughSubject<ViewRouter,Never>()
     var current: Page = ViewRouter.initialPage() {
         didSet {
             withAnimation() {
-                objectWillChange.send(self)
+                DispatchQueue.main.async {
+                    self.objectWillChange.send(self)
+                }
             }
         }
     }

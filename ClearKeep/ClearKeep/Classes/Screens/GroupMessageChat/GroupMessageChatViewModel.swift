@@ -18,6 +18,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
         self.groupId = groupId
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
         requestAllKeyInGroup(byGroupId: groupId)
+        registerWithGroup(groupId)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMessage),
                                                name: NSNotification.Name("DidReceiveSignalMessage"),
@@ -27,15 +28,15 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     @objc func didReceiveMessage(notification: NSNotification) {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
-            let publication = userInfo["publication"] as? Signal_Publication,
+           let publication = userInfo["publication"] as? Message_MessageObjectResponse,
            publication.groupID == self.groupId { // need check groupId
             decryptionMessage(publication: publication)
         }
     }
     
-    func decryptionMessage(publication: Signal_Publication) {
+    func decryptionMessage(publication: Message_MessageObjectResponse) {
         if let ourEncryptionMng = self.ourEncryptionManager,
-            let connectionDb = self.connectionDb {
+           let connectionDb = self.connectionDb {
             do {
                 var account: CKAccount?
                 connectionDb.read { (transaction) in
@@ -62,7 +63,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func requestKeyInGroup(byGroupId groupId: String, publication: Signal_Publication) {
+    func requestKeyInGroup(byGroupId groupId: String, publication: Message_MessageObjectResponse) {
         Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                      groupId: groupId) { [weak self](result, error, response) in
             guard let groupResponse = response else {
@@ -72,13 +73,40 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
             if let ourEncryptionMng = self?.ourEncryptionManager {
                 if !ourEncryptionMng.senderKeyExistsForUsername(groupResponse.clientKey.clientID,
                                                                 deviceId: groupResponse.clientKey.deviceID,
-                                                                    groupId: groupId) {
+                                                                groupId: groupId) {
                     self?.processSenderKey(byGroupId: groupResponse.groupID,
                                            responseSenderKey: groupResponse.clientKey)
                     
                     // decrypt message again
                     self?.decryptionMessage(publication: publication)
                 }
+            }
+        }
+    }
+    
+    private func registerWithGroup(_ groupId: String) {
+        if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
+            let userName = myAccount.username
+            let deviceID = Int32(myAccount.deviceId)
+            
+            let address = SignalAddress(name: userName, deviceId: deviceID)
+            let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
+            let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+            do {
+                let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
+                Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                                                           clientId: userName,
+                                                           deviceId: deviceID,
+                                                           senderKeyData: signalSKDM.serializedData()) { (result, error) in
+                    print("Register group with result: \(result)")
+                    if result {
+                        Backend.shared.signalSubscrible(clientId: userName)
+                    }
+                }
+                
+            } catch {
+                print("Register group error: \(error)")
+                
             }
         }
     }
@@ -108,7 +136,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     private func processSenderKey(byGroupId groupId: String,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         if let ourAccountEncryptMng = self.ourEncryptionManager,
-            let connectionDb = self.connectionDb {
+           let connectionDb = self.connectionDb {
             // save account infor
             connectionDb.readWrite { (transaction) in
                 var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
@@ -128,7 +156,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
             }
         }
     }
-        
+    
     func send(messageStr: String) {
         guard let payload = messageStr.data(using: .utf8) else {
             return
@@ -136,14 +164,17 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
         
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
-                let post = MessageModel(from: myAccount.username, data: payload)
-                messages.append(post)
-                
                 guard let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
-                                                                             groupId: self.groupId,
-                                                                             name: myAccount.username,
-                                                                             deviceId: UInt32(myAccount.deviceId)) else { return }
-                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: self.groupId) { (result, error) in
+                                                                                   groupId: self.groupId,
+                                                                                   name: myAccount.username,
+                                                                                   deviceId: UInt32(myAccount.deviceId)) else { return }
+                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: self.groupId, groupType: "group") { (result, error) in
+                    if result {
+                        DispatchQueue.main.async {
+                            let post = MessageModel(from: myAccount.username, data: payload)
+                            self.messages.append(post)
+                        }
+                    }
                     print("Send message to group \(self.groupId) result: \(result)")
                 }
             } catch {

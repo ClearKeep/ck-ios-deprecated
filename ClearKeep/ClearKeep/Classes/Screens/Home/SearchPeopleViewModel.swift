@@ -14,7 +14,7 @@ class SearchPeopleViewModel : ObservableObject, Identifiable {
     }
 
     func searchUser(_ keySearch: String){
-        Backend.shared.searchUser(keySearch) { (result, error) in
+        Backend.shared.searchUser(keySearch.lowercased()) { (result, error) in
             if let result = result {
                 DispatchQueue.main.async {
                     self.users.removeAll()

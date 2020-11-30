@@ -36,6 +36,7 @@ struct MessageChatView: View {
                 }.padding(.trailing)
             }.onAppear() {
                 self.viewModel.messages.removeAll()
+                self.viewModel.getMessageInRoom()
             }
         }
     }
@@ -56,6 +57,8 @@ struct MessageView: View {
     var chatWithUserID: String
     
     var chatWithUserName: String
+    
+    var isGroup = false
     
     var body: some View {
         
@@ -91,6 +94,11 @@ struct MessageView: View {
     
     private func sender() -> String {
         let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+        let myAccount = CKSignalCoordinate.shared.myAccount?.username ?? ""
+        
+        if isGroup {
+            return mesgModel.from == myAccount ? userNameLogin : mesgModel.from
+        }
         return mesgModel.from == self.chatWithUserID ? self.chatWithUserName : userNameLogin
     }
 }

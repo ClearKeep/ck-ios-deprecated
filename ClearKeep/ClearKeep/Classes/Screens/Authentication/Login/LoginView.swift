@@ -119,16 +119,22 @@ extension LoginView {
         Backend.shared.login(request) { (result, error) in
             if let result = result {
                 do {
-                    let user = User(id: "", token: result.accessToken, hash: result.hashKey,userName: self.username)
+                    var user = User(id: "", token: result.accessToken, hash: result.hashKey,userName: self.username)
                     try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                     UserDefaults.standard.setValue(self.username, forKey: Constants.keySaveUserNameLogin)
                     Backend.shared.getLoginUserID { (userID) in
-                        let randomID = Int32.random(in: 1...Int32.max)
-                        let address = SignalAddress(name: userID, deviceId: Int32(randomID))
-                        Backend.shared.authenticator.register(address: address) { (result, error) in
-                            if result {
-                                loginForUser(clientID: userID)
+                        do {
+                            user.id = userID
+                            try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                            let randomID = Int32.random(in: 1...Int32.max)
+                            let address = SignalAddress(name: userID, deviceId: Int32(randomID))
+                            Backend.shared.authenticator.register(address: address) { (result, error) in
+                                if result {
+                                    loginForUser(clientID: userID)
+                                }
                             }
+                        } catch {
+                            print("save user error")
                         }
                     }
                 } catch {
@@ -154,6 +160,8 @@ extension LoginView {
                                                              transaction: transaction)
                         if accounts.count > 0 {
                             myAccount = accounts.first
+                        } else {
+                            myAccount?.save(with: transaction)
                         }
                     })
                     if let account = myAccount {

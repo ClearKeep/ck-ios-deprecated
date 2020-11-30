@@ -9,23 +9,23 @@ import GRPC
 
 class SignalService {
     
-    fileprivate let clientSignal: Signal_SignalKeyDistributionClient
+    fileprivate let clientSignal: Message_MessageClientProtocol
     
-    init(_ clientSignal: Signal_SignalKeyDistributionClient) {
+    init(_ clientSignal: Message_MessageClientProtocol) {
         self.clientSignal = clientSignal
     }
 }
 
 extension SignalService {
         
-    func listen(clientId: String, heard: @escaping ((String, Signal_Publication) -> Void)) {
-        let request: Signal_SubscribeAndListenRequest = .with {
+    func listen(clientId: String, heard: @escaping ((String, Message_MessageObjectResponse) -> Void)) {
+        let request: Message_SubscribeAndListenRequest = .with {
             $0.clientID = clientId
         }
         DispatchQueue.global(qos: .background).async {
             do {
                 let call = self.clientSignal.listen(request) { publication in
-                    guard let data = try? publication.serializedData(), let response = try? Signal_Publication(serializedData: data) else {
+                    guard let data = try? publication.serializedData(), let response = try? Message_MessageObjectResponse(serializedData: data) else {
                         print("Error serializedData")
                         return
                     }
@@ -43,7 +43,7 @@ extension SignalService {
     
     func subscribe(clientId: String, completion: @escaping (() -> Void)) {
         print("subscribe to \(clientId)")
-        let request: Signal_SubscribeAndListenRequest = .with {
+        let request: Message_SubscribeAndListenRequest = .with {
             $0.clientID = clientId
         }
         clientSignal.subscribe(request).response.whenComplete { (result) in

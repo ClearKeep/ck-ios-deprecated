@@ -16,11 +16,13 @@ class Backend: ObservableObject {
     
     private let clientSignal: Signal_SignalKeyDistributionClient
     
-    private let clientAuth : Auth_AuthClient
+    private let clientAuth: Auth_AuthClient
     
-    private let clientUser : User_UserClient
+    private let clientUser: User_UserClient
     
-    private let clientGroup : Group_GroupClient
+    private let clientGroup: Group_GroupClient
+    
+    private let clientMessage: Message_MessageClient
     
     private let connection: ClientConnection
     
@@ -50,9 +52,11 @@ class Backend: ObservableObject {
         
         clientGroup = Group_GroupClient(channel: connection)
         
+        clientMessage = Message_MessageClient(channel: connection)
+        
         authenticator = Authenticator(clientSignal)
         
-        signalService = SignalService(clientSignal)
+        signalService = SignalService(clientMessage)
     }
     
     deinit {
@@ -75,7 +79,7 @@ class Backend: ObservableObject {
         })
     }
     
-    private func heard(_ clienId: String, publication: Signal_Publication) {
+    private func heard(_ clienId: String, publication: Message_MessageObjectResponse) {
         let userInfo: [String : Any] = ["clientId": clienId, "publication": publication]
         NotificationCenter.default.post(name: NSNotification.Name("DidReceiveSignalMessage"),
                                         object: nil,
@@ -87,30 +91,32 @@ class Backend: ObservableObject {
               fromClientId senderId: String,
               toClientId receiveId: String = "",
               groupId: String = "",
+              groupType: String = "",
               _ completion: @escaping (Bool, Error?) -> Void) {
         do {
-            let request: Signal_PublishRequest = .with {
+            let request: Message_PublishRequest = .with {
                 $0.clientID = receiveId
                 $0.fromClientID = senderId
                 $0.message = message
+                $0.groupType = groupType
                 $0.groupID = groupId
             }
             
-            try self.sendMessage(request)
+            try self.sendMessage(request, completion)
             
         } catch {
             print(error.localizedDescription)
         }
     }
         
-    private func sendMessage(_ request: Signal_PublishRequest,
+    private func sendMessage(_ request: Message_PublishRequest,
                         _ completion: ((Bool, Error?) -> Void)? = nil) throws {
         
-        clientSignal.publish(request).response.whenComplete { result in
+        clientMessage.publish(request).response.whenComplete { result in
             switch result {
             case .success(let response):
                 print(response)
-                completion?(false, nil)
+                completion?(true, nil)
             case .failure(let error):
                 print(error)
                 completion?(false, error)
@@ -220,6 +226,24 @@ class Backend: ObservableObject {
                     completion(response.id)
                 case .failure(_):
                     completion("")
+                }
+            }
+        }
+    }
+    
+    func getMessageInRoom(_ groupID: String,_ completion: @escaping (Message_GetMessagesInGroupResponse?, Error?) -> Void){
+        let header = self.getHeaderApi()
+        if let header = header {
+            var req = Message_GetMessagesInGroupRequest()
+            req.groupID = groupID
+            req.offSet = 0
+            req.lastMessageAt = 0
+            clientMessage.get_messages_in_group(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response, nil)
+                case .failure(let error):
+                    completion(nil, error)
                 }
             }
         }

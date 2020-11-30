@@ -25,7 +25,7 @@ struct Signal_BaseResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var message: String = String()
+  var success: Bool = false
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -208,59 +208,6 @@ struct Signal_GroupGetAllClientKeyResponse {
   init() {}
 }
 
-/// ----- PUBLISH AND SUBCRIBE MESSAGE -----
-/// Request: publish a message
-struct Signal_PublishRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var fromClientID: String = String()
-
-  var clientID: String = String()
-
-  var groupID: String = String()
-
-  var groupType: String = String()
-
-  var message: Data = SwiftProtobuf.Internal.emptyData
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-/// Request: subcribe or listen
-struct Signal_SubscribeAndListenRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var clientID: String = String()
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Signal_Publication {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var fromClientID: String = String()
-
-  var groupID: String = String()
-
-  var groupType: String = String()
-
-  var message: Data = SwiftProtobuf.Internal.emptyData
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "signal"
@@ -268,27 +215,27 @@ fileprivate let _protobuf_package = "signal"
 extension Signal_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".BaseResponse"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "message"),
+    1: .same(proto: "success"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.message.isEmpty {
-      try visitor.visitSingularStringField(value: self.message, fieldNumber: 1)
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Signal_BaseResponse, rhs: Signal_BaseResponse) -> Bool {
-    if lhs.message != rhs.message {return false}
+    if lhs.success != rhs.success {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -694,135 +641,6 @@ extension Signal_GroupGetAllClientKeyResponse: SwiftProtobuf.Message, SwiftProto
   static func ==(lhs: Signal_GroupGetAllClientKeyResponse, rhs: Signal_GroupGetAllClientKeyResponse) -> Bool {
     if lhs.groupID != rhs.groupID {return false}
     if lhs.lstClientKey != rhs.lstClientKey {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Signal_PublishRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PublishRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "fromClientId"),
-    2: .same(proto: "clientId"),
-    3: .same(proto: "groupId"),
-    4: .same(proto: "groupType"),
-    5: .same(proto: "message"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.fromClientID)
-      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 3: try decoder.decodeSingularStringField(value: &self.groupID)
-      case 4: try decoder.decodeSingularStringField(value: &self.groupType)
-      case 5: try decoder.decodeSingularBytesField(value: &self.message)
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.fromClientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.fromClientID, fieldNumber: 1)
-    }
-    if !self.clientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 2)
-    }
-    if !self.groupID.isEmpty {
-      try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 3)
-    }
-    if !self.groupType.isEmpty {
-      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 4)
-    }
-    if !self.message.isEmpty {
-      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 5)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Signal_PublishRequest, rhs: Signal_PublishRequest) -> Bool {
-    if lhs.fromClientID != rhs.fromClientID {return false}
-    if lhs.clientID != rhs.clientID {return false}
-    if lhs.groupID != rhs.groupID {return false}
-    if lhs.groupType != rhs.groupType {return false}
-    if lhs.message != rhs.message {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Signal_SubscribeAndListenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SubscribeAndListenRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "clientId"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.clientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Signal_SubscribeAndListenRequest, rhs: Signal_SubscribeAndListenRequest) -> Bool {
-    if lhs.clientID != rhs.clientID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Signal_Publication: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Publication"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "fromClientId"),
-    2: .same(proto: "groupId"),
-    3: .same(proto: "groupType"),
-    4: .same(proto: "message"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.fromClientID)
-      case 2: try decoder.decodeSingularStringField(value: &self.groupID)
-      case 3: try decoder.decodeSingularStringField(value: &self.groupType)
-      case 4: try decoder.decodeSingularBytesField(value: &self.message)
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.fromClientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.fromClientID, fieldNumber: 1)
-    }
-    if !self.groupID.isEmpty {
-      try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 2)
-    }
-    if !self.groupType.isEmpty {
-      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 3)
-    }
-    if !self.message.isEmpty {
-      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Signal_Publication, rhs: Signal_Publication) -> Bool {
-    if lhs.fromClientID != rhs.fromClientID {return false}
-    if lhs.groupID != rhs.groupID {return false}
-    if lhs.groupType != rhs.groupType {return false}
-    if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

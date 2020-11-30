@@ -20,6 +20,32 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+struct Group_MessageObjectResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var id: String = String()
+
+  var groupID: String = String()
+
+  var groupType: String = String()
+
+  var fromClientID: String = String()
+
+  var clientID: String = String()
+
+  var message: Data = SwiftProtobuf.Internal.emptyData
+
+  var createdAt: Int64 = 0
+
+  var updatedAt: Int64 = 0
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 struct Group_GroupObjectResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -33,19 +59,32 @@ struct Group_GroupObjectResponse {
 
   var groupType: String = String()
 
+  var lstClientID: [String] = []
+
+  var lastMessageAt: Int64 = 0
+
+  var lastMessage: Group_MessageObjectResponse {
+    get {return _lastMessage ?? Group_MessageObjectResponse()}
+    set {_lastMessage = newValue}
+  }
+  /// Returns true if `lastMessage` has been explicitly set.
+  var hasLastMessage: Bool {return self._lastMessage != nil}
+  /// Clears the value of `lastMessage`. Subsequent reads from it will return its default value.
+  mutating func clearLastMessage() {self._lastMessage = nil}
+
   var createdByClientID: String = String()
 
   var createdAt: Int64 = 0
 
   var updatedByClientID: String = String()
 
-  var lstClientID: [String] = []
-
   var updatedAt: Int64 = 0
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _lastMessage: Group_MessageObjectResponse? = nil
 }
 
 struct Group_BaseResponse {
@@ -199,6 +238,77 @@ struct Group_JoinGroupRequest {
 
 fileprivate let _protobuf_package = "group"
 
+extension Group_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".MessageObjectResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "group_id"),
+    3: .standard(proto: "group_type"),
+    4: .standard(proto: "from_client_id"),
+    5: .standard(proto: "client_id"),
+    6: .same(proto: "message"),
+    7: .standard(proto: "created_at"),
+    8: .standard(proto: "updated_at"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularStringField(value: &self.groupID)
+      case 3: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 4: try decoder.decodeSingularStringField(value: &self.fromClientID)
+      case 5: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 6: try decoder.decodeSingularBytesField(value: &self.message)
+      case 7: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 8: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    if !self.groupID.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 2)
+    }
+    if !self.groupType.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 3)
+    }
+    if !self.fromClientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientID, fieldNumber: 4)
+    }
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 5)
+    }
+    if !self.message.isEmpty {
+      try visitor.visitSingularBytesField(value: self.message, fieldNumber: 6)
+    }
+    if self.createdAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 7)
+    }
+    if self.updatedAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 8)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Group_MessageObjectResponse, rhs: Group_MessageObjectResponse) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs.groupID != rhs.groupID {return false}
+    if lhs.groupType != rhs.groupType {return false}
+    if lhs.fromClientID != rhs.fromClientID {return false}
+    if lhs.clientID != rhs.clientID {return false}
+    if lhs.message != rhs.message {return false}
+    if lhs.createdAt != rhs.createdAt {return false}
+    if lhs.updatedAt != rhs.updatedAt {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".GroupObjectResponse"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -206,11 +316,13 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     2: .standard(proto: "group_name"),
     3: .standard(proto: "group_avatar"),
     4: .standard(proto: "group_type"),
-    5: .standard(proto: "created_by_client_id"),
-    6: .standard(proto: "created_at"),
-    7: .standard(proto: "updated_by_client_id"),
-    8: .standard(proto: "lst_client_id"),
-    9: .standard(proto: "updated_at"),
+    5: .standard(proto: "lst_client_id"),
+    6: .standard(proto: "last_message_at"),
+    7: .standard(proto: "last_message"),
+    8: .standard(proto: "created_by_client_id"),
+    9: .standard(proto: "created_at"),
+    10: .standard(proto: "updated_by_client_id"),
+    11: .standard(proto: "updated_at"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -220,11 +332,13 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 2: try decoder.decodeSingularStringField(value: &self.groupName)
       case 3: try decoder.decodeSingularStringField(value: &self.groupAvatar)
       case 4: try decoder.decodeSingularStringField(value: &self.groupType)
-      case 5: try decoder.decodeSingularStringField(value: &self.createdByClientID)
-      case 6: try decoder.decodeSingularInt64Field(value: &self.createdAt)
-      case 7: try decoder.decodeSingularStringField(value: &self.updatedByClientID)
-      case 8: try decoder.decodeRepeatedStringField(value: &self.lstClientID)
-      case 9: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
+      case 5: try decoder.decodeRepeatedStringField(value: &self.lstClientID)
+      case 6: try decoder.decodeSingularInt64Field(value: &self.lastMessageAt)
+      case 7: try decoder.decodeSingularMessageField(value: &self._lastMessage)
+      case 8: try decoder.decodeSingularStringField(value: &self.createdByClientID)
+      case 9: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 10: try decoder.decodeSingularStringField(value: &self.updatedByClientID)
+      case 11: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
       default: break
       }
     }
@@ -243,20 +357,26 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.groupType.isEmpty {
       try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 4)
     }
+    if !self.lstClientID.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.lstClientID, fieldNumber: 5)
+    }
+    if self.lastMessageAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.lastMessageAt, fieldNumber: 6)
+    }
+    if let v = self._lastMessage {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }
     if !self.createdByClientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.createdByClientID, fieldNumber: 5)
+      try visitor.visitSingularStringField(value: self.createdByClientID, fieldNumber: 8)
     }
     if self.createdAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 6)
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 9)
     }
     if !self.updatedByClientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.updatedByClientID, fieldNumber: 7)
-    }
-    if !self.lstClientID.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.lstClientID, fieldNumber: 8)
+      try visitor.visitSingularStringField(value: self.updatedByClientID, fieldNumber: 10)
     }
     if self.updatedAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 9)
+      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 11)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -266,10 +386,12 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs.groupName != rhs.groupName {return false}
     if lhs.groupAvatar != rhs.groupAvatar {return false}
     if lhs.groupType != rhs.groupType {return false}
+    if lhs.lstClientID != rhs.lstClientID {return false}
+    if lhs.lastMessageAt != rhs.lastMessageAt {return false}
+    if lhs._lastMessage != rhs._lastMessage {return false}
     if lhs.createdByClientID != rhs.createdByClientID {return false}
     if lhs.createdAt != rhs.createdAt {return false}
     if lhs.updatedByClientID != rhs.updatedByClientID {return false}
-    if lhs.lstClientID != rhs.lstClientID {return false}
     if lhs.updatedAt != rhs.updatedAt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

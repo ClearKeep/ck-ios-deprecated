@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct TabViewContainer: View {
+    
+    @ObservedObject var viewModel = MotherViewModel()
+
+    
     var body: some View {
         TabView {
-            HistoryChatView()
+            HistoryChatView(groups: RealmGroups())
                 .tabItem {
                     VStack {
-                        Image("ic_history")
+                        Image(systemName: "clock")
                             .renderingMode(.template)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -25,7 +29,7 @@ struct TabViewContainer: View {
             PeopleView()
                 .tabItem {
                     VStack {
-                        Image("ic_contact")
+                        Image(systemName: "person.3.fill")
                             .renderingMode(.template)
                             .resizable()
                             .frame(width: 15, height: 15)
@@ -36,13 +40,21 @@ struct TabViewContainer: View {
             ProfileView()
                 .tabItem {
                     VStack {
-                        Image("ic_profile")
+                        Image(systemName: "person.fill")
                             .renderingMode(.template)
                             .resizable()
                             .frame(width: 15, height: 15)
                         Text("Profile")
                     }
                 }
+        }
+        .onAppear(){
+            do {
+                let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
+                viewModel.getUserInDatabase(clientID: userLogin.id)
+            } catch {
+                print("get user login error")
+            }
         }
     }
 }

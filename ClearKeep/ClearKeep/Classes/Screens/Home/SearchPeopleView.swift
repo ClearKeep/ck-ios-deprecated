@@ -12,40 +12,49 @@ struct SearchPeopleView: View {
     @State var keySearch: String = ""
     @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var viewModel = SearchPeopleViewModel()
-
+    
     
     var body: some View {
-        ZStack(alignment: .top) {
-            Color(.white).opacity(0.2).edgesIgnoringSafeArea(.all)
-            VStack {
-                HStack {
-                    Button(action: {
-                        viewRouter.current = .tabview
-                    }){
-                        Image("ic_back_navigation").resizable().frame(width: 25, height: 25)
+        NavigationView {
+            ZStack(alignment: .top) {
+                Color(.white).opacity(0.2).edgesIgnoringSafeArea(.all)
+                VStack {
+                    HStack {
+                        Button(action: {
+                            viewRouter.current = .tabview
+                        }){
+                            Image(systemName: "chevron.backward")
+                        }
+                        TextFieldContent(key: "username", value: $keySearch)
+                        Button(action: {
+                            viewModel.searchUser(self.keySearch)
+                        }){
+                            Image("ic_search").resizable().frame(width: 25, height: 25)
+                        }
                     }
-                    TextFieldContent(key: "username", value: $keySearch)
-                    Button(action: {
-                        viewModel.searchUser(self.keySearch)
-                    }){
-                        Image("ic_search").resizable().frame(width: 25, height: 25)
-                    }
-                }
-                
-                List(viewModel.users){ user in
-                    Image(systemName: "car.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                    VStack(alignment: .leading) {
-                        Text(user.userName)
-                        Text(user.id)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                    Group {
+                        List(viewModel.users){ user in
+                            NavigationLink(destination:  MessageChatView(clientId: user.id, userName: user.userName))
+                            {
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                VStack(alignment: .leading) {
+                                    Text(user.userName)
+                                    Text(user.id)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                        }
                     }
                 }
             }
+            .padding()
+            .navigationBarTitle(Text(""), displayMode: .inline)
+            
         }
-        .padding()
+        
     }
 }
 

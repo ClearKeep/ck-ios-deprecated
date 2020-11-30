@@ -11,6 +11,7 @@ target 'ClearKeep' do
   # Waiting on merge https://github.com/yapstudios/YapDatabase/pull/492
   pod 'YapDatabase/SQLCipher', '~> 4.0'
   pod 'Mantle', '~> 2.1.6'
+  pod 'RealmSwift'
 
   target 'ClearKeepTests' do
     inherit! :search_paths

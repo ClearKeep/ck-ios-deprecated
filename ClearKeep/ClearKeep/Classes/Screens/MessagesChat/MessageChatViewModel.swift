@@ -10,14 +10,17 @@ import Combine
 
 class MessageChatViewModel: ObservableObject, Identifiable {
     let clientId: String
+    var groupId: String = ""
     let chatWithUser: String
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var recipientDeviceId: UInt32 = 0
+    var isExistGroup = false
     @Published var messages: [MessageModel] = []
     
     init(clientId: String ,chatWithUser: String) {
         self.clientId = clientId
         self.chatWithUser = chatWithUser
+        requestBundleRecipient(byClientId: clientId)
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMessage),
@@ -29,8 +32,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         print("didReceiveMessage \(String(describing: notification.userInfo))")
         if let userInfo = notification.userInfo,
            let clientId = userInfo["clientId"] as? String,
-            let publication = userInfo["publication"] as? Signal_Publication,
-            publication.groupID.isEmpty,
+            let publication = userInfo["publication"] as? Message_MessageObjectResponse,
+//            publication.groupID.isEmpty,
            clientId == self.clientId {
             if let ourEncryptionMng = self.ourEncryptionManager {
                 do {
@@ -39,8 +42,10 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                                 deviceId: recipientDeviceId)
                     let messageDecryption = String(data: decryptedData, encoding: .utf8)
                     print("Message decryption: \(messageDecryption ?? "Empty error")")
-                    let post = MessageModel(from: clientId, data: decryptedData)
-                    messages.append(post)
+                    DispatchQueue.main.async {
+                        let post = MessageModel(from: clientId, data: decryptedData)
+                        self.messages.append(post)
+                    }
                 } catch {
                     print("Decryption message error: \(error)")
                 }
@@ -148,6 +153,43 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
+    func getMessageInRoom(){
+//        var listGroup = CKExtensions.getAllGroup
+//        listGroup = listGroup.filter {$0.groupType == "peer"}
+//        listGroup.forEach { (group) in
+//            if group.lstClientID.contains(self.clientId) {
+//                self.groupId = group.groupID
+//                self.isExistGroup = true
+//            }
+//        }
+
+        if self.isExistGroup {
+            Backend.shared.getMessageInRoom(self.groupId) { (result, error) in
+                if let result = result {
+                    result.lstMessage.forEach { (message) in
+                        DispatchQueue.main.async {
+//                            if let ourEncryptionMng = self.ourEncryptionManager {
+//                                do {
+//                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
+//                                                                                                name: self.clientId,
+//                                                                                                deviceId: self.recipientDeviceId)
+//                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
+//                                    print("Message decryption: \(messageDecryption ?? "Empty error")")
+//                                    DispatchQueue.main.async {
+//                                        let post = MessageModel(from: self.clientId, data: decryptedData)
+//                                        self.messages.append(post)
+//                                    }
+//                                } catch {
+//                                    print("Decryption message error: \(error)")
+//                                }
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func send(messageStr: String) {
         guard let payload = messageStr.data(using: .utf8) else {
             return
@@ -156,6 +198,11 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
                 requestBundleRecipient(byClientId: clientId)
+//                if messages.isEmpty {
+//                    Backend.shared.createRoom(req) { (result) in
+//                        print(result.groupID)
+//                    }
+//                }
                 var req = Group_CreateGroupRequest()
                 let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
                 req.groupName = "\(self.chatWithUser)-\(userNameLogin)"
@@ -163,21 +210,35 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 req.createdByClientID = myAccount.username
                 req.lstClientID = [myAccount.username , self.clientId]
                 
-                if messages.isEmpty {
-                    Backend.shared.createRoom(req) { (result) in
-                        print(result.groupID)
-                    }
-                }
-                
-                let post = MessageModel(from: myAccount.username, data: payload)
-                messages.append(post)
-                
                 guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
                                                                                name: clientId,
                                                                                deviceId: recipientDeviceId) else { return }
-                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: clientId) { (result, error) in
-                    print("Send message: \(result)")
+                if !isExistGroup {
+                    Backend.shared.createRoom(req) { (result) in
+                        self.groupId = result.groupID
+                        self.isExistGroup = true
+                        Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: self.groupId , groupType: "peer") { (result, error) in
+                            if result {
+                                DispatchQueue.main.async {
+                                    let post = MessageModel(from: myAccount.username, data: payload)
+                                    self.messages.append(post)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: self.groupId , groupType: "peer") { (result, error) in
+                        if result {
+                            DispatchQueue.main.async {
+                                let post = MessageModel(from: myAccount.username, data: payload)
+                                self.messages.append(post)
+                            }
+                        }
+                    }
                 }
+
+
+
             } catch {
                 print("Send message error: \(error)")
             }

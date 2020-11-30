@@ -52,22 +52,6 @@ internal protocol Signal_SignalKeyDistributionClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse>
 
-  func subscribe(
-    _ request: Signal_SubscribeAndListenRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Signal_SubscribeAndListenRequest, Signal_BaseResponse>
-
-  func listen(
-    _ request: Signal_SubscribeAndListenRequest,
-    callOptions: CallOptions?,
-    handler: @escaping (Signal_Publication) -> Void
-  ) -> ServerStreamingCall<Signal_SubscribeAndListenRequest, Signal_Publication>
-
-  func publish(
-    _ request: Signal_PublishRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Signal_PublishRequest, Signal_BaseResponse>
-
 }
 
 extension Signal_SignalKeyDistributionClientProtocol {
@@ -156,60 +140,6 @@ extension Signal_SignalKeyDistributionClientProtocol {
       callOptions: callOptions ?? self.defaultCallOptions
     )
   }
-
-  ///action
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to Subscribe.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func subscribe(
-    _ request: Signal_SubscribeAndListenRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Signal_SubscribeAndListenRequest, Signal_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/signal.SignalKeyDistribution/Subscribe",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
-  /// Server streaming call to Listen
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to Listen.
-  ///   - callOptions: Call options.
-  ///   - handler: A closure called when each response is received from the server.
-  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
-  internal func listen(
-    _ request: Signal_SubscribeAndListenRequest,
-    callOptions: CallOptions? = nil,
-    handler: @escaping (Signal_Publication) -> Void
-  ) -> ServerStreamingCall<Signal_SubscribeAndListenRequest, Signal_Publication> {
-    return self.makeServerStreamingCall(
-      path: "/signal.SignalKeyDistribution/Listen",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      handler: handler
-    )
-  }
-
-  /// Unary call to Publish
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to Publish.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func publish(
-    _ request: Signal_PublishRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Signal_PublishRequest, Signal_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/signal.SignalKeyDistribution/Publish",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
 }
 
 internal final class Signal_SignalKeyDistributionClient: Signal_SignalKeyDistributionClientProtocol {
@@ -236,10 +166,6 @@ internal protocol Signal_SignalKeyDistributionProvider: CallHandlerProvider {
   func groupRegisterClientKey(request: Signal_GroupRegisterClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_BaseResponse>
   func groupGetClientKey(request: Signal_GroupGetClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_GroupGetClientKeyResponse>
   func groupGetAllClientKey(request: Signal_GroupGetAllClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_GroupGetAllClientKeyResponse>
-  ///action
-  func subscribe(request: Signal_SubscribeAndListenRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_BaseResponse>
-  func listen(request: Signal_SubscribeAndListenRequest, context: StreamingResponseCallContext<Signal_Publication>) -> EventLoopFuture<GRPCStatus>
-  func publish(request: Signal_PublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_BaseResponse>
 }
 
 extension Signal_SignalKeyDistributionProvider {
@@ -281,27 +207,6 @@ extension Signal_SignalKeyDistributionProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.groupGetAllClientKey(request: request, context: context)
-        }
-      }
-
-    case "Subscribe":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.subscribe(request: request, context: context)
-        }
-      }
-
-    case "Listen":
-      return CallHandlerFactory.makeServerStreaming(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listen(request: request, context: context)
-        }
-      }
-
-    case "Publish":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.publish(request: request, context: context)
         }
       }
 

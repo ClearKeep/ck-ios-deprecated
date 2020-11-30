@@ -32,6 +32,22 @@ internal protocol Message_MessageClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Message_GetMessagesInGroupRequest, Message_GetMessagesInGroupResponse>
 
+  func subscribe(
+    _ request: Message_SubscribeAndListenRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Message_SubscribeAndListenRequest, Message_BaseResponse>
+
+  func listen(
+    _ request: Message_SubscribeAndListenRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (Message_MessageObjectResponse) -> Void
+  ) -> ServerStreamingCall<Message_SubscribeAndListenRequest, Message_MessageObjectResponse>
+
+  func publish(
+    _ request: Message_PublishRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Message_PublishRequest, Message_MessageObjectResponse>
+
 }
 
 extension Message_MessageClientProtocol {
@@ -48,6 +64,60 @@ extension Message_MessageClientProtocol {
   ) -> UnaryCall<Message_GetMessagesInGroupRequest, Message_GetMessagesInGroupResponse> {
     return self.makeUnaryCall(
       path: "/message.Message/get_messages_in_group",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  ///action
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Subscribe.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func subscribe(
+    _ request: Message_SubscribeAndListenRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Message_SubscribeAndListenRequest, Message_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/message.Message/Subscribe",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Server streaming call to Listen
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Listen.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  internal func listen(
+    _ request: Message_SubscribeAndListenRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Message_MessageObjectResponse) -> Void
+  ) -> ServerStreamingCall<Message_SubscribeAndListenRequest, Message_MessageObjectResponse> {
+    return self.makeServerStreamingCall(
+      path: "/message.Message/Listen",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      handler: handler
+    )
+  }
+
+  /// Unary call to Publish
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Publish.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func publish(
+    _ request: Message_PublishRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Message_PublishRequest, Message_MessageObjectResponse> {
+    return self.makeUnaryCall(
+      path: "/message.Message/Publish",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -72,6 +142,10 @@ internal final class Message_MessageClient: Message_MessageClientProtocol {
 /// To build a server, implement a class that conforms to this protocol.
 internal protocol Message_MessageProvider: CallHandlerProvider {
   func get_messages_in_group(request: Message_GetMessagesInGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_GetMessagesInGroupResponse>
+  ///action
+  func subscribe(request: Message_SubscribeAndListenRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
+  func listen(request: Message_SubscribeAndListenRequest, context: StreamingResponseCallContext<Message_MessageObjectResponse>) -> EventLoopFuture<GRPCStatus>
+  func publish(request: Message_PublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_MessageObjectResponse>
 }
 
 extension Message_MessageProvider {
@@ -85,6 +159,27 @@ extension Message_MessageProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.get_messages_in_group(request: request, context: context)
+        }
+      }
+
+    case "Subscribe":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.subscribe(request: request, context: context)
+        }
+      }
+
+    case "Listen":
+      return CallHandlerFactory.makeServerStreaming(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listen(request: request, context: context)
+        }
+      }
+
+    case "Publish":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.publish(request: request, context: context)
         }
       }
 
