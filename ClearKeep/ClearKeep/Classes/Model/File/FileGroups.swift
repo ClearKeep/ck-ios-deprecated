@@ -29,6 +29,10 @@ class FileGroups: GroupChats {
             all.append(group)
         }
     }
+    
+    func isExistGroup(findGroup: GroupModel) -> Bool {
+        return !all.filter{$0.id == findGroup.id}.isEmpty
+    }
 
     func update(group: GroupModel) {
         if let index = all.firstIndex(where: { $0.id == group.id }) {

@@ -12,7 +12,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var recipientDeviceId: UInt32 = 0
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
-    @Published var messages: [MessageModel] = []
+    var messsages = RealmMessages()
     
     init(groupId: String) {
         self.groupId = groupId
@@ -50,8 +50,19 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
                                                                                   deviceId: UInt32(senderAccount.deviceId))
                         let messageDecryption = String(data: decryptedData, encoding: .utf8)
                         print("Message decryption: \(messageDecryption ?? "Empty error")")
-                        let post = MessageModel(from: publication.fromClientID, data: decryptedData)
-                        messages.append(post)
+                        
+                        DispatchQueue.main.async {
+                            let post = MessageModel(id: publication.id,
+                                                    groupID: publication.groupID,
+                                                    groupType: publication.groupType,
+                                                    fromClientID: publication.fromClientID,
+                                                    clientID: publication.clientID,
+                                                    message: decryptedData,
+                                                    createdAt: publication.createdAt,
+                                                    updatedAt: publication.updatedAt)
+                            self.messsages.add(message: post)
+                        }
+                        
                         return
                     }
                 }
@@ -168,14 +179,22 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
                                                                                    groupId: self.groupId,
                                                                                    name: myAccount.username,
                                                                                    deviceId: UInt32(myAccount.deviceId)) else { return }
-                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: self.groupId, groupType: "group") { (result, error) in
-                    if result {
+                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: self.groupId, groupType: "group") { (result) in
+                    if let result = result {
                         DispatchQueue.main.async {
-                            let post = MessageModel(from: myAccount.username, data: payload)
-                            self.messages.append(post)
+                            let post = MessageModel(id: result.id,
+                                                    groupID: result.groupID,
+                                                    groupType: result.groupType,
+                                                    fromClientID: result.fromClientID,
+                                                    clientID: result.clientID,
+                                                    message: payload,
+                                                    createdAt: result.createdAt,
+                                                    updatedAt: result.updatedAt)
+                            self.messsages.add(message: post)
                         }
+                        
                     }
-                    print("Send message to group \(self.groupId) result: \(result)")
+                    print("Send message to group \(self.groupId) result")
                 }
             } catch {
                 print("Send message error: \(error)")

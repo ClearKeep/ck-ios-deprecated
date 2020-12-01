@@ -9,42 +9,38 @@ import SwiftUI
 
 class HistoryChatViewModel: ObservableObject, Identifiable{
     
-    @Published var groups : [GroupModel] = []
+    var groupRealm = RealmGroups()
     
     func getJoinedGroup(){
+        
         Backend.shared.getJoinnedGroup { (result, error) in
             if let result = result {
-                DispatchQueue.main.async {
-                    self.groups.removeAll()
-                    result.lstGroup.forEach { (group) in
-                        let message = group.lastMessage
-                        let lastMess = MessageGroup()
-                        lastMess.id = message.id
-                        lastMess.groupID = message.groupID
-                        lastMess.clientID = message.clientID
-                        lastMess.fromClientID = message.fromClientID
-                        lastMess.createdAt = message.createdAt
-                        lastMess.message = message.message
-                        lastMess.updatedAt = message.updatedAt
-                        lastMess.groupType = message.groupType
-                        
-//                        let groupChat = GroupChat()
-//                        groupChat.groupId = group.groupID
-//                        groupChat.groupName = group.groupName
-//                        groupChat.avatarGroup = group.groupAvatar
-//                        groupChat.groupType = group.groupType
-//                        groupChat.lstClientID = group.lstClientID
-//                        groupChat.lastMessage = lastMess
-//                        groupChat.lastMessageAt = group.lastMessageAt
-//                        groupChat.createdByClientID = group.createdByClientID
-//                        groupChat.createdAt = group.createdAt
-//                        groupChat.updatedByClientID = group.updatedByClientID
-//                        groupChat.updatedAt = group.updatedAt
-                        
-//                        self.groups2.append(groupChat)
-//                        self.groups.append(GroupModel(id: "", groupID: group.groupID, groupName: group.groupName, groupAvatar: group.groupAvatar, groupType: group.groupType, createdByClientID: group.createdByClientID, createdAt: group.createdAt, updatedByClientID: group.updatedByClientID, lstClientID: group.lstClientID, updatedAt: group.updatedAt))
+                result.lstGroup.forEach { (groupResponse) in
+                    
+                    let lstClientID = groupResponse.lstClient.map{$0.id}
+                    
+                    
+                    let groupModel = GroupModel(groupID: groupResponse.groupID,
+                                                groupName: groupResponse.groupName,
+                                                groupAvatar: groupResponse.groupAvatar,
+                                                groupType: groupResponse.groupType,
+                                                createdByClientID: groupResponse.createdByClientID,
+                                                createdAt: groupResponse.createdAt,
+                                                updatedByClientID: groupResponse.updatedByClientID,
+                                                lstClientID: lstClientID,
+                                                updatedAt: groupResponse.updatedAt,
+                                                lastMessageAt: groupResponse.lastMessageAt,
+                                                lastMessage: groupResponse.lastMessage.message)
+                    
+                    if self.groupRealm.isExistGroup(findGroup: groupModel) {
+                        DispatchQueue.main.async {
+                            self.groupRealm.update(group: groupModel)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.groupRealm.add(group: groupModel)
+                        }
                     }
-//                    CKExtensions.saveAllGroup(allGroup: self.groups)
                 }
             }
         }

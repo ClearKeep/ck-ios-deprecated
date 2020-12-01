@@ -29,7 +29,7 @@ class RealmGroups: GroupChats {
     }
 
     func update(group: GroupModel) {
-        if let index = all.firstIndex(where: { $0.id == group.id }) {
+        if let index = all.firstIndex(where: { $0.groupID == group.groupID }) {
             let realmGroup = buildRealmGroup(group: group)
             guard write(group: realmGroup) else { return }
             all[index] = group
@@ -41,7 +41,7 @@ class RealmGroups: GroupChats {
 
     func remove(groupRemove: GroupModel) {
         for (index, group) in all.enumerated() {
-            if group.id == groupRemove.id {
+            if group.groupID == groupRemove.groupID {
                 let realmGroup = buildRealmGroup(group: group)
                 guard delete(group: realmGroup) else { continue }
                 all.remove(at: index)
@@ -59,10 +59,14 @@ class RealmGroups: GroupChats {
     private func delete(group: RealmGroup) -> Bool {
         realmWrite { realm in
             if let group = realm.object(ofType: RealmGroup.self,
-                                         forPrimaryKey: group.id) {
+                                         forPrimaryKey: group.groupId) {
                 realm.delete(group)
             }
         }
+    }
+    
+    func isExistGroup(findGroup: GroupModel) -> Bool{
+        return !all.filter{$0.groupID == findGroup.groupID}.isEmpty
     }
 
     private func realmWrite(operation: (_ realm: Realm) -> Void) -> Bool {
@@ -106,12 +110,8 @@ class RealmGroups: GroupChats {
     }
 
     private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
-        guard let id = UUID(uuidString: realmGroup.id) else {
-            fatalError("Corrupted ID: \(realmGroup.id)")
-        }
         
-        let group = GroupModel(id: id,
-                               groupID: realmGroup.groupId,
+        let group = GroupModel(groupID: realmGroup.groupId,
                                groupName: realmGroup.groupName,
                                groupAvatar: realmGroup.avatarGroup,
                                groupType: realmGroup.groupType,
@@ -119,14 +119,16 @@ class RealmGroups: GroupChats {
                                createdAt: realmGroup.createdAt,
                                updatedByClientID: realmGroup.updatedByClientID,
                                lstClientID: realmGroup.lstClientID,
-                               updatedAt: realmGroup.updatedAt)
+                               updatedAt: realmGroup.updatedAt,
+                               lastMessageAt: realmGroup.lastMessageAt,
+                               lastMessage: realmGroup.lastMessage)
 
         return group
     }
 
     private func buildRealmGroup(group: GroupModel) -> RealmGroup {
         let realmGroup = RealmGroup()
-        realmGroup.id = group.id.uuidString
+        realmGroup.groupId = group.groupID
         copyGroupAttributes(from: group, to: realmGroup)
 
         return realmGroup
@@ -140,7 +142,9 @@ class RealmGroups: GroupChats {
         realmGroup.createdAt = group.createdAt
         realmGroup.updatedByClientID = group.updatedByClientID
         realmGroup.updatedAt = group.updatedAt
-        realmGroup.lstClientID.append(objectsIn: group.lstClientID)
+        realmGroup.lstClientID = group.lstClientID
+        realmGroup.lastMessage = group.lastMessage
+        realmGroup.lastMessageAt = group.lastMessageAt
     }
 
 }

@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 struct GroupModel: Identifiable , Codable {
-    var id = UUID()
+    var id : String = UUID().uuidString
     var groupID: String
     var groupName: String
     var groupAvatar: String
@@ -17,9 +17,10 @@ struct GroupModel: Identifiable , Codable {
     var createdByClientID: String
     var createdAt: Int64
     var updatedByClientID: String
-    var lstClientID = List<String>()
+    var lstClientID = Array<String>()
     var updatedAt: Int64
-    
+    var lastMessageAt: Int64 = 0
+    var lastMessage = Data()
 }
 
 protocol GroupChats: ObservableObject{
@@ -34,11 +35,13 @@ protocol GroupChats: ObservableObject{
     func update(group: GroupModel)
 
     func remove(groupRemove: GroupModel)
+    
+    func isExistGroup(findGroup: GroupModel) -> Bool
 }
 
 extension GroupModel: Equatable {
 
     static func ==(lhs: GroupModel, rhs: GroupModel) -> Bool {
-        lhs.id == rhs.id
+        lhs.groupID == rhs.groupID
     }
 }

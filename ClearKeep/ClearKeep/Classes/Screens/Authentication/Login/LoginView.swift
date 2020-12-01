@@ -17,7 +17,7 @@ struct LoginView: View {
     var body: some View {
         VStack {
             TitleLabel("ClearKeep")
-            UserImage(name: "phone")
+            UserImage(name: "ic_profile")
             TextFieldContent(key: "Username", value: $username)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)

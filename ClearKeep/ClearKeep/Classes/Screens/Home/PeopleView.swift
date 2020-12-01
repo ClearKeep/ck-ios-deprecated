@@ -14,9 +14,8 @@ struct PeopleView: View {
     
     var body: some View {
         NavigationView {
-            Group {
                 List(viewModel.users){ user in
-                    NavigationLink(destination:  MessageChatView(clientId: user.id, userName: user.userName))
+                    NavigationLink(destination:  MessageChatView(clientId: user.id, userName: user.userName, messages: RealmMessages()))
                     {
                         Image(systemName: "person.fill")
                             .resizable()
@@ -28,8 +27,6 @@ struct PeopleView: View {
                                 .foregroundColor(.gray)
                         }
                     }
-                    
-                }
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("People"),

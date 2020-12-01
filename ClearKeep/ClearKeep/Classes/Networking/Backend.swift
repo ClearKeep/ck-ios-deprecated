@@ -37,7 +37,7 @@ class Backend: ObservableObject {
     @Published var rooms = [RoomModel]()
     
     
-    init(host: String = "172.16.0.216", port: Int = 5000) {
+    init(host: String = "localhost", port: Int = 5000) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -92,9 +92,9 @@ class Backend: ObservableObject {
               toClientId receiveId: String = "",
               groupId: String = "",
               groupType: String = "",
-              _ completion: @escaping (Bool, Error?) -> Void) {
+              _ completion: @escaping (Message_MessageObjectResponse?) -> Void) {
         do {
-            let request: Message_PublishRequest = .with {
+            let request: Message_PublishRequest = . with {
                 $0.clientID = receiveId
                 $0.fromClientID = senderId
                 $0.message = message
@@ -110,16 +110,16 @@ class Backend: ObservableObject {
     }
         
     private func sendMessage(_ request: Message_PublishRequest,
-                        _ completion: ((Bool, Error?) -> Void)? = nil) throws {
+                        _ completion: ((Message_MessageObjectResponse?) -> Void)? = nil) throws {
         
         clientMessage.publish(request).response.whenComplete { result in
             switch result {
             case .success(let response):
                 print(response)
-                completion?(true, nil)
+                completion?(response)
             case .failure(let error):
                 print(error)
-                completion?(false, error)
+                completion?(nil)
             }
         }
     }

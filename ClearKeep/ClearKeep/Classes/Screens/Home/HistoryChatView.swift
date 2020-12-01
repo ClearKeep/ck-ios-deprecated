@@ -18,11 +18,12 @@ struct HistoryChatView<GenericGroups: GroupChats>: View {
     var body: some View {
         
         NavigationView {
-            Group {
-                List(groups.all , id: \.groupID){ group in
-                    let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID), userName: viewModel.getGroupName(group: group))
-                    
-                    let viewGroup = GroupMessageChatView(groupId: group.groupID)
+            List(groups.all , id: \.groupID){ group in
+                    let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID),
+                                                   userName: viewModel.getGroupName(group: group),
+                                                   messages: RealmMessages())
+
+                    let viewGroup = GroupMessageChatView(groupId: group.groupID ,messages: RealmMessages())
                     
                     if group.groupType == "peer" {
                         NavigationLink(destination:  viewPeer) {
@@ -50,12 +51,38 @@ struct HistoryChatView<GenericGroups: GroupChats>: View {
                         }
                     }
                 }.onAppear {
-                    self.viewModel.getJoinedGroup()
-                    
-//                    Backend.shared.getJoinnedGroup { (result, error) in
-//                        
-//                    }
-                }
+//                    viewModel.getJoinedGroup()
+                    Backend.shared.getJoinnedGroup { (result, error) in
+                        if let result = result {
+                            result.lstGroup.forEach { (groupResponse) in
+                                
+                                let lstClientID = groupResponse.lstClient.map{$0.id}
+                                
+                                
+                                let groupModel = GroupModel(groupID: groupResponse.groupID,
+                                                            groupName: groupResponse.groupName,
+                                                            groupAvatar: groupResponse.groupAvatar,
+                                                            groupType: groupResponse.groupType,
+                                                            createdByClientID: groupResponse.createdByClientID,
+                                                            createdAt: groupResponse.createdAt,
+                                                            updatedByClientID: groupResponse.updatedByClientID,
+                                                            lstClientID: lstClientID,
+                                                            updatedAt: groupResponse.updatedAt,
+                                                            lastMessageAt: groupResponse.lastMessageAt,
+                                                            lastMessage: groupResponse.lastMessage.message)
+                                
+                                if self.groups.isExistGroup(findGroup: groupModel) {
+                                    DispatchQueue.main.async {
+                                        self.groups.update(group: groupModel)
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        self.groups.add(group: groupModel)
+                                    }
+                                }
+                            }
+                        }
+                    }
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("Chat"), trailing: Button(action: {
@@ -83,6 +110,10 @@ struct HistoryChatView_Previews: PreviewProvider {
         func insert() { }
         func update(group: GroupModel) { }
         func remove(groupRemove: GroupModel) { }
+        func isExistGroup(findGroup: GroupModel) -> Bool {
+            return !all.filter{$0.id == findGroup.id}.isEmpty
+        }
+        
     }
     
     

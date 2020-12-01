@@ -7,23 +7,27 @@
 
 import SwiftUI
 
-struct MessageChatView: View {
+struct MessageChatView<GenericMessages: MessageChats>: View {
+    
     @State private var nextMessage: String = ""
     @ObservedObject var viewModel: MessageChatViewModel
+    @ObservedObject var messages: GenericMessages
+    
     
     private let selectedRoom: String
     
     private let chatWithUserID: String
-    
-    init(clientId: String , userName : String) {
+        
+    init(clientId: String , userName: String, messages: GenericMessages) {
         self.selectedRoom = userName
         self.chatWithUserID = clientId
+        self.messages = messages
         viewModel = MessageChatViewModel(clientId: clientId,chatWithUser: userName)
     }
     
     var body: some View {
         VStack {
-            List(viewModel.messages, id: \.newID) { model in
+            List(messages.allMessageInGroup(groupId: selectedRoom), id: \.id) { model in
                 MessageView(mesgModel: model,chatWithUserID: self.chatWithUserID,chatWithUserName: self.selectedRoom)
             }
             .navigationBarTitle(Text(self.selectedRoom))
@@ -35,7 +39,6 @@ struct MessageChatView: View {
                     Image(systemName: "paperplane")
                 }.padding(.trailing)
             }.onAppear() {
-                self.viewModel.messages.removeAll()
                 self.viewModel.getMessageInRoom()
             }
         }
@@ -62,7 +65,7 @@ struct MessageView: View {
     
     var body: some View {
         
-        let checkSender = mesgModel.from == CKSignalCoordinate.shared.myAccount?.username
+        let checkSender = mesgModel.fromClientID == CKSignalCoordinate.shared.myAccount?.username
         
         if checkSender {
             
@@ -89,7 +92,7 @@ struct MessageView: View {
     }
 
     private func stringValue() -> String {
-        return String(data: mesgModel.data, encoding: .utf8) ?? "x"
+        return String(data: mesgModel.message, encoding: .utf8) ?? "x"
     }
     
     private func sender() -> String {
@@ -97,14 +100,34 @@ struct MessageView: View {
         let myAccount = CKSignalCoordinate.shared.myAccount?.username ?? ""
         
         if isGroup {
-            return mesgModel.from == myAccount ? userNameLogin : mesgModel.from
+            return mesgModel.fromClientID == myAccount ? userNameLogin : mesgModel.fromClientID
         }
-        return mesgModel.from == self.chatWithUserID ? self.chatWithUserName : userNameLogin
+        return mesgModel.fromClientID == self.chatWithUserID ? self.chatWithUserName : userNameLogin
     }
 }
 
 struct MessageChat_Previews: PreviewProvider {
+    
+    static let messages = [MessageModel]()
+    
+    class PreviewMessages: MessageChats {
+        
+        @Published private(set) var all: [MessageModel]
+        var allPublished: Published<[MessageModel]> { _all }
+        var allPublisher: Published<[MessageModel]>.Publisher { $all }
+        init(messages: [MessageModel]) { self.all = messages }
+        func add(message: MessageModel) { }
+        func insert() { }
+        func update(message: MessageModel) { }
+        func remove(messageRemove: MessageModel) { }
+        func allMessageInGroup(groupId: String) -> [MessageModel] {
+            return all.filter{$0.groupID == groupId}
+        }
+        
+        }
+    
+    
     static var previews: some View {
-        MessageChatView(clientId: "" , userName: "")
+        MessageChatView(clientId: "" , userName: "", messages: PreviewMessages(messages: messages))
     }
 }
