@@ -24,7 +24,7 @@ struct MotherView: View {
             case .tabview: TabViewContainer().transition(.move(edge: .trailing))
             case .search: SearchPeopleView()
             case .createRoom: CreateRoomView()
-            case .history: HistoryChatView(groups: RealmGroups())
+            case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             }
         }
     }

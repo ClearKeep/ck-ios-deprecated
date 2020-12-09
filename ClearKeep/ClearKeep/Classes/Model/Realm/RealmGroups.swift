@@ -33,9 +33,22 @@ class RealmGroups: GroupChats {
             let realmGroup = buildRealmGroup(group: group)
             guard write(group: realmGroup) else { return }
             all[index] = group
+            sort()
         }
         else {
             print("group not found")
+        }
+    }
+    
+    func updateLastMessage(groupID:String ,lastMessage: Data){
+        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
+            if var group = all.filter({$0.groupID == groupID}).first {
+                group.lastMessage = lastMessage
+                let realmGroup = buildRealmGroup(group: group)
+                guard write(group: realmGroup) else { return }
+                all[index] = group
+                sort()
+            }
         }
     }
 
@@ -65,8 +78,13 @@ class RealmGroups: GroupChats {
         }
     }
     
-    func isExistGroup(findGroup: GroupModel) -> Bool{
-        return !all.filter{$0.groupID == findGroup.groupID}.isEmpty
+    func isExistGroup(groupId: String) -> Bool{
+        return !all.filter{$0.groupID == groupId}.isEmpty
+    }
+    
+    func filterGroup(groupId: String) -> GroupModel?{
+        let group = self.all.filter{$0.groupID == groupId}.first
+        return group
     }
 
     private func realmWrite(operation: (_ realm: Realm) -> Void) -> Bool {
@@ -93,7 +111,7 @@ class RealmGroups: GroupChats {
         }
     }
 
-    private func loadSavedData() {
+    func loadSavedData() {
         DispatchQueue.global().async {
             guard let realm = self.getRealm() else { return }
 
@@ -105,11 +123,17 @@ class RealmGroups: GroupChats {
 
             DispatchQueue.main.async {
                 self.all = groups
+                self.sort()
             }
         }
     }
 
     private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
+        
+        var lstClientId = Array<String>()
+        realmGroup.lstClientID.forEach { (id) in
+            lstClientId.append(id)
+        }
         
         let group = GroupModel(groupID: realmGroup.groupId,
                                groupName: realmGroup.groupName,
@@ -118,7 +142,7 @@ class RealmGroups: GroupChats {
                                createdByClientID: realmGroup.createdByClientID,
                                createdAt: realmGroup.createdAt,
                                updatedByClientID: realmGroup.updatedByClientID,
-                               lstClientID: realmGroup.lstClientID,
+                               lstClientID: lstClientId,
                                updatedAt: realmGroup.updatedAt,
                                lastMessageAt: realmGroup.lastMessageAt,
                                lastMessage: realmGroup.lastMessage)
@@ -142,9 +166,13 @@ class RealmGroups: GroupChats {
         realmGroup.createdAt = group.createdAt
         realmGroup.updatedByClientID = group.updatedByClientID
         realmGroup.updatedAt = group.updatedAt
-        realmGroup.lstClientID = group.lstClientID
+        realmGroup.lstClientID.append(objectsIn: group.lstClientID)
         realmGroup.lastMessage = group.lastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
+    }
+    
+    private func sort() {
+        all.sort(by: { $0.updatedAt < $1.updatedAt } )
     }
 
 }

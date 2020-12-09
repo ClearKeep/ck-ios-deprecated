@@ -30,8 +30,8 @@ class FileGroups: GroupChats {
         }
     }
     
-    func isExistGroup(findGroup: GroupModel) -> Bool {
-        return !all.filter{$0.id == findGroup.id}.isEmpty
+    func isExistGroup(groupId: String) -> Bool {
+        return !all.filter{$0.id == groupId}.isEmpty
     }
 
     func update(group: GroupModel) {

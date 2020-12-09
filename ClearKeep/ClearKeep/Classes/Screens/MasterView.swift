@@ -10,8 +10,8 @@ struct MasterView: View {
             List {
                 ForEach(resource.rooms, id: \.self) { room in
                     NavigationLink(
-                        destination: MessageChatView(clientId: room.id , userName: "", messages: RealmMessages())
-//                        destination: GroupMessageChatView(groupId: room.id)
+                        destination: MessageChatView(clientId: room.id, groupID: "" , userName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
+//                        destination: GroupMessageChatView(groupId: room.id).environmentObject(RealmGroups()).environmentObject(RealmMessages())
                     ) {
                         Text(room.id)
                     }

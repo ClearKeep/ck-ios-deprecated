@@ -26,6 +26,7 @@ class RealmMessages: MessageChats {
         let realmMessage = buildRealmMessage(message: message)
         guard write(message: realmMessage) else { return }
             all.append(message)
+            sort()
     }
 
     func update(message: MessageModel) {
@@ -33,6 +34,7 @@ class RealmMessages: MessageChats {
             let realmMessage = buildRealmMessage(message: message)
             guard write(message: realmMessage) else { return }
             all[index] = message
+            sort()
         }
         else {
             print("message not found")
@@ -51,6 +53,20 @@ class RealmMessages: MessageChats {
     
     func allMessageInGroup(groupId: String) -> [MessageModel] {
         return all.filter{$0.groupID == groupId}
+    }
+    
+    func isExistMessage(msgId: String) -> Bool{
+        let filter = all.filter{$0.id == msgId}
+        return !filter.isEmpty
+    }
+    
+    func getTimeStampPreLastMessage(groupId: String) -> Int64{
+        let messageInGroup = all.filter{$0.groupID == groupId}
+        var timeStamp : Int64 = 0
+        if !messageInGroup.isEmpty {
+            timeStamp = messageInGroup[messageInGroup.count - 1].createdAt
+        }
+        return timeStamp
     }
 
     // MARK: - Private functions
@@ -93,7 +109,7 @@ class RealmMessages: MessageChats {
         }
     }
 
-    private func loadSavedData() {
+    func loadSavedData() {
         DispatchQueue.global().async {
             guard let realm = self.getRealm() else { return }
 
@@ -105,6 +121,7 @@ class RealmMessages: MessageChats {
 
             DispatchQueue.main.async {
                 self.all = messages
+                self.sort()
             }
         }
     }
@@ -139,6 +156,10 @@ class RealmMessages: MessageChats {
         realmMessage.message = message.message
         realmMessage.createdAt = message.createdAt
         realmMessage.updatedAt = message.updatedAt
+    }
+    
+    private func sort() {
+        all.sort(by: { $0.createdAt < $1.createdAt } )
     }
 
 }

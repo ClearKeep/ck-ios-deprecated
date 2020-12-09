@@ -17,10 +17,15 @@ struct GroupModel: Identifiable , Codable {
     var createdByClientID: String
     var createdAt: Int64
     var updatedByClientID: String
-    var lstClientID = Array<String>()
+    var lstClientID : Array<String> = []
     var updatedAt: Int64
     var lastMessageAt: Int64 = 0
     var lastMessage = Data()
+}
+
+struct GroupMember: Identifiable , Codable {
+    var id: String
+    var username: String
 }
 
 protocol GroupChats: ObservableObject{
@@ -36,7 +41,7 @@ protocol GroupChats: ObservableObject{
 
     func remove(groupRemove: GroupModel)
     
-    func isExistGroup(findGroup: GroupModel) -> Bool
+    func isExistGroup(groupId: String) -> Bool
 }
 
 extension GroupModel: Equatable {

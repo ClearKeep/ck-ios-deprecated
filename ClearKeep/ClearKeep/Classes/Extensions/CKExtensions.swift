@@ -40,6 +40,12 @@ class CKExtensions {
     
 }
 
+extension NSNotification {
+    static let ReceiveMessage = NSNotification.Name.init("ReceiveMessage")
+    
+    static let Notification = NSNotification.Name.init("Notification")
+}
+
 extension UserDefaults: ObjectSavable {
     func setObject<Object>(_ object: Object, forKey: String) throws where Object: Encodable {
         let encoder = JSONEncoder()

@@ -26,9 +26,13 @@ class Backend: ObservableObject {
     
     private let connection: ClientConnection
     
+    private let clientNotify: Notification_NotifyClient
+    
     var authenticator: Authenticator
     
     var signalService: SignalService?
+    
+    var notificationService: NotificationService?
     
     private var queueHandShake: [String: String] = [:]
     
@@ -37,7 +41,8 @@ class Backend: ObservableObject {
     @Published var rooms = [RoomModel]()
     
     
-    init(host: String = "localhost", port: Int = 5000) {
+    
+    init(host: String = "172.16.0.197", port: Int = 5000) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -57,6 +62,11 @@ class Backend: ObservableObject {
         authenticator = Authenticator(clientSignal)
         
         signalService = SignalService(clientMessage)
+        
+        clientNotify = Notification_NotifyClient(channel: connection)
+        
+        notificationService = NotificationService(clientNotify)
+        
     }
     
     deinit {
@@ -81,11 +91,26 @@ class Backend: ObservableObject {
     
     private func heard(_ clienId: String, publication: Message_MessageObjectResponse) {
         let userInfo: [String : Any] = ["clientId": clienId, "publication": publication]
-        NotificationCenter.default.post(name: NSNotification.Name("DidReceiveSignalMessage"),
+
+        NotificationCenter.default.post(name: NSNotification.ReceiveMessage,
+                                        object: nil,
+                                        userInfo: userInfo)
+    }
+    
+    func notificationSubscrible(clientId: String) -> Void{
+        notificationService?.subscribe(clientId: clientId, completion: { [weak self] in
+            self?.notificationService?.listen(clientId: clientId, heard: self!.heardNotification)
+        })
+    }
+    
+    private func heardNotification(publication: Notification_NotifyObjectResponse) {
+        let userInfo: [String : Any] = ["publication": publication]
+        NotificationCenter.default.post(name: NSNotification.Notification,
                                         object: nil,
                                         userInfo: userInfo)
         
     }
+    
     
     func send(_ message: Data,
               fromClientId senderId: String,
@@ -231,13 +256,13 @@ class Backend: ObservableObject {
         }
     }
     
-    func getMessageInRoom(_ groupID: String,_ completion: @escaping (Message_GetMessagesInGroupResponse?, Error?) -> Void){
+    func getMessageInRoom(_ groupID: String,_ timeStamp: Int64 ,_ completion: @escaping (Message_GetMessagesInGroupResponse?, Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {
             var req = Message_GetMessagesInGroupRequest()
             req.groupID = groupID
             req.offSet = 0
-            req.lastMessageAt = 0
+            req.lastMessageAt = timeStamp
             clientMessage.get_messages_in_group(req, callOptions: header).response.whenComplete { (result) in
                 switch result {
                 case .success(let response):

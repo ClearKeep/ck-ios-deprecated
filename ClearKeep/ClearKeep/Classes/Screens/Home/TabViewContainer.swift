@@ -14,7 +14,7 @@ struct TabViewContainer: View {
     
     var body: some View {
         TabView {
-            HistoryChatView(groups: RealmGroups())
+            HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
                 .tabItem {
                     VStack {
                         Image(systemName: "clock")
@@ -52,9 +52,26 @@ struct TabViewContainer: View {
             do {
                 let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
                 viewModel.getUserInDatabase(clientID: userLogin.id)
+                self.subscribleMessages()
+                self.subscribleNotify()
             } catch {
                 print("get user login error")
             }
+        }
+    }
+}
+
+
+extension TabViewContainer {
+    private func subscribleNotify(){
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.notificationSubscrible(clientId: myAccount.username)
+        }
+    }
+    
+    private func subscribleMessages(){
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.signalSubscrible(clientId: myAccount.username)
         }
     }
 }

@@ -156,13 +156,13 @@ extension CKAccountSignalEncryptionManager {
     }
     
     public func encryptToAddress(_ data:Data, name:String, deviceId:UInt32) throws -> SignalCiphertext {
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
+        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(111))
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
         return try sessionCipher.encryptData(data)
     }
     
     public func decryptFromAddress(_ data:Data, name:String, deviceId:UInt32) throws -> Data {
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(deviceId))
+        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(111))
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
         let cipherText = SignalCiphertext(data: data, type: .unknown)
         return try sessionCipher.decryptCiphertext(cipherText)

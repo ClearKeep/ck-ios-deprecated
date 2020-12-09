@@ -34,7 +34,8 @@ struct SearchPeopleView: View {
                     }
                     Group {
                         List(viewModel.users){ user in
-                            NavigationLink(destination:  MessageChatView(clientId: user.id, userName: user.userName, messages: RealmMessages()))
+                            NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: "", userName: user.userName)
+                                            .environmentObject(RealmGroups()).environmentObject(RealmMessages()))
                             {
                                 Image(systemName: "person.fill")
                                     .resizable()

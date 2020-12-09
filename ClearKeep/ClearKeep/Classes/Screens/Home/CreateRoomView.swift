@@ -18,6 +18,8 @@ struct CreateRoomView: View {
     @State private var showSelectMemberView = false
     
     @ObservedObject var selectObserver = CreateRoomViewModel()
+    
+    @EnvironmentObject var realmGroups : RealmGroups
 
     
     var body: some View {
@@ -71,9 +73,26 @@ extension CreateRoomView {
             req.createdByClientID = account.username
             req.lstClientID = lstClientID
             
-            Backend.shared.createRoom(req) { (response) in
+            Backend.shared.createRoom(req) { (result) in
                 DispatchQueue.main.async {
+                    let group = GroupModel(groupID: result.groupID,
+                                           groupName: result.groupName,
+                                           groupAvatar: result.groupAvatar,
+                                           groupType: result.groupType,
+                                           createdByClientID: result.createdByClientID,
+                                           createdAt: result.createdAt,
+                                           updatedByClientID: result.updatedByClientID,
+                                           lstClientID: lstClientID,
+                                           updatedAt: result.updatedAt,
+                                           lastMessageAt: result.lastMessageAt,
+                                           lastMessage: Data())
+                    
+                    DispatchQueue.main.async {
+                        realmGroups.add(group: group)
+                    }
+                    
                     self.viewRouter.current = .history
+                    
                 }
             }
         }

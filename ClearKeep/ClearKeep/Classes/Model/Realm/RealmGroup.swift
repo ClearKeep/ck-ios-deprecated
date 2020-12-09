@@ -13,7 +13,7 @@ class RealmGroup: Object {
     @objc dynamic var groupName: String = ""
     @objc dynamic var avatarGroup: String = ""
     @objc dynamic var groupType: String = ""
-    var lstClientID = Array<String>()
+    var lstClientID = List<String>()
     @objc dynamic var lastMessage = Data()
     @objc dynamic var lastMessageAt: Int64 = 0
     @objc dynamic var createdByClientID: String = ""
@@ -23,6 +23,15 @@ class RealmGroup: Object {
     
     override class func primaryKey() -> String? {
         return "groupId"
+    }
+}
+
+class DeviceIdForClientId: Object {
+    @objc dynamic var clientId: String = ""
+    @objc dynamic var recipient: Int32 = 0
+    
+    override class func primaryKey() -> String? {
+        return "clientId"
     }
 }
 

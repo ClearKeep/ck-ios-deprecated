@@ -126,8 +126,9 @@ extension LoginView {
                         do {
                             user.id = userID
                             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                            let randomID = Int32.random(in: 1...Int32.max)
-                            let address = SignalAddress(name: userID, deviceId: Int32(randomID))
+//                            let randomID = Int32.random(in: 1...Int32.max)
+                            //TODO: hashcode device id
+                            let address = SignalAddress(name: userID, deviceId: Int32(111))
                             Backend.shared.authenticator.register(address: address) { (result, error) in
                                 if result {
                                     loginForUser(clientID: userID)
@@ -172,7 +173,7 @@ extension LoginView {
                         CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                     }
                     if result {
-                        Backend.shared.signalSubscrible(clientId: clientID)
+//                        Backend.shared.signalSubscrible(clientId: clientID)
                         self.viewRouter.current = .tabview
                     }
                 }
