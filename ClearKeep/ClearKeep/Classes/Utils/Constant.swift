@@ -11,4 +11,6 @@ struct Constants {
     static let keySaveUser = "keySaveUser"
     static let keySaveUserNameLogin = "keySaveUserNameLogin"
     static let keySaveGroup = "keySaveGroup"
+    static let isChatRoom = "isChatRoom"
+    static let isChatGroup = "isChatGroup"
 }

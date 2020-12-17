@@ -333,16 +333,16 @@ extension CKSignalStorageManager: SignalStore {
     
     /// Returns true if deleted, false if not found
     public func deletePreKey(withId preKeyId: UInt32) -> Bool {
-        var result = false
-        self.databaseConnection.readWrite { (transaction) in
-            let yapKey = CKSignalPreKey.uniqueKey(forAccountKey: self.accountKey, keyId: preKeyId)
-            if let preKey = CKSignalPreKey.fetchObject(withUniqueID: yapKey, transaction: transaction) {
-                preKey.keyData = nil
-                preKey.save(with: transaction)
-                result = true
-            }
-        }
-        return result
+//        var result = false
+//        self.databaseConnection.readWrite { (transaction) in
+//            let yapKey = CKSignalPreKey.uniqueKey(forAccountKey: self.accountKey, keyId: preKeyId)
+//            if let preKey = CKSignalPreKey.fetchObject(withUniqueID: yapKey, transaction: transaction) {
+//                preKey.keyData = nil
+//                preKey.save(with: transaction)
+//                result = true
+//            }
+//        }
+        return true
     }
     
     //MARK: SignalSignedPreKeyStore

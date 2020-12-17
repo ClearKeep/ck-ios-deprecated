@@ -28,21 +28,21 @@ struct GroupMember: Identifiable , Codable {
     var username: String
 }
 
-protocol GroupChats: ObservableObject{
-    var all: [GroupModel] { get }
-
-    var allPublished: Published<[GroupModel]> { get }
-
-    var allPublisher: Published<[GroupModel]>.Publisher { get }
-
-    func add(group: GroupModel)
-
-    func update(group: GroupModel)
-
-    func remove(groupRemove: GroupModel)
-    
-    func isExistGroup(groupId: String) -> Bool
-}
+//protocol GroupChats: ObservableObject{
+//    var all: [GroupModel] { get }
+//
+////    var allPublished: Published<[GroupModel]> { get }
+////
+////    var allPublisher: Published<[GroupModel]>.Publisher { get }
+//
+//    func add(group: GroupModel)
+//
+//    func update(group: GroupModel)
+//
+//    func remove(groupRemove: GroupModel)
+//    
+//    func isExistGroup(groupId: String) -> Bool
+//}
 
 extension GroupModel: Equatable {
 

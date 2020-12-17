@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FileGroups: GroupChats {
+class FileGroups: ObservableObject {
     
     private static let groupsKey = "groups"
 

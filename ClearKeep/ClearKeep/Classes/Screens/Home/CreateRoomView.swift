@@ -11,7 +11,7 @@ struct CreateRoomView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var viewModel = InviteMemberViewModel()
-
+    
     @State var groupName: String = ""
     @State var userName: String = ""
     @State var isDisable = true
@@ -20,7 +20,7 @@ struct CreateRoomView: View {
     @ObservedObject var selectObserver = CreateRoomViewModel()
     
     @EnvironmentObject var realmGroups : RealmGroups
-
+    
     
     var body: some View {
         VStack {
@@ -34,8 +34,8 @@ struct CreateRoomView: View {
                     Text(self.getAllMember()).lineLimit(1)
                 }
                 NavigationLink(destination: InviteMemberGroup(selectObserver: selectObserver)) {
-                                    Text("Add members")
-                                }
+                    Text("Add members")
+                }
                 .padding()
             }
             Button(action: createRoom){
@@ -66,7 +66,7 @@ extension CreateRoomView {
         if let account = CKSignalCoordinate.shared.myAccount {
             var lstClientID = self.selectObserver.peoples.map{$0.id}
             lstClientID.append(account.username)
-                
+            
             var req = Group_CreateGroupRequest()
             req.groupName = self.groupName
             req.groupType = "group"
@@ -87,12 +87,8 @@ extension CreateRoomView {
                                            lastMessageAt: result.lastMessageAt,
                                            lastMessage: Data())
                     
-                    DispatchQueue.main.async {
-                        realmGroups.add(group: group)
-                    }
-                    
+                    self.realmGroups.add(group: group)
                     self.viewRouter.current = .history
-                    
                 }
             }
         }

@@ -36,7 +36,7 @@ struct MessageChatView: View {
     
     var body: some View {
         VStack {
-            List(messages, id: \.id) { model in
+            List(self.realmMessages.allMessageInGroup(groupId: self.myGroupID), id: \.id) { model in
                 MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
             }
             .navigationBarTitle(Text(self.userName))
@@ -48,6 +48,7 @@ struct MessageChatView: View {
                     Image(systemName: "paperplane")
                 }.padding(.trailing)
             }.onAppear() {
+                UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
                 self.myGroupID = groupID
                 self.viewModel.requestBundleRecipient(byClientId: self.clientId)
                 self.realmMessages.loadSavedData()
@@ -55,10 +56,13 @@ struct MessageChatView: View {
                 self.reloadData()
                 self.getMessageInRoom()
             }
+            .onDisappear(){
+                UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+            }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
-                self.realmMessages.loadSavedData()
-                self.groupRealms.loadSavedData()
-                self.didReceiveMessage(userInfo: obj.userInfo)
+                if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                    self.didReceiveMessage(userInfo: obj.userInfo)
+                }
             }
         }
     }

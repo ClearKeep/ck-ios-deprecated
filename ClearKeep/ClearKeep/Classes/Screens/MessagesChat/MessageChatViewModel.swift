@@ -36,7 +36,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     }
                     // check exist session recipient in database
                     if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                        self?.recipientDeviceId = UInt32(111)
+                        self?.recipientDeviceId = UInt32(555)
 //                        DispatchQueue.main.async {
 //                            self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
 //                            let realmDevice = DeviceIdForClientId()
@@ -94,7 +94,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 }
                 
                 let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(111),
+                                                                deviceId: UInt32(555),
                                                                 preKeyId: UInt32(recipientResponse.preKeyID),
                                                                 preKeyPublic: preKeyKeyPair.publicKey,
                                                                 signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
@@ -103,7 +103,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                 identityKey: recipientResponse.identityKeyPublic)
                 
                 let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 111)
+                                                  deviceId: 555)
                 let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
                                                                 context: ourEncryptionMng.signalContext)
                 try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
@@ -122,7 +122,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
                                         publicKey: recipientResponse.preKey)
                 
-                let bundle = CKBundle(deviceId: UInt32(111),
+                let bundle = CKBundle(deviceId: UInt32(555),
                                       registrationId: UInt32(recipientResponse.registrationID),
                                       identityKey: recipientResponse.identityKeyPublic,
                                       signedPreKey: ckSignedPreKey,

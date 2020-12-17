@@ -10,13 +10,13 @@ import RealmSwift
 
 /// Class should be created only once
 /// (typically, initialize in SceneDelegate and inject where needed)
-class RealmGroups: GroupChats {
+class RealmGroups: ObservableObject {
 
     // MARK:- Persons conformance
-    @Published private(set) var all = [GroupModel]()
+    @Published var all = [GroupModel]()
 
-    var allPublished: Published<[GroupModel]> { _all }
-    var allPublisher: Published<[GroupModel]>.Publisher { $all }
+//    var allPublished: Published<[GroupModel]> { _all }
+//    var allPublisher: Published<[GroupModel]>.Publisher { $all }
 
     init() {
         loadSavedData()
@@ -33,7 +33,7 @@ class RealmGroups: GroupChats {
             let realmGroup = buildRealmGroup(group: group)
             guard write(group: realmGroup) else { return }
             all[index] = group
-            sort()
+//            sort()
         }
         else {
             print("group not found")
@@ -47,7 +47,7 @@ class RealmGroups: GroupChats {
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
-                sort()
+//                sort()
             }
         }
     }
@@ -123,7 +123,7 @@ class RealmGroups: GroupChats {
 
             DispatchQueue.main.async {
                 self.all = groups
-                self.sort()
+//                self.sort()
             }
         }
     }

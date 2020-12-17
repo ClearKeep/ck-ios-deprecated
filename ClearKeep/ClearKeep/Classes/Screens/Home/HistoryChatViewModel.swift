@@ -14,37 +14,41 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
     
     @Published var recipientDeviceId: UInt32 = 0
     
-    init() {
-        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+//    init() {
+//        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+//    }
+    func start(ourEncryptionManager: CKAccountSignalEncryptionManager?){
+        self.ourEncryptionManager = ourEncryptionManager
     }
     
-    func requestBundleRecipient(byClientId clientId: String) {
+    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
         
-//                let realm = RealmHelper<DeviceIdForClientId>()
-//                let lstDeviceId = realm.findAll()
-//                if let existDevice = lstDeviceId.filter({$0.clientId == clientId}).first {
-//                    DispatchQueue.main.async {
-//                        self.recipientDeviceId = UInt32(existDevice.recipient)
-//                    }
-//                } else {
+        //                let realm = RealmHelper<DeviceIdForClientId>()
+        //                let lstDeviceId = realm.findAll()
+        //                if let existDevice = lstDeviceId.filter({$0.clientId == clientId}).first {
+        //                    DispatchQueue.main.async {
+        //                        self.recipientDeviceId = UInt32(existDevice.recipient)
+        //                    }
+        //                } else {
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
                 guard let recipientResponse = response else {
                     print("Request prekey \(clientId) fail")
+                    completion()
                     return
                 }
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
                     self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-
-//                    DispatchQueue.main.async {
-//                        self?.recipientDeviceId = UInt32(111)
-//                        let realmDevice = DeviceIdForClientId()
-//                        realmDevice.clientId = clientId
-//                        realmDevice.recipient = recipientResponse.deviceID
-//                        realm.add(object: realmDevice)
-//                    }
+                    
+                    //                    DispatchQueue.main.async {
+                    //                        self?.recipientDeviceId = UInt32(111)
+                    //                        let realmDevice = DeviceIdForClientId()
+                    //                        realmDevice.clientId = clientId
+                    //                        realmDevice.recipient = recipientResponse.deviceID
+                    //                        realm.add(object: realmDevice)
+                    //                    }
                     if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {
@@ -60,7 +64,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                                         buddy.username = recipientResponse.clientID
                                         buddy.save(with:transaction)
                                         
-                                        let device = CKDevice(deviceId: NSNumber(value:111),
+                                        let device = CKDevice(deviceId: NSNumber(value:555),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: buddy.uniqueId,
                                                               parentCollection: CKBuddy.collection,
@@ -78,9 +82,13 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                         //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
                     }
                     print("processPreKeyBundle recipient finished")
-//                }
-            }
+                    completion()
+                    
+                    //                }
+                } else {
+                    completion()
                 }
+            }
     }
     
     private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
@@ -95,7 +103,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                 }
                 
                 let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(111),
+                                                                deviceId: UInt32(555),
                                                                 preKeyId: UInt32(recipientResponse.preKeyID),
                                                                 preKeyPublic: preKeyKeyPair.publicKey,
                                                                 signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
@@ -104,7 +112,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                                                                 identityKey: recipientResponse.identityKeyPublic)
                 
                 let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 111)
+                                                  deviceId: 555)
                 let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
                                                                 context: ourEncryptionMng.signalContext)
                 try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
@@ -123,7 +131,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                 let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
                                         publicKey: recipientResponse.preKey)
                 
-                let bundle = CKBundle(deviceId: UInt32(111),
+                let bundle = CKBundle(deviceId: UInt32(555),
                                       registrationId: UInt32(recipientResponse.registrationID),
                                       identityKey: recipientResponse.identityKeyPublic,
                                       signedPreKey: ckSignedPreKey,

@@ -10,13 +10,13 @@ import RealmSwift
 
 /// Class should be created only once
 /// (typically, initialize in SceneDelegate and inject where needed)
-class RealmMessages: MessageChats {
+class RealmMessages: ObservableObject {
 
     // MARK:- Persons conformance
-    @Published private(set) var all = [MessageModel]()
+    @Published var all = [MessageModel]()
 
-    var allPublished: Published<[MessageModel]> { _all }
-    var allPublisher: Published<[MessageModel]>.Publisher { $all }
+//    var allPublished: Published<[MessageModel]> { _all }
+//    var allPublisher: Published<[MessageModel]>.Publisher { $all }
 
     init() {
         loadSavedData()

@@ -128,7 +128,7 @@ extension LoginView {
                             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
 //                            let randomID = Int32.random(in: 1...Int32.max)
                             //TODO: hashcode device id
-                            let address = SignalAddress(name: userID, deviceId: Int32(111))
+                            let address = SignalAddress(name: userID, deviceId: Int32(555))
                             Backend.shared.authenticator.register(address: address) { (result, error) in
                                 if result {
                                     loginForUser(clientID: userID)
