@@ -40,6 +40,11 @@ struct MessageChatView: View {
                 MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
             }
             .navigationBarTitle(Text(self.userName))
+            .navigationBarItems(trailing: Button( action: {
+                self.viewModel.callPeerToPeer(self.clientId , self.myGroupID)
+            }){
+                Image(systemName: "phone")
+            })
             HStack {
                 TextFieldContent(key: "Next message", value: self.$nextMessage)
                 Button( action: {

@@ -18,6 +18,19 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
+    func callPeerToPeer(_ clientID: String ,_ groupID: String){
+            Backend.shared.videoCall(clientID, groupID) { (response, error) in
+                if let response = response {
+                    if response.success {
+                        
+                    }
+                }
+        }
+        
+        
+
+    }
+    
     func requestBundleRecipient(byClientId clientId: String) {
         
 //        let realm = RealmHelper<DeviceIdForClientId>()

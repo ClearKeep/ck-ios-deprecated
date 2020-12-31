@@ -19,7 +19,7 @@ class SignalService {
 extension SignalService {
         
     func listen(clientId: String, heard: @escaping ((String, Message_MessageObjectResponse) -> Void)) {
-        let request: Message_SubscribeAndListenRequest = .with {
+        let request: Message_ListenRequest = .with {
             $0.clientID = clientId
         }
         DispatchQueue.global(qos: .background).async {
@@ -43,7 +43,7 @@ extension SignalService {
     
     func subscribe(clientId: String, completion: @escaping (() -> Void)) {
         print("subscribe to \(clientId)")
-        let request: Message_SubscribeAndListenRequest = .with {
+        let request: Message_SubscribeRequest = .with {
             $0.clientID = clientId
         }
         clientSignal.subscribe(request).response.whenComplete { (result) in

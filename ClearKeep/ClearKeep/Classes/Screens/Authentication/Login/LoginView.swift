@@ -173,8 +173,11 @@ extension LoginView {
                         CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                     }
                     if result {
-//                        Backend.shared.signalSubscrible(clientId: clientID)
-                        self.viewRouter.current = .tabview
+                        Backend.shared.registerTokenDevice { (response) in
+                            if response {
+                                self.viewRouter.current = .tabview
+                            }
+                        }
                     }
                 }
                 

@@ -25,7 +25,7 @@ class NotificationService {
 extension NotificationService {
         
     func listen(clientId: String, heard: @escaping ((Notification_NotifyObjectResponse) -> Void)) {
-        let request: Notification_SubscribeAndListenRequest = .with {
+        let request: Notification_ListenRequest = .with {
             $0.clientID = clientId
             
         }
@@ -50,7 +50,7 @@ extension NotificationService {
     
     func subscribe(clientId: String, completion: @escaping (() -> Void)) {
         print("subscribe notify to \(clientId)")
-        let request: Notification_SubscribeAndListenRequest = .with {
+        let request: Notification_SubscribeRequest = .with {
             $0.clientID = clientId
         }
         clientSignal.subscribe(request).response.whenComplete { (result) in

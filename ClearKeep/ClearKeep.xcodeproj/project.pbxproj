@@ -61,18 +61,7 @@
 		686F25E7255E748E00953C5E /* CKExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25E6255E748E00953C5E /* CKExtensions.swift */; };
 		686F25EF255E766E00953C5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25EE255E766E00953C5E /* User.swift */; };
 		686F25F5255E774600953C5E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25F4255E774600953C5E /* Constant.swift */; };
-		6887F44B2577893000ACB377 /* notify.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F43F2577892B00ACB377 /* notify.pb.swift */; };
-		6887F44C2577893000ACB377 /* message.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4402577892B00ACB377 /* message.grpc.swift */; };
-		6887F44D2577893000ACB377 /* group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4412577892C00ACB377 /* group.grpc.swift */; };
-		6887F44E2577893000ACB377 /* auth.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4422577892C00ACB377 /* auth.pb.swift */; };
-		6887F44F2577893000ACB377 /* notify.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4432577892D00ACB377 /* notify.grpc.swift */; };
-		6887F4502577893000ACB377 /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4442577892D00ACB377 /* signal.grpc.swift */; };
-		6887F4512577893000ACB377 /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4452577892D00ACB377 /* signal.pb.swift */; };
-		6887F4522577893000ACB377 /* auth.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4462577892E00ACB377 /* auth.grpc.swift */; };
-		6887F4532577893000ACB377 /* user.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4472577892E00ACB377 /* user.pb.swift */; };
-		6887F4542577893000ACB377 /* user.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4482577892F00ACB377 /* user.grpc.swift */; };
-		6887F4552577893000ACB377 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F4492577892F00ACB377 /* message.pb.swift */; };
-		6887F4562577893000ACB377 /* group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F44A2577893000ACB377 /* group.pb.swift */; };
+		6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6873AA8C259B1D4D009FD141 /* CallView.swift */; };
 		6887F46A257895D900ACB377 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F469257895D900ACB377 /* NotificationService.swift */; };
 		688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67A82570B5FF00B95235 /* RealmHelper.swift */; };
 		688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67D22570F4CA00B95235 /* FileGroups.swift */; };
@@ -91,6 +80,23 @@
 		68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */; };
 		68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */; };
 		68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF962574E4600018F5D5 /* RealmMessages.swift */; };
+		68CBC68725932B3500997D93 /* notify.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67725932B2600997D93 /* notify.grpc.swift */; };
+		68CBC68825932B3500997D93 /* message.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67825932B2700997D93 /* message.grpc.swift */; };
+		68CBC68925932B3500997D93 /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67925932B2800997D93 /* signal.pb.swift */; };
+		68CBC68A25932B3500997D93 /* user.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67A25932B2900997D93 /* user.pb.swift */; };
+		68CBC68B25932B3500997D93 /* group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67B25932B2A00997D93 /* group.grpc.swift */; };
+		68CBC68C25932B3500997D93 /* notify_push.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */; };
+		68CBC68D25932B3500997D93 /* user.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67D25932B2C00997D93 /* user.grpc.swift */; };
+		68CBC68E25932B3500997D93 /* auth.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67E25932B2D00997D93 /* auth.grpc.swift */; };
+		68CBC68F25932B3500997D93 /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67F25932B2F00997D93 /* signal.grpc.swift */; };
+		68CBC69025932B3500997D93 /* notify.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68025932B3000997D93 /* notify.pb.swift */; };
+		68CBC69125932B3500997D93 /* group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68125932B3100997D93 /* group.pb.swift */; };
+		68CBC69225932B3500997D93 /* auth.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68225932B3200997D93 /* auth.pb.swift */; };
+		68CBC69325932B3500997D93 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68325932B3300997D93 /* message.pb.swift */; };
+		68CBC69425932B3500997D93 /* notify_push.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68425932B3400997D93 /* notify_push.pb.swift */; };
+		68CBC69525932B3500997D93 /* video_call.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68525932B3500997D93 /* video_call.pb.swift */; };
+		68CBC69625932B3500997D93 /* video_call.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68625932B3500997D93 /* video_call.grpc.swift */; };
+		68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68CBC6B325944AC100997D93 /* PushKit.framework */; };
 		68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA4B825677E0B00109725 /* MotherViewModel.swift */; };
 		68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA512256C9F3600109725 /* CreateRoomView.swift */; };
 		68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA517256CA23300109725 /* CreateRoomViewModel.swift */; };
@@ -193,18 +199,7 @@
 		686F25E6255E748E00953C5E /* CKExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKExtensions.swift; sourceTree = "<group>"; };
 		686F25EE255E766E00953C5E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		686F25F4255E774600953C5E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
-		6887F43F2577892B00ACB377 /* notify.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.pb.swift; sourceTree = "<group>"; };
-		6887F4402577892B00ACB377 /* message.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.grpc.swift; sourceTree = "<group>"; };
-		6887F4412577892C00ACB377 /* group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.grpc.swift; sourceTree = "<group>"; };
-		6887F4422577892C00ACB377 /* auth.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.pb.swift; sourceTree = "<group>"; };
-		6887F4432577892D00ACB377 /* notify.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.grpc.swift; sourceTree = "<group>"; };
-		6887F4442577892D00ACB377 /* signal.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.grpc.swift; sourceTree = "<group>"; };
-		6887F4452577892D00ACB377 /* signal.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.pb.swift; sourceTree = "<group>"; };
-		6887F4462577892E00ACB377 /* auth.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.grpc.swift; sourceTree = "<group>"; };
-		6887F4472577892E00ACB377 /* user.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.pb.swift; sourceTree = "<group>"; };
-		6887F4482577892F00ACB377 /* user.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.grpc.swift; sourceTree = "<group>"; };
-		6887F4492577892F00ACB377 /* message.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.pb.swift; sourceTree = "<group>"; };
-		6887F44A2577893000ACB377 /* group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.pb.swift; sourceTree = "<group>"; };
+		6873AA8C259B1D4D009FD141 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		6887F469257895D900ACB377 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		688B67A82570B5FF00B95235 /* RealmHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
 		688B67D22570F4CA00B95235 /* FileGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGroups.swift; sourceTree = "<group>"; };
@@ -223,6 +218,24 @@
 		68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPeopleEvent.swift; sourceTree = "<group>"; };
 		68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessage.swift; sourceTree = "<group>"; };
 		68C0AF962574E4600018F5D5 /* RealmMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessages.swift; sourceTree = "<group>"; };
+		68CBC67725932B2600997D93 /* notify.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.grpc.swift; sourceTree = "<group>"; };
+		68CBC67825932B2700997D93 /* message.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.grpc.swift; sourceTree = "<group>"; };
+		68CBC67925932B2800997D93 /* signal.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.pb.swift; sourceTree = "<group>"; };
+		68CBC67A25932B2900997D93 /* user.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.pb.swift; sourceTree = "<group>"; };
+		68CBC67B25932B2A00997D93 /* group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.grpc.swift; sourceTree = "<group>"; };
+		68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify_push.grpc.swift; sourceTree = "<group>"; };
+		68CBC67D25932B2C00997D93 /* user.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.grpc.swift; sourceTree = "<group>"; };
+		68CBC67E25932B2D00997D93 /* auth.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.grpc.swift; sourceTree = "<group>"; };
+		68CBC67F25932B2F00997D93 /* signal.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.grpc.swift; sourceTree = "<group>"; };
+		68CBC68025932B3000997D93 /* notify.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.pb.swift; sourceTree = "<group>"; };
+		68CBC68125932B3100997D93 /* group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.pb.swift; sourceTree = "<group>"; };
+		68CBC68225932B3200997D93 /* auth.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.pb.swift; sourceTree = "<group>"; };
+		68CBC68325932B3300997D93 /* message.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.pb.swift; sourceTree = "<group>"; };
+		68CBC68425932B3400997D93 /* notify_push.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify_push.pb.swift; sourceTree = "<group>"; };
+		68CBC68525932B3500997D93 /* video_call.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = video_call.pb.swift; sourceTree = "<group>"; };
+		68CBC68625932B3500997D93 /* video_call.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = video_call.grpc.swift; sourceTree = "<group>"; };
+		68CBC69A25942FD600997D93 /* ClearKeep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearKeep.entitlements; sourceTree = "<group>"; };
+		68CBC6B325944AC100997D93 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		68CFA4B825677E0B00109725 /* MotherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherViewModel.swift; sourceTree = "<group>"; };
 		68CFA512256C9F3600109725 /* CreateRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomView.swift; sourceTree = "<group>"; };
 		68CFA517256CA23300109725 /* CreateRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModel.swift; sourceTree = "<group>"; };
@@ -240,6 +253,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */,
 				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
 				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
 				16C83CB425300887002E3115 /* GRPC in Frameworks */,
@@ -340,6 +354,7 @@
 				16E32C6D2538330D007ED99A /* MasterView.swift */,
 				16E32C7225383372007ED99A /* MenuView.swift */,
 				16E32C772538338D007ED99A /* ProfileView.swift */,
+				6873AA8C259B1D4D009FD141 /* CallView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -428,6 +443,7 @@
 		1664F1B3252C6B4700FF37AD /* ClearKeep */ = {
 			isa = PBXGroup;
 			children = (
+				68CBC69A25942FD600997D93 /* ClearKeep.entitlements */,
 				16208E2F252D63B6000A6CE7 /* Classes */,
 				1664F1EA252C6D0400FF37AD /* protobuf */,
 				16208E2E252D6351000A6CE7 /* Resources */,
@@ -465,18 +481,22 @@
 		1664F1EA252C6D0400FF37AD /* protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				6887F4462577892E00ACB377 /* auth.grpc.swift */,
-				6887F4422577892C00ACB377 /* auth.pb.swift */,
-				6887F4412577892C00ACB377 /* group.grpc.swift */,
-				6887F44A2577893000ACB377 /* group.pb.swift */,
-				6887F4402577892B00ACB377 /* message.grpc.swift */,
-				6887F4492577892F00ACB377 /* message.pb.swift */,
-				6887F4432577892D00ACB377 /* notify.grpc.swift */,
-				6887F43F2577892B00ACB377 /* notify.pb.swift */,
-				6887F4442577892D00ACB377 /* signal.grpc.swift */,
-				6887F4452577892D00ACB377 /* signal.pb.swift */,
-				6887F4482577892F00ACB377 /* user.grpc.swift */,
-				6887F4472577892E00ACB377 /* user.pb.swift */,
+				68CBC67E25932B2D00997D93 /* auth.grpc.swift */,
+				68CBC68225932B3200997D93 /* auth.pb.swift */,
+				68CBC67B25932B2A00997D93 /* group.grpc.swift */,
+				68CBC68125932B3100997D93 /* group.pb.swift */,
+				68CBC67825932B2700997D93 /* message.grpc.swift */,
+				68CBC68325932B3300997D93 /* message.pb.swift */,
+				68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */,
+				68CBC68425932B3400997D93 /* notify_push.pb.swift */,
+				68CBC67725932B2600997D93 /* notify.grpc.swift */,
+				68CBC68025932B3000997D93 /* notify.pb.swift */,
+				68CBC67F25932B2F00997D93 /* signal.grpc.swift */,
+				68CBC67925932B2800997D93 /* signal.pb.swift */,
+				68CBC67D25932B2C00997D93 /* user.grpc.swift */,
+				68CBC67A25932B2900997D93 /* user.pb.swift */,
+				68CBC68625932B3500997D93 /* video_call.grpc.swift */,
+				68CBC68525932B3500997D93 /* video_call.pb.swift */,
 			);
 			path = protobuf;
 			sourceTree = "<group>";
@@ -627,6 +647,7 @@
 		7510310A1AC48EF5487B6EBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68CBC6B325944AC100997D93 /* PushKit.framework */,
 				8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */,
 				AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */,
 				70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */,
@@ -883,18 +904,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				689247BC2565144800EAD2B7 /* HistoryChatView.swift in Sources */,
+				68CBC68E25932B3500997D93 /* auth.grpc.swift in Sources */,
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
 				6887F46A257895D900ACB377 /* NotificationService.swift in Sources */,
+				68CBC69125932B3500997D93 /* group.pb.swift in Sources */,
 				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
-				6887F4562577893000ACB377 /* group.pb.swift in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
+				68CBC69625932B3500997D93 /* video_call.grpc.swift in Sources */,
+				68CBC68925932B3500997D93 /* signal.pb.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
-				6887F4532577893000ACB377 /* user.pb.swift in Sources */,
+				68CBC69225932B3500997D93 /* auth.pb.swift in Sources */,
 				689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
@@ -908,48 +932,52 @@
 				689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
 				569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */,
+				68CBC69425932B3500997D93 /* notify_push.pb.swift in Sources */,
+				68CBC68F25932B3500997D93 /* signal.grpc.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
+				68CBC68B25932B3500997D93 /* group.grpc.swift in Sources */,
+				68CBC68D25932B3500997D93 /* user.grpc.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
-				6887F4502577893000ACB377 /* signal.grpc.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
+				68CBC68C25932B3500997D93 /* notify_push.grpc.swift in Sources */,
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
-				6887F44F2577893000ACB377 /* notify.grpc.swift in Sources */,
 				6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */,
+				68CBC69025932B3500997D93 /* notify.pb.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
+				68CBC68725932B3500997D93 /* notify.grpc.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
-				6887F44D2577893000ACB377 /* group.grpc.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
-				6887F44C2577893000ACB377 /* message.grpc.swift in Sources */,
 				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
-				6887F4512577893000ACB377 /* signal.pb.swift in Sources */,
 				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				686F25F5255E774600953C5E /* Constant.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
 				56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */,
+				68CBC68A25932B3500997D93 /* user.pb.swift in Sources */,
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
+				68CBC68825932B3500997D93 /* message.grpc.swift in Sources */,
 				569FFB92254BCB1E00C487F5 /* CKSignalObject.m in Sources */,
 				686F25EF255E766E00953C5E /* User.swift in Sources */,
 				569FFBBC254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift in Sources */,
-				6887F44E2577893000ACB377 /* auth.pb.swift in Sources */,
 				68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */,
+				6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */,
 				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
+				68CBC69525932B3500997D93 /* video_call.pb.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
-				6887F4542577893000ACB377 /* user.grpc.swift in Sources */,
-				6887F4522577893000ACB377 /* auth.grpc.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,
+				68CBC69325932B3500997D93 /* message.pb.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
@@ -958,11 +986,9 @@
 				688B67E42570F86000B95235 /* RealmGroups.swift in Sources */,
 				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
 				688B67DC2570F7ED00B95235 /* RealmGroup.swift in Sources */,
-				6887F4552577893000ACB377 /* message.pb.swift in Sources */,
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
 				68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */,
 				686F25E7255E748E00953C5E /* CKExtensions.swift in Sources */,
-				6887F44B2577893000ACB377 /* notify.pb.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,9 +1158,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
-				DEVELOPMENT_TEAM = 6A2VP7UW5D;
+				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/ClearKeep/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1142,7 +1169,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = telred.ClearKeep.ClearKeep3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1158,6 +1185,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = QD37T5UQ3B;
@@ -1168,7 +1196,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = telred.ClearKeep.ClearKeep4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

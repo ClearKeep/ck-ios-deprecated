@@ -38,15 +38,20 @@ internal protocol Notification_NotifyClientProtocol: GRPCClient {
   ) -> UnaryCall<Notification_Empty, Notification_GetNotifiesResponse>
 
   func subscribe(
-    _ request: Notification_SubscribeAndListenRequest,
+    _ request: Notification_SubscribeRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Notification_SubscribeAndListenRequest, Notification_BaseResponse>
+  ) -> UnaryCall<Notification_SubscribeRequest, Notification_BaseResponse>
+
+  func un_subscribe(
+    _ request: Notification_UnSubscribeRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Notification_UnSubscribeRequest, Notification_BaseResponse>
 
   func listen(
-    _ request: Notification_SubscribeAndListenRequest,
+    _ request: Notification_ListenRequest,
     callOptions: CallOptions?,
     handler: @escaping (Notification_NotifyObjectResponse) -> Void
-  ) -> ServerStreamingCall<Notification_SubscribeAndListenRequest, Notification_NotifyObjectResponse>
+  ) -> ServerStreamingCall<Notification_ListenRequest, Notification_NotifyObjectResponse>
 
 }
 
@@ -93,11 +98,28 @@ extension Notification_NotifyClientProtocol {
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
   internal func subscribe(
-    _ request: Notification_SubscribeAndListenRequest,
+    _ request: Notification_SubscribeRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Notification_SubscribeAndListenRequest, Notification_BaseResponse> {
+  ) -> UnaryCall<Notification_SubscribeRequest, Notification_BaseResponse> {
     return self.makeUnaryCall(
       path: "/notification.Notify/subscribe",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to un_subscribe
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to un_subscribe.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func un_subscribe(
+    _ request: Notification_UnSubscribeRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Notification_UnSubscribeRequest, Notification_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/notification.Notify/un_subscribe",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -111,10 +133,10 @@ extension Notification_NotifyClientProtocol {
   ///   - handler: A closure called when each response is received from the server.
   /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
   internal func listen(
-    _ request: Notification_SubscribeAndListenRequest,
+    _ request: Notification_ListenRequest,
     callOptions: CallOptions? = nil,
     handler: @escaping (Notification_NotifyObjectResponse) -> Void
-  ) -> ServerStreamingCall<Notification_SubscribeAndListenRequest, Notification_NotifyObjectResponse> {
+  ) -> ServerStreamingCall<Notification_ListenRequest, Notification_NotifyObjectResponse> {
     return self.makeServerStreamingCall(
       path: "/notification.Notify/listen",
       request: request,
@@ -143,8 +165,9 @@ internal final class Notification_NotifyClient: Notification_NotifyClientProtoco
 internal protocol Notification_NotifyProvider: CallHandlerProvider {
   func read_notify(request: Notification_ReadNotifyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Notification_BaseResponse>
   func get_unread_notifies(request: Notification_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Notification_GetNotifiesResponse>
-  func subscribe(request: Notification_SubscribeAndListenRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Notification_BaseResponse>
-  func listen(request: Notification_SubscribeAndListenRequest, context: StreamingResponseCallContext<Notification_NotifyObjectResponse>) -> EventLoopFuture<GRPCStatus>
+  func subscribe(request: Notification_SubscribeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Notification_BaseResponse>
+  func un_subscribe(request: Notification_UnSubscribeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Notification_BaseResponse>
+  func listen(request: Notification_ListenRequest, context: StreamingResponseCallContext<Notification_NotifyObjectResponse>) -> EventLoopFuture<GRPCStatus>
 }
 
 extension Notification_NotifyProvider {
@@ -172,6 +195,13 @@ extension Notification_NotifyProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.subscribe(request: request, context: context)
+        }
+      }
+
+    case "un_subscribe":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.un_subscribe(request: request, context: context)
         }
       }
 

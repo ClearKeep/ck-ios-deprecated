@@ -28,6 +28,10 @@ class Backend: ObservableObject {
     
     private let clientNotify: Notification_NotifyClient
     
+    private let clientNotifyPush: NotifyPush_NotifyPushClient
+    
+    private let clientVideoCall: VideoCall_VideoCallClient
+    
     var authenticator: Authenticator
     
     var signalService: SignalService?
@@ -42,7 +46,7 @@ class Backend: ObservableObject {
     
     
     
-    init(host: String = "172.16.0.197", port: Int = 5000) {
+    init(host: String = "172.16.10.119", port: Int = 5000) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -66,6 +70,10 @@ class Backend: ObservableObject {
         clientNotify = Notification_NotifyClient(channel: connection)
         
         notificationService = NotificationService(clientNotify)
+        
+        clientNotifyPush = NotifyPush_NotifyPushClient(channel: connection)
+        
+        clientVideoCall = VideoCall_VideoCallClient(channel: connection)
         
     }
     
@@ -269,6 +277,45 @@ class Backend: ObservableObject {
                     completion(response, nil)
                 case .failure(let error):
                     completion(nil, error)
+                }
+            }
+        }
+    }
+    
+    func registerTokenDevice(_ completion: @escaping (Bool) -> Void){
+        let header = self.getHeaderApi()
+        let tokenPush = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotify)
+        let deviceID = UIDevice.current.identifierForVendor
+
+        if let header = header , let token = tokenPush , let deviceID = deviceID?.uuidString {
+            var req = NotifyPush_RegisterTokenRequest()
+            req.token = token
+            req.deviceType = "ios"
+            req.deviceID = deviceID
+            
+            clientNotifyPush.register_token(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response.success)
+                case .failure(_):
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    func videoCall(_ clientID: String ,_ groupID: String , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
+        let header = self.getHeaderApi()
+        if let header = header {
+            var req = VideoCall_VideoCallRequest()
+            req.clientID = clientID
+            req.groupID = groupID
+            clientVideoCall.video_call(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response , nil)
+                case .failure(let error):
+                    completion(nil , error)
                 }
             }
         }

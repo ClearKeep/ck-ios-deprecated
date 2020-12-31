@@ -33,15 +33,20 @@ internal protocol Message_MessageClientProtocol: GRPCClient {
   ) -> UnaryCall<Message_GetMessagesInGroupRequest, Message_GetMessagesInGroupResponse>
 
   func subscribe(
-    _ request: Message_SubscribeAndListenRequest,
+    _ request: Message_SubscribeRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Message_SubscribeAndListenRequest, Message_BaseResponse>
+  ) -> UnaryCall<Message_SubscribeRequest, Message_BaseResponse>
+
+  func unSubscribe(
+    _ request: Message_UnSubscribeRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Message_UnSubscribeRequest, Message_BaseResponse>
 
   func listen(
-    _ request: Message_SubscribeAndListenRequest,
+    _ request: Message_ListenRequest,
     callOptions: CallOptions?,
     handler: @escaping (Message_MessageObjectResponse) -> Void
-  ) -> ServerStreamingCall<Message_SubscribeAndListenRequest, Message_MessageObjectResponse>
+  ) -> ServerStreamingCall<Message_ListenRequest, Message_MessageObjectResponse>
 
   func publish(
     _ request: Message_PublishRequest,
@@ -76,11 +81,28 @@ extension Message_MessageClientProtocol {
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
   internal func subscribe(
-    _ request: Message_SubscribeAndListenRequest,
+    _ request: Message_SubscribeRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Message_SubscribeAndListenRequest, Message_BaseResponse> {
+  ) -> UnaryCall<Message_SubscribeRequest, Message_BaseResponse> {
     return self.makeUnaryCall(
       path: "/message.Message/Subscribe",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to UnSubscribe
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to UnSubscribe.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func unSubscribe(
+    _ request: Message_UnSubscribeRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Message_UnSubscribeRequest, Message_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/message.Message/UnSubscribe",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -94,10 +116,10 @@ extension Message_MessageClientProtocol {
   ///   - handler: A closure called when each response is received from the server.
   /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
   internal func listen(
-    _ request: Message_SubscribeAndListenRequest,
+    _ request: Message_ListenRequest,
     callOptions: CallOptions? = nil,
     handler: @escaping (Message_MessageObjectResponse) -> Void
-  ) -> ServerStreamingCall<Message_SubscribeAndListenRequest, Message_MessageObjectResponse> {
+  ) -> ServerStreamingCall<Message_ListenRequest, Message_MessageObjectResponse> {
     return self.makeServerStreamingCall(
       path: "/message.Message/Listen",
       request: request,
@@ -143,8 +165,9 @@ internal final class Message_MessageClient: Message_MessageClientProtocol {
 internal protocol Message_MessageProvider: CallHandlerProvider {
   func get_messages_in_group(request: Message_GetMessagesInGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_GetMessagesInGroupResponse>
   ///action
-  func subscribe(request: Message_SubscribeAndListenRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
-  func listen(request: Message_SubscribeAndListenRequest, context: StreamingResponseCallContext<Message_MessageObjectResponse>) -> EventLoopFuture<GRPCStatus>
+  func subscribe(request: Message_SubscribeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
+  func unSubscribe(request: Message_UnSubscribeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
+  func listen(request: Message_ListenRequest, context: StreamingResponseCallContext<Message_MessageObjectResponse>) -> EventLoopFuture<GRPCStatus>
   func publish(request: Message_PublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_MessageObjectResponse>
 }
 
@@ -166,6 +189,13 @@ extension Message_MessageProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.subscribe(request: request, context: context)
+        }
+      }
+
+    case "UnSubscribe":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.unSubscribe(request: request, context: context)
         }
       }
 
