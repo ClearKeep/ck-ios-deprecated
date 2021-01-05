@@ -10,6 +10,7 @@ import SwiftUI
 struct MessageChatView: View {
     
     @State private var nextMessage: String = ""
+    @State var isShowCall = false
     @ObservedObject var viewModel: MessageChatViewModel
     
     @EnvironmentObject var groupRealms : RealmGroups
@@ -40,11 +41,9 @@ struct MessageChatView: View {
                 MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
             }
             .navigationBarTitle(Text(self.userName))
-            .navigationBarItems(trailing: Button( action: {
-                self.viewModel.callPeerToPeer(self.clientId , self.myGroupID)
-            }){
+            .navigationBarItems(trailing: NavigationLink(destination: CallView(isShowCall: $isShowCall), isActive: $isShowCall, label: {
                 Image(systemName: "phone")
-            })
+            }))
             HStack {
                 TextFieldContent(key: "Next message", value: self.$nextMessage)
                 Button( action: {
