@@ -22,7 +22,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             Backend.shared.videoCall(clientID, groupID) { (response, error) in
                 if let response = response {
                     if response.success {
-                        
+                        DispatchQueue.main.async {
+                            CallManager.shared.startCall(clientId: clientID)
+                        }
                     }
                 }
         }

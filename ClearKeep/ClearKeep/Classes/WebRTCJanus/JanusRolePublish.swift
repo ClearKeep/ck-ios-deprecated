@@ -16,10 +16,9 @@ protocol JanusRolePublishDelegate {
 class JanusRolePublish: JanusRole {
     
     private var localAudioTrack: RTCAudioTrack!
-    private var localRenderView: RTCEAGLVideoView?
+    var videoRenderView: RTCEAGLVideoView?
     private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (false, false, false)
     private var customFrameCapturer: Bool = false
-    var _localRenderView: RTCEAGLVideoView?
     var localVideoTrack: RTCVideoTrack!
     var cameraDevicePosition: AVCaptureDevice.Position = .front
     var videoCapturer: RTCVideoCapturer!
@@ -57,8 +56,8 @@ class JanusRolePublish: JanusRole {
         channels.audio = true
         self.customFrameCapturer = customFrameCapturer
         
-        localRenderView = RTCEAGLVideoView()
-        localRenderView!.delegate = self
+        videoRenderView = RTCEAGLVideoView()
+        videoRenderView!.delegate = self
         
         setupLocalTracks()
         
@@ -66,15 +65,15 @@ class JanusRolePublish: JanusRole {
         
         if self.channels.video {
             startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
-            self.localVideoTrack?.add(self.localRenderView!)
+            self.localVideoTrack?.add(self.videoRenderView!)
         }
         if let delegatePublish = self.delegate as? JanusRolePublishDelegate {
-            delegatePublish.JanusRolePublish(role: self, didReceiveVideoView: localRenderView!)
+            delegatePublish.JanusRolePublish(role: self, didReceiveVideoView: videoRenderView!)
         }
     }
 
     func setupLocalViewFrame(frame: CGRect) {
-        localRenderView?.frame = frame
+        videoRenderView?.frame = frame
     }
     
     func captureCurrentFrame(sampleBuffer: CMSampleBuffer){
@@ -270,10 +269,10 @@ extension JanusRolePublish: RTCVideoViewDelegate {
         let isLandScape = size.width < size.height
         var renderView: RTCEAGLVideoView?
         var parentView: UIView?
-        if videoView.isEqual(localRenderView){
+        if videoView.isEqual(videoRenderView){
             print("local video size changed")
-            renderView = localRenderView
-            parentView = localRenderView?.superview
+            renderView = videoRenderView
+            parentView = videoRenderView?.superview
         }
         
         guard let _renderView = renderView, let _parentView = parentView else { return }

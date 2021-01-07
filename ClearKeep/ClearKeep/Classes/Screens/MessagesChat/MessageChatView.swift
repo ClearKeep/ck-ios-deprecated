@@ -41,7 +41,10 @@ struct MessageChatView: View {
                 MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
             }
             .navigationBarTitle(Text(self.userName))
-            .navigationBarItems(trailing: NavigationLink(destination: CallView(isShowCall: $isShowCall), isActive: $isShowCall, label: {
+            .navigationBarItems(trailing: Button(action: {
+                // CallManager call
+                viewModel.callPeerToPeer(self.clientId, self.groupID)
+            }, label: {
                 Image(systemName: "phone")
             }))
             HStack {

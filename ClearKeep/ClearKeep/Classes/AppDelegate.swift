@@ -13,7 +13,7 @@ import CallKit
 //@main
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
-    
+    let viewRouter = ViewRouter()
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
         
@@ -74,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     }
     
     func displayIncomingCall(handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
+        CallManager.shared.reportIncomingCall(uuid: UUID(), handle: handle, hasVideo: true, completion: completion)
     }
     
     fileprivate func defaultConfig() -> CXProviderConfiguration{

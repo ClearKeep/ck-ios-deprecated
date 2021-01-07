@@ -25,6 +25,7 @@ struct MotherView: View {
             case .search: SearchPeopleView()
             case .createRoom: CreateRoomView()
             case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .callVideo: CallView()
             }
         }
     }
@@ -47,6 +48,7 @@ class ViewRouter: ObservableObject {
         case search
         case createRoom
         case history
+        case callVideo
     }
     
     private static func initialPage() -> Page {

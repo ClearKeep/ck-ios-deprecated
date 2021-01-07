@@ -36,14 +36,6 @@ extension JanusVideoRoomDelegate {
 
 class JanusVideoRoom: NSObject {
     var delegate: JanusVideoRoomDelegate? = nil
-    private var _localConfig = JanusPublishMediaConstraints()
-    var localConfig: JanusPublishMediaConstraints {
-        set {
-            publisher?.mediaConstraints = newValue
-            _localConfig = newValue
-        }
-        get { return _localConfig }
-    }
     var remotes = [Int: JanusRoleListen]()
     var janus: Janus?
     var publisher: JanusRolePublish?
@@ -54,7 +46,7 @@ class JanusVideoRoom: NSObject {
     private var roomId: Int = 0
     var cameraSession: CameraSession?
     var cameraFilter: CameraFilter?
-    var useCustomCapturer = false
+    var useCustomCapturer = true
     
     static var instance: JanusVideoRoom?
     
@@ -65,16 +57,25 @@ class JanusVideoRoom: NSObject {
 //            }
             // update url server
         } else {
-            instance = JanusVideoRoom(withServer: server, delegate: delegate)
+            instance = JanusVideoRoom(delegate: delegate)
         }
         return instance!
     }
     
-    init(withServer server: URL, delegate: JanusVideoRoomDelegate? = nil) {
+    init(delegate: JanusVideoRoomDelegate? = nil) {
         super.init()
-        janus = Janus(withServer: server, delegate: self)
+        let server = URL(string: "ws://172.16.1.214:8188/janus")
+        janus = Janus(withServer: server!, delegate: self)
         publisher = JanusRolePublish(withJanus: janus!, delegate: self)
         publisher?.setup(customFrameCapturer: useCustomCapturer)
+        self.delegate = delegate
+        let localConfig = JanusPublishMediaConstraints()
+        localConfig.pushSize = CGSize(width: 720, height: 960)
+        localConfig.fps = 16
+        localConfig.videoBitrate = 600*1000
+        localConfig.audioBirate = 200*1000
+        localConfig.frequency = 44100
+        publisher?.mediaConstraints = localConfig
         
         print("--- use custom capturer ---")
         if self.useCustomCapturer {
@@ -226,13 +227,6 @@ extension JanusVideoRoom: JanusDelegate {
 }
 
 extension JanusVideoRoom: JanusRoleListenDelegate {
-    func janusRolePublish(role: JanusRolePublish, didSetLocalVideoTrack localVideoTrack: RTCVideoTrack) {
-        
-    }
-    
-    func janusRolePublish(role: JanusRolePublish, renderSizeChangeWithSize size: CGSize) {
-        
-    }
     
     func janusRoleListen(role: JanusRoleListen, firstRenderWithSize size: CGSize) {
         self.delegate?.janusVideoRoom(janusRoom: self, firstFrameDecodeWithSize: size, uId: role.id!)
@@ -240,10 +234,6 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     
     func janusRoleListen(role: JanusRoleListen, renderSizeChangeWithSize size: CGSize) {
         self.delegate?.janusVideoRoom(janusRoom: self, renderSizeChangeWithSize: size, uId: role.id!)
-    }
-    
-    func janusRoleListen(role: JanusRoleListen, didSetRemoteVideoTrack remoteVideoTrack: RTCVideoTrack) {
-        
     }
     
     func janusRole(role: JanusRole, joinRoomWithResult error: Error?) {

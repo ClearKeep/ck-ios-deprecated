@@ -17,7 +17,6 @@ protocol JanusRoleListenDelegate: JanusRoleDelegate {
 class JanusRoleListen: JanusRole {
     var _renderView: RTCEAGLVideoView? = nil
     var videoTrack: RTCVideoTrack?
-    private var remoteStream: RTCMediaStream?
     var renderSize: CGSize = .zero
     
     override init(withJanus janus: Janus, delegate: JanusRoleDelegate? = nil) {
@@ -119,7 +118,7 @@ class JanusRoleListen: JanusRole {
     // MARK: - UIView Render
     func setupRemoteViewFrame(frame: CGRect) {
 //        remoteRenderView?.frame = frame
-        renderView.frame = frame
+        videoRenderView.frame = frame
     }
 
     func removeRemoteView() {
@@ -127,7 +126,7 @@ class JanusRoleListen: JanusRole {
         _renderView = nil
     }
     
-    var renderView: RTCEAGLVideoView {
+    var videoRenderView: RTCEAGLVideoView {
         if let renderView = _renderView {
             return renderView
         }
@@ -161,7 +160,7 @@ extension JanusRoleListen {
         asyncInMainThread {
             if stream.videoTracks.count > 0 {
                 let videoTrack = stream.videoTracks[0]
-                videoTrack.add(self.renderView)
+                videoTrack.add(self.videoRenderView)
                 self.videoTrack = videoTrack
             }
         }
@@ -171,33 +170,3 @@ extension JanusRoleListen {
         debugPrint("")
     }
 }
-
-//extension JanusRoleListen: RTCEAGLVideoViewDelegate {
-//    func videoView(_ videoView: RTCEAGLVideoView, didChangeVideoSize size: CGSize) {
-//        if renderSize == .zero {
-//            renderSize = size
-//            if let listenDelegate = self.delegate as? JanusRoleListenDelegate {
-//                listenDelegate.janusRoleListen(role: self, firstRenderWithSize: size)
-//            }
-//        } else {
-//            if let listenDelegate = self.delegate as? JanusRoleListenDelegate {
-//                listenDelegate.janusRoleListen(role: self, renderSizeChangeWithSize: size)
-//            }
-//        }
-//    }
-//
-//    override func peerConnection(_ peerConnection: RTCPeerConnection, didAdd stream: RTCMediaStream) {
-//        asyncInMainThread {
-//            if stream.videoTracks.count > 0 {
-//                let videoTrack = stream.videoTracks[0]
-//                videoTrack.add(self.renderView)
-//                self.videoTrack = videoTrack
-//            }
-//        }
-//    }
-//
-//    override func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
-//        self.videoTrack = nil
-//        self.renderSize = .zero
-//    }
-//}
