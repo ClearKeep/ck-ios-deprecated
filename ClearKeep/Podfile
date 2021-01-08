@@ -12,6 +12,8 @@ target 'ClearKeep' do
   pod 'YapDatabase/SQLCipher', '~> 4.0'
   pod 'Mantle', '~> 2.1.6'
   pod 'RealmSwift'
+  pod 'SocketRocket'
+  pod 'GoogleWebRTC'
 
   target 'ClearKeepTests' do
     inherit! :search_paths

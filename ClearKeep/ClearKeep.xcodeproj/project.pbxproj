@@ -30,8 +30,36 @@
 		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
 		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
+		56205ADF25A2B6B600B39D07 /* CallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205ADE25A2B6B600B39D07 /* CallModel.swift */; };
+		56205AE425A2B6F700B39D07 /* TrackedCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AE325A2B6F700B39D07 /* TrackedCall.swift */; };
+		56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AE825A2B72B00B39D07 /* CallManager.swift */; };
+		56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 56205AEE25A2BB8500B39D07 /* SwiftyJSON */; };
+		56205B0825A2C36D00B39D07 /* JanusVideoRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF325A2C35C00B39D07 /* JanusVideoRoom.swift */; };
+		56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF425A2C35D00B39D07 /* JanusRoleListen.swift */; };
+		56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF625A2C35F00B39D07 /* CameraFilter.swift */; };
+		56205B0B25A2C36D00B39D07 /* CameraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF725A2C35F00B39D07 /* CameraSession.swift */; };
+		56205B0C25A2C36D00B39D07 /* JanusWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF825A2C36000B39D07 /* JanusWebsocket.swift */; };
+		56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AF925A2C36200B39D07 /* JanusMediaConstraints.swift */; };
+		56205B0E25A2C36D00B39D07 /* JanusPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFA25A2C36300B39D07 /* JanusPlugin.swift */; };
+		56205B0F25A2C36D00B39D07 /* Janus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFB25A2C36400B39D07 /* Janus.swift */; };
+		56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFC25A2C36500B39D07 /* JanusRole.swift */; };
+		56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFD25A2C36700B39D07 /* JanusRolePublish+Control.swift */; };
+		56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFE25A2C36800B39D07 /* Janus+WebSocketDelegate.swift */; };
+		56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AFF25A2C36900B39D07 /* Janus+Define.swift */; };
+		56205B1425A2C36D00B39D07 /* Janus+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0025A2C36B00B39D07 /* Janus+Utilities.swift */; };
+		56205B1525A2C36D00B39D07 /* JanusRolePublish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0125A2C36C00B39D07 /* JanusRolePublish.swift */; };
+		56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0325A2C36D00B39D07 /* RTCCustomFrameCapturer.swift */; };
+		56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0425A2C36D00B39D07 /* RTCFactory.swift */; };
+		56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0525A2C36D00B39D07 /* RTCCanvas.swift */; };
+		56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0625A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift */; };
+		56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B0725A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift */; };
+		56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B3225A2CC2C00B39D07 /* CallViewModel.swift */; };
+		56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B3D25A2F57F00B39D07 /* VideoView.swift */; };
+		56205B4425A2FB9100B39D07 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B4325A2FB9100B39D07 /* GridView.swift */; };
+		56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B4B25A316F400B39D07 /* ShapeCustom.swift */; };
 		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
 		566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */; };
+		5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693C2F925A6A4DB005FB8C6 /* CallBox.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
 		569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8A254BCB1C00C487F5 /* CKSignalSignedPreKey.m */; };
@@ -156,8 +184,35 @@
 		1D1A7615AE34C5F264B3034C /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
 		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
+		56205ADE25A2B6B600B39D07 /* CallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallModel.swift; sourceTree = "<group>"; };
+		56205AE325A2B6F700B39D07 /* TrackedCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackedCall.swift; sourceTree = "<group>"; };
+		56205AE825A2B72B00B39D07 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
+		56205AF325A2C35C00B39D07 /* JanusVideoRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusVideoRoom.swift; sourceTree = "<group>"; };
+		56205AF425A2C35D00B39D07 /* JanusRoleListen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusRoleListen.swift; sourceTree = "<group>"; };
+		56205AF625A2C35F00B39D07 /* CameraFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFilter.swift; sourceTree = "<group>"; };
+		56205AF725A2C35F00B39D07 /* CameraSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSession.swift; sourceTree = "<group>"; };
+		56205AF825A2C36000B39D07 /* JanusWebsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusWebsocket.swift; sourceTree = "<group>"; };
+		56205AF925A2C36200B39D07 /* JanusMediaConstraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusMediaConstraints.swift; sourceTree = "<group>"; };
+		56205AFA25A2C36300B39D07 /* JanusPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusPlugin.swift; sourceTree = "<group>"; };
+		56205AFB25A2C36400B39D07 /* Janus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Janus.swift; sourceTree = "<group>"; };
+		56205AFC25A2C36500B39D07 /* JanusRole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusRole.swift; sourceTree = "<group>"; };
+		56205AFD25A2C36700B39D07 /* JanusRolePublish+Control.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JanusRolePublish+Control.swift"; sourceTree = "<group>"; };
+		56205AFE25A2C36800B39D07 /* Janus+WebSocketDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Janus+WebSocketDelegate.swift"; sourceTree = "<group>"; };
+		56205AFF25A2C36900B39D07 /* Janus+Define.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Janus+Define.swift"; sourceTree = "<group>"; };
+		56205B0025A2C36B00B39D07 /* Janus+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Janus+Utilities.swift"; sourceTree = "<group>"; };
+		56205B0125A2C36C00B39D07 /* JanusRolePublish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusRolePublish.swift; sourceTree = "<group>"; };
+		56205B0325A2C36D00B39D07 /* RTCCustomFrameCapturer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCCustomFrameCapturer.swift; sourceTree = "<group>"; };
+		56205B0425A2C36D00B39D07 /* RTCFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCFactory.swift; sourceTree = "<group>"; };
+		56205B0525A2C36D00B39D07 /* RTCCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCCanvas.swift; sourceTree = "<group>"; };
+		56205B0625A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCSimulatorVideoDecoderFactory.swift; sourceTree = "<group>"; };
+		56205B0725A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCSimluatorVideoEncoderFactory.swift; sourceTree = "<group>"; };
+		56205B3225A2CC2C00B39D07 /* CallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewModel.swift; sourceTree = "<group>"; };
+		56205B3D25A2F57F00B39D07 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		56205B4325A2FB9100B39D07 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		56205B4B25A316F400B39D07 /* ShapeCustom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeCustom.swift; sourceTree = "<group>"; };
 		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
 		566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatViewModel.swift; sourceTree = "<group>"; };
+		5693C2F925A6A4DB005FB8C6 /* CallBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBox.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
 		569FFB89254BCB1C00C487F5 /* CKSignalSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSignalSession.m; sourceTree = "<group>"; };
@@ -253,6 +308,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */,
 				68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */,
 				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
 				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
@@ -293,6 +349,8 @@
 		16208E2F252D63B6000A6CE7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				56205ADC25A2B67E00B39D07 /* CallKitManager */,
+				56205ADA25A2B65400B39D07 /* WebRTCJanus */,
 				56C7F319254A709300737C5F /* Controllers */,
 				1664F1B4252C6B4700FF37AD /* AppDelegate.swift */,
 				1664F1B6252C6B4700FF37AD /* SceneDelegate.swift */,
@@ -343,6 +401,7 @@
 		16208E36252D63F9000A6CE7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				56205B4225A2FB7400B39D07 /* ViewCustom */,
 				56E7EE5C255A3D0F0060C146 /* MessengerView */,
 				566DA9A42553D6F20076F2F0 /* GroupMessageChat */,
 				56BDA86D254C02F300B72317 /* MessagesChat */,
@@ -355,6 +414,7 @@
 				16E32C7225383372007ED99A /* MenuView.swift */,
 				16E32C772538338D007ED99A /* ProfileView.swift */,
 				6873AA8C259B1D4D009FD141 /* CallView.swift */,
+				56205B3225A2CC2C00B39D07 /* CallViewModel.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -512,6 +572,85 @@
 				EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		56205ADA25A2B65400B39D07 /* WebRTCJanus */ = {
+			isa = PBXGroup;
+			children = (
+				56205AF525A2C35F00B39D07 /* Camera */,
+				56205AFB25A2C36400B39D07 /* Janus.swift */,
+				56205AFF25A2C36900B39D07 /* Janus+Define.swift */,
+				56205B0025A2C36B00B39D07 /* Janus+Utilities.swift */,
+				56205AFE25A2C36800B39D07 /* Janus+WebSocketDelegate.swift */,
+				56205AF925A2C36200B39D07 /* JanusMediaConstraints.swift */,
+				56205AFA25A2C36300B39D07 /* JanusPlugin.swift */,
+				56205AFC25A2C36500B39D07 /* JanusRole.swift */,
+				56205AF425A2C35D00B39D07 /* JanusRoleListen.swift */,
+				56205B0125A2C36C00B39D07 /* JanusRolePublish.swift */,
+				56205AFD25A2C36700B39D07 /* JanusRolePublish+Control.swift */,
+				56205AF325A2C35C00B39D07 /* JanusVideoRoom.swift */,
+				56205AF825A2C36000B39D07 /* JanusWebsocket.swift */,
+				56205B0225A2C36D00B39D07 /* WebRTC+Custom */,
+				56205ADB25A2B66300B39D07 /* WebRTC */,
+			);
+			path = WebRTCJanus;
+			sourceTree = "<group>";
+		};
+		56205ADB25A2B66300B39D07 /* WebRTC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WebRTC;
+			sourceTree = "<group>";
+		};
+		56205ADC25A2B67E00B39D07 /* CallKitManager */ = {
+			isa = PBXGroup;
+			children = (
+				56205ADD25A2B69500B39D07 /* Models */,
+				56205AE825A2B72B00B39D07 /* CallManager.swift */,
+			);
+			path = CallKitManager;
+			sourceTree = "<group>";
+		};
+		56205ADD25A2B69500B39D07 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				56205ADE25A2B6B600B39D07 /* CallModel.swift */,
+				56205AE325A2B6F700B39D07 /* TrackedCall.swift */,
+				5693C2F925A6A4DB005FB8C6 /* CallBox.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		56205AF525A2C35F00B39D07 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				56205AF625A2C35F00B39D07 /* CameraFilter.swift */,
+				56205AF725A2C35F00B39D07 /* CameraSession.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		56205B0225A2C36D00B39D07 /* WebRTC+Custom */ = {
+			isa = PBXGroup;
+			children = (
+				56205B0325A2C36D00B39D07 /* RTCCustomFrameCapturer.swift */,
+				56205B0425A2C36D00B39D07 /* RTCFactory.swift */,
+				56205B0525A2C36D00B39D07 /* RTCCanvas.swift */,
+				56205B0625A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift */,
+				56205B0725A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift */,
+			);
+			path = "WebRTC+Custom";
+			sourceTree = "<group>";
+		};
+		56205B4225A2FB7400B39D07 /* ViewCustom */ = {
+			isa = PBXGroup;
+			children = (
+				56205B3D25A2F57F00B39D07 /* VideoView.swift */,
+				56205B4325A2FB9100B39D07 /* GridView.swift */,
+				56205B4B25A316F400B39D07 /* ShapeCustom.swift */,
+			);
+			path = ViewCustom;
 			sourceTree = "<group>";
 		};
 		566DA9A42553D6F20076F2F0 /* GroupMessageChat */ = {
@@ -677,6 +816,7 @@
 				1664F22A252C7CBF00FF37AD /* SwiftProtobuf */,
 				16C83CB325300887002E3115 /* GRPC */,
 				16C83CB525300887002E3115 /* CGRPCZlib */,
+				56205AEE25A2BB8500B39D07 /* SwiftyJSON */,
 			);
 			productName = ClearKeep;
 			productReference = 1664F1B1252C6B4700FF37AD /* ClearKeep.app */;
@@ -756,6 +896,7 @@
 			packageReferences = (
 				1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */,
+				56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 1664F1B2252C6B4700FF37AD /* Products */;
 			projectDirPath = "";
@@ -914,12 +1055,15 @@
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
 				68CBC69625932B3500997D93 /* video_call.grpc.swift in Sources */,
+				56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */,
 				68CBC68925932B3500997D93 /* signal.pb.swift in Sources */,
+				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
 				68CBC69225932B3500997D93 /* auth.pb.swift in Sources */,
 				689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */,
+				56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
 				1664F1B7252C6B4700FF37AD /* SceneDelegate.swift in Sources */,
@@ -928,6 +1072,7 @@
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
+				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
 				689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
@@ -935,20 +1080,30 @@
 				68CBC69425932B3500997D93 /* notify_push.pb.swift in Sources */,
 				68CBC68F25932B3500997D93 /* signal.grpc.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
+				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
+				56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
+				56205B1525A2C36D00B39D07 /* JanusRolePublish.swift in Sources */,
+				56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
+				56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
 				68CBC68B25932B3500997D93 /* group.grpc.swift in Sources */,
 				68CBC68D25932B3500997D93 /* user.grpc.swift in Sources */,
+				56205AE425A2B6F700B39D07 /* TrackedCall.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				68CBC68C25932B3500997D93 /* notify_push.grpc.swift in Sources */,
+				56205B0F25A2C36D00B39D07 /* Janus.swift in Sources */,
+				56205ADF25A2B6B600B39D07 /* CallModel.swift in Sources */,
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
+				56205B0C25A2C36D00B39D07 /* JanusWebsocket.swift in Sources */,
 				6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */,
 				68CBC69025932B3500997D93 /* notify.pb.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
+				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				68CBC68725932B3500997D93 /* notify.grpc.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
@@ -959,9 +1114,14 @@
 				686F25F5255E774600953C5E /* Constant.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
 				56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */,
+				56205B4425A2FB9100B39D07 /* GridView.swift in Sources */,
 				68CBC68A25932B3500997D93 /* user.pb.swift in Sources */,
+				56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */,
+				5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */,
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
+				56205B0825A2C36D00B39D07 /* JanusVideoRoom.swift in Sources */,
+				56205B0B25A2C36D00B39D07 /* CameraSession.swift in Sources */,
 				68CBC68825932B3500997D93 /* message.grpc.swift in Sources */,
 				569FFB92254BCB1E00C487F5 /* CKSignalObject.m in Sources */,
 				686F25EF255E766E00953C5E /* User.swift in Sources */,
@@ -972,22 +1132,30 @@
 				68CBC69525932B3500997D93 /* video_call.pb.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
+				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
+				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
+				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,
 				68CBC69325932B3500997D93 /* message.pb.swift in Sources */,
+				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
+				56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
 				68CFA522256CF04600109725 /* InviteMemberViewModel.swift in Sources */,
 				689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */,
+				56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */,
 				688B67E42570F86000B95235 /* RealmGroups.swift in Sources */,
 				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
 				688B67DC2570F7ED00B95235 /* RealmGroup.swift in Sources */,
+				56205B0E25A2C36D00B39D07 /* JanusPlugin.swift in Sources */,
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
 				68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */,
+				56205B1425A2C36D00B39D07 /* Janus+Utilities.swift in Sources */,
 				686F25E7255E748E00953C5E /* CKExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1159,9 +1327,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/ClearKeep/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1171,6 +1341,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3.1;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1186,9 +1357,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
-				DEVELOPMENT_TEAM = QD37T5UQ3B;
+				DEVELOPMENT_TEAM = H4C7478UQW;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/ClearKeep/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1198,6 +1371,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3.1;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1350,6 +1524,14 @@
 				revision = e2e138df61dcbfc2dc1cf284fdab6f983539ab48;
 			};
 		};
+		56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1367,6 +1549,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
 			productName = CGRPCZlib;
+		};
+		56205AEE25A2BB8500B39D07 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

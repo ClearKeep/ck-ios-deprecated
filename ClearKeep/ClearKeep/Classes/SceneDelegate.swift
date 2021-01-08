@@ -19,8 +19,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func show(_ scene: UIScene) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let contentView = MotherView()
-            .environmentObject(ViewRouter())
+            .environmentObject(appDelegate.viewRouter)
 
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)

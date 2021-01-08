@@ -106,6 +106,8 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
+        CallManager.shared.startCall(clientId: "clientID")
+        return
         //        if isGroupChat {
         //            getSenderKeyInGroupTest()
         //        } else {

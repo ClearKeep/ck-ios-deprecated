@@ -13,7 +13,7 @@ import CallKit
 //@main
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
-    
+    let viewRouter = ViewRouter()
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
         
@@ -62,11 +62,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         //        UNUserNotificationCenter.current().add(request)
         
         if type == PKPushType.voIP {
-            self.incomingCall()
+//            self.incomingCall()
+            let backGroundTaskIndet = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+            self.displayIncomingCall(handle: "handle", hasVideo: true){ _ in
+                UIApplication.shared.endBackgroundTask(backGroundTaskIndet)
+            }
         }
         
         
         print("co push")
+    }
+    
+    func displayIncomingCall(handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
+        CallManager.shared.reportIncomingCall(uuid: UUID(), handle: handle, hasVideo: true, completion: completion)
     }
     
     fileprivate func defaultConfig() -> CXProviderConfiguration{
@@ -91,6 +99,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
+        // fake token registered
+        UserDefaults.standard.setValue(UUID().uuidString, forKey: Constants.keySaveTokenPushNotify)
         
         UNUserNotificationCenter.current()
             .requestAuthorization(
