@@ -35,38 +35,23 @@ extension JanusVideoRoomDelegate {
 }
 
 class JanusVideoRoom: NSObject {
-    var delegate: JanusVideoRoomDelegate? = nil
+    var delegate: JanusVideoRoomDelegate?
     var remotes = [Int: JanusRoleListen]()
-    var janus: Janus?
     var publisher: JanusRolePublish?
     var canvas = [Int: RTCCanvas]()
     
     private var userId: Int = 0
-    private var username: String? = nil
+    private var username: String?
     private var roomId: Int = 0
     var cameraSession: CameraSession?
     var cameraFilter: CameraFilter?
-    var useCustomCapturer = true
-    
-    static var instance: JanusVideoRoom?
-    
-    static func shared(withServer server: URL, delegate: JanusVideoRoomDelegate? = nil) -> JanusVideoRoom {
-        if let _ = self.instance {
-//            if instance.delegate != delegate {
-//                instance.delegate = delegate
-//            }
-            // update url server
-        } else {
-            instance = JanusVideoRoom(delegate: delegate)
-        }
-        return instance!
-    }
+    var useCustomCapturer = false
     
     init(delegate: JanusVideoRoomDelegate? = nil) {
         super.init()
         let server = URL(string: "ws://172.16.1.214:8188/janus")
-        janus = Janus(withServer: server!, delegate: self)
-        publisher = JanusRolePublish(withJanus: janus!, delegate: self)
+        let janus = Janus(withServer: server!)
+        publisher = JanusRolePublish(withJanus: janus, delegate: self)
         publisher?.setup(customFrameCapturer: useCustomCapturer)
         self.delegate = delegate
         let localConfig = JanusPublishMediaConstraints()
@@ -84,13 +69,6 @@ class JanusVideoRoom: NSObject {
             self.cameraSession?.setupSession()
             
             self.cameraFilter = CameraFilter()
-        }
-    }
-    
-    func updateJanus(withServer server: URL) {
-        if janus?.server.absoluteString != server.absoluteString {
-            janus?.destroySession()
-            janus = Janus(withServer: server, delegate: self)
         }
     }
     
@@ -115,11 +93,10 @@ class JanusVideoRoom: NSObject {
     
     func leaveRoom(callback: (() -> ())?) {
         for listenRole in remotes.values {
-            listenRole.leaveRoom { [weak self] in
+            listenRole.leaveRoom {
 //                let _ = self?.stopPreView(withUid: listenRole.id!)
             }
         }
-        remotes.removeAll()
         publisher?.leaveRoom { [weak self] in
             asyncInMainThread {
                 if let callback = callback {
@@ -201,29 +178,8 @@ class JanusVideoRoom: NSObject {
     }
     
     deinit {
-        self.janus?.destroySession()
+        self.publisher?.janus.destroySession()
     }
-}
-
-extension JanusVideoRoom: JanusDelegate {
-    func janus(_ janus: Janus, createComplete error: Error?) {
-        if error != nil {
-            asyncInMainThread {
-                self.delegate?.janusVideoRoom(janusRoom: self, fatalErrorWithID: .serverErr)
-            }
-        }
-    }
-    
-    func janus(_ janus: Janus, netBrokenWithId reason: RTCNetBrokenReason) {
-        self.leaveRoom(callback: nil)
-        asyncInMainThread {
-            self.delegate?.janusVideoRoom(janusRoom: self, netBrokenWithID: reason)
-        }
-    }
-    
-    func janus(_ janus: Janus, attachPlugin handleId: NSNumber, result error: Error?) { }
-    
-    func janusDestroy(_ janus: Janus?) { }
 }
 
 extension JanusVideoRoom: JanusRoleListenDelegate {
@@ -234,6 +190,17 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     
     func janusRoleListen(role: JanusRoleListen, renderSizeChangeWithSize size: CGSize) {
         self.delegate?.janusVideoRoom(janusRoom: self, renderSizeChangeWithSize: size, uId: role.id!)
+    }
+    
+    func janusRole(role: JanusRole, fatalErrorWithID code: RTCErrorCode) {
+        self.delegate?.janusVideoRoom(janusRoom: self, fatalErrorWithID: code)
+    }
+    
+    func janusRole(role: JanusRole, netBrokenWithID reason: RTCNetBrokenReason) {
+        self.leaveRoom(callback: nil)
+        asyncInMainThread {
+            self.delegate?.janusVideoRoom(janusRoom: self, netBrokenWithID: reason)
+        }
     }
     
     func janusRole(role: JanusRole, joinRoomWithResult error: Error?) {
@@ -249,9 +216,11 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     func janusRole(role: JanusRole, leaveRoomWithResult error: Error?) {
         if let publisher = self.publisher {
             if role.id == publisher.id {
-                self.janus?.destroySession()
+                publisher.janus.destroySession()
+                publisher.janus.stop()
             }
         }
+        self.remotes.removeAll()
     }
     
     func janusRole(role: JanusRole?, didJoinRemoteRole remoteRole: JanusRoleListen) {

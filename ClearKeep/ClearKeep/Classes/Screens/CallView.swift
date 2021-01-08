@@ -30,36 +30,34 @@ struct CallView: View {
                     HStack(alignment: .top) {
                         Spacer()
                         VideoView(rtcVideoView: videoView)
-                            .frame(width: 120,
-                                   height: 180)
-//                            .animation(.easeInOut(duration: 0.6))
+                            .frame(width: viewModel.callStatus == .answered ? 120 : reader.frame(in: .global).width,
+                                   height: viewModel.callStatus == .answered ? 180 : reader.frame(in: .global).height)
                             .clipShape(Rectangle())
-                            .cornerRadius(15)
-                    }.padding(.top, 45)
+                            .cornerRadius(viewModel.callStatus == .answered ? 15 : 0)
+                            .animation(.easeInOut(duration: 0.6))
+                    }.padding(.top, viewModel.callStatus == .answered ? 45 : 0)
                     .padding(.horizontal)
                 }
-                
-                // Info call
-                if viewModel.receiveCameraOff ||
-                    viewModel.callStatus == .calling ||
-                    viewModel.callStatus == .ringing {
+//
+//                // Info call
+                if viewModel.callStatus != .answered {
                     VStack(alignment: .center) {
                         Spacer(minLength: 50)
                         // Receive avatar
                         Image(systemName: "person.circle")
                             .resizable()
-                            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                            .frame(width: 100, height: 100)
                             .foregroundColor(Color.white)
                             .padding()
-                        
+
                         // Receive name
-                        Text("Phan Van Dai")
+                        Text(viewModel.getUserName())
                             .font(.system(size: 24))
                             .fontWeight(.bold)
                             .foregroundColor(Color.white)
-                        
+
                         // Call status
-                        Text("Đang đổ chuông...")
+                        Text(viewModel.getStatusMessage())
                             .font(.system(size: 16))
                             .foregroundColor(Color.white)
                         Spacer()
@@ -78,17 +76,21 @@ struct CallView: View {
                         HStack {
                             Spacer()
                             // Button camera
-                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                Image(systemName: "video.fill")
+                            Button(action: {
+                                viewModel.cameraOffChange()
+                            }, label: {
+                                Image(systemName: viewModel.cameraOn ? "video.fill" : "video.slash.fill")
                                     .font(.system(size: 22))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
                                     .padding()
                                     .background(Color.white.opacity(0.2))
                                     .clipShape(Circle())
                             })
                             Spacer()
                             // button swipe camera
-                            Button(action: {}, label: {
+                            Button(action: {
+                                viewModel.cameraSwipe()
+                            }, label: {
                                 Image(systemName: "camera.rotate.fill")
                                     .font(.system(size: 22))
                                     .foregroundColor(Color.white)
@@ -98,10 +100,12 @@ struct CallView: View {
                             })
                             Spacer()
                             // button micro
-                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                Image(systemName: "mic.fill")
+                            Button(action: {
+                                viewModel.microOffChange()
+                            }, label: {
+                                Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
                                     .font(.system(size: 22))
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
                                     .padding()
                                     .background(Color.white.opacity(0.2))
                                     .clipShape(Circle())

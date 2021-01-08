@@ -36,6 +36,8 @@ protocol JanusRoleDelegate: JanusPluginDelegate {
     func janusRole(role: JanusRole, didLeaveRemoteRoleWithUid uid: Int)
     func janusRole(role: JanusRole, remoteUnPublishedWithUid uid: Int)
     func janusRole(role: JanusRole, remoteDetachWithUid uid: Int)
+    func janusRole(role: JanusRole, fatalErrorWithID code: RTCErrorCode)
+    func janusRole(role: JanusRole, netBrokenWithID reason: RTCNetBrokenReason)
 }
 
 class JanusRole: JanusPlugin {
@@ -54,6 +56,7 @@ class JanusRole: JanusPlugin {
     
     init(withJanus janus: Janus, delegate: JanusRoleDelegate? = nil) {
         super.init(withJanus: janus, delegate: delegate)
+        janus.delegate = self
         self.opaqueId = "videoroomtest-\(randomString(withLength: 12))"
         self.pluginName = "janus.plugin.videoroom"
     }
@@ -88,7 +91,6 @@ class JanusRole: JanusPlugin {
                 callback()
             }
         }
-        self.destroyRTCPeer()
     }
     
     var peerConnection: RTCPeerConnection {
@@ -154,7 +156,9 @@ class JanusRole: JanusPlugin {
             status = .leaveing
             self.janus.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
                 self?.status = .leaved
-                self?.destroyRTCPeer()
+                if let delegate = self?.delegate as? JanusRoleDelegate {
+                    delegate.janusRole(role: self!, leaveRoomWithResult: nil)
+                }
                 callback()
             }
         }
@@ -245,8 +249,24 @@ extension JanusRole: RTCPeerConnectionDelegate {
     func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
         
     }
+}
+
+extension JanusRole: JanusDelegate {
+    func janus(_ janus: Janus, createComplete error: Error?) {
+        if error != nil {
+            if let delegateRole = self.delegate as? JanusRoleDelegate {
+                delegateRole.janusRole(role: self, fatalErrorWithID: .serverErr)
+            }
+        }
+    }
     
+    func janus(_ janus: Janus, netBrokenWithId reason: RTCNetBrokenReason) {
+        if let delegateRole = self.delegate as? JanusRoleDelegate {
+            delegateRole.janusRole(role: self, netBrokenWithID: reason)
+        }
+    }
     
+    func janus(_ janus: Janus, attachPlugin handleId: NSNumber, result error: Error?) { }
     
-    
+    func janusDestroy(_ janus: Janus?) { }
 }

@@ -9,17 +9,12 @@
 import UIKit
 import WebRTC
 
-protocol JanusRolePublishDelegate {
-    func JanusRolePublish(role: JanusRolePublish, didReceiveVideoView videoView: RTCEAGLVideoView)
-}
-
 class JanusRolePublish: JanusRole {
-    
-    private var localAudioTrack: RTCAudioTrack!
-    var videoRenderView: RTCEAGLVideoView?
+    var videoRenderView = RTCEAGLVideoView()
     private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (false, false, false)
     private var customFrameCapturer: Bool = false
     var localVideoTrack: RTCVideoTrack!
+    private var localAudioTrack: RTCAudioTrack!
     var cameraDevicePosition: AVCaptureDevice.Position = .front
     var videoCapturer: RTCVideoCapturer!
     let rtcAudioSession =  RTCAudioSession.sharedInstance()
@@ -55,9 +50,7 @@ class JanusRolePublish: JanusRole {
         channels.video = true
         channels.audio = true
         self.customFrameCapturer = customFrameCapturer
-        
-        videoRenderView = RTCEAGLVideoView()
-        videoRenderView!.delegate = self
+        videoRenderView.delegate = self
         
         setupLocalTracks()
         
@@ -65,15 +58,12 @@ class JanusRolePublish: JanusRole {
         
         if self.channels.video {
             startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
-            self.localVideoTrack?.add(self.videoRenderView!)
-        }
-        if let delegatePublish = self.delegate as? JanusRolePublishDelegate {
-            delegatePublish.JanusRolePublish(role: self, didReceiveVideoView: videoRenderView!)
+            self.localVideoTrack?.add(self.videoRenderView)
         }
     }
 
     func setupLocalViewFrame(frame: CGRect) {
-        videoRenderView?.frame = frame
+        videoRenderView.frame = frame
     }
     
     func captureCurrentFrame(sampleBuffer: CMSampleBuffer){
@@ -123,10 +113,8 @@ class JanusRolePublish: JanusRole {
     }
     
     override func leaveRoom(callback: @escaping RoleLeaveRoomCallback) {
-//        super.leaveRoom {
-//            callback()
-//        }
-        self.detach {
+        super.leaveRoom {
+            self.destroyRTCPeer()
             callback()
         }
     }
@@ -272,11 +260,11 @@ extension JanusRolePublish: RTCVideoViewDelegate {
         if videoView.isEqual(videoRenderView){
             print("local video size changed")
             renderView = videoRenderView
-            parentView = videoRenderView?.superview
+            parentView = videoRenderView.superview
         }
-        
+
         guard let _renderView = renderView, let _parentView = parentView else { return }
-        
+
         if(isLandScape){
             let ratio = size.width / size.height
             _renderView.frame = CGRect(x: 0, y: 0, width: _parentView.frame.height * ratio, height: _parentView.frame.height)
@@ -288,3 +276,4 @@ extension JanusRolePublish: RTCVideoViewDelegate {
         }
     }
 }
+

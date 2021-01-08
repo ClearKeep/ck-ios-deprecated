@@ -13,7 +13,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var remoteVideoView: RTCEAGLVideoView?
     @Published var remotesVideoView = [RTCEAGLVideoView]()
     
-    @Published var receiveCameraOff = false
+    @Published var cameraOn = true
     @Published var cameraFront = false
     @Published var microEnable = true
     @Published var callStatus: CallStatus = .calling
@@ -29,9 +29,7 @@ class CallViewModel: NSObject, ObservableObject {
     override init() {
         super.init()
         
-        // Check timeout for call
-//        timeoutTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(CallViewModel.checkCallTimeout), userInfo: nil, repeats: true)
-//        RunLoop.current.add(timeoutTimer!, forMode: .default)
+        
     }
     
     func updateCallBox(callBox: CallBox) {
@@ -39,18 +37,48 @@ class CallViewModel: NSObject, ObservableObject {
         updateVideoView()
 
         self.callBox?.stateDidChange = { [weak self] in
-            self?.callStatus = (self?.callBox!.status)!
-            self?.updateVideoView()
+            DispatchQueue.main.async {
+                let boxStatus = self?.callBox!.status
+                if self?.callStatus != .answered, boxStatus == .answered {
+                    self?.startCallTimer()
+                } else if self?.callStatus != .ringing, boxStatus == .ringing {
+                    self?.startCallTimout()
+                } else if boxStatus == .ended {
+                    self?.stopCallTimer()
+                    self?.stopTimeoutTimer()
+                    
+                }
+                self?.callStatus = (self?.callBox!.status)!
+                self?.updateVideoView()
+            }
         }
+    }
+    
+    func getStatusMessage() -> String {
+        switch callStatus {
+        case .calling:
+            return "Đang liên hệ..."
+        case .ringing:
+            return "Đang rung chuông..."
+        case .ended:
+            return "Kêt thúc cuộc gọi..."
+        default:
+            return ""
+        }
+    }
+    
+    func getUserName() -> String {
+        return callBox?.username ?? ""
     }
     
     func updateVideoView() {
         DispatchQueue.main.async {
-            self.localVideoView = self.callBox?.videoRoom?.publisher?.videoRenderView
-            if let listener = self.callBox?.videoRoom?.remotes.values.first {
+            if self.localVideoView == nil {
+                self.localVideoView = self.callBox?.videoRoom?.publisher?.videoRenderView
+            }
+            if self.remoteVideoView == nil, let listener = self.callBox?.videoRoom?.remotes.values.first {
                 self.remoteVideoView = listener.videoRenderView
             }
-            debugPrint("localVideo is nil \(self.localVideoView == nil)")
         }
     }
     
@@ -64,8 +92,39 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func cameraSwipe(isFront: Bool = false) {
-        cameraFront = isFront
+    func cameraSwipe() {
+        cameraFront = !cameraFront
+        if let callBox = self.callBox {
+            callBox.videoRoom?.publisher?.switchCameraPosition()
+        }
+    }
+    
+    func cameraOffChange() {
+        cameraOn = !cameraOn
+        if let callBox = self.callBox {
+            if cameraOn {
+                callBox.videoRoom?.publisher?.cameraOn()
+            } else {
+                callBox.videoRoom?.publisher?.cameraOff()
+            }
+        }
+    }
+    
+    func microOffChange() {
+        microEnable = !microEnable
+        if let callBox = self.callBox {
+            if microEnable {
+                callBox.videoRoom?.publisher?.unmuteAudio()
+            } else {
+                callBox.videoRoom?.publisher?.muteAudio()
+            }
+        }
+    }
+    
+    private func startCallTimout() {
+        // Check timeout for call
+        timeoutTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(CallViewModel.checkCallTimeout), userInfo: nil, repeats: true)
+        RunLoop.current.add(timeoutTimer!, forMode: .default)
     }
     
     private func startCallTimer() {
@@ -103,13 +162,13 @@ class CallViewModel: NSObject, ObservableObject {
     @objc private func checkCallTimeout() {
         print("checkCallTimeout")
         callInterval += 10
-        if callInterval > 60 && callTimer == nil {
+        if callInterval > 30 && callTimer == nil {
 //            if callControl.isIncoming {
 //                CallManager.shared.reject()
 //            } else {
 //                CallManager.shared.hangup()
 //            }
-//            CallManager.shared.endCall()
+            endCall()
         }
     }
 }

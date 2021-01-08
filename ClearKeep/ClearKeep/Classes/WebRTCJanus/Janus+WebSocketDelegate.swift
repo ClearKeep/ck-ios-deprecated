@@ -11,6 +11,7 @@ import Foundation
 extension Janus: WebSocketDelegate {
     func webSocket(didOpen webSocket: WebSocket) {
         createSession()
+        connectCallback?(nil)
     }
     
     func webSocket(_ webSocket: WebSocket, didReceiveMessage msg: [String : Any]) {
@@ -127,7 +128,6 @@ extension Janus: WebSocketDelegate {
             keepAliveTimer.invalidate()
             self.keepAliveTimer = nil
         }
-        
         janusWebSocket = nil
         sessionId = 0
         

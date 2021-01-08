@@ -9,7 +9,7 @@
 import UIKit
 
 class Janus: NSObject {
-    let delegate: JanusDelegate?
+    var delegate: JanusDelegate?
     let server: URL
     var sessionId: Int = 0
     var janusWebSocket: JanusWebSocket?
@@ -21,19 +21,29 @@ class Janus: NSObject {
     let apiSecret: String? = nil
     var keepAliveTimer: Timer? = nil
     let keepAliveInterval: Int
+    var connectCallback: ((Error?) -> ())?
     
     init(withServer server: URL, delegate: JanusDelegate? = nil) {
         self.server = server
         self.delegate = delegate
         self.janusWebSocket = JanusWebSocket(withServer: server)
         
-        let _ = self.janusWebSocket?.start()
+//        let _ = self.janusWebSocket?.start()
         keepAliveInterval = 30000
         super.init()
         self.janusWebSocket?.delegate = self
     }
     
     deinit {
+        janusWebSocket?.stop()
+    }
+    
+    func connect(completion: ((Error?) -> ())?) {
+        connectCallback = completion
+        let _ = janusWebSocket?.start()
+    }
+    
+    func stop() {
         janusWebSocket?.stop()
     }
     

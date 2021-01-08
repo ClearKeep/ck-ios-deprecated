@@ -8,6 +8,8 @@
 import UIKit
 import CallKit
 import AVFoundation
+import PushKit
+import SwiftyJSON
 
 final class CallManager: NSObject {
     
@@ -112,15 +114,22 @@ final class CallManager: NSObject {
     private func postCallsChangedNotification(userInfo: [String: Any]? = nil) {
         NotificationCenter.default.post(name: type(of: self).CallsChangedNotification, object: self, userInfo: userInfo)
     }
+    
+    func handleIncomingPushEvent(payload: PKPushPayload, completion: ((NSError?) -> Void)? = nil) {
+        let jsonData = JSON(payload.dictionaryPayload)
+        if let username = jsonData["aps"]["from_client"]["username"].string {
+            reportIncomingCall(uuid: UUID(), callerName: username, completion: completion)
+        }
+    }
 }
 
 extension CallManager {
     // MARK: Incoming Calls
     /// Use CXProvider to report the incoming call to the system
-    func reportIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
+    func reportIncomingCall(uuid: UUID, callerName: String, hasVideo: Bool = true, completion: ((NSError?) -> Void)? = nil) {
         // Construct a CXCallUpdate describing the incoming call, including the caller.
         let update = CXCallUpdate()
-        update.remoteHandle = CXHandle(type: .phoneNumber, value: handle)
+        update.remoteHandle = CXHandle(type: .phoneNumber, value: callerName)
         update.hasVideo = hasVideo
 
         // pre-heat the AVAudioSession
@@ -134,8 +143,8 @@ extension CallManager {
              */
             if error == nil {
                 let call = CallBox(uuid: uuid)
-                call.handle = handle
-
+                call.username = callerName
+                call.handle = callerName
                 self.addCall(call)
             }
             
@@ -310,7 +319,7 @@ extension CallManager: CXProviderDelegate {
         // Start call audio media, now that the audio session has been activated after having its priority boosted.
         outgoingCall?.startCall(withAudioSession: audioSession) { [weak self] success in
             if success {
-                self?.outgoingCall?.startAudio()
+                self?.outgoingCall?.startJoinRoom()
             } else {
                 if let outgoingCall = self?.outgoingCall {
                     self?.end(call: outgoingCall)
@@ -325,7 +334,7 @@ extension CallManager: CXProviderDelegate {
                         appDelegate.viewRouter.current = .callVideo
                     }
                 }
-                self.answerCall?.startAudio()
+                self.answerCall?.startJoinRoom()
             }
         }
     }
@@ -342,13 +351,15 @@ extension CallManager: CXProviderDelegate {
             return
         }
         
-        outgoingCall?.endCall()
-        outgoingCall = nil
-        answerCall?.endCall()
-        answerCall = nil
-        self.removeAllCalls()
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.viewRouter.current = .login
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            self.outgoingCall?.endCall()
+            self.outgoingCall = nil
+            self.answerCall?.endCall()
+            self.answerCall = nil
+            self.removeAllCalls()
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.viewRouter.current = .login
+            }
         }
     }
 }

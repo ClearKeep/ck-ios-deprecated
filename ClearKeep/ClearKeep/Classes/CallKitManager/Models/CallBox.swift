@@ -20,6 +20,7 @@ final class CallBox: NSObject {
 
     // MARK: Metadata Properties
     let uuid: UUID
+    var username: String = ""
     let isOutgoing: Bool
     var handle: String?
     var status = CallStatus.calling
@@ -114,7 +115,7 @@ final class CallBox: NSObject {
     var videoRoom: JanusVideoRoom?
     
     var canStartCall: ((Bool) -> Void)?
-    func startCall(withAudioSession audioSession: AVAudioSession, completion: ((_ success: Bool) -> Void)?) {
+    func startCall(withAudioSession audioSession: AVAudioSession?, completion: ((_ success: Bool) -> Void)?) {
 //        OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance(with: audioSession))
         if videoRoom == nil {
             videoRoom = JanusVideoRoom(delegate: self)
@@ -122,13 +123,12 @@ final class CallBox: NSObject {
         canStartCall = completion
 
         hasStartedConnecting = true
-        videoRoom?.joinRoom(withRoomId: 1234, username: "", completeCallback: { [weak self](isSuccess, error) in
+        videoRoom?.publisher?.janus.connect(completion: { (error) in
             if let error = error {
                 print(error.localizedDescription)
+                completion?(false)
             } else {
-                completion?(isSuccess)
-                self?.status = .ringing
-                self?.stateDidChange?()
+                completion?(true)
             }
         })
     }
@@ -145,31 +145,25 @@ final class CallBox: NSObject {
         canAnswerCall = completion
         
         hasStartedConnecting = true
-        videoRoom?.joinRoom(withRoomId: 1234, username: "", completeCallback: { [weak self](isSuccess, error) in
+        videoRoom?.publisher?.janus.connect(completion: { (error) in
             if let error = error {
                 print(error.localizedDescription)
+                completion?(false)
             } else {
-                completion?(isSuccess)
-                self?.status = .ringing
-                self?.stateDidChange?()
+                completion?(true)
             }
         })
     }
     
-    func startAudio() {
-//        if publisher == nil {
-//            let settings = OTPublisherSettings()
-//            settings.name = UIDevice.current.name
-//            settings.audioTrack = true
-//            settings.videoTrack = false
-//            publisher = OTPublisher.init(delegate: self, settings: settings)
-//        }
-//
-//        var error: OTError?
-//        session?.publish(publisher!, error: &error)
-//        if error != nil {
-//            print(error!)
-//        }
+    func startJoinRoom() {
+        videoRoom?.joinRoom(withRoomId: 1234, username: "", completeCallback: { [weak self](isSuccess, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                self?.status = .ringing
+                self?.stateDidChange?()
+            }
+        })
     }
     
     func endCall() {
