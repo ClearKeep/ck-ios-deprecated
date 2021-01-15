@@ -11,27 +11,29 @@ struct MessageChatView: View {
     
     @State private var nextMessage: String = ""
     @State var isShowCall = false
-    @ObservedObject var viewModel: MessageChatViewModel
+    @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var realmMessages : RealmMessages
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
-    
     private let userName: String
-    
+    private let groupType: String
     private let clientId: String
-    private var groupID: String
+    private let groupId: Int64
     
-    @State var myGroupID: String = ""
+    @State var myGroupID: Int64 = 0
     
     @State var messages = [MessageModel]()
     
-    init(clientId: String , groupID: String, userName: String ) {
+    init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
         self.clientId = clientId
-        self.groupID = groupID
-        viewModel = MessageChatViewModel()
+        self.groupType = groupType
+        self.groupId = groupID
+        
+//        self.viewModel = MessageChatViewModel(clientId: clientId, groupId: groupID, groupType: groupType)
+//        self.myGroupID = self.viewModel.groupId
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
@@ -43,7 +45,14 @@ struct MessageChatView: View {
             .navigationBarTitle(Text(self.userName))
             .navigationBarItems(trailing: Button(action: {
                 // CallManager call
-                viewModel.callPeerToPeer(self.clientId, self.groupID)
+                if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                    viewModel.callPeerToPeer(group: group)
+                } else {
+                    viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
+                        viewModel.callPeerToPeer(group: group)
+                    }
+                }
+                
             }, label: {
                 Image(systemName: "phone")
             }))
@@ -56,7 +65,11 @@ struct MessageChatView: View {
                 }.padding(.trailing)
             }.onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
-                self.myGroupID = groupID
+                viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
+                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                    viewModel.groupId = group.groupID
+                }
+                self.myGroupID = viewModel.groupId
                 self.viewModel.requestBundleRecipient(byClientId: self.clientId)
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
@@ -115,8 +128,9 @@ extension MessageChatView {
     }
     
     func getMessageInRoom(){
-        if !self.groupID.isEmpty {
-            Backend.shared.getMessageInRoom(self.groupID , self.realmMessages.getTimeStampPreLastMessage(groupId: self.groupID)) { (result, error) in
+        if viewModel.groupId != 0 {
+            Backend.shared.getMessageInRoom(viewModel.groupId,
+                                            self.realmMessages.getTimeStampPreLastMessage(groupId: viewModel.groupId)) { (result, error) in
                 if let result = result {
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
@@ -156,7 +170,7 @@ extension MessageChatView {
     
     private func reloadData(){
         DispatchQueue.main.async {
-            self.messages = self.realmMessages.allMessageInGroup(groupId: self.myGroupID)
+            self.messages = self.realmMessages.allMessageInGroup(groupId: viewModel.groupId)
         }
     }
     
@@ -178,36 +192,16 @@ extension MessageChatView {
                 guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
                                                                                      name: clientId,
                                                                                      deviceId: self.viewModel.recipientDeviceId) else { return }
-                if self.myGroupID.isEmpty {
-                    
-                    var req = Group_CreateGroupRequest()
-                    let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
-                    req.groupName = "\(self.userName)-\(userNameLogin)"
-                    req.groupType = "peer"
-                    req.createdByClientID = myAccount.username
-                    req.lstClientID = [myAccount.username , self.clientId]
-                    
-                    Backend.shared.createRoom(req) { (result) in
-                        let lstClientID = result.lstClient.map{$0.id}
+                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                    viewModel.groupId = group.groupID
+                    self.myGroupID = group.groupID
+                }
+                if viewModel.groupId == 0 {
+                    viewModel.createGroup(username: self.userName, clientId: clientId) { (group) in
+                        self.groupRealms.add(group: group)
+                        self.myGroupID = group.groupID
                         
-                        DispatchQueue.main.async {
-                            let group = GroupModel(groupID: result.groupID,
-                                                   groupName: result.groupName,
-                                                   groupAvatar: result.groupAvatar,
-                                                   groupType: result.groupType,
-                                                   createdByClientID: result.createdByClientID,
-                                                   createdAt: result.createdAt,
-                                                   updatedByClientID: result.updatedByClientID,
-                                                   lstClientID: lstClientID,
-                                                   updatedAt: result.updatedAt,
-                                                   lastMessageAt: result.lastMessageAt,
-                                                   lastMessage: payload)
-                            self.groupRealms.add(group: group)
-                        }
-
-                        self.myGroupID = result.groupID
-                        
-                        Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: self.myGroupID , groupType: "peer") { (result) in
+                        Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
                             if let result = result {
                                 DispatchQueue.main.async {
                                     let post = MessageModel(id: result.id,
@@ -225,7 +219,7 @@ extension MessageChatView {
                         }
                     }
                 } else {
-                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: self.myGroupID , groupType: "peer") { (result) in
+                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
                         if let result = result {
                             DispatchQueue.main.async {
                                 let post = MessageModel(id: result.id,
@@ -237,7 +231,7 @@ extension MessageChatView {
                                                         createdAt: result.createdAt,
                                                         updatedAt: result.updatedAt)
                                 self.realmMessages.add(message: post)
-                                self.groupRealms.updateLastMessage(groupID: self.myGroupID, lastMessage: payload)
+                                self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload)
                                 self.reloadData()
                             }
                         }
@@ -307,6 +301,6 @@ struct MessageView: View {
 
 struct MessageChat_Previews: PreviewProvider {
     static var previews: some View {
-        MessageChatView(clientId: "" , groupID: "", userName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
+        MessageChatView(clientId: "" , groupID: 0, userName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
     }
 }

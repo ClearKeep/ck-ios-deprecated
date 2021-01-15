@@ -28,7 +28,7 @@ class Authenticator {
     }
     
     private func groupRegisterClient(byClientId clientId: String,
-                               groupId: String,
+                               groupId: Int64,
                                deviceId: Int32,
                                senderKeyData: Data,
                                _ completion: @escaping (Bool, Error?) -> Void,
@@ -122,7 +122,7 @@ class Authenticator {
     }
     
     private func groupGetClientKey(byClientId clientId: String,
-                                    groupId: String,
+                                    groupId: Int64,
                                  _ completion: @escaping (Bool, Error?, Signal_GroupGetClientKeyResponse?) -> Void,
                                  submit: @escaping (Signal_GroupGetClientKeyRequest, CallOptions?)
                                     -> UnaryCall<Signal_GroupGetClientKeyRequest, Signal_GroupGetClientKeyResponse>) {
@@ -165,7 +165,7 @@ class Authenticator {
         }
     }
     
-    private func groupGetAllClientKey(byGroupId groupId: String,
+    private func groupGetAllClientKey(byGroupId groupId: Int64,
                                       _ completion: @escaping (Bool, Error?, Signal_GroupGetAllClientKeyResponse?) -> Void,
                                       submit: @escaping (Signal_GroupGetAllClientKeyRequest, CallOptions?)
                                         -> UnaryCall<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse>) {
@@ -193,7 +193,7 @@ extension Authenticator {
         peerRegisterClient(byAddress: address, completion, submit: clientSignal.peerRegisterClientKey)
     }
     
-    func registerGroup(byGroupId groupId: String,
+    func registerGroup(byGroupId groupId: Int64,
                        clientId: String,
                        deviceId: Int32,
                        senderKeyData: Data,
@@ -221,12 +221,12 @@ extension Authenticator {
     }
     
     func requestKeyGroup(byClientId clientId: String,
-                         groupId: String,
+                         groupId: Int64,
                          _ completion: @escaping (Bool, Error?, Signal_GroupGetClientKeyResponse?) -> Void) {
         groupGetClientKey(byClientId: clientId, groupId: groupId, completion, submit: clientSignal.groupGetClientKey)
     }
     
-    func requestAllKeyInGroup(byGroup groupId: String,
+    func requestAllKeyInGroup(byGroup groupId: Int64,
                               _ completion: @escaping (Bool, Error?, Signal_GroupGetAllClientKeyResponse?) -> Void) {
         groupGetAllClientKey(byGroupId: groupId, completion, submit: clientSignal.groupGetAllClientKey)
     }

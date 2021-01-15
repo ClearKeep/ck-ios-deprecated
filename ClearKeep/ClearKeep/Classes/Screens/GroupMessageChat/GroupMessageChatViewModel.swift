@@ -96,14 +96,14 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
 //        }
 //    }
     
-    func registerWithGroup(_ groupId: String) {
+    func registerWithGroup(_ groupId: Int64) {
         if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
             let userName = myAccount.username
             let deviceID = Int32(myAccount.deviceId)
             
             let address = SignalAddress(name: userName, deviceId: deviceID)
             let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-            let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+            let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
             do {
                 let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
                 Backend.shared.authenticator.registerGroup(byGroupId: groupId,
@@ -123,7 +123,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func requestAllKeyInGroup(byGroupId groupId: String) {
+    func requestAllKeyInGroup(byGroupId groupId: Int64) {
         Backend.shared.authenticator.requestAllKeyInGroup(byGroup: groupId) { [weak self](result, error, response) in
             guard let allKeyGroupResponse = response else {
                 print("Request prekey \(groupId) fail")
@@ -145,7 +145,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    private func processSenderKey(byGroupId groupId: String,
+    private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {

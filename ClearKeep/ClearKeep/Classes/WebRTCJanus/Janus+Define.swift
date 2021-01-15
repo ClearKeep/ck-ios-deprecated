@@ -33,6 +33,7 @@ enum RTCErrorCode: Int {
     case unknow = 0
     case serverJsonErr = -1
     case serverErr = -2
+    case permission = -3
 }
 
 enum RTCNetBrokenReason: Int {

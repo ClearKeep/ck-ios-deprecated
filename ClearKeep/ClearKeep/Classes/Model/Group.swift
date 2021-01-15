@@ -10,8 +10,9 @@ import RealmSwift
 
 struct GroupModel: Identifiable , Codable {
     var id : String = UUID().uuidString
-    var groupID: String
+    var groupID: Int64
     var groupName: String
+    var groupToken: String
     var groupAvatar: String
     var groupType: String
     var createdByClientID: String

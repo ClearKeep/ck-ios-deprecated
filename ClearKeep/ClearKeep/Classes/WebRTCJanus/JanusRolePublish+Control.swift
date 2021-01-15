@@ -69,6 +69,10 @@ extension JanusRolePublish {
                 self.cameraDevicePosition = position
                 self.startCaptureLocalVideo(cameraPositon: position, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
             }
+        } else if let _ = self.videoCapturer as? RTCCustomFrameCapturer {
+            let position = (self.cameraDevicePosition == .front) ? AVCaptureDevice.Position.back : AVCaptureDevice.Position.front
+            self.cameraDevicePosition = position
+            cameraSession?.setupSession(position: position)
         }
     }
     
@@ -117,7 +121,6 @@ extension JanusRolePublish {
     }
     
     private func setAudioEnabled(_ isEnabled: Bool) {
-        let audioTracks = self.peerConnection.transceivers.compactMap { return $0.sender.track as? RTCAudioTrack }
-        audioTracks.forEach { $0.isEnabled = isEnabled }
+        localAudioTrack.isEnabled = isEnabled
     }
 }

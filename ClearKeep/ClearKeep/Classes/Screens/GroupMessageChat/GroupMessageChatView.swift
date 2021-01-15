@@ -22,9 +22,9 @@ struct GroupMessageChatView: View {
     @State var messages = [MessageModel]()
     
     
-    private let selectedRoom: String
+    private let selectedRoom: Int64
     
-    init(groupId: String, groupName: String) {
+    init(groupId: Int64, groupName: String) {
         self.selectedRoom = groupId
         self.groupName = groupName
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
@@ -70,7 +70,7 @@ struct GroupMessageChatView: View {
 extension GroupMessageChatView {
     
     func getMessageInRoom(){
-        if !self.selectedRoom.isEmpty {
+        if self.selectedRoom != 0 {
             Backend.shared.getMessageInRoom(self.selectedRoom , self.realmMessages.getTimeStampPreLastMessage(groupId: self.selectedRoom)) { (result, error) in
                 if let result = result {
                     result.lstMessage.forEach { (message) in
@@ -162,7 +162,7 @@ extension GroupMessageChatView {
         }
     }
     
-    func requestKeyInGroup(byGroupId groupId: String, publication: Message_MessageObjectResponse) {
+    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
         Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                      groupId: groupId) {(result, error, response) in
             guard let groupResponse = response else {
@@ -183,7 +183,7 @@ extension GroupMessageChatView {
         }
     }
     
-    private func processSenderKey(byGroupId groupId: String,
+    private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
@@ -242,13 +242,13 @@ extension GroupMessageChatView {
         }
     }
     
-    func registerWithGroup(_ groupId: String) {
+    func registerWithGroup(_ groupId: Int64) {
         if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
             let userName = myAccount.username
             let deviceID = Int32(myAccount.deviceId)
             let address = SignalAddress(name: userName, deviceId: deviceID)
             let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-            let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+            let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
             
             if !ourAccountEncryptMng.senderKeyExistsForUsername(userName,
                                                                 deviceId: deviceID,
@@ -274,7 +274,7 @@ extension GroupMessageChatView {
         }
     }
     
-    func requestAllKeyInGroup(byGroupId groupId: String) {
+    func requestAllKeyInGroup(byGroupId groupId: Int64) {
         Backend.shared.authenticator.requestAllKeyInGroup(byGroup: groupId) {(result, error, response) in
             guard let allKeyGroupResponse = response else {
                 print("Request prekey \(groupId) fail")
@@ -303,6 +303,6 @@ extension GroupMessageChatView {
 
 struct GroupMessageChatView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupMessageChatView(groupId: "" , groupName: "").environmentObject(RealmGroup()).environmentObject(RealmMessages())
+        GroupMessageChatView(groupId: 0 , groupName: "").environmentObject(RealmGroup()).environmentObject(RealmMessages())
     }
 }

@@ -29,7 +29,8 @@ struct HistoryChatView: View {
             List(groupRealms.all , id: \.groupID){ group in
                 let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID),
                                                groupID : group.groupID,
-                                               userName: viewModel.getGroupName(group: group)).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                                               userName: viewModel.getGroupName(group: group),
+                                               groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 
                 let viewGroup = GroupMessageChatView(groupId: group.groupID, groupName: group.groupName).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 
@@ -143,6 +144,7 @@ extension HistoryChatView {
                             let lstClientID = groupResponse.lstClient.map{$0.id}
                             let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                         groupName: groupResponse.groupName,
+                                                        groupToken: groupResponse.groupRtcToken,
                                                         groupAvatar: groupResponse.groupAvatar,
                                                         groupType: groupResponse.groupType,
                                                         createdByClientID: groupResponse.createdByClientID,
@@ -209,7 +211,7 @@ extension HistoryChatView {
         }
     }
     
-    func requestKeyInGroup(byGroupId groupId: String, publication: Message_MessageObjectResponse) {
+    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
         Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                      groupId: groupId) {(result, error, response) in
             guard let groupResponse = response else {
@@ -230,7 +232,7 @@ extension HistoryChatView {
         }
     }
     
-    private func processSenderKey(byGroupId groupId: String,
+    private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {

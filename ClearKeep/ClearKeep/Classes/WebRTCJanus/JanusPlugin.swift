@@ -31,7 +31,7 @@ class JanusPlugin: NSObject, JanusPluginHandleProtocol {
     var pluginName: String?
     var handleId = NSNumber(value: 0)
     var attached: Bool = false
-    var janus: Janus
+    weak var janus: Janus?
     var delegate: JanusPluginDelegate?
     var transactions = [String: Any]()
     
@@ -42,20 +42,20 @@ class JanusPlugin: NSObject, JanusPluginHandleProtocol {
     }
     
     func send(message msg: [String: Any], callback: @escaping PluginRequestCallback) {
-        janus.send(message: msg, jsep: nil, handleId: handleId, callback: callback)
+        janus?.send(message: msg, jsep: nil, handleId: handleId, callback: callback)
     }
     
     func send(message msg: [String: Any], jsep: [String: Any],
               callback: @escaping PluginRequestCallback) {
-        janus.send(message: msg, jsep: jsep, handleId: handleId, callback: callback)
+        janus?.send(message: msg, jsep: jsep, handleId: handleId, callback: callback)
     }
     
     func send(trickleCandidate candidate: [String: Any]) {
-        janus.send(trickleCandidate: candidate, handleId: handleId)
+        janus?.send(trickleCandidate: candidate, handleId: handleId)
     }
     
     func attach(withCallback callback: @escaping AttachResult) {
-        janus.attachPlugin(plugin: self) { [weak self](handleId, error) in
+        janus?.attachPlugin(plugin: self) { [weak self](handleId, error) in
             self?.handleId = handleId
             self?.attached = error == nil
             callback(error)
@@ -63,7 +63,7 @@ class JanusPlugin: NSObject, JanusPluginHandleProtocol {
     }
     
     func detach(withCallback callback: DetachedResult?) {
-        janus.detachPlugin(plugin: self) { [weak self](error) in
+        janus?.detachPlugin(plugin: self) { [weak self](error) in
             self?.attached = false
             if let callback = callback {
                 callback()

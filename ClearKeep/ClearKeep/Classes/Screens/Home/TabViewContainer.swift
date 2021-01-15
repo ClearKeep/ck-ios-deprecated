@@ -26,7 +26,7 @@ struct TabViewContainer: View {
                     }
                 }
             
-            PeopleView()
+            PeopleView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
                 .tabItem {
                     VStack {
                         Image(systemName: "person.3.fill")

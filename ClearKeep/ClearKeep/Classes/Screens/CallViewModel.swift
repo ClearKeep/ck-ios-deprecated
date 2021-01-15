@@ -39,14 +39,13 @@ class CallViewModel: NSObject, ObservableObject {
         self.callBox?.stateDidChange = { [weak self] in
             DispatchQueue.main.async {
                 let boxStatus = self?.callBox!.status
-                if self?.callStatus != .answered, boxStatus == .answered {
+                if boxStatus == .answered {
                     self?.startCallTimer()
                 } else if self?.callStatus != .ringing, boxStatus == .ringing {
                     self?.startCallTimout()
                 } else if boxStatus == .ended {
                     self?.stopCallTimer()
                     self?.stopTimeoutTimer()
-                    
                 }
                 self?.callStatus = (self?.callBox!.status)!
                 self?.updateVideoView()
@@ -68,7 +67,7 @@ class CallViewModel: NSObject, ObservableObject {
     }
     
     func getUserName() -> String {
-        return callBox?.username ?? ""
+        return callBox?.clientName ?? ""
     }
     
     func updateVideoView() {
@@ -162,7 +161,7 @@ class CallViewModel: NSObject, ObservableObject {
     @objc private func checkCallTimeout() {
         print("checkCallTimeout")
         callInterval += 10
-        if callInterval > 30 && callTimer == nil {
+        if callInterval > 20 && callTimer == nil {
 //            if callControl.isIncoming {
 //                CallManager.shared.reject()
 //            } else {

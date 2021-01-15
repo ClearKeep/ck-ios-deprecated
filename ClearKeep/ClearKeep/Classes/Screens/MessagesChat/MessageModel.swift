@@ -11,7 +11,7 @@ struct MessageModel: Identifiable {
     
     var id: String = String()
 
-    var groupID: String = String()
+    var groupID: Int64 = 0
 
     var groupType: String = String()
 
@@ -40,6 +40,6 @@ protocol MessageChats: ObservableObject{
 
     func remove(messageRemove: MessageModel)
     
-    func allMessageInGroup(groupId: String) -> [MessageModel]
+    func allMessageInGroup(groupId: Int64) -> [MessageModel]
     
 }

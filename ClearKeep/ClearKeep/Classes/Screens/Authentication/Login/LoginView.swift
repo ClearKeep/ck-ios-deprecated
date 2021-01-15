@@ -70,7 +70,7 @@ extension LoginView {
             print("DeviceID always number")
             return
         }
-        let groupId = "test_group"
+        let groupId: Int64 = 1234
         do {
             // save my Account
             connectionDb.readWrite { (transaction) in
@@ -81,7 +81,7 @@ extension LoginView {
             
             let address = SignalAddress(name: username, deviceId: deviceID)
             let groupSessionBuilder = SignalGroupSessionBuilder(context: ourSignalEncryptionMng.signalContext)
-            let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+            let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
             let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
             
             CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
@@ -106,13 +106,12 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
-        CallManager.shared.startCall(clientId: "clientID")
-        return
-        //        if isGroupChat {
-        //            getSenderKeyInGroupTest()
-        //        } else {
-        //            loginForUser()
-        //        }
+//        CallManager.shared.startCall(clientId: "049fbb62-6666-493c-9628-db1149cca079",
+//                                     clientName: "Luan Nguyen",
+//                                     avatar: "",
+//                                     groupId: 41,
+//                                     groupToken: "269a7a3fd8bc2e75785f")
+//        return
         var request = Auth_AuthReq()
         request.username = self.username
         request.password = self.password
@@ -126,6 +125,10 @@ extension LoginView {
                     UserDefaults.standard.setValue(self.username, forKey: Constants.keySaveUserNameLogin)
                     Backend.shared.getLoginUserID { (userID) in
                         do {
+                            if userID.isEmpty {
+                                print("getLoginUserID Empty")
+                                return
+                            }
                             user.id = userID
                             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
 //                            let randomID = Int32.random(in: 1...Int32.max)
@@ -134,6 +137,8 @@ extension LoginView {
                             Backend.shared.authenticator.register(address: address) { (result, error) in
                                 if result {
                                     loginForUser(clientID: userID)
+                                } else {
+                                    print("Reigster Key Error \(error?.localizedDescription ?? "")")
                                 }
                             }
                         } catch {
@@ -147,19 +152,17 @@ extension LoginView {
                 print(error)
             }
         }
-        
-        
     }
     
     private func loginForUser(clientID : String) {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
-                if let receiveStore = response {
+                if let _ = response {
                     // save account
                     var myAccount: CKAccount?
                     dbConnection.readWrite({ (transaction) in
-                        let accounts = CKAccount.allAccounts(withUsername: receiveStore.clientID,
+                        let accounts = CKAccount.allAccounts(withUsername: clientID,
                                                              transaction: transaction)
                         if accounts.count > 0 {
                             myAccount = accounts.first
@@ -180,10 +183,10 @@ extension LoginView {
                                 self.viewRouter.current = .tabview
                             }
                         }
+                    }else {
+                        print("requestKey Error: \(error?.localizedDescription ?? "")")
                     }
                 }
-                
-
             } catch {
                 print("Login with error: \(error)")
             }
@@ -195,7 +198,7 @@ extension LoginView {
     }
     
     private func getSenderKeyInGroupTest() {
-        let groupId = "test_group"
+        let groupId: Int64 = 1234
         Backend.shared.authenticator.requestKeyGroup(byClientId: username, groupId: groupId) { (result, error, response) in
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
@@ -224,7 +227,7 @@ extension LoginView {
                        let senderId = response?.clientKey.clientID,
                        let groupId = response?.groupID {
                         let address = SignalAddress(name: senderId, deviceId: deviceId)
-                        let senderKeyName = SignalSenderKeyName(groupId: groupId, address: address)
+                        let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
                         if !ourEncryptionManager.senderKeyExistsForUsername(senderId, deviceId: deviceId, groupId: groupId) {
                             let _ = ourEncryptionManager.storage.storeSenderKey(senderKeyData, senderKeyName: senderKeyName)
                             //                            try ourEncryptionManager.consumeIncoming(toGroup: groupId, address: address, skdmDtata: senderKeyData)

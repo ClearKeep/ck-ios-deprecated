@@ -32,6 +32,8 @@ extension JanusVideoRoomDelegate {
     func janusVideoRoom(janusRoom: JanusVideoRoom, fatalErrorWithID code: RTCErrorCode) { }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, netBrokenWithID reason: RTCNetBrokenReason) { }
+    
+    func janusVideoRoom(janusRoom: JanusVideoRoom, didReceiveData data: Data) {}
 }
 
 class JanusVideoRoom: NSObject {
@@ -42,17 +44,16 @@ class JanusVideoRoom: NSObject {
     
     private var userId: Int = 0
     private var username: String?
-    private var roomId: Int = 0
-    var cameraSession: CameraSession?
-    var cameraFilter: CameraFilter?
-    var useCustomCapturer = false
+    private var roomId: Int64 = 0
+    var useCustomCapturer = true
     
-    init(delegate: JanusVideoRoomDelegate? = nil) {
+    init(delegate: JanusVideoRoomDelegate? = nil, token: String?) {
         super.init()
         let server = URL(string: "ws://172.16.1.214:8188/janus")
-        let janus = Janus(withServer: server!)
+        let janus = Janus(withServer: server!, token: token)
         publisher = JanusRolePublish(withJanus: janus, delegate: self)
         publisher?.setup(customFrameCapturer: useCustomCapturer)
+        
         self.delegate = delegate
         let localConfig = JanusPublishMediaConstraints()
         localConfig.pushSize = CGSize(width: 720, height: 960)
@@ -61,40 +62,59 @@ class JanusVideoRoom: NSObject {
         localConfig.audioBirate = 200*1000
         localConfig.frequency = 44100
         publisher?.mediaConstraints = localConfig
-        
-        print("--- use custom capturer ---")
-        if self.useCustomCapturer {
-            self.cameraSession = CameraSession()
-            self.cameraSession?.delegate = self
-            self.cameraSession?.setupSession()
-            
-            self.cameraFilter = CameraFilter()
-        }
     }
     
-    func joinRoom(withRoomId roomId: Int,
+    func joinRoom(withRoomId roomId: Int64,
                   username: String,
                   completeCallback callback: CompleteCallback?) {
         self.roomId = roomId
         self.username = username
-        
-        publisher?.joinRoom(withRoomId: roomId, username: username, callback: { [weak self](error) in
-            if let callback = callback {
-                callback(error == nil, error)
-            } else {
-                asyncInMainThread {
-                    if let self = self {
-                        self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: (self.publisher?.id)!)
+        AVCaptureDevice.authorizeVideo(completion: { (status) in
+            AVCaptureDevice.authorizeAudio(completion: { (status) in
+                if status == .alreadyAuthorized || status == .justAuthorized {
+                    self.publisher?.joinRoom(withRoomId: roomId, username: username, callback: { [weak self](error) in
+                        if let callback = callback {
+                            callback(error == nil, error)
+                        } else {
+                            asyncInMainThread {
+                                if let self = self {
+                                    self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: (self.publisher?.id)!)
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    print("Permission authorizeAudio denied")
+                    if let callbackJoin = callback {
+                        callbackJoin(false, nil)
+                    } else {
+                        self.delegate?.janusVideoRoom(janusRoom: self, fatalErrorWithID: .permission)
                     }
                 }
-            }
+            })
         })
+//        self.publisher?.joinRoom(withRoomId: roomId, username: username, callback: { [weak self](error) in
+//            if let callback = callback {
+//                callback(error == nil, error)
+//            } else {
+//                asyncInMainThread {
+//                    if let self = self {
+//                        self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: (self.publisher?.id)!)
+//                    }
+//                }
+//            }
+//        })
     }
     
     func leaveRoom(callback: (() -> ())?) {
         for listenRole in remotes.values {
             listenRole.leaveRoom {
 //                let _ = self?.stopPreView(withUid: listenRole.id!)
+                DispatchQueue.main.async {
+                    listenRole._renderView?.removeFromSuperview()
+                    listenRole.videoTrack = nil
+                    listenRole._renderView = nil
+                }
             }
         }
         publisher?.leaveRoom { [weak self] in
@@ -178,7 +198,7 @@ class JanusVideoRoom: NSObject {
     }
     
     deinit {
-        self.publisher?.janus.destroySession()
+        self.publisher?.janus?.destroySession()
     }
 }
 
@@ -216,8 +236,8 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     func janusRole(role: JanusRole, leaveRoomWithResult error: Error?) {
         if let publisher = self.publisher {
             if role.id == publisher.id {
-                publisher.janus.destroySession()
-                publisher.janus.stop()
+                publisher.janus?.destroySession()
+                publisher.janus?.stop()
             }
         }
         self.remotes.removeAll()
@@ -255,24 +275,51 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     func janusRole(role: JanusRole, remoteUnPublishedWithUid uid: Int) {
         self.delegate?.janusVideoRoom(janusRoom: self, remoteUnPublishedWithUid: uid)
     }
+    
+    func janusRole(role: JanusRole, didReceiveData data: Data) {
+        self.delegate?.janusVideoRoom(janusRoom: self, didReceiveData: data)
+    }
 }
 
+extension AVCaptureDevice {
+    enum AuthorizationStatus {
+        case justDenied
+        case alreadyDenied
+        case restricted
+        case justAuthorized
+        case alreadyAuthorized
+        case unknown
+    }
 
-// MARK: - CameraSessionDelegate
-extension JanusVideoRoom: CameraSessionDelegate {
-    func didOutput(_ sampleBuffer: CMSampleBuffer) {
-        if self.useCustomCapturer {
-            if let cvpixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer){
-                if let buffer = self.cameraFilter?.apply(cvpixelBuffer){
-                    self.publisher?.captureCurrentFrame(sampleBuffer: buffer)
-                    return
-                }else{
-                    print("no applied image")
+    class func authorizeVideo(completion: ((AuthorizationStatus) -> Void)?) {
+        AVCaptureDevice.authorize(mediaType: AVMediaType.video, completion: completion)
+    }
+
+    class func authorizeAudio(completion: ((AuthorizationStatus) -> Void)?) {
+        AVCaptureDevice.authorize(mediaType: AVMediaType.audio, completion: completion)
+    }
+
+    private class func authorize(mediaType: AVMediaType, completion: ((AuthorizationStatus) -> Void)?) {
+        let status = AVCaptureDevice.authorizationStatus(for: mediaType)
+        switch status {
+        case .authorized:
+            completion?(.alreadyAuthorized)
+        case .denied:
+            completion?(.alreadyDenied)
+        case .restricted:
+            completion?(.restricted)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: mediaType, completionHandler: { (granted) in
+                DispatchQueue.main.async {
+                    if granted {
+                        completion?(.justAuthorized)
+                    } else {
+                        completion?(.justDenied)
+                    }
                 }
-            }else{
-                print("no pixelbuffer")
-            }
-            self.publisher?.captureCurrentFrame(sampleBuffer: sampleBuffer)
+            })
+        @unknown default:
+            completion?(.unknown)
         }
     }
 }

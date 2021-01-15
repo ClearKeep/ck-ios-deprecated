@@ -9,8 +9,9 @@ import Foundation
 import RealmSwift
     
 class RealmGroup: Object {
-    @objc dynamic var groupId: String = ""
+    @objc dynamic var groupId: Int64 = 0
     @objc dynamic var groupName: String = ""
+    @objc dynamic var groupToken: String = ""
     @objc dynamic var avatarGroup: String = ""
     @objc dynamic var groupType: String = ""
     var lstClientID = List<String>()

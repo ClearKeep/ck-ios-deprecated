@@ -40,7 +40,7 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    func updateLastMessage(groupID:String ,lastMessage: Data){
+    func updateLastMessage(groupID: Int64 ,lastMessage: Data){
         if let index = all.firstIndex(where: { $0.groupID == groupID }) {
             if var group = all.filter({$0.groupID == groupID}).first {
                 group.lastMessage = lastMessage
@@ -78,11 +78,20 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    func isExistGroup(groupId: String) -> Bool{
+    func isExistGroup(groupId: Int64) -> Bool{
         return !all.filter{$0.groupID == groupId}.isEmpty
     }
     
-    func filterGroup(groupId: String) -> GroupModel?{
+    func getGroup(clientId: String, type: String = "peer") -> GroupModel? {
+        return all.filter{group in
+            if group.lstClientID.contains(clientId), group.groupType == type {
+                return true
+            }
+            return false
+        }.first
+    }
+    
+    func filterGroup(groupId: Int64) -> GroupModel?{
         let group = self.all.filter{$0.groupID == groupId}.first
         return group
     }
@@ -137,6 +146,7 @@ class RealmGroups: ObservableObject {
         
         let group = GroupModel(groupID: realmGroup.groupId,
                                groupName: realmGroup.groupName,
+                               groupToken: realmGroup.groupToken,
                                groupAvatar: realmGroup.avatarGroup,
                                groupType: realmGroup.groupType,
                                createdByClientID: realmGroup.createdByClientID,
@@ -160,6 +170,7 @@ class RealmGroups: ObservableObject {
 
     private func copyGroupAttributes(from group: GroupModel, to realmGroup: RealmGroup) {
         realmGroup.groupName = group.groupName
+        realmGroup.groupToken = group.groupToken
         realmGroup.avatarGroup = group.groupAvatar
         realmGroup.groupType = group.groupType
         realmGroup.createdByClientID = group.createdByClientID

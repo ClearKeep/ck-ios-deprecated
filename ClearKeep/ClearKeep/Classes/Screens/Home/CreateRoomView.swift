@@ -77,6 +77,7 @@ extension CreateRoomView {
                 DispatchQueue.main.async {
                     let group = GroupModel(groupID: result.groupID,
                                            groupName: result.groupName,
+                                           groupToken: result.groupRtcToken,
                                            groupAvatar: result.groupAvatar,
                                            groupType: result.groupType,
                                            createdByClientID: result.createdByClientID,

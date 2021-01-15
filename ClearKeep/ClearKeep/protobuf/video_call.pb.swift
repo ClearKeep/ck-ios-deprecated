@@ -40,7 +40,7 @@ struct VideoCall_VideoCallRequest {
 
   var clientID: String = String()
 
-  var groupID: String = String()
+  var groupID: Int64 = 0
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -59,8 +59,11 @@ extension VideoCall_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
       default: break
       }
     }
@@ -89,9 +92,12 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 2: try decoder.decodeSingularStringField(value: &self.groupID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
       default: break
       }
     }
@@ -101,8 +107,8 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
-    if !self.groupID.isEmpty {
-      try visitor.visitSingularStringField(value: self.groupID, fieldNumber: 2)
+    if self.groupID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }

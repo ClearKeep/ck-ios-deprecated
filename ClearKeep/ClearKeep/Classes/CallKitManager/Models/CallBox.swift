@@ -20,9 +20,12 @@ final class CallBox: NSObject {
 
     // MARK: Metadata Properties
     let uuid: UUID
-    var username: String = ""
+    let clientId: String
+    var groupToken: String?
+    var clientName: String?
+    var roomId: Int64 = 0
+    var avatar: String?
     let isOutgoing: Bool
-    var handle: String?
     var status = CallStatus.calling
 
     // MARK: Call State Properties
@@ -103,8 +106,9 @@ final class CallBox: NSObject {
 
     // MARK: Initialization
 
-    init(uuid: UUID, isOutgoing: Bool = false) {
+    init(uuid: UUID, clientId: String, isOutgoing: Bool = false) {
         self.uuid = uuid
+        self.clientId = clientId
         self.isOutgoing = isOutgoing
     }
 
@@ -118,12 +122,12 @@ final class CallBox: NSObject {
     func startCall(withAudioSession audioSession: AVAudioSession?, completion: ((_ success: Bool) -> Void)?) {
 //        OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance(with: audioSession))
         if videoRoom == nil {
-            videoRoom = JanusVideoRoom(delegate: self)
+            videoRoom = JanusVideoRoom(delegate: self, token: groupToken)
         }
         canStartCall = completion
 
         hasStartedConnecting = true
-        videoRoom?.publisher?.janus.connect(completion: { (error) in
+        videoRoom?.publisher?.janus?.connect(completion: { (error) in
             if let error = error {
                 print(error.localizedDescription)
                 completion?(false)
@@ -137,7 +141,7 @@ final class CallBox: NSObject {
     func answerCall(withAudioSession audioSession: AVAudioSession, completion: ((_ success: Bool) -> Void)?) {
 //        OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance(with: audioSession))
         if videoRoom == nil {
-            videoRoom = JanusVideoRoom(delegate: self)
+            videoRoom = JanusVideoRoom(delegate: self, token: groupToken)
         }
 //        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
 //            appDelegate.viewRouter.current = .callVideo
@@ -145,7 +149,7 @@ final class CallBox: NSObject {
         canAnswerCall = completion
         
         hasStartedConnecting = true
-        videoRoom?.publisher?.janus.connect(completion: { (error) in
+        videoRoom?.publisher?.janus?.connect(completion: { (error) in
             if let error = error {
                 print(error.localizedDescription)
                 completion?(false)
@@ -156,9 +160,10 @@ final class CallBox: NSObject {
     }
     
     func startJoinRoom() {
-        videoRoom?.joinRoom(withRoomId: 1234, username: "", completeCallback: { [weak self](isSuccess, error) in
-            if let error = error {
-                print(error.localizedDescription)
+        videoRoom?.joinRoom(withRoomId: roomId, username: "", completeCallback: { [weak self](isSuccess, error) in
+            if error != nil || !isSuccess {
+                print(error?.localizedDescription ?? "")
+                CallManager.shared.end(call: self!)
             } else {
                 self?.status = .ringing
                 self?.stateDidChange?()
@@ -174,29 +179,59 @@ final class CallBox: NSObject {
         
         if let videoRoom = self.videoRoom {
             videoRoom.leaveRoom(callback: nil)
+            videoRoom.leaveRoom {
+                videoRoom.publisher?.delegate = nil
+                videoRoom.publisher = nil
+            }
         }
         videoRoom = nil
         hasEnded = true
+    }
+    
+    func camera(isEnable: Bool) {
+        sendData(dictData: ["action": "camera", "enable": isEnable])
+    }
+    
+    func micro(isEnable: Bool) {
+        sendData(dictData: ["action": "micro", "enable": isEnable])
+    }
+    
+    func sendData(dictData: [String: Any]) {
+        var data: Data? = nil
+        do {
+            data = try JSONSerialization.data(withJSONObject: dictData, options: .prettyPrinted)
+            videoRoom?.publisher?.sendData(data!)
+        } catch {
+            debugPrint("error: \(error.localizedDescription)")
+        }
     }
 }
 
 extension CallBox: JanusVideoRoomDelegate {
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteLeaveWithID clientId: Int) {
-        
+        CallManager.shared.end(call: self)
+        print("=================>>>>>>>>>>>>>>>>>>> remoteLeaveWithID")
     }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, didJoinRoomWithId clientId: Int) {
         status = .ringing
         self.stateDidChange?()
+        print("=================>>>>>>>>>>>>>>>>>>> didJoinRoomWithId")
     }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteUnPublishedWithUid clientId: Int) {
         CallManager.shared.end(call: self)
+        print("=================>>>>>>>>>>>>>>>>>>> remoteUnPublishedWithUid")
     }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, firstFrameDecodeWithSize size: CGSize, uId: Int) {
         status = .answered
         self.stateDidChange?()
+        print("=================>>>>>>>>>>>>>>>>>>> firstFrameDecodeWithSize")
+    }
+    
+    func janusVideoRoom(janusRoom: JanusVideoRoom, fatalErrorWithID code: RTCErrorCode) {
+        CallManager.shared.end(call: self)
     }
 }
 

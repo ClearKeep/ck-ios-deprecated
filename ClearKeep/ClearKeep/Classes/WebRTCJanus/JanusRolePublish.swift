@@ -10,15 +10,18 @@ import UIKit
 import WebRTC
 
 class JanusRolePublish: JanusRole {
-    var videoRenderView = RTCEAGLVideoView()
-    private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (false, false, false)
+    var videoRenderView: RTCEAGLVideoView?
+    private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (true, true, true)
     private var customFrameCapturer: Bool = false
     var localVideoTrack: RTCVideoTrack!
-    private var localAudioTrack: RTCAudioTrack!
-    var cameraDevicePosition: AVCaptureDevice.Position = .front
-    var videoCapturer: RTCVideoCapturer!
+    var localAudioTrack: RTCAudioTrack!
+    
     let rtcAudioSession =  RTCAudioSession.sharedInstance()
     let audioQueue = DispatchQueue(label: "audio")
+    var cameraSession: CameraSession?
+    var cameraFilter: CameraFilter?
+    var videoCapturer: RTCVideoCapturer!
+    var cameraDevicePosition: AVCaptureDevice.Position = .front
     
     override init(withJanus janus: Janus, delegate: JanusRoleDelegate? = nil) {
         super.init(withJanus: janus, delegate: delegate)
@@ -47,23 +50,30 @@ class JanusRolePublish: JanusRole {
     }
     
     func setup(customFrameCapturer: Bool = true) {
-        channels.video = true
-        channels.audio = true
         self.customFrameCapturer = customFrameCapturer
-        videoRenderView.delegate = self
+        print("--- use custom capturer ---")
+        if self.customFrameCapturer {
+            self.cameraSession = CameraSession()
+            self.cameraSession?.delegate = self
+            self.cameraSession?.setupSession()
+            
+            self.cameraFilter = CameraFilter()
+        }
+        
+        videoRenderView = RTCEAGLVideoView()
+        videoRenderView?.delegate = self
         
         setupLocalTracks()
-        
         configureAudioSession()
         
         if self.channels.video {
             startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
-            self.localVideoTrack?.add(self.videoRenderView)
+            self.localVideoTrack?.add(self.videoRenderView!)
         }
     }
 
     func setupLocalViewFrame(frame: CGRect) {
-        videoRenderView.frame = frame
+        videoRenderView?.frame = frame
     }
     
     func captureCurrentFrame(sampleBuffer: CMSampleBuffer){
@@ -78,8 +88,40 @@ class JanusRolePublish: JanusRole {
         }
     }
     
+    // MARK: Data Channels
+    private func createDataChannel() -> RTCDataChannel? {
+        let config = RTCDataChannelConfiguration()
+        guard let dataChannel = self.peerConnection.dataChannel(forLabel: "WebRTCData", configuration: config) else {
+            debugPrint("Warning: Couldn't create data channel.")
+            return nil
+        }
+        return dataChannel
+    }
+    
+    func sendData(_ data: Data) {
+        let buffer = RTCDataBuffer(data: data, isBinary: true)
+        self.remoteDataChannel?.sendData(buffer)
+    }
+    
+    func setupPeerStream() {
+        // Video
+        if self.channels.video {
+            self.peerConnection.add(localVideoTrack, streamIds: ["stream0"])
+        }
+        // Audio
+        if self.channels.audio {
+            self.peerConnection.add(localAudioTrack, streamIds: ["stream0"])
+        }
+        // Data
+        if self.channels.datachannel,
+           let dataChannel = createDataChannel() {
+            dataChannel.delegate = self
+            self.localDataChannel = dataChannel
+        }
+    }
+    
     // MARK: - Override function
-    override func joinRoom(withRoomId roomId: Int, username: String?, callback: @escaping RoleJoinRoomCallback) {
+    override func joinRoom(withRoomId roomId: Int64, username: String?, callback: @escaping RoleJoinRoomCallback) {
         if !self.attached {
             self.attach { [weak self](error) in
                 if let error = error {
@@ -97,12 +139,7 @@ class JanusRolePublish: JanusRole {
             return
         }
         
-        if self.channels.video {
-            self.peerConnection.add(localVideoTrack, streamIds: ["stream0"])
-        }
-        if self.channels.audio {
-            self.peerConnection.add(localAudioTrack, streamIds: ["stream0"])
-        }
+        setupPeerStream()
                 
         super.joinRoom(withRoomId: roomId, username: username) { [weak self](error) in
             if error == nil {
@@ -115,6 +152,13 @@ class JanusRolePublish: JanusRole {
     override func leaveRoom(callback: @escaping RoleLeaveRoomCallback) {
         super.leaveRoom {
             self.destroyRTCPeer()
+            DispatchQueue.main.async {
+                self.videoRenderView?.removeFromSuperview()
+                self.localVideoTrack = nil
+                self.videoRenderView = nil
+                
+//                self.stopVideoCapture()
+            }
             callback()
         }
     }
@@ -139,7 +183,7 @@ class JanusRolePublish: JanusRole {
             if let publishers = msg["publishers"] as? [[String: Any]] {
                 for item in publishers {
                     if let delegate = self.delegate as? JanusRoleListenDelegate {
-                        let listener = JanusRoleListen.role(withDict: item, janus: self.janus, delegate: delegate)
+                        let listener = JanusRoleListen.role(withDict: item, janus: self.janus!, delegate: delegate)
                         listener.privateId = self.privateId
                         listener.opaqueId = self.opaqueId
                         delegate.janusRole(role: self, didJoinRemoteRole: listener)
@@ -200,6 +244,14 @@ class JanusRolePublish: JanusRole {
         return videoTrack
     }
     
+    private func stopVideoCapture() {
+        if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
+            capturer.captureSession.stopRunning()
+        } else if let _ = self.videoCapturer as? RTCCustomFrameCapturer {
+            cameraSession?.stopSession()
+        }
+    }
+    
     private func sendOffer() {
         guard let constraints = self.mediaConstraints?.getOfferConstraints() else {
             return
@@ -218,7 +270,7 @@ class JanusRolePublish: JanusRole {
                                    "audio": NSNumber(value: true),
                                    "video": NSNumber(value: true),
                                    "bitrate": NSNumber(value: publishMediaConstraints.videoBitrate)] as [String : Any]
-                        self?.janus.send(message: msg, jsep: jsep, handleId: self!.handleId, callback: { [weak self](msg, jsep) in
+                        self?.janus?.send(message: msg, jsep: jsep, handleId: self!.handleId, callback: { [weak self](msg, jsep) in
                             if let status = msg["configured"] as? String, status == "ok" {
                                 if let jsep = jsep {
                                     self?.handleRemote(jsep: jsep)
@@ -260,7 +312,7 @@ extension JanusRolePublish: RTCVideoViewDelegate {
         if videoView.isEqual(videoRenderView){
             print("local video size changed")
             renderView = videoRenderView
-            parentView = videoRenderView.superview
+            parentView = videoRenderView?.superview
         }
 
         guard let _renderView = renderView, let _parentView = parentView else { return }
@@ -277,3 +329,33 @@ extension JanusRolePublish: RTCVideoViewDelegate {
     }
 }
 
+extension JanusRolePublish: RTCDataChannelDelegate {
+    func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
+        debugPrint("dataChannel did change state: \(dataChannel.readyState)")
+    }
+    
+    func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
+        if let delegateRole = self.delegate as? JanusRoleDelegate {
+            delegateRole.janusRole(role: self, didReceiveData: buffer.data)
+        }
+    }
+}
+
+// MARK: - CameraSessionDelegate
+extension JanusRolePublish: CameraSessionDelegate {
+    func didOutput(_ sampleBuffer: CMSampleBuffer) {
+        if self.customFrameCapturer {
+            if let cvpixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer){
+                if let buffer = self.cameraFilter?.apply(cvpixelBuffer){
+                    self.captureCurrentFrame(sampleBuffer: buffer)
+                    return
+                }else{
+                    print("no applied image")
+                }
+            }else{
+                print("no pixelbuffer")
+            }
+            self.captureCurrentFrame(sampleBuffer: sampleBuffer)
+        }
+    }
+}

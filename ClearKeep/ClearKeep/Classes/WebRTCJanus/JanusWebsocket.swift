@@ -78,7 +78,7 @@ class JanusWebSocket: WebSocket {
     
     override func send(message msg: [String: Any]?) {
         guard var msgDict = msg else { return }
-        msgDict["token"] = "a1b2c3d4"
+//        msgDict["token"] = "a1b2c3d4"
         print(String(format: "Message send: %@", msgDict))
         var json: Data? = nil
         do {

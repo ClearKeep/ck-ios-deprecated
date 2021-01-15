@@ -17,18 +17,18 @@ class Janus: NSObject {
     var pluginHandlers = [NSNumber: JanusPluginHandleProtocol]()
     var delayReq = [[String: Any]]()
     
-    let token: String? = nil
+    var token: String? = nil
     let apiSecret: String? = nil
     var keepAliveTimer: Timer? = nil
     let keepAliveInterval: Int
     var connectCallback: ((Error?) -> ())?
     
-    init(withServer server: URL, delegate: JanusDelegate? = nil) {
+    init(withServer server: URL, delegate: JanusDelegate? = nil, token: String?) {
         self.server = server
         self.delegate = delegate
+        self.token = token
         self.janusWebSocket = JanusWebSocket(withServer: server)
         
-//        let _ = self.janusWebSocket?.start()
         keepAliveInterval = 30000
         super.init()
         self.janusWebSocket?.delegate = self
@@ -54,6 +54,9 @@ class Janus: NSObject {
         params["transaction"] = transaction
         let callback: JanusRequestCallback = { [weak self] msg in
             self?.handleCreateSessionCallback(msg: msg)
+        }
+        if let token = self.token {
+            params["token"] = token
         }
         janusTransactions[transaction] = callback
         janusWebSocket?.send(message: params)
@@ -200,11 +203,11 @@ class Janus: NSObject {
         }
         let callbackJanus: JanusRequestCallback = { msg in
             if let janus = msg["janus"] as? String, janus == "error",
-                let error = msg["error"] as? [String: Any] {
+               let error = msg["error"] as? [String: Any] {
                 let data: [String : Any] = ["error_code": error["code"] ?? "", "error_reason": error["reason"] ?? ""]
                 callback(data, nil)
             } else if let pluginData = msg["plugindata"] as? [String: Any],
-                let data = pluginData["data"] as? [String: Any] {
+                      let data = pluginData["data"] as? [String: Any] {
                 let jsep = msg["jsep"] as? [String : Any]
                 callback(data, jsep)
             } else {
@@ -225,18 +228,21 @@ class Janus: NSObject {
             transaction = randomString(withLength: 12)
         }
         
-        let params = ["janus": JanusMessage.trickle.rawValue,
+        var params = ["janus": JanusMessage.trickle.rawValue,
                       "candidate": candidate,
                       "transaction": transaction,
                       "handle_id": handleId,
                       "session_id": NSNumber(value: sessionId)] as [String : Any]
+        if let token = self.token {
+            params["token"] = token
+        }
         janusWebSocket?.send(message: params)
     }
     
     // MARK: - Private function
     private func handleCreateSessionCallback(msg: [String: Any]) {
         if let janus = msg["janus"] as? String,
-            janus == "success" {
+           janus == "success" {
             if let sessionData = msg["data"] as? [String: Any] {
                 self.sessionId = sessionData["id"] as! Int
                 if self.keepAliveInterval > 0 {
@@ -262,9 +268,9 @@ class Janus: NSObject {
     
     private func handleAttachPluginCallback(plugin: JanusPluginHandleProtocol, pluginCallback: AttachCallback,  msg: [String: Any]) {
         if let janus = msg["janus"] as? String,
-            janus == "success" {
+           janus == "success" {
             if let sessionData = msg["data"] as? [String: Any],
-                let id = sessionData["id"] as? Int {
+               let id = sessionData["id"] as? Int {
                 let handleId = NSNumber(value: id)
                 self.pluginHandlers[handleId] = plugin
                 plugin.handleId = handleId
@@ -273,8 +279,8 @@ class Janus: NSObject {
                 self.delegate?.janus(self, createComplete: JanusResultError.jsonErr(msg: "json error"))
             }
         } else if let janus = msg["janus"] as? String,
-            janus == "error",
-            let error = msg["error"] as? [String: Any] {
+                  janus == "error",
+                  let error = msg["error"] as? [String: Any] {
             pluginCallback(0, JanusResultError.codeErr(code: error["code"] as! Int, desc: error["reason"] as? String))
         } else {
             debugPrint("no handle")
@@ -284,9 +290,12 @@ class Janus: NSObject {
     @objc private func sessionKeepAlive(timer: Timer) {
         if sessionId != 0, let websocket = janusWebSocket {
             let transaction = randomString(withLength: 12)
-            let params = ["janus": JanusMessage.keepalive.rawValue,
-                           "session_id": NSNumber(value: sessionId),
-                           "transaction": transaction] as [String : Any]
+            var params = ["janus": JanusMessage.keepalive.rawValue,
+                          "session_id": NSNumber(value: sessionId),
+                          "transaction": transaction] as [String : Any]
+            if let token = self.token {
+                params["token"] = token
+            }
             websocket.send(message: params)
         }
     }

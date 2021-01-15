@@ -28,17 +28,18 @@ struct CallView: View {
                 // local video
                 if let videoView = viewModel.localVideoView {
                     HStack(alignment: .top) {
-                        Spacer()
+                        if (viewModel.callStatus == .answered) { Spacer() }
                         VideoView(rtcVideoView: videoView)
                             .frame(width: viewModel.callStatus == .answered ? 120 : reader.frame(in: .global).width,
-                                   height: viewModel.callStatus == .answered ? 180 : reader.frame(in: .global).height)
+                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height)
                             .clipShape(Rectangle())
                             .cornerRadius(viewModel.callStatus == .answered ? 15 : 0)
                             .animation(.easeInOut(duration: 0.6))
                     }.padding(.top, viewModel.callStatus == .answered ? 45 : 0)
+                    .edgesIgnoringSafeArea(.all)
                     .padding(.horizontal)
                 }
-//
+
 //                // Info call
                 if viewModel.callStatus != .answered {
                     VStack(alignment: .center) {
@@ -83,7 +84,7 @@ struct CallView: View {
                                     .font(.system(size: 22))
                                     .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
                                     .padding()
-                                    .background(Color.white.opacity(0.2))
+                                    .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
                                     .clipShape(Circle())
                             })
                             Spacer()
@@ -107,7 +108,7 @@ struct CallView: View {
                                     .font(.system(size: 22))
                                     .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
                                     .padding()
-                                    .background(Color.white.opacity(0.2))
+                                    .background(Color.white.opacity(viewModel.microEnable ? 0.2 : 1))
                                     .clipShape(Circle())
                             })
                             Spacer()
@@ -138,9 +139,7 @@ struct CallView: View {
             .edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
             .onAppear(perform: {
-                print("onAppear video View")
                 if let callBox = CallManager.shared.calls.first {
-                    print("onAppear video View update")
                     viewModel.updateCallBox(callBox: callBox)
                 }
             })

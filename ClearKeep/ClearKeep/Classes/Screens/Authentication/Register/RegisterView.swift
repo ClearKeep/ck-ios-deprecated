@@ -53,6 +53,8 @@ extension RegisterView {
         Backend.shared.register(request) { (result) in
             if result {
                 self.viewRouter.current = .login
+            } else {
+                print("Register account fail")
             }
         }
     }

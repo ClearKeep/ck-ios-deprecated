@@ -51,7 +51,7 @@ class RealmMessages: ObservableObject {
         }
     }
     
-    func allMessageInGroup(groupId: String) -> [MessageModel] {
+    func allMessageInGroup(groupId: Int64) -> [MessageModel] {
         return all.filter{$0.groupID == groupId}
     }
     
@@ -60,7 +60,7 @@ class RealmMessages: ObservableObject {
         return !filter.isEmpty
     }
     
-    func getTimeStampPreLastMessage(groupId: String) -> Int64{
+    func getTimeStampPreLastMessage(groupId: Int64) -> Int64{
         let messageInGroup = all.filter{$0.groupID == groupId}
         var timeStamp : Int64 = 0
         if !messageInGroup.isEmpty {

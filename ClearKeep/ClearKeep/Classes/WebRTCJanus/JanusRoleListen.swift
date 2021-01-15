@@ -43,7 +43,7 @@ class JanusRoleListen: JanusRole {
         return publish
     }
     
-    override func joinRoom(withRoomId roomId: Int, username: String?, callback: @escaping RoleJoinRoomCallback) {
+    override func joinRoom(withRoomId roomId: Int64, username: String?, callback: @escaping RoleJoinRoomCallback) {
         if !self.attached, self.status == .detached, roomId > 0 {
             self.attach { [weak self](error) in
                 if let error = error {
@@ -64,7 +64,7 @@ class JanusRoleListen: JanusRole {
     }
     
     override func leaveRoom(callback: @escaping RoleLeaveRoomCallback) {
-        self.detach {
+        super.leaveRoom {
             callback()
         }
     }
@@ -108,7 +108,7 @@ class JanusRoleListen: JanusRole {
     
     func prepareLocalJsep(jsep: [String: Any]) {
         let msg = ["request": "start", "room": NSNumber(value: self.roomId!)] as [String : Any]
-        self.janus.send(message: msg, jsep: jsep, handleId: handleId) { (msg, jsep) in
+        self.janus?.send(message: msg, jsep: jsep, handleId: handleId) { (msg, jsep) in
             if let action = msg["started"] as? String, action == "ok" {
                 debugPrint("prepareLocalJsep ok")
             }

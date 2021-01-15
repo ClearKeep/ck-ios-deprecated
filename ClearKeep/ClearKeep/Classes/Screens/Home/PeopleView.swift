@@ -11,13 +11,15 @@ struct PeopleView: View {
     
     @ObservedObject var viewModel = PeopleViewModel()
     @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var groupRealms : RealmGroups
+    @EnvironmentObject var messsagesRealms : RealmMessages
     
     var body: some View {
         NavigationView {
                 List(viewModel.users){ user in
-                    NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: "", userName: user.userName)
-                                    .environmentObject(RealmGroups())
-                                    .environmentObject(RealmMessages()))
+                    NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                    .environmentObject(groupRealms)
+                                    .environmentObject(messsagesRealms))
                     {
                         Image(systemName: "person.fill")
                             .resizable()

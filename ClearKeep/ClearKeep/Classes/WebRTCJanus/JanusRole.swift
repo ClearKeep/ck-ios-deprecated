@@ -40,9 +40,13 @@ protocol JanusRoleDelegate: JanusPluginDelegate {
     func janusRole(role: JanusRole, netBrokenWithID reason: RTCNetBrokenReason)
 }
 
+extension JanusRoleDelegate {
+    func janusRole(role: JanusRole, didReceiveData data: Data) { }
+}
+
 class JanusRole: JanusPlugin {
     var id: Int?
-    var roomId: Int?
+    var roomId: Int64?
     var privateId: NSNumber?
     var pType: PublishType = .publish
     var display: String?
@@ -51,6 +55,8 @@ class JanusRole: JanusPlugin {
     
     var audioCode: String?
     var videoCode: String?
+    var localDataChannel: RTCDataChannel?
+    var remoteDataChannel: RTCDataChannel?
     
     private var _peerConnection: RTCPeerConnection?
     
@@ -98,15 +104,15 @@ class JanusRole: JanusPlugin {
             return peerConnection
         }
         let configuration = RTCConfiguration()
-        let optionalDict = ["DtlsSrtpKeyAgreement": "true"]
-        let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: optionalDict)
+        configuration.iceServers = [RTCIceServer(urlStrings: ["stun:stun.l.google.com:19302"])]
+        let constraints = JanusMediaConstraints().getPeerConnectionConstraints()
         _peerConnection = RTCFactory.shared.peerConnectionFactory().peerConnection(with: configuration,
                                                                                  constraints: constraints,
                                                                                  delegate: self)
         return _peerConnection!
     }
     
-    func joinRoom(withRoomId roomId: Int, username: String?, callback: @escaping RoleJoinRoomCallback) {
+    func joinRoom(withRoomId roomId: Int64, username: String?, callback: @escaping RoleJoinRoomCallback) {
         self.roomId = roomId
         var msg: [String: Any]
         if pType == .publish {
@@ -123,7 +129,7 @@ class JanusRole: JanusPlugin {
         }
         
         status = .joining
-        self.janus.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
+        self.janus?.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
             if let error = msg["error"] as? [String: Any],
                 let code = error["error_code"] as? Int,
                 let errMsg = msg["error"] as? String {
@@ -154,7 +160,7 @@ class JanusRole: JanusPlugin {
         let msg = ["request": "leave"]
         if status.rawValue > JanusRoleStatus.joining.rawValue {
             status = .leaveing
-            self.janus.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
+            self.janus?.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
                 self?.status = .leaved
                 if let delegate = self?.delegate as? JanusRoleDelegate {
                     delegate.janusRole(role: self!, leaveRoomWithResult: nil)
@@ -247,7 +253,7 @@ extension JanusRole: RTCPeerConnectionDelegate {
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didOpen dataChannel: RTCDataChannel) {
-        
+        self.remoteDataChannel = dataChannel
     }
 }
 

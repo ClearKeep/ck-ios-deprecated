@@ -10,7 +10,7 @@ import RealmSwift
 
 class RealmMessage: Object {
     @objc dynamic var id: String = String()
-    @objc dynamic var groupID: String = String()
+    @objc dynamic var groupID: Int64 = 0
     @objc dynamic var groupType: String = String()
     @objc dynamic var fromClientID: String = String()
     @objc dynamic var clientID: String = String()

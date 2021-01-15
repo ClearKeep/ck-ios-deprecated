@@ -26,6 +26,8 @@ class PeopleViewModel : ObservableObject, Identifiable {
                     }
                 }
                 
+            } else {
+                print("getListUser Error: \(error?.localizedDescription ?? "")")
             }
         }
     }

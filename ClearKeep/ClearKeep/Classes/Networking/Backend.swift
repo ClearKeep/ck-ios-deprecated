@@ -46,7 +46,8 @@ class Backend: ObservableObject {
     
     
     
-    init(host: String = "172.16.9.81", port: Int = 5000) {
+    init(host: String = "172.16.10.119", port: Int = 5000) {
+//    init(host: String = "172.16.0.216", port: Int = 5000) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -123,7 +124,7 @@ class Backend: ObservableObject {
     func send(_ message: Data,
               fromClientId senderId: String,
               toClientId receiveId: String = "",
-              groupId: String = "",
+              groupId: Int64 = 0,
               groupType: String = "",
               _ completion: @escaping (Message_MessageObjectResponse?) -> Void) {
         do {
@@ -264,7 +265,7 @@ class Backend: ObservableObject {
         }
     }
     
-    func getMessageInRoom(_ groupID: String,_ timeStamp: Int64 ,_ completion: @escaping (Message_GetMessagesInGroupResponse?, Error?) -> Void){
+    func getMessageInRoom(_ groupID: Int64,_ timeStamp: Int64 ,_ completion: @escaping (Message_GetMessagesInGroupResponse?, Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {
             var req = Message_GetMessagesInGroupRequest()
@@ -304,7 +305,7 @@ class Backend: ObservableObject {
         }
     }
     
-    func videoCall(_ clientID: String ,_ groupID: String , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
+    func videoCall(_ clientID: String ,_ groupID: Int64 , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {
             var req = VideoCall_VideoCallRequest()
