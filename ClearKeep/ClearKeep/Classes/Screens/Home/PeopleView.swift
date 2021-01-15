@@ -26,9 +26,9 @@ struct PeopleView: View {
                             .frame(width: 40, height: 40)
                         VStack(alignment: .leading) {
                             Text(user.userName)
-                            Text(user.id)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+//                            Text(user.id)
+//                                .font(.subheadline)
+//                                .foregroundColor(.gray)
                         }
                     }
             }

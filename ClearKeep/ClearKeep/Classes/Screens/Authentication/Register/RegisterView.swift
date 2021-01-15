@@ -27,12 +27,12 @@ struct RegisterView: View {
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
             PasswordSecureField(password: $passWord)
-            TextFieldContent(key: "FirstName", value: $firstName)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            TextFieldContent(key: "LastName", value: $lastName)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
+//            TextFieldContent(key: "FirstName", value: $firstName)
+//                .autocapitalization(.none)
+//                .disableAutocorrection(true)
+//            TextFieldContent(key: "LastName", value: $lastName)
+//                .autocapitalization(.none)
+//                .disableAutocorrection(true)
             Button(action: register) {
                 ButtonContent("REGISTER")
             }

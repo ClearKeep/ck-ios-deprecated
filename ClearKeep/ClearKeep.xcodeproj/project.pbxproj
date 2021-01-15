@@ -128,6 +128,7 @@
 		68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA517256CA23300109725 /* CreateRoomViewModel.swift */; };
 		68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */; };
 		68CFA522256CF04600109725 /* InviteMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA521256CF04600109725 /* InviteMemberViewModel.swift */; };
+		68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DE38C625B1445500554555 /* ChatBubbleView.swift */; };
 		AACA7258848E78382F486218 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */; };
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
@@ -292,6 +293,7 @@
 		68CFA517256CA23300109725 /* CreateRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewModel.swift; sourceTree = "<group>"; };
 		68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteMemberGroup.swift; sourceTree = "<group>"; };
 		68CFA521256CF04600109725 /* InviteMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteMemberViewModel.swift; sourceTree = "<group>"; };
+		68DE38C625B1445500554555 /* ChatBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleView.swift; sourceTree = "<group>"; };
 		70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -635,6 +637,7 @@
 				56205B3D25A2F57F00B39D07 /* VideoView.swift */,
 				56205B4325A2FB9100B39D07 /* GridView.swift */,
 				56205B4B25A316F400B39D07 /* ShapeCustom.swift */,
+				68DE38C625B1445500554555 /* ChatBubbleView.swift */,
 			);
 			path = ViewCustom;
 			sourceTree = "<group>";
@@ -1123,6 +1126,7 @@
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
+				68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,
 				68CBC69325932B3500997D93 /* message.pb.swift in Sources */,
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,

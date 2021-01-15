@@ -54,7 +54,7 @@ struct MessageChatView: View {
                 }
                 
             }, label: {
-                Image(systemName: "phone")
+                Image(systemName: "video")
             }))
             HStack {
                 TextFieldContent(key: "Next message", value: self.$nextMessage)
@@ -261,26 +261,36 @@ struct MessageView: View {
         let checkSender = mesgModel.fromClientID == CKSignalCoordinate.shared.myAccount?.username
         
         if checkSender {
-            
-            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
-                Text(sender()).bold().foregroundColor(Color.red)
-                Text(stringValue()).alignmentGuide(.trailing) { d in
-                    d[.leading]
-                }
+//
+//            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
+//                Text(sender()).bold().foregroundColor(Color.red)
+//                Text(stringValue()).alignmentGuide(.trailing) { d in
+//                    d[.leading]
+//                }
+//            }
+
+            return ChatBubble(direction: .left) {
+                Text(stringValue())
+                    .padding(.all, 5)
+                    .foregroundColor(Color.white)
+                    .background(Color.blue)
             }
-            
-            return senderView
             
         } else {
             
-            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
-                Text(sender()).bold().foregroundColor(Color.green)
-                Text(stringValue()).alignmentGuide(.trailing) { d in
-                    d[.trailing]
-                }
-            }
+//            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
+//                Text(sender()).bold().foregroundColor(Color.green)
+//                Text(stringValue()).alignmentGuide(.trailing) { d in
+//                    d[.trailing]
+//                }
+//            }
             
-            return receiveView
+            return ChatBubble(direction: .right) {
+                Text(stringValue())
+                    .padding(.all, 5)
+                    .foregroundColor(Color.white)
+                    .background(Color.blue)
+            }
         }
     }
     
