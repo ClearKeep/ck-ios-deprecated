@@ -136,7 +136,6 @@ class RealmMessages: ObservableObject {
                                    message: realmMessage.message,
                                    createdAt: realmMessage.createdAt,
                                    updatedAt: realmMessage.updatedAt)
-
         return message
     }
 

@@ -17,36 +17,86 @@ struct GroupMessageChatView: View {
     var recipientDeviceId: UInt32 = 0
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
-    private var groupName: String = ""
+    let groupModel: GroupModel
     
     @State var messages = [MessageModel]()
-    
-    
-    private let selectedRoom: Int64
-    
-    init(groupId: Int64, groupName: String) {
-        self.selectedRoom = groupId
-        self.groupName = groupName
+    @State var messageStr = ""
+        
+    init(groupModel: GroupModel) {
+        self.groupModel = groupModel
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
     var body: some View {
         VStack {
-            List(self.realmMessages.allMessageInGroup(groupId: self.selectedRoom), id: \.id) { model in
-                MessageView(mesgModel: model, chatWithUserID: "", chatWithUserName: "" , isGroup: true)
+            VStack{
+                // Displaying Message....
+                GeometryReader { reader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        HStack { Spacer() }
+                        //                ScrollViewReader{reader in
+                        VStack(spacing: 20){
+                            ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
+                                
+                                // Chat Bubbles...
+                                MessageBubble(msg: msg, userName: getUserName(msg: msg))
+                            }
+                            // when ever a new data is inserted scroll to bottom...
+                            //                        .onChange(of: allMessages.messages) { (value) in
+                            //                            // scrolling only user message...
+                            //                            if value.last!.myMsg{
+                            //                                reader.scrollTo(value.last?.id)
+                            //                            }
+                            //                        }
+                        }
+                        .padding([.horizontal,.bottom])
+                        .padding(.top, 25)
+                        //                }
+                    })
+                }
+                
+                HStack(spacing: 15){
+                    HStack(spacing: 15){
+                        TextField("Message", text: $messageStr)
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal)
+                    .background(Color.black.opacity(0.06))
+                    .clipShape(Capsule())
+                    
+                    // Send Button...
+                    // hiding view...
+                    if messageStr != ""{
+                        Button(action: {
+                            // appeding message...
+                            // adding animation...
+                            withAnimation(.easeIn){
+                                self.send()
+                            }
+                            messageStr = ""
+                        }, label: {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(Color.blue)
+                                // adjusting padding shape...
+                                .padding(.vertical,12)
+                                .padding(.leading,12)
+                                .padding(.trailing,17)
+                                .background(Color.black.opacity(0.07))
+                                .clipShape(Circle())
+                        })
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 8)
+                .animation(.easeOut)
             }
-            .navigationBarTitle(Text(self.groupName))
-            HStack {
-                TextFieldContent(key: "Next message", value: self.$nextMessage)
-                Button( action: {
-                    self.send()
-                }){
-                    Image(systemName: "paperplane")
-                }.padding(.trailing)
-            }.onAppear() {
+            .navigationBarTitle(Text(groupModel.groupName))
+            .background(Color.white)
+            .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 //                self.requestAllKeyInGroup(byGroupId: self.selectedRoom)
-                self.registerWithGroup(self.selectedRoom)
+                self.registerWithGroup(groupModel.groupID)
                 self.reloadData()
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
@@ -63,6 +113,39 @@ struct GroupMessageChatView: View {
                     }
                 }
             }
+            
+            
+//            List(self.realmMessages.allMessageInGroup(groupId: self.selectedRoom), id: \.id) { model in
+//                MessageView(mesgModel: model, chatWithUserID: "", chatWithUserName: "" , isGroup: true)
+//            }
+//            .navigationBarTitle(Text(self.groupName))
+//            HStack {
+//                TextFieldContent(key: "Next message", value: self.$nextMessage)
+//                Button( action: {
+//                    self.send()
+//                }){
+//                    Image(systemName: "paperplane")
+//                }.padding(.trailing)
+//            }.onAppear() {
+//                UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
+//                //                self.requestAllKeyInGroup(byGroupId: self.selectedRoom)
+//                self.registerWithGroup(self.selectedRoom)
+//                self.reloadData()
+//                self.realmMessages.loadSavedData()
+//                self.groupRealms.loadSavedData()
+//                self.getMessageInRoom()
+//            }
+//            .onDisappear(){
+//                UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
+//            }
+//            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
+//                if let userInfo = obj.userInfo,
+//                   let publication = userInfo["publication"] as? Message_MessageObjectResponse {
+//                    if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
+//                        self.decryptionMessage(publication: publication)
+//                    }
+//                }
+//            }
         }
     }
 }
@@ -70,8 +153,8 @@ struct GroupMessageChatView: View {
 extension GroupMessageChatView {
     
     func getMessageInRoom(){
-        if self.selectedRoom != 0 {
-            Backend.shared.getMessageInRoom(self.selectedRoom , self.realmMessages.getTimeStampPreLastMessage(groupId: self.selectedRoom)) { (result, error) in
+        if groupModel.groupID != 0 {
+            Backend.shared.getMessageInRoom(groupModel.groupID , self.realmMessages.getTimeStampPreLastMessage(groupId: groupModel.groupID)) { (result, error) in
                 if let result = result {
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
@@ -106,13 +189,20 @@ extension GroupMessageChatView {
         }
     }
     
+    private func getUserName(msg: MessageModel) -> String? {
+        if let mem = groupModel.lstClientID.filter{ $0.id == msg.fromClientID }.first {
+            return mem.username
+        }
+        return nil
+    }
+    
     private func reloadData(){
-        self.messages = self.realmMessages.allMessageInGroup(groupId: self.selectedRoom)
+        self.messages = self.realmMessages.allMessageInGroup(groupId: groupModel.groupID)
     }
     
     private func send() {
-        self.sendMessage(messageStr: $nextMessage.wrappedValue)
-        nextMessage = ""
+        self.sendMessage(messageStr: $messageStr.wrappedValue)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     
@@ -125,16 +215,16 @@ extension GroupMessageChatView {
                     account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
                 }
                 if let senderAccount = account {
-                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: selectedRoom) {
+                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupModel.groupID) {
                         let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                                  groupId: self.selectedRoom,
+                                                                                  groupId: groupModel.groupID,
                                                                                   name: publication.fromClientID,
                                                                                   deviceId: UInt32(senderAccount.deviceId))
                         let messageDecryption = String(data: decryptedData, encoding: .utf8)
                         print("Message decryption: \(messageDecryption ?? "Empty error")")
                         
                         DispatchQueue.main.async {
-                            self.groupRealms.updateLastMessage(groupID: self.selectedRoom, lastMessage: decryptedData)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData)
                             let post = MessageModel(id: publication.id,
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
@@ -149,14 +239,14 @@ extension GroupMessageChatView {
                         self.reloadData()
                         return
                     }else {
-                        requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
+                        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
                     }
                 }else {
-                    requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
+                    requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
                 }
             } catch {
                 print("Decryption message error: \(error)")
-                requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
+                requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
             }
 //            requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
         }
@@ -215,10 +305,10 @@ extension GroupMessageChatView {
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             do {
                 guard let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
-                                                                                   groupId: self.selectedRoom,
+                                                                                   groupId: groupModel.groupID,
                                                                                    name: myAccount.username,
                                                                                    deviceId: UInt32(myAccount.deviceId)) else { return }
-                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: self.selectedRoom, groupType: "group") { (result) in
+                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: groupModel.groupID, groupType: "group") { (result) in
                     if let result = result {
                         DispatchQueue.main.async {
                             let post = MessageModel(id: result.id,
@@ -230,11 +320,11 @@ extension GroupMessageChatView {
                                                     createdAt: result.createdAt,
                                                     updatedAt: result.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: self.selectedRoom, lastMessage: payload)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload)
                             self.reloadData()
                         }
                     }
-                    print("Send message to group \(self.selectedRoom) result")
+                    print("Send message to group \(groupModel.groupID) result")
                 }
             } catch {
                 print("Send message error: \(error)")
@@ -252,7 +342,7 @@ extension GroupMessageChatView {
             
             if !ourAccountEncryptMng.senderKeyExistsForUsername(userName,
                                                                 deviceId: deviceID,
-                                                                groupId: self.selectedRoom) {
+                                                                groupId: groupModel.groupID) {
                 do {
                     let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
                     Backend.shared.authenticator.registerGroup(byGroupId: groupId,
@@ -301,8 +391,8 @@ extension GroupMessageChatView {
     
 }
 
-struct GroupMessageChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        GroupMessageChatView(groupId: 0 , groupName: "").environmentObject(RealmGroup()).environmentObject(RealmMessages())
-    }
-}
+//struct GroupMessageChatView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        GroupMessageChatView(GroupModel()).environmentObject(RealmGroup()).environmentObject(RealmMessages())
+//    }
+//}

@@ -100,13 +100,22 @@ struct MultipleSelectionRow: View {
     
     var body: some View {
         HStack {
+            Image(systemName: "person.circle.fill")
+                .resizable()
+                .frame(width: 30, height: 30)
+                .padding(.top, 6)
+                .padding(.bottom, 6)
+                .padding(.horizontal)
             Text(self.people.userName)
-                .font(.title)
+                .font(.body)
                 .fontWeight(.bold)
             Spacer()
             if self.isSelected {
                 Spacer()
-                Image(systemName: "checkmark").foregroundColor(.blue)
+                Image(systemName: "checkmark.circle.fill")
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.blue)
             }
         }.onTapGesture(count: 1, perform: {
             if self.isSelected {

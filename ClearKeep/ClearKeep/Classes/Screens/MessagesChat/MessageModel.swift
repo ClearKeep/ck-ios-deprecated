@@ -24,6 +24,31 @@ struct MessageModel: Identifiable {
     var createdAt: Int64 = 0
 
     var updatedAt: Int64 = 0
+    
+    var myMsg: Bool = true
+    
+    var photo: Data?
+    
+    init(id: String,
+         groupID: Int64,
+         groupType: String,
+         fromClientID: String,
+         clientID: String,
+         message: Data,
+         createdAt: Int64,
+         updatedAt: Int64) {
+        self.id = id
+        self.groupID = groupID
+        self.groupType = groupType
+        self.fromClientID = fromClientID
+        self.clientID = clientID
+        self.message = message
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            myMsg = myAccount.username == fromClientID
+        }
+    }
 }
 
 protocol MessageChats: ObservableObject{

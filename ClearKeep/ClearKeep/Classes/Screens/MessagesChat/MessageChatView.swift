@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
+import TTProgressHUD
 
 struct MessageChatView: View {
     
-    @State private var nextMessage: String = ""
     @State var isShowCall = false
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
@@ -25,6 +25,9 @@ struct MessageChatView: View {
     @State var myGroupID: Int64 = 0
     
     @State var messages = [MessageModel]()
+    @State var messageStr = ""
+    @State var hudVisible = false
+    private let scrollingProxy = ListScrollingProxy()
     
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
@@ -32,59 +35,169 @@ struct MessageChatView: View {
         self.groupType = groupType
         self.groupId = groupID
         
-//        self.viewModel = MessageChatViewModel(clientId: clientId, groupId: groupID, groupType: groupType)
-//        self.myGroupID = self.viewModel.groupId
+        //        self.viewModel = MessageChatViewModel(clientId: clientId, groupId: groupID, groupType: groupType)
+        //        self.myGroupID = self.viewModel.groupId
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
     var body: some View {
         VStack {
-            List(self.realmMessages.allMessageInGroup(groupId: self.myGroupID), id: \.id) { model in
-                MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
+            // Displaying Message....
+            GeometryReader { reader in
+                ScrollView(.vertical, showsIndicators: false, content: {
+                    HStack { Spacer() }
+                    //                ScrollViewReader{reader in
+                    VStack(spacing: 20){
+                        ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
+                            // Chat Bubbles...
+                            MessageBubble(msg: msg)
+                                .background (
+                                    ListScrollingHelper(proxy: self.scrollingProxy)
+                                )
+                        }
+                        // when ever a new data is inserted scroll to bottom...
+                        //                        .onChange(of: allMessages.messages) { (value) in
+                        //                            // scrolling only user message...
+                        //                            if value.last!.myMsg{
+                        //                                reader.scrollTo(value.last?.id)
+                        //                            }
+                        //                        }
+                    }
+                    .padding([.horizontal,.bottom])
+                    .padding(.top, 25)
+                    //                }
+                })
             }
-            .navigationBarTitle(Text(self.userName))
-            .navigationBarItems(trailing: Button(action: {
-                // CallManager call
-                if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                    viewModel.callPeerToPeer(group: group)
-                } else {
-                    viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                        viewModel.callPeerToPeer(group: group)
+            
+            
+            HStack(spacing: 15){
+                HStack(spacing: 15){
+                    TextField("Message", text: $messageStr)
+                }
+                .padding(.vertical, 12)
+                .padding(.horizontal)
+                .background(Color.black.opacity(0.06))
+                .clipShape(Capsule())
+                
+                // Send Button...
+                // hiding view...
+                if messageStr != ""{
+                    Button(action: {
+                        // appeding message...
+                        // adding animation...
+                        withAnimation(.easeIn){
+                            self.send()
+                        }
+                        scrollingProxy.scrollTo(.end)
+                        messageStr = ""
+                    }, label: {
+                        Image(systemName: "paperplane.fill")
+                            .font(.system(size: 22))
+                            .foregroundColor(Color.blue)
+                            // adjusting padding shape...
+                            .padding(.vertical,12)
+                            .padding(.leading,12)
+                            .padding(.trailing,17)
+                            .background(Color.black.opacity(0.07))
+                            .clipShape(Circle())
+                    })
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+            .animation(.easeOut)
+        }
+        .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .navigationBarTitle(Text(self.userName))
+        .navigationBarItems(trailing: Button(action: {
+            hudVisible = true
+            // CallManager call
+            if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                viewModel.callPeerToPeer(group: group) {
+                    hudVisible = false
+                }
+            } else {
+                viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
+                    viewModel.callPeerToPeer(group: group) {
+                        hudVisible = false
                     }
                 }
-                
-            }, label: {
-                Image(systemName: "video")
-            }))
-            HStack {
-                TextFieldContent(key: "Next message", value: self.$nextMessage)
-                Button( action: {
-                    self.send()
-                }){
-                    Image(systemName: "paperplane")
-                }.padding(.trailing)
-            }.onAppear() {
-                UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
-                viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
-                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                    viewModel.groupId = group.groupID
-                }
-                self.myGroupID = viewModel.groupId
-                self.viewModel.requestBundleRecipient(byClientId: self.clientId)
-                self.realmMessages.loadSavedData()
-                self.groupRealms.loadSavedData()
-                self.reloadData()
-                self.getMessageInRoom()
             }
-            .onDisappear(){
-                UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+            
+        }, label: {
+            Image(systemName: "video")
+        }))
+        // since bottom edge is ignored....
+        //        .padding(.bottom,UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+        .background(Color.white)
+        .onAppear() {
+            UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
+            viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
+            if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                viewModel.groupId = group.groupID
             }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
-                if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
-                    self.didReceiveMessage(userInfo: obj.userInfo)
-                }
+            self.myGroupID = viewModel.groupId
+            self.viewModel.requestBundleRecipient(byClientId: self.clientId)
+            self.realmMessages.loadSavedData()
+            self.groupRealms.loadSavedData()
+            self.reloadData()
+            self.getMessageInRoom()
+        }
+        .onDisappear(){
+            UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
+            if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                self.didReceiveMessage(userInfo: obj.userInfo)
             }
         }
+        //        VStack {
+        //            List(self.realmMessages.allMessageInGroup(groupId: self.myGroupID), id: \.id) { model in
+        //                MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
+        //            }
+        //            .navigationBarTitle(Text(self.userName))
+        //            .navigationBarItems(trailing: Button(action: {
+        //                // CallManager call
+        //                if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+        //                    viewModel.callPeerToPeer(group: group)
+        //                } else {
+        //                    viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
+        //                        viewModel.callPeerToPeer(group: group)
+        //                    }
+        //                }
+        //
+        //            }, label: {
+        //                Image(systemName: "video")
+        //            }))
+        //            HStack {
+        //                TextFieldContent(key: "Next message", value: self.$nextMessage)
+        //                Button( action: {
+        //                    self.send()
+        //                }){
+        //                    Image(systemName: "paperplane")
+        //                }.padding(.trailing)
+        //            }.onAppear() {
+        //                UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
+        //                viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
+        //                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+        //                    viewModel.groupId = group.groupID
+        //                }
+        //                self.myGroupID = viewModel.groupId
+        //                self.viewModel.requestBundleRecipient(byClientId: self.clientId)
+        //                self.realmMessages.loadSavedData()
+        //                self.groupRealms.loadSavedData()
+        //                self.reloadData()
+        //                self.getMessageInRoom()
+        //            }
+        //            .onDisappear(){
+        //                UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+        //            }
+        //            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
+        //                if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+        //                    self.didReceiveMessage(userInfo: obj.userInfo)
+        //                }
+        //            }
+        //        }
     }
 }
 
@@ -176,8 +289,8 @@ extension MessageChatView {
     
     
     private func send() {
-        self.sendMessage(messageStr: $nextMessage.wrappedValue)
-        nextMessage = ""
+        self.sendMessage(messageStr: $messageStr.wrappedValue)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func sendMessage(messageStr: String) {
@@ -214,6 +327,7 @@ extension MessageChatView {
                                                             updatedAt: result.updatedAt)
                                     self.realmMessages.add(message: post)
                                     self.reloadData()
+                                    self.scrollingProxy.scrollTo(.end)
                                 }
                             }
                         }
@@ -261,14 +375,14 @@ struct MessageView: View {
         let checkSender = mesgModel.fromClientID == CKSignalCoordinate.shared.myAccount?.username
         
         if checkSender {
-//
-//            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
-//                Text(sender()).bold().foregroundColor(Color.red)
-//                Text(stringValue()).alignmentGuide(.trailing) { d in
-//                    d[.leading]
-//                }
-//            }
-
+            //
+            //            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
+            //                Text(sender()).bold().foregroundColor(Color.red)
+            //                Text(stringValue()).alignmentGuide(.trailing) { d in
+            //                    d[.leading]
+            //                }
+            //            }
+            
             return ChatBubble(direction: .left) {
                 Text(stringValue())
                     .padding(.all, 5)
@@ -278,12 +392,12 @@ struct MessageView: View {
             
         } else {
             
-//            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
-//                Text(sender()).bold().foregroundColor(Color.green)
-//                Text(stringValue()).alignmentGuide(.trailing) { d in
-//                    d[.trailing]
-//                }
-//            }
+            //            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
+            //                Text(sender()).bold().foregroundColor(Color.green)
+            //                Text(stringValue()).alignmentGuide(.trailing) { d in
+            //                    d[.trailing]
+            //                }
+            //            }
             
             return ChatBubble(direction: .right) {
                 Text(stringValue())

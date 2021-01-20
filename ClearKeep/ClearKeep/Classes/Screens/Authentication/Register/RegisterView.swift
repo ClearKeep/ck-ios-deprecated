@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TTProgressHUD
 
 struct RegisterView: View {
     
@@ -16,10 +17,12 @@ struct RegisterView: View {
     @State var passWord: String = ""
     @State var firstName: String = ""
     @State var lastName: String = ""
+    @Binding var isPresentModel: Bool
+    @State var hudVisible = false
     
     var body: some View {
         VStack {
-            TitleLabel("ClearKeep")
+            TitleLabel("Register Account")
             TextFieldContent(key: "Email", value: $email)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
@@ -38,11 +41,13 @@ struct RegisterView: View {
             }
         }
         .padding()
+        .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
     }
 }
 
 extension RegisterView {
     private func register(){
+        hudVisible = true
         var request = Auth_RegisterReq()
         request.username = self.userName
         request.password = self.passWord
@@ -51,8 +56,10 @@ extension RegisterView {
         request.lastName = self.lastName
         
         Backend.shared.register(request) { (result) in
+            hudVisible = false
             if result {
-                self.viewRouter.current = .login
+//                self.viewRouter.current = .login
+                isPresentModel = false
             } else {
                 print("Register account fail")
             }
@@ -60,8 +67,8 @@ extension RegisterView {
     }
 }
 
-struct RegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegisterView()
-    }
-}
+//struct RegisterView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RegisterView(Con)
+//    }
+//}

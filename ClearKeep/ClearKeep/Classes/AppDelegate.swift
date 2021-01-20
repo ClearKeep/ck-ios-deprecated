@@ -9,6 +9,7 @@ import UIKit
 import UserNotifications
 import PushKit
 import CallKit
+import IQKeyboardManagerSwift
 
 //@main
 @UIApplicationMain
@@ -48,21 +49,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
-        
-        
-        //        let content = UNMutableNotificationContent()
-        //        content.title = "Notification Title"
-        //        content.subtitle = ""
-        //        content.body = "message"
-        //        content.sound = UNNotificationSound.default
-        //
-        //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        //
-        //        let request = UNNotificationRequest(identifier: "notification.id.01", content: content, trigger: trigger)
-        //        UNUserNotificationCenter.current().add(request)
-        
         if type == PKPushType.voIP {
-//            self.incomingCall()
+            // check login
+            if CKExtensions.getUserToken().isEmpty { return }
             let backGroundTaskIndet = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
             CallManager.shared.handleIncomingPushEvent(payload: payload) { (_) in
                 UIApplication.shared.endBackgroundTask(backGroundTaskIndet)
@@ -80,18 +69,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         return config
     }
     
-    func incomingCall(){
-        let provider = CXProvider(configuration: defaultConfig())
-        provider.setDelegate(self, queue: .none)
-        let update = CXCallUpdate()
-        update.remoteHandle = CXHandle(type: .generic, value: "ClearKeep")
-        update.hasVideo = true
-        provider.reportNewIncomingCall(with: UUID(), update: update, completion: { error in })
-    }
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
+        IQKeyboardManager.shared.enable = true
+        let list = availableVideoResolutions()
         // cheating fix callkit request failure in the first time
         let _ = CallManager.shared
         UNUserNotificationCenter.current()

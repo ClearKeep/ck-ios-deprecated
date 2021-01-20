@@ -113,9 +113,6 @@ final class CallBox: NSObject {
     }
 
     // MARK: Actions
-//    var session: OTSession?
-//    var publisher: OTPublisher?
-//    var subscriber: OTSubscriber?
     var videoRoom: JanusVideoRoom?
     
     var canStartCall: ((Bool) -> Void)?
@@ -234,67 +231,3 @@ extension CallBox: JanusVideoRoomDelegate {
         CallManager.shared.end(call: self)
     }
 }
-
-//extension SpeakerboxCall: OTSessionDelegate {
-//    func sessionDidConnect(_ session: OTSession) {
-//        print(#function)
-//
-//        hasConnected = true
-//        canStartCall?(true)
-//        canAnswerCall?(true)
-//    }
-//
-//    func sessionDidDisconnect(_ session: OTSession) {
-//        print(#function)
-//    }
-//
-//    func sessionDidBeginReconnecting(_ session: OTSession) {
-//        print(#function)
-//    }
-//
-//    func sessionDidReconnect(_ session: OTSession) {
-//        print(#function)
-//    }
-//
-//    func session(_ session: OTSession, didFailWithError error: OTError) {
-//        print(#function, error)
-//
-//        hasConnected = false
-//        canStartCall?(false)
-//        canAnswerCall?(false)
-//    }
-//
-//    func session(_ session: OTSession, streamCreated stream: OTStream) {
-//        print(#function)
-//        subscriber = OTSubscriber.init(stream: stream, delegate: self)
-//        subscriber?.subscribeToVideo = false
-//        if let subscriber = subscriber {
-//            var error: OTError?
-//            session.subscribe(subscriber, error: &error)
-//            if error != nil {
-//                print(error!)
-//            }
-//        }
-//    }
-//
-//
-//    func session(_ session: OTSession, streamDestroyed stream: OTStream) {
-//        print(#function)
-//    }
-//}
-//
-//extension SpeakerboxCall: OTPublisherDelegate {
-//    func publisher(_ publisher: OTPublisherKit, didFailWithError error: OTError) {
-//        print(#function)
-//    }
-//}
-//
-//extension SpeakerboxCall: OTSubscriberDelegate {
-//    func subscriberDidConnect(toStream subscriber: OTSubscriberKit) {
-//        print(#function)
-//    }
-//
-//    func subscriber(_ subscriber: OTSubscriberKit, didFailWithError error: OTError) {
-//        print(#function)
-//    }
-//}

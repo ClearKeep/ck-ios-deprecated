@@ -13,3 +13,4 @@
 #import "CKDevice.h"
 #import "CKAccount.h"
 #import "CKBuddy.h"
+#import "Tools.h"

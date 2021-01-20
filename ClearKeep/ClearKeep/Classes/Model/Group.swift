@@ -18,7 +18,7 @@ struct GroupModel: Identifiable , Codable {
     var createdByClientID: String
     var createdAt: Int64
     var updatedByClientID: String
-    var lstClientID : Array<String> = []
+    var lstClientID : Array<GroupMember> = []
     var updatedAt: Int64
     var lastMessageAt: Int64 = 0
     var lastMessage = Data()

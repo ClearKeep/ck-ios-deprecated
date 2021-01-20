@@ -90,12 +90,22 @@ class JanusRoleListen: JanusRole {
                         if let error = error {
                             debugPrint("peerConnection answerForConstraints error: \(error.localizedDescription)")
                         } else if let sdpDict = sdp {
-                            self?.peerConnection.setLocalDescription(sdpDict, completionHandler: { (error) in
+                            var modifiedSDP = sdpDict
+                            // test lowData mode enable
+                            let lowDataModeEnabled = false
+                            if lowDataModeEnabled {
+                                //If low data mode is enabled modify the SDP
+                                let sdpString = sdpDict.sdp
+                                let modifiedSDPString = self?.setMediaBitrates(sdp: sdpString, videoBitrate: 2000*1000, audioBitrate: 200)
+                                //Create a new SDP using the modified SDP string
+                                modifiedSDP = RTCSessionDescription(type: .answer, sdp: modifiedSDPString!)
+                            }
+                            self?.peerConnection.setLocalDescription(modifiedSDP, completionHandler: { (error) in
                                 if let error = error {
                                     debugPrint("peerConnection?.setLocalDescription error: \(error.localizedDescription)")
                                 }
                             })
-                            let jsep = ["type": "answer", "sdp": sdpDict.sdp]
+                            let jsep = ["type": "answer", "sdp": modifiedSDP.sdp]
                             self?.prepareLocalJsep(jsep: jsep)
                         }
                     })
@@ -117,7 +127,6 @@ class JanusRoleListen: JanusRole {
     
     // MARK: - UIView Render
     func setupRemoteViewFrame(frame: CGRect) {
-//        remoteRenderView?.frame = frame
         videoRenderView.frame = frame
     }
 

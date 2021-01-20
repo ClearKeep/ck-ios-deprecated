@@ -64,14 +64,15 @@ extension CreateRoomView {
     private func createRoom(){
         
         if let account = CKSignalCoordinate.shared.myAccount {
-            var lstClientID = self.selectObserver.peoples.map{$0.id}
-            lstClientID.append(account.username)
+            let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+            var lstClientID = self.selectObserver.peoples.map{ GroupMember(id: $0.id, username: $0.userName)}
+            lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
             
             var req = Group_CreateGroupRequest()
             req.groupName = self.groupName
             req.groupType = "group"
             req.createdByClientID = account.username
-            req.lstClientID = lstClientID
+            req.lstClientID = lstClientID.map{$0.id}
             
             Backend.shared.createRoom(req) { (result) in
                 DispatchQueue.main.async {

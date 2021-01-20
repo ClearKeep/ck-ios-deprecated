@@ -63,11 +63,17 @@ extension JanusRolePublish {
     }
     
     func switchCameraPosition() {
-        if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
+        if let capturer = self.videoCapturer as? RTCCameraVideoCapturer,
+           let publishConstraints = self.mediaConstraints as? JanusPublishMediaConstraints {
             capturer.stopCapture {
                 let position = (self.cameraDevicePosition == .front) ? AVCaptureDevice.Position.back : AVCaptureDevice.Position.front
                 self.cameraDevicePosition = position
-                self.startCaptureLocalVideo(cameraPositon: position, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
+                let cameraWidth = publishConstraints.resolution.width
+                let cameraHeight = publishConstraints.resolution.height
+                self.startCaptureLocalVideo(cameraPositon: position,
+                                            videoWidth: Int(cameraWidth),
+                                            videoHeight: Int(cameraHeight),
+                                            videoFps: Int(publishConstraints.fps))
             }
         } else if let _ = self.videoCapturer as? RTCCustomFrameCapturer {
             let position = (self.cameraDevicePosition == .front) ? AVCaptureDevice.Position.back : AVCaptureDevice.Position.front
@@ -76,7 +82,7 @@ extension JanusRolePublish {
         }
     }
     
-    func startCaptureLocalVideo(cameraPositon: AVCaptureDevice.Position, videoWidth: Int, videoHeight: Int?, videoFps: Int) {
+    func startCaptureLocalVideo(cameraPositon: AVCaptureDevice.Position, videoWidth: Int, videoHeight: Int, videoFps: Int) {
         if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
             var targetDevice: AVCaptureDevice?
             var targetFormat: AVCaptureDevice.Format?
@@ -97,7 +103,7 @@ extension JanusRolePublish {
                     let description = format.formatDescription as CMFormatDescription
                     let dimensions = CMVideoFormatDescriptionGetDimensions(description)
                     
-                    if dimensions.width == videoWidth && dimensions.height == videoHeight ?? 0{
+                    if dimensions.width == videoWidth && dimensions.height == videoHeight {
                         targetFormat = format
                     } else if dimensions.width == videoWidth {
                         targetFormat = format

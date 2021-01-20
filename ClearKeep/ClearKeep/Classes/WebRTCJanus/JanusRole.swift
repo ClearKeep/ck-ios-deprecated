@@ -208,6 +208,54 @@ class JanusRole: JanusPlugin {
     }
 }
 
+// MARK: - Controlling the bandwidth video
+extension JanusRole {
+    func setMediaBitrates(sdp: String, videoBitrate: Int, audioBitrate: Int) -> String {
+        return setMediaBitrate(sdp: setMediaBitrate(sdp: sdp, mediaType: "video", bitrate: videoBitrate),
+                               mediaType: "audio",
+                               bitrate: audioBitrate)
+    }
+
+    private func setMediaBitrate(sdp: String, mediaType: String, bitrate: Int) -> String {
+        var lines = sdp.components(separatedBy: "\n")
+        var line = -1
+        
+        for (index, lineString) in lines.enumerated() {
+            if lineString.hasPrefix("m=\(mediaType)") {
+                line = index
+                break
+            }
+        }
+        
+        guard line != -1 else {
+            //Couldn't find the m (media) line return the original sdp
+            print("Couldn't find the m line in SDP so returning the original sdp")
+            return sdp
+        }
+        
+        // Go to next line i.e. line after m
+        line += 1
+        
+        //Now skip i and c lines
+        while (lines[line].hasPrefix("i=") || lines[line].hasPrefix("c=")) {
+            line += 1
+        }
+        
+        let newLine = "b=AS:\(bitrate)"
+        //Check if we're on b (bitrate) line, if so replace it
+        if lines[line].hasPrefix("b") {
+            print("Replacing the b line of the SDP")
+            lines[line] = newLine
+        } else {
+            //If there's no b line, add a new b line
+            lines.insert(newLine, at: line)
+        }
+        
+        let modifiedSDP = lines.joined(separator: "\n")
+        return modifiedSDP
+    }
+}
+
 extension JanusRole: RTCPeerConnectionDelegate {
     func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
         

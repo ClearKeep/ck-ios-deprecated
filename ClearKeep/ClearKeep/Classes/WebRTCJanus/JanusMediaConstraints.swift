@@ -25,10 +25,6 @@ class JanusMediaConstraints: NSObject {
         return RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
     }
     
-    func getVideoConnstraints() -> RTCMediaConstraints? {
-        return nil
-    }
-    
     func getAnswerConstraints() -> RTCMediaConstraints {
         let mandatoryConstraints = ["OfferToReceiveAudio": videoEnable ? "true" : "false",
                                     "OfferToReceiveVideo": audioEnable ? "true" : "false"]
@@ -36,14 +32,14 @@ class JanusMediaConstraints: NSObject {
     }
     
     func getPeerConnectionConstraints() -> RTCMediaConstraints {
-        let optionalConstraints = ["DtlsSrtpKeyAgreement" : "true"]
+        let optionalConstraints = ["DtlsSrtpKeyAgreement" : "true", "googSuspendBelowMinBitrate": "false", "googCombinedAudioVideoBwe": "true"]
         return RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: optionalConstraints)
     }
 }
 
 class JanusPublishMediaConstraints: JanusMediaConstraints {
-    var pushSize: CGSize = .zero
-    var fps = 60
+    var resolution: CGSize = .zero
+    var fps: Int32 = 60
     var frequency: Int = 0
     var videoBitrate: Int = 0
     var audioBirate: Int = 0

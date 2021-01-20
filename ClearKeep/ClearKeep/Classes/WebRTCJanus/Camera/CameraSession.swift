@@ -26,7 +26,7 @@ class CameraSession: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     func setupSession(position: AVCaptureDevice.Position = .front){
         if let session = self.session { session.stopRunning() }
         self.session = AVCaptureSession()
-        session?.sessionPreset = AVCaptureSession.Preset.medium
+        session?.sessionPreset = position  == .front ? AVCaptureSession.Preset.medium : AVCaptureSession.Preset.hd1920x1080
         self.device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position)
         guard let input = try? AVCaptureDeviceInput(device: device!) else {
             print("Caught exception!")

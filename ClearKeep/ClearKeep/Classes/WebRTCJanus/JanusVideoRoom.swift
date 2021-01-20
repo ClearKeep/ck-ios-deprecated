@@ -45,23 +45,29 @@ class JanusVideoRoom: NSObject {
     private var userId: Int = 0
     private var username: String?
     private var roomId: Int64 = 0
-    var useCustomCapturer = true
+    var useCustomCapturer = false
     
     init(delegate: JanusVideoRoomDelegate? = nil, token: String?) {
         super.init()
-        let server = URL(string: "ws://172.16.1.214:8188/janus")
+        let server = URL(string: "ws://172.16.4.105:8188/janus")
         let janus = Janus(withServer: server!, token: token)
         publisher = JanusRolePublish(withJanus: janus, delegate: self)
-        publisher?.setup(customFrameCapturer: useCustomCapturer)
         
         self.delegate = delegate
         let localConfig = JanusPublishMediaConstraints()
-        localConfig.pushSize = CGSize(width: 720, height: 960)
-        localConfig.fps = 16
-        localConfig.videoBitrate = 600*1000
-        localConfig.audioBirate = 200*1000
+//        localConfig.resolution = CGSize(width: 4032, height: 3024)
+//        localConfig.resolution = CGSize(width: 1280, height: 720)
+//        localConfig.resolution = CGSize(width: 1024, height: 768)
+        localConfig.resolution = CGSize(width: 960, height: 540)
+//        localConfig.resolution = CGSize(width: 640, height: 480)
+//        localConfig.resolution = CGSize(width: 480, height: 640)
+//        localConfig.resolution = CGSize(width: 192, height: 144)
+        localConfig.fps = 45
+        localConfig.videoBitrate = 1000
+        localConfig.audioBirate = 200
         localConfig.frequency = 44100
         publisher?.mediaConstraints = localConfig
+        publisher?.setup(customFrameCapturer: useCustomCapturer)
     }
     
     func joinRoom(withRoomId roomId: Int64,
@@ -93,17 +99,6 @@ class JanusVideoRoom: NSObject {
                 }
             })
         })
-//        self.publisher?.joinRoom(withRoomId: roomId, username: username, callback: { [weak self](error) in
-//            if let callback = callback {
-//                callback(error == nil, error)
-//            } else {
-//                asyncInMainThread {
-//                    if let self = self {
-//                        self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: (self.publisher?.id)!)
-//                    }
-//                }
-//            }
-//        })
     }
     
     func leaveRoom(callback: (() -> ())?) {
@@ -128,50 +123,6 @@ class JanusVideoRoom: NSObject {
         }
     }
     
-//    func startPreView(withCanvas canvas: RTCCanvas) {
-//        var canvasChange = canvas
-//        if let publisher = self.publisher {
-//            if canvas.uid == 0 || canvas.uid == publisher.id {
-//                publisher.setupLocalViewFrame(frame: canvas.view.bounds)
-//                switch canvas.renderMode {
-//                    case .hidden:
-//                        canvas.renderView?.contentMode = .scaleAspectFill
-//                    case .fit:
-//                        canvas.renderView?.contentMode = .scaleAspectFit
-//                    case .fill:
-//                        canvas.renderView?.contentMode = .scaleToFill
-//                }
-//                canvas.renderView = publisher.localVideoView()
-//                canvas.view.addSubview(publisher.localVideoView())
-//            } else {
-//                asyncInMainThread {
-//                    let role = self.remotes[canvas.uid]
-//                    role?.renderView.removeFromSuperview()
-//                    role?.setupRemoteViewFrame(frame: canvas.view.bounds)
-//                    canvas.view.addObserver(self, forKeyPath: "frame", options: .new, context: &canvasChange)
-//                    canvas.view.addSubview((role?.renderView)!)
-//                    canvas.renderView = role?.renderView
-//                }
-//            }
-//            self.canvas[canvas.uid] = canvas
-//        }
-//    }
-//
-//    func stopPreView(withUid uid: Int) -> RTCCanvas? {
-//        if let canvas = self.canvas[uid] {
-//            if uid == 0 || uid == publisher?.id {
-//                publisher?.stopPreview()
-//            } else if let role = remotes[canvas.uid] {
-//                canvas.view.removeObserver(self, forKeyPath: "frame")
-//                canvas.view.removeFromSuperview()
-//                role.removeRemoteView()
-//                self.canvas.removeValue(forKey: uid)
-//            }
-//            return canvas
-//        }
-//        return nil
-//    }
-    
     func startListenRemote(remoteRole: JanusRoleListen) {
         self.remotes[remoteRole.id!] = remoteRole
         remoteRole.joinRoom(withRoomId: roomId, username: nil) { [weak self](error) in
@@ -185,16 +136,6 @@ class JanusVideoRoom: NSObject {
     
     func stopListenRemote(remoteRole: JanusRoleListen) {
         self.remotes.removeValue(forKey: remoteRole.id!)
-    }
-    
-    func updateRenderViewFrame(canvas: RTCCanvas) {
-        canvas.renderView?.frame = canvas.view.bounds
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "frame", let canvas = context as? RTCCanvas {
-            updateRenderViewFrame(canvas: canvas)
-        }
     }
     
     deinit {

@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param transaction a readwrite yap transaction
  @return the number of accounts removed
  */
++ (NSUInteger)removeAllAccountsInTransaction:(YapDatabaseReadWriteTransaction *)transaction;
 + (NSUInteger)removeAllAccountsOfType:(CKAccountType)accountType inTransaction:(YapDatabaseReadWriteTransaction *)transaction;
 
 @end

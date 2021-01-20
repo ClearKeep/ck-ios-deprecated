@@ -38,15 +38,16 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         self.groupType = groupType
     }
     
-    func callPeerToPeer(group: GroupModel){
+    func callPeerToPeer(group: GroupModel, completion: (() -> ())? = nil){
         if isRequesting { return }
         isRequesting = true
-        requestVideoCall(clientId: clientId, groupId: group.groupID, groupToken: group.groupToken)
+        requestVideoCall(clientId: clientId, groupId: group.groupID, groupToken: group.groupToken, completion: completion)
     }
     
-    func requestVideoCall(clientId: String, groupId: Int64, groupToken: String) {
+    func requestVideoCall(clientId: String, groupId: Int64, groupToken: String, completion: (() -> ())?) {
         Backend.shared.videoCall(clientId, groupId) { (response, error) in
             self.isRequesting = false
+            completion?()
             if let response = response {
                 if response.success {
                     DispatchQueue.main.async {
@@ -77,7 +78,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         req.lstClientID = [myAccount.username , clientId]
         
         Backend.shared.createRoom(req) { (result) in
-            let lstClientID = result.lstClient.map{$0.id}
+            let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.username)}
             
             DispatchQueue.main.async {
                 let group = GroupModel(groupID: result.groupID,

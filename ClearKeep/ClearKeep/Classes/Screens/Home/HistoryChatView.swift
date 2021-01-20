@@ -27,18 +27,18 @@ struct HistoryChatView: View {
         
         NavigationView {
             List(groupRealms.all , id: \.groupID){ group in
-                let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID),
+                let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
                                                groupID : group.groupID,
                                                userName: viewModel.getGroupName(group: group),
                                                groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                
-                let viewGroup = GroupMessageChatView(groupId: group.groupID, groupName: group.groupName).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                
+
+                let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+
                 if group.groupType == "peer" {
                     NavigationLink(destination:  viewPeer) {
-                        Image(systemName: group.groupType == "peer" ? "person.fill" : "person.3.fill")
+                        Image(systemName: "person.circle.fill")
                             .resizable()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 30, height: 30)
                         VStack(alignment: .leading) {
                             Text(viewModel.getGroupName(group: group))
                             Text(viewModel.getMessage(data: group.lastMessage))
@@ -48,9 +48,9 @@ struct HistoryChatView: View {
                     }
                 }else {
                     NavigationLink(destination:  viewGroup) {
-                        Image(systemName: group.groupType == "peer" ? "person.fill" : "person.3.fill")
+                        Image(systemName: "person.3.fill")
                             .resizable()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 30, height: 30)
                         VStack(alignment: .leading) {
                             Text(viewModel.getGroupName(group: group))
                             Text(viewModel.getMessage(data: group.lastMessage))
@@ -141,7 +141,7 @@ extension HistoryChatView {
                         
                     } else {
                         DispatchQueue.main.async {
-                            let lstClientID = groupResponse.lstClient.map{$0.id}
+                            let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.username)}
                             let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                         groupName: groupResponse.groupName,
                                                         groupToken: groupResponse.groupRtcToken,

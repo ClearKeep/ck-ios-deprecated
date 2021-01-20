@@ -84,7 +84,7 @@ class RealmGroups: ObservableObject {
     
     func getGroup(clientId: String, type: String = "peer") -> GroupModel? {
         return all.filter{group in
-            if group.lstClientID.contains(clientId), group.groupType == type {
+            if group.lstClientID.filter{$0.id == clientId}.count > 0 && group.groupType == type {
                 return true
             }
             return false
@@ -139,9 +139,13 @@ class RealmGroups: ObservableObject {
 
     private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
         
-        var lstClientId = Array<String>()
-        realmGroup.lstClientID.forEach { (id) in
-            lstClientId.append(id)
+        var lstClientId = Array<GroupMember>()
+        realmGroup.lstClientID.forEach { (str) in
+            let components = str.components(separatedBy: ",")
+            if components.count > 0 {
+                lstClientId.append(GroupMember(id: components.first!, username: components.last!))
+            }
+            
         }
         
         let group = GroupModel(groupID: realmGroup.groupId,
@@ -169,6 +173,7 @@ class RealmGroups: ObservableObject {
     }
 
     private func copyGroupAttributes(from group: GroupModel, to realmGroup: RealmGroup) {
+        let listClientId = group.lstClientID.map{"\($0.id),\($0.username)"}
         realmGroup.groupName = group.groupName
         realmGroup.groupToken = group.groupToken
         realmGroup.avatarGroup = group.groupAvatar
@@ -177,7 +182,7 @@ class RealmGroups: ObservableObject {
         realmGroup.createdAt = group.createdAt
         realmGroup.updatedByClientID = group.updatedByClientID
         realmGroup.updatedAt = group.updatedAt
-        realmGroup.lstClientID.append(objectsIn: group.lstClientID)
+        realmGroup.lstClientID.append(objectsIn: listClientId)
         realmGroup.lastMessage = group.lastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
     }

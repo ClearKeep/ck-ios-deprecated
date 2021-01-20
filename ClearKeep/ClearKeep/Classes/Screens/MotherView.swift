@@ -20,7 +20,7 @@ struct MotherView: View {
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
             case .profile: ProfileView()
-            case .register: RegisterView()
+            case .register: RegisterView(isPresentModel: .constant(true))
             case .tabview: TabViewContainer().transition(.move(edge: .trailing))
             case .search: SearchPeopleView()
             case .createRoom: CreateRoomView()

@@ -115,71 +115,6 @@ func descriptionForDescription(description: RTCSessionDescription,
                                  sdp:"")
 }
 
-//func descriptionForDescription(description: RTCSessionDescription,
-//                               preferredForDescription codec: String) -> RTCSessionDescription {
-//    let sdpStr = description.sdp
-//    let lineSep = "\n"
-//    let mLineSep = " "
-//    var lines = sdpStr.components(separatedBy: lineSep)
-//    var mLineIndex = -1
-//    for (index, item) in lines.enumerated() {
-//        if item.hasPrefix("m=video") {
-//            mLineIndex = index
-//            break
-//        }
-//    }
-//    if mLineIndex == -1 {
-//        return description
-//    }
-//
-//    // An array with all payload types with name |codec|. The payload types are
-//    // integers in the range 96-127, but they are stored as strings here.
-//    let pattern = "^a=rtpmap:(\\d+) \(codec)(/\\d+)+[\r]?$"
-//    var codecPayloadTypes = [String]()
-//    do {
-//        let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-//        for line in lines {
-//            if let codeMatches = regex.firstMatch(in: line,
-//                                                  options: .reportProgress,
-//                                                  range: NSMakeRange(0, line.count)) {
-//                let range = codeMatches.range(at: 1)
-//                let myNSString = line as NSString
-//                let subStr = myNSString.substring(with: range)
-//                codecPayloadTypes.append(subStr)
-//            }
-//        }
-//
-//        if codecPayloadTypes.count == 0 {
-//            return description
-//        }
-//
-//        let origMLineParts = lines[mLineIndex].components(separatedBy: mLineSep)
-//        let kHeaderLength = 3
-//        if origMLineParts.count <= kHeaderLength {
-//            return description
-//        }
-//        // Split the line into header and payloadTypes.
-//        let payloadRange = NSMakeRange(kHeaderLength, origMLineParts.count - kHeaderLength)
-//        let header = origMLineParts[0...kHeaderLength]
-//        var payloadTypes = origMLineParts[kHeaderLength...payloadRange.length]
-//        var newMLineParts = [String]()
-//        newMLineParts += header
-//        newMLineParts += codecPayloadTypes
-//        payloadTypes += codecPayloadTypes
-//        newMLineParts += payloadTypes
-//
-//        let newMLine = newMLineParts.joined(separator: mLineSep)
-//        lines[mLineIndex] = newMLine
-//        let mangledSdpString = lines.joined(separator: lineSep)
-//        return RTCSessionDescription(
-//            type: description.type,
-//            sdp: mangledSdpString)
-//    } catch {
-//        debugPrint("error: \(error.localizedDescription)")
-//    }
-//    return RTCSessionDescription(type: .prAnswer, sdp: "")
-//}
-
 extension String {
     subscript(_ i: Int) -> String {
         let idx1 = index(startIndex, offsetBy: i)
@@ -200,3 +135,23 @@ extension String {
     }
 }
 
+func availableVideoResolutions() -> [String]? {
+    var resolutions: Set<[NSNumber]> = []
+    for device in RTCCameraVideoCapturer.captureDevices() {
+        for format in RTCCameraVideoCapturer.supportedFormats(for: device) {
+            var resolution: CMVideoDimensions? = nil
+            if let formatDescription = format.formatDescription as? CMVideoFormatDescription {
+                resolution = CMVideoFormatDescriptionGetDimensions(formatDescription)
+            }
+            let resolutionObject = [NSNumber(value: resolution?.width ?? 0), NSNumber(value: resolution?.height ?? 0)]
+            resolutions.insert(resolutionObject)
+        }
+    }
+    var resolutionStrings: [String] = []
+    for resolution in resolutions {
+        let resolutionString = "\(resolution.first ?? 0)x\(resolution.last ?? 0)"
+        resolutionStrings.append(resolutionString)
+    }
+    
+    return resolutionStrings
+}

@@ -9,12 +9,12 @@ struct MasterView: View {
         Group {
             List {
                 ForEach(resource.rooms, id: \.self) { room in
-                    NavigationLink(
-//                        destination: MessageChatView(user: nil, groupID: 0).environmentObject(RealmGroups()).environmentObject(RealmMessages())
-                        destination: GroupMessageChatView(groupId: Int64(room.id)!, groupName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
-                    ) {
+//                    NavigationLink(
+////                        destination: MessageChatView(user: nil, groupID: 0).environmentObject(RealmGroups()).environmentObject(RealmMessages())
+//                        destination: GroupMessageChatView(groupId: Int64(room.id)!, groupName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
+//                    ) {
                         Text(room.id)
-                    }
+//                    }
                 }.onDelete { indices in
                     indices.forEach { self.resource.rooms.remove(at: $0) }
                 }

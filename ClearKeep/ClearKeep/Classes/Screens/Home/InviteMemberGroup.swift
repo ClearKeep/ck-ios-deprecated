@@ -19,7 +19,7 @@ struct InviteMemberGroup: View {
         
         List(viewModel.peoples, selection: $selectedRows){ item in
             MultipleSelectionRow(people: item, selectedItems: self.$selectedRows)
-        }
+        }.navigationBarTitle(Text("Add members"))
         .onAppear(){
             self.viewModel.getListUser()
         }.onDisappear() {

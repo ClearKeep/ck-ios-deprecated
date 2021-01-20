@@ -56,7 +56,6 @@ class JanusRolePublish: JanusRole {
             self.cameraSession = CameraSession()
             self.cameraSession?.delegate = self
             self.cameraSession?.setupSession()
-            
             self.cameraFilter = CameraFilter()
         }
         
@@ -67,7 +66,17 @@ class JanusRolePublish: JanusRole {
         configureAudioSession()
         
         if self.channels.video {
-            startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
+            if let _ = self.videoCapturer as? RTCCameraVideoCapturer,
+               let publishConstraints = self.mediaConstraints as? JanusPublishMediaConstraints {
+                startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition,
+                                       videoWidth: Int(publishConstraints.resolution.width),
+                                       videoHeight: Int(publishConstraints.resolution.height),
+                                       videoFps: Int(publishConstraints.fps))
+//                startCaptureLocalVideo(cameraPositon: self.cameraDevicePosition,
+//                                       videoWidth: 1280,
+//                                       videoHeight: 720,
+//                                       videoFps: 60)
+            }
             self.localVideoTrack?.add(self.videoRenderView!)
         }
     }
@@ -156,8 +165,6 @@ class JanusRolePublish: JanusRole {
                 self.videoRenderView?.removeFromSuperview()
                 self.localVideoTrack = nil
                 self.videoRenderView = nil
-                
-//                self.stopVideoCapture()
             }
             callback()
         }
@@ -228,9 +235,12 @@ class JanusRolePublish: JanusRole {
         return audioTrack
     }
     
-    private func createVideoTrack() -> RTCVideoTrack {
+    private func createVideoTrack() -> RTCVideoTrack? {
+        guard let publishConstraints = self.mediaConstraints as? JanusPublishMediaConstraints else { return nil }
         let videoSource = RTCFactory.shared.peerConnectionFactory().videoSource()
-        
+        videoSource.adaptOutputFormat(toWidth: Int32(publishConstraints.resolution.width),
+                                      height: Int32(publishConstraints.resolution.height),
+                                      fps: publishConstraints.fps)
         if self.customFrameCapturer {
             self.videoCapturer = RTCCustomFrameCapturer(delegate: videoSource)
         }else if TARGET_OS_SIMULATOR != 0 {
@@ -258,18 +268,33 @@ class JanusRolePublish: JanusRole {
         }
         self.peerConnection.offer(for: constraints, completionHandler: { [weak self](sdp, error) in
             if error == nil, let sdp = sdp, let videoCode = self?.mediaConstraints?.videoCode {
-                let sdpPreferringCodec = descriptionForDescription(description: sdp,
-                                                                   preferredForDescription: videoCode)
-                self?.peerConnection.setLocalDescription(sdp, completionHandler: { [weak self](error) in
+//                let sdpPreferringCodec = descriptionForDescription(description: sdp,
+//                                                                   preferredForDescription: videoCode)
+                guard let sdpPreferringCodec = Tools.description(for: sdp, preferredVideoCodec: videoCode),
+                      let publishMediaConstraints = self?.mediaConstraints as? JanusPublishMediaConstraints else {
+                    print("Tools.description fail")
+                    return
+                }
+                var modifiedSDP = sdpPreferringCodec
+                let lowDataModeEnabled = false
+                if lowDataModeEnabled {
+                    //If low data mode is enabled modify the SDP
+                    let sdpString = sdpPreferringCodec.sdp
+                    let modifiedSDPString = self?.setMediaBitrates(sdp: sdpString, videoBitrate: publishMediaConstraints.videoBitrate*1000, audioBitrate: 200)
+                    //Create a new SDP using the modified SDP string
+                    modifiedSDP = RTCSessionDescription(type: .offer, sdp: modifiedSDPString!)
+                }
+                
+                self?.peerConnection.setLocalDescription(modifiedSDP, completionHandler: { [weak self](error) in
                     if let error = error {
                         debugPrint("Publish Role setLocalDescription error: \(String(describing: error.localizedDescription))")
-                    } else if let publishMediaConstraints = self?.mediaConstraints as? JanusPublishMediaConstraints {
+                    } else {
                         
-                        let jsep = ["type": "offer", "sdp": sdpPreferringCodec.sdp]
+                        let jsep = ["type": "offer", "sdp": modifiedSDP.sdp]
                         let msg = ["request": "configure",
                                    "audio": NSNumber(value: true),
                                    "video": NSNumber(value: true),
-                                   "bitrate": NSNumber(value: publishMediaConstraints.videoBitrate)] as [String : Any]
+                                   "bitrate": NSNumber(value: publishMediaConstraints.videoBitrate*1000)] as [String : Any]
                         self?.janus?.send(message: msg, jsep: jsep, handleId: self!.handleId, callback: { [weak self](msg, jsep) in
                             if let status = msg["configured"] as? String, status == "ok" {
                                 if let jsep = jsep {
@@ -293,7 +318,7 @@ class JanusRolePublish: JanusRole {
                         if track.kind == kARDVideoTrackKind {
                             let paramsToModify = sender.parameters
                             for encoding in paramsToModify.encodings {
-                                encoding.maxBitrateBps = NSNumber(value: publishMediaConstraints.videoBitrate)
+                                encoding.maxBitrateBps = NSNumber(value: publishMediaConstraints.videoBitrate*1000)
                             }
                             sender.parameters = paramsToModify
                         }

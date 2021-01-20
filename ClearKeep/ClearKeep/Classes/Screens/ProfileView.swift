@@ -18,7 +18,7 @@ struct ProfileView: View {
     @State var firstName: String = ""
     @State var lastName: String = ""
     @State var isDisable: Bool = true
-
+    @State var hudVisible = false
 
     var body: some View {
         VStack {
@@ -31,10 +31,14 @@ struct ProfileView: View {
                 .padding(.bottom, 20)
             TextFieldProfile(key: "Email", value: $email, disable: $isDisable)
             TextFieldProfile(key: "UserName", value: $userName, disable: $isDisable)
-            TextFieldProfile(key: "FirstName", value: $firstName, disable: $isDisable)
-            TextFieldProfile(key: "LastName", value: $lastName, disable: $isDisable)
+            // Logout button
+            Button(action: logout) {
+                ButtonContent("LOGOUT")
+                    .padding(.trailing, 25)
+            }
         }
         .padding()
+        .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onAppear(){
             Backend.shared.getMyProfile { (result, error) in
                 if let result = result {
@@ -52,7 +56,19 @@ struct ProfileView: View {
     }
 
     private func logout() {
-        
+        hudVisible = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            hudVisible = false
+            // clear data user default
+            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+            // clear data user in database
+            guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
+            connectionDb.readWrite { (transaction) in
+                CKAccount.removeAllAccounts(in: transaction)
+            }
+            CKSignalCoordinate.shared.myAccount = nil
+            self.viewRouter.current = .login
+        }
     }
     
     private var confirmationSheet: ActionSheet {

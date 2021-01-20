@@ -1,5 +1,7 @@
 
 import SwiftUI
+import TTProgressHUD
+//import HUD
 
 let isGroupChat = true
 
@@ -12,27 +14,38 @@ struct LoginView: View {
     @State var authenticationDidFail: Bool = false
     @State var authenticationDidSucceed: Bool = false
     @EnvironmentObject var viewRouter: ViewRouter
-    
+    @State var isRegister: Bool = false
+    @State var hudVisible = false
     
     var body: some View {
-        VStack {
-            TitleLabel("ClearKeep")
-            UserImage(name: "ic_profile")
-            TextFieldContent(key: "Username", value: $username)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            PasswordSecureField(password: $password)
-            HStack {
-                Button(action: login) {
-                    ButtonContent("LOGIN")
-                        .padding(.trailing, 25)
+        NavigationView {
+            ZStack {
+                VStack {
+                    TitleLabel("ClearKeep")
+                    TextFieldContent(key: "Username", value: $username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                    PasswordSecureField(password: $password)
+                    HStack {
+                        Button(action: login) {
+                            ButtonContent("LOGIN")
+                                .padding(.trailing, 25)
+                        }
+                        NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
+                            Button(action: {
+//                                register()
+                                isRegister = true
+                            }) {
+                                ButtonContent("REGISTER")
+                            }
+                        }
+                        
+                    }
                 }
-                Button(action: register) {
-                    ButtonContent("REGISTER")
-                }
+                .padding()
+                .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             }
         }
-        .padding()
     }
     
 }
@@ -112,6 +125,12 @@ extension LoginView {
 //                                     groupId: 41,
 //                                     groupToken: "269a7a3fd8bc2e75785f")
 //        return
+//        hudVisible = true
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+//            self.hudVisible = false
+//        }
+//        return
+        hudVisible = true
         var request = Auth_AuthReq()
         request.username = self.username
         request.password = self.password
@@ -139,17 +158,21 @@ extension LoginView {
                                     loginForUser(clientID: userID)
                                 } else {
                                     print("Reigster Key Error \(error?.localizedDescription ?? "")")
+                                    hudVisible = false
                                 }
                             }
                         } catch {
                             print("save user error")
+                            hudVisible = false
                         }
                     }
                 } catch {
                     print(error.localizedDescription)
+                    hudVisible = false
                 }
             } else if let error = error {
                 print(error)
+                hudVisible = false
             }
         }
     }
@@ -180,15 +203,18 @@ extension LoginView {
                     if result {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
+                                hudVisible = false
                                 self.viewRouter.current = .tabview
                             }
                         }
                     }else {
                         print("requestKey Error: \(error?.localizedDescription ?? "")")
+                        hudVisible = false
                     }
                 }
             } catch {
                 print("Login with error: \(error)")
+                hudVisible = false
             }
         }
     }
