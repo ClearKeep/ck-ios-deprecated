@@ -114,12 +114,12 @@ class JanusRolePublish: JanusRole {
     
     func setupPeerStream() {
         // Video
-        if self.channels.video {
-            self.peerConnection.add(localVideoTrack, streamIds: ["stream0"])
+        if self.channels.video, let videoTrack = localVideoTrack {
+            self.peerConnection.add(videoTrack, streamIds: ["stream0"])
         }
         // Audio
-        if self.channels.audio {
-            self.peerConnection.add(localAudioTrack, streamIds: ["stream0"])
+        if self.channels.audio, let audioTrack = localAudioTrack {
+            self.peerConnection.add(audioTrack, streamIds: ["stream0"])
         }
         // Data
         if self.channels.datachannel,

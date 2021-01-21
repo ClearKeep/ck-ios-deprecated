@@ -1,7 +1,5 @@
 
 import SwiftUI
-import TTProgressHUD
-//import HUD
 
 let isGroupChat = true
 
@@ -122,9 +120,8 @@ extension LoginView {
 //        CallManager.shared.startCall(clientId: "049fbb62-6666-493c-9628-db1149cca079",
 //                                     clientName: "Luan Nguyen",
 //                                     avatar: "",
-//                                     groupId: 41,
-//                                     groupToken: "269a7a3fd8bc2e75785f")
-//        return
+//                                     groupId: 1234,
+//                                     groupToken: "a1b2c3d4") //269a7a3fd8bc2e75785f
 //        hudVisible = true
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
 //            self.hudVisible = false

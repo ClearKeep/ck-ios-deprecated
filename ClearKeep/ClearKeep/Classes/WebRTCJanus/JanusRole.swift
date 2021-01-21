@@ -99,16 +99,23 @@ class JanusRole: JanusPlugin {
         }
     }
     
+    func defaultSTUNServer() -> [RTCIceServer] {
+        let stun = RTCIceServer(urlStrings: ["stun:stun.l.google.com:19302"], username: "", credential: "")
+        let turn = RTCIceServer(urlStrings: ["turn:global.turn.twilio.com:3478"], username: "9c57f5e5e278657931c2f8e1396d1ebf6109cda6a09748d2ae0f6ba2ad4c10b1", credential: "HFqVPyZWSkjufm3moL6Wxi4+BTj1NoLQRn15R8CIHGg=")
+        return [stun, turn]
+    }
+    
     var peerConnection: RTCPeerConnection {
+        RTCInitializeSSL()
         if let peerConnection = _peerConnection {
             return peerConnection
         }
         let configuration = RTCConfiguration()
-        configuration.iceServers = [RTCIceServer(urlStrings: ["stun:stun.l.google.com:19302"])]
+        configuration.iceServers = defaultSTUNServer()
         let constraints = JanusMediaConstraints().getPeerConnectionConstraints()
         _peerConnection = RTCFactory.shared.peerConnectionFactory().peerConnection(with: configuration,
-                                                                                 constraints: constraints,
-                                                                                 delegate: self)
+                                                                                   constraints: constraints,
+                                                                                   delegate: self)
         return _peerConnection!
     }
     
@@ -121,7 +128,7 @@ class JanusRole: JanusPlugin {
                 msg["display"] = username
             }
         } else {
-            msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "listener"]
+            msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "subscriber"]
             if let id = self.id, let privateId = self.privateId {
                 msg["feed"] = NSNumber(value: id)
                 msg["private_id"] = privateId
@@ -131,8 +138,8 @@ class JanusRole: JanusPlugin {
         status = .joining
         self.janus?.send(message: msg, handleId: handleId) { [weak self](msg, jsep) in
             if let error = msg["error"] as? [String: Any],
-                let code = error["error_code"] as? Int,
-                let errMsg = msg["error"] as? String {
+               let code = error["error_code"] as? Int,
+               let errMsg = msg["error"] as? String {
                 callback(JanusResultError.codeErr(code: code, desc: errMsg))
             } else {
                 self?.status = .joined
@@ -140,8 +147,8 @@ class JanusRole: JanusPlugin {
                 self?.privateId = msg["private_id"] as? NSNumber
                 callback(nil)
                 if let publishers = msg["publishers"] as? [[String: Any]],
-                    let janus = self?.janus,
-                    let delegate = self?.delegate as? JanusRoleDelegate {
+                   let janus = self?.janus,
+                   let delegate = self?.delegate as? JanusRoleDelegate {
                     for item in publishers {
                         let listenter = JanusRoleListen.role(withDict: item, janus: janus, delegate: delegate)
                         listenter.privateId = self?.privateId
@@ -215,7 +222,7 @@ extension JanusRole {
                                mediaType: "audio",
                                bitrate: audioBitrate)
     }
-
+    
     private func setMediaBitrate(sdp: String, mediaType: String, bitrate: Int) -> String {
         var lines = sdp.components(separatedBy: "\n")
         var line = -1

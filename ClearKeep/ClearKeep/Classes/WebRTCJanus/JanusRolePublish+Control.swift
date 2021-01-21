@@ -68,8 +68,8 @@ extension JanusRolePublish {
             capturer.stopCapture {
                 let position = (self.cameraDevicePosition == .front) ? AVCaptureDevice.Position.back : AVCaptureDevice.Position.front
                 self.cameraDevicePosition = position
-                let cameraWidth = publishConstraints.resolution.width
-                let cameraHeight = publishConstraints.resolution.height
+                let cameraWidth = self.cameraDevicePosition == .front ? publishConstraints.resolution.width : 1024
+                let cameraHeight = self.cameraDevicePosition == .front ? publishConstraints.resolution.height : 768
                 self.startCaptureLocalVideo(cameraPositon: position,
                                             videoWidth: Int(cameraWidth),
                                             videoHeight: Int(cameraHeight),

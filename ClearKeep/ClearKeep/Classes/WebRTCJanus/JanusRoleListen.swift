@@ -32,11 +32,10 @@ class JanusRoleListen: JanusRole {
                               delegate: JanusRoleDelegate?) -> JanusRoleListen {
         let publish = JanusRoleListen(withJanus: janus, delegate: delegate)
         publish.pType = .lister
-        if let username = dict["display"] as? String,
-            let videoCode = dict["video_codec"] as? String,
+        if let videoCode = dict["video_codec"] as? String,
             let id = dict["id"] as? Int {
             publish.id = id
-            publish.display = username
+            publish.display = dict["display"] as? String
             publish.audioCode = dict["audio_codec"] as? String
             publish.videoCode = videoCode
         }

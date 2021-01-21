@@ -157,7 +157,7 @@ final class CallBox: NSObject {
     }
     
     func startJoinRoom() {
-        videoRoom?.joinRoom(withRoomId: roomId, username: "", completeCallback: { [weak self](isSuccess, error) in
+        videoRoom?.joinRoom(withRoomId: roomId, username: clientName ?? "iOS", completeCallback: { [weak self](isSuccess, error) in
             if error != nil || !isSuccess {
                 print(error?.localizedDescription ?? "")
                 CallManager.shared.end(call: self!)
