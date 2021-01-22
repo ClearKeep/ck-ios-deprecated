@@ -142,18 +142,21 @@ extension LoginView {
                     Backend.shared.getLoginUserID { (userID) in
                         do {
                             if userID.isEmpty {
-                                hudVisible = false
                                 print("getLoginUserID Empty")
+                                hudVisible = false
                                 return
                             }
                             user.id = userID
                             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                            // check registered
-                            Backend.shared.authenticator.requestKey(byClientId: userID) { (result, error, response) in
-                                if result, let response = response {
-                                    updateUserInfo(responseUserKey: response, clientId: userID)
+                            //                            let randomID = Int32.random(in: 1...Int32.max)
+                            //TODO: hashcode device id
+                            let address = SignalAddress(name: userID, deviceId: Int32(555))
+                            Backend.shared.authenticator.register(address: address) { (result, error) in
+                                if result {
+                                    loginForUser(clientID: userID)
                                 } else {
-                                    registerUserKey(clientId: userID)
+                                    print("Reigster Key Error \(error?.localizedDescription ?? "")")
+                                    hudVisible = false
                                 }
                             }
                         } catch {
@@ -172,24 +175,43 @@ extension LoginView {
         }
     }
     
-    private func registerUserKey(clientId: String) {
-        let address = SignalAddress(name: clientId, deviceId: Int32(555))
-        Backend.shared.authenticator.register(address: address) { (result, error) in
-            if result {
-                loginForUser(clientID: clientId)
-            } else {
-                print("Reigster Key Error \(error?.localizedDescription ?? "")")
-                hudVisible = false
-            }
-        }
-    }
-    
     private func loginForUser(clientID : String) {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
-            if result, let response = response {
-                updateUserInfo(responseUserKey: response, clientId: clientID)
-            } else {
-                print("requestKey error")
+            guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
+            do {
+                if let _ = response {
+                    // save account
+                    var myAccount: CKAccount?
+                    dbConnection.readWrite({ (transaction) in
+                        let accounts = CKAccount.allAccounts(withUsername: clientID,
+                                                             transaction: transaction)
+                        if accounts.count > 0 {
+                            myAccount = accounts.first
+                        } else {
+                            myAccount?.save(with: transaction)
+                        }
+                    })
+                    if let account = myAccount {
+                        let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
+                                                                                        databaseConnection: dbConnection)
+                        
+                        CKSignalCoordinate.shared.myAccount = account
+                        CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                    }
+                    if result {
+                        Backend.shared.registerTokenDevice { (response) in
+                            if response {
+                                hudVisible = false
+                                self.viewRouter.current = .tabview
+                            }
+                        }
+                    }else {
+                        print("requestKey Error: \(error?.localizedDescription ?? "")")
+                        hudVisible = false
+                    }
+                }
+            } catch {
+                print("Login with error: \(error)")
                 hudVisible = false
             }
         }
