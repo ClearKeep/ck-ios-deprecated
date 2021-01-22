@@ -149,7 +149,15 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
         var userNameLogin = UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? ""
         userNameLogin = group.groupName.replacingOccurrences(of: userNameLogin, with: "")
         userNameLogin = userNameLogin.replacingOccurrences(of: "-", with: "")
-        return group.groupType == "peer" ? userNameLogin : group.groupName
+        return group.groupType == "peer" ? getPeerReciveName(inGroup: group) : group.groupName
+    }
+    
+    func getPeerReciveName(inGroup group: GroupModel) -> String {
+        let userNameLogin = UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? ""
+        if let member = group.lstClientID.filter{$0.username != userNameLogin}.first {
+            return member.username
+        }
+        return group.groupName
     }
     
     func getClientIdFriend(listClientID: [String]) -> String {

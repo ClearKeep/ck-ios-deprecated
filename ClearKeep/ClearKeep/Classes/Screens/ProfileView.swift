@@ -32,10 +32,10 @@ struct ProfileView: View {
             TextFieldProfile(key: "Email", value: $email, disable: $isDisable)
             TextFieldProfile(key: "UserName", value: $userName, disable: $isDisable)
             // Logout button
-            Button(action: logout) {
-                ButtonContent("LOGOUT")
-                    .padding(.trailing, 25)
-            }
+//            Button(action: logout) {
+//                ButtonContent("LOGOUT")
+//                    .padding(.trailing, 25)
+//            }
         }
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
@@ -67,6 +67,7 @@ struct ProfileView: View {
                 CKAccount.removeAllAccounts(in: transaction)
             }
             CKSignalCoordinate.shared.myAccount = nil
+            
             self.viewRouter.current = .login
         }
     }

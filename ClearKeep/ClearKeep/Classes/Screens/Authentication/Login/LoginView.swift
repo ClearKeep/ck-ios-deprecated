@@ -31,7 +31,7 @@ struct LoginView: View {
                         }
                         NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
                             Button(action: {
-//                                register()
+                                //                                register()
                                 isRegister = true
                             }) {
                                 ButtonContent("REGISTER")
@@ -117,16 +117,16 @@ extension LoginView {
 extension LoginView {
     
     private func login() {
-//        CallManager.shared.startCall(clientId: "049fbb62-6666-493c-9628-db1149cca079",
-//                                     clientName: "Luan Nguyen",
-//                                     avatar: "",
-//                                     groupId: 1234,
-//                                     groupToken: "a1b2c3d4") //269a7a3fd8bc2e75785f
-//        hudVisible = true
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-//            self.hudVisible = false
-//        }
-//        return
+        //        CallManager.shared.startCall(clientId: "049fbb62-6666-493c-9628-db1149cca079",
+        //                                     clientName: "Luan Nguyen",
+        //                                     avatar: "",
+        //                                     groupId: 1234,
+        //                                     groupToken: "a1b2c3d4") //269a7a3fd8bc2e75785f
+        //        hudVisible = true
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+        //            self.hudVisible = false
+        //        }
+        //        return
         hudVisible = true
         var request = Auth_AuthReq()
         request.username = self.username
@@ -142,20 +142,18 @@ extension LoginView {
                     Backend.shared.getLoginUserID { (userID) in
                         do {
                             if userID.isEmpty {
+                                hudVisible = false
                                 print("getLoginUserID Empty")
                                 return
                             }
                             user.id = userID
                             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-//                            let randomID = Int32.random(in: 1...Int32.max)
-                            //TODO: hashcode device id
-                            let address = SignalAddress(name: userID, deviceId: Int32(555))
-                            Backend.shared.authenticator.register(address: address) { (result, error) in
-                                if result {
-                                    loginForUser(clientID: userID)
+                            // check registered
+                            Backend.shared.authenticator.requestKey(byClientId: userID) { (result, error, response) in
+                                if result, let response = response {
+                                    updateUserInfo(responseUserKey: response, clientId: userID)
                                 } else {
-                                    print("Reigster Key Error \(error?.localizedDescription ?? "")")
-                                    hudVisible = false
+                                    registerUserKey(clientId: userID)
                                 }
                             }
                         } catch {
@@ -174,45 +172,55 @@ extension LoginView {
         }
     }
     
-    private func loginForUser(clientID : String) {
-        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
-            guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
-            do {
-                if let _ = response {
-                    // save account
-                    var myAccount: CKAccount?
-                    dbConnection.readWrite({ (transaction) in
-                        let accounts = CKAccount.allAccounts(withUsername: clientID,
-                                                             transaction: transaction)
-                        if accounts.count > 0 {
-                            myAccount = accounts.first
-                        } else {
-                            myAccount?.save(with: transaction)
-                        }
-                    })
-                    if let account = myAccount {
-                        let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
-                                                                                        databaseConnection: dbConnection)
-                        
-                        CKSignalCoordinate.shared.myAccount = account
-                        CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
-                    }
-                    if result {
-                        Backend.shared.registerTokenDevice { (response) in
-                            if response {
-                                hudVisible = false
-                                self.viewRouter.current = .tabview
-                            }
-                        }
-                    }else {
-                        print("requestKey Error: \(error?.localizedDescription ?? "")")
-                        hudVisible = false
-                    }
-                }
-            } catch {
-                print("Login with error: \(error)")
+    private func registerUserKey(clientId: String) {
+        let address = SignalAddress(name: clientId, deviceId: Int32(555))
+        Backend.shared.authenticator.register(address: address) { (result, error) in
+            if result {
+                loginForUser(clientID: clientId)
+            } else {
+                print("Reigster Key Error \(error?.localizedDescription ?? "")")
                 hudVisible = false
             }
+        }
+    }
+    
+    private func loginForUser(clientID : String) {
+        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
+            if result, let response = response {
+                updateUserInfo(responseUserKey: response, clientId: clientID)
+            } else {
+                print("requestKey error")
+                hudVisible = false
+            }
+        }
+    }
+    
+    private func updateUserInfo(responseUserKey: Signal_PeerGetClientKeyResponse, clientId: String) {
+        guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
+        do {
+            // save account
+            if let myAccount = CKAccount(username: responseUserKey.clientID, deviceId: responseUserKey.deviceID, accountType: .none) {
+                // save account
+                dbConnection.readWrite({ (transaction) in
+                    myAccount.save(with:transaction)
+                })
+                
+                let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
+                                                                                databaseConnection: dbConnection)
+                
+                CKSignalCoordinate.shared.myAccount = myAccount
+                CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                
+                Backend.shared.registerTokenDevice { (response) in
+                    if response {
+                        hudVisible = false
+                        self.viewRouter.current = .tabview
+                    }
+                }
+            }
+        } catch {
+            print("Login with error: \(error)")
+            hudVisible = false
         }
     }
     

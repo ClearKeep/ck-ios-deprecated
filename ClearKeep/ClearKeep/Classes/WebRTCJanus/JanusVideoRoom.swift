@@ -50,6 +50,7 @@ class JanusVideoRoom: NSObject {
     init(delegate: JanusVideoRoomDelegate? = nil, token: String?) {
         super.init()
         let server = URL(string: "ws://54.235.68.160:8188/janus")
+//        let server = URL(string: "ws://10.0.255.82:8188/janus") // Local server
         let janus = Janus(withServer: server!, token: token)
         publisher = JanusRolePublish(withJanus: janus, delegate: self)
         
@@ -58,12 +59,12 @@ class JanusVideoRoom: NSObject {
 //        localConfig.resolution = CGSize(width: 4032, height: 3024)
 //        localConfig.resolution = CGSize(width: 1280, height: 720)
 //        localConfig.resolution = CGSize(width: 1024, height: 768)
-        localConfig.resolution = CGSize(width: 960, height: 540)
-//        localConfig.resolution = CGSize(width: 640, height: 480)
+//        localConfig.resolution = CGSize(width: 960, height: 540)
+        localConfig.resolution = CGSize(width: 640, height: 480)
 //        localConfig.resolution = CGSize(width: 480, height: 640)
 //        localConfig.resolution = CGSize(width: 192, height: 144)
-        localConfig.fps = 45
-        localConfig.videoBitrate = 512
+        localConfig.fps = 30
+        localConfig.videoBitrate = 256
         localConfig.audioBirate = 200
         localConfig.frequency = 44100
         publisher?.mediaConstraints = localConfig

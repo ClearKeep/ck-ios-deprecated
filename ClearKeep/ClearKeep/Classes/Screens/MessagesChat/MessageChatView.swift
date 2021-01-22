@@ -252,7 +252,7 @@ extension MessageChatView {
                                 do {
                                     let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
                                                                                                 name: self.clientId,
-                                                                                                deviceId: UInt32(111))
+                                                                                                deviceId: UInt32(555))
                                     let messageDecryption = String(data: decryptedData, encoding: .utf8)
                                     print("Message decryption: \(messageDecryption ?? "Empty error")")
                                     

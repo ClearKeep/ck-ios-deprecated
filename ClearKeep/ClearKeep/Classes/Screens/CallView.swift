@@ -78,9 +78,20 @@ struct CallView: View {
                             Spacer()
                             // Button camera
                             Button(action: {
-                                viewModel.cameraOffChange()
+                                viewModel.cameraChange()
                             }, label: {
                                 Image(systemName: viewModel.cameraOn ? "video.fill" : "video.slash.fill")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
+                                    .padding()
+                                    .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
+                                    .clipShape(Circle())
+                            })
+                            // Button speaker
+                            Button(action: {
+                                viewModel.speakerChange()
+                            }, label: {
+                                Image(systemName: !viewModel.speakerEnable ? "speaker.1.fill" : "speaker.2.fill")
                                     .font(.system(size: 22))
                                     .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
                                     .padding()
@@ -90,7 +101,7 @@ struct CallView: View {
                             Spacer()
                             // button swipe camera
                             Button(action: {
-                                viewModel.cameraSwipe()
+                                viewModel.cameraSwipeChange()
                             }, label: {
                                 Image(systemName: "camera.rotate.fill")
                                     .font(.system(size: 22))
@@ -102,7 +113,7 @@ struct CallView: View {
                             Spacer()
                             // button micro
                             Button(action: {
-                                viewModel.microOffChange()
+                                viewModel.microChange()
                             }, label: {
                                 Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
                                     .font(.system(size: 22))

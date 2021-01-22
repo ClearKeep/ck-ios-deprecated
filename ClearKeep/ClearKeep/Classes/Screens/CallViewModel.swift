@@ -16,6 +16,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var cameraOn = true
     @Published var cameraFront = false
     @Published var microEnable = true
+    @Published var speakerEnable = false
     @Published var callStatus: CallStatus = .calling
     @Published var callGroup = false
     
@@ -91,14 +92,14 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func cameraSwipe() {
+    func cameraSwipeChange() {
         cameraFront = !cameraFront
         if let callBox = self.callBox {
             callBox.videoRoom?.publisher?.switchCameraPosition()
         }
     }
     
-    func cameraOffChange() {
+    func cameraChange() {
         cameraOn = !cameraOn
         if let callBox = self.callBox {
             if cameraOn {
@@ -109,7 +110,18 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func microOffChange() {
+    func speakerChange() {
+        speakerEnable = !speakerEnable
+        if let callBox = self.callBox {
+            if speakerEnable {
+                callBox.videoRoom?.publisher?.speakerOn()
+            } else {
+                callBox.videoRoom?.publisher?.speakerOff()
+            }
+        }
+    }
+    
+    func microChange() {
         microEnable = !microEnable
         if let callBox = self.callBox {
             if microEnable {
