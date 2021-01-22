@@ -173,7 +173,7 @@ class CallViewModel: NSObject, ObservableObject {
     @objc private func checkCallTimeout() {
         print("checkCallTimeout")
         callInterval += 10
-        if callInterval > 20 && callTimer == nil {
+        if callInterval > 60 && callTimer == nil {
 //            if callControl.isIncoming {
 //                CallManager.shared.reject()
 //            } else {
