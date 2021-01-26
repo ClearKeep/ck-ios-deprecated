@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import TTProgressHUD
+import AVFoundation
 
 struct MessageChatView: View {
     
@@ -27,6 +27,7 @@ struct MessageChatView: View {
     @State var messages = [MessageModel]()
     @State var messageStr = ""
     @State var hudVisible = false
+    @State var alertVisible = false
     private let scrollingProxy = ListScrollingProxy()
     
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
@@ -73,6 +74,7 @@ struct MessageChatView: View {
             HStack(spacing: 15){
                 HStack(spacing: 15){
                     TextField("Message", text: $messageStr)
+                        .foregroundColor(.black)
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal)
@@ -110,23 +112,40 @@ struct MessageChatView: View {
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .navigationBarTitle(Text(self.userName))
         .navigationBarItems(trailing: Button(action: {
-            hudVisible = true
-            // CallManager call
-            if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                viewModel.callPeerToPeer(group: group) {
-                    hudVisible = false
-                }
-            } else {
-                viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                    viewModel.callPeerToPeer(group: group) {
-                        hudVisible = false
-                    }
-                }
-            }
             
+            AVCaptureDevice.authorizeVideo(completion: { (status) in
+                AVCaptureDevice.authorizeAudio(completion: { (status) in
+                    if status == .alreadyAuthorized || status == .justAuthorized {
+                        hudVisible = true
+                        // CallManager call
+                        if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                            viewModel.callPeerToPeer(group: group) {
+                                hudVisible = false
+                            }
+                        } else {
+                            viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
+                                viewModel.callPeerToPeer(group: group) {
+                                    hudVisible = false
+                                }
+                            }
+                        }
+                    } else {
+                        self.alertVisible = true
+                    }
+                })
+            })
+              
         }, label: {
             Image(systemName: "video")
         }))
+        .alert(isPresented: $alertVisible, content: {
+            Alert (title: Text("Need camera and microphone permissions"),
+                        message: Text("Go to Settings?"),
+                        primaryButton: .default(Text("Settings"), action: {
+                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                        }),
+                        secondaryButton: .default(Text("Cancel")))
+        })
         // since bottom edge is ignored....
         //        .padding(.bottom,UIApplication.shared.windows.first?.safeAreaInsets.bottom)
         .background(Color.white)

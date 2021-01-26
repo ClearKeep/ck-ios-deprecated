@@ -31,7 +31,7 @@ struct CallView: View {
                         if (viewModel.callStatus == .answered) { Spacer() }
                         VideoView(rtcVideoView: videoView)
                             .frame(width: viewModel.callStatus == .answered ? 120 : reader.frame(in: .global).width,
-                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height)
+                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height - 45)
                             .clipShape(Rectangle())
                             .cornerRadius(viewModel.callStatus == .answered ? 15 : 0)
                             .animation(.easeInOut(duration: 0.6))

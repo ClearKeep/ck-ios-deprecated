@@ -30,10 +30,10 @@ struct HUD: View {
     
     private var edgeLength: CGFloat {
         let calcLength = frame.width > frame.height
-            ? frame.height / 2
-            : frame.width / 2
-        return calcLength > 170
-            ? 170
+            ? frame.height / 3
+            : frame.width / 3
+        return calcLength > 100
+            ? 100
             : calcLength
     }
     

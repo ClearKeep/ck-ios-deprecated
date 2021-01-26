@@ -14,4 +14,5 @@ struct Constants {
     static let isChatRoom = "isChatRoom"
     static let isChatGroup = "isChatGroup"
     static let keySaveTokenPushNotify = "keySaveTokenPushNotify"
+    static let keySaveTokenPushNotifyAPNS = "keySaveTokenPushNotifyAPNS"
 }

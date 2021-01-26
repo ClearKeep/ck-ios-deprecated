@@ -87,10 +87,10 @@ struct MessageBubble: View {
     }
     
     private func dateTime() -> String {
-        let date = Date(timeIntervalSince1970: TimeInterval(msg.createdAt))
+        let date = NSDate(timeIntervalSince1970: TimeInterval(msg.createdAt/1000))
         let formatDate = DateFormatter()
         formatDate.dateFormat = "EEE HH:mm"
-        return formatDate.string(from: date)
+        return formatDate.string(from: date as Date)
     }
     
     private func stringValue() -> String {

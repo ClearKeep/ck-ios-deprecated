@@ -102,8 +102,8 @@ class JanusRole: JanusPlugin {
     func defaultSTUNServer() -> [RTCIceServer] {
         let stun = RTCIceServer(urlStrings: ["stun:stun.l.google.com:19302"])
         let turn = RTCIceServer(urlStrings: ["turn:global.turn.twilio.com:3478"],
-                                username: "7b77eddc0b07cf19d7f94bd8fd443223f558a61a55327dfc34f8d2bdbb9e8323",
-                                credential: "PUhwdZZUU2B0/U+9JlSuCAcdT7NRZR4qZu/dhDoC+1w=")
+                                username: "8f87a00be37f0bfe19c0168ed0614966d70f2f8513ad66bda31a4a0a55fa89bd",
+                                credential: "leZgnMWJMJ8QRFapC5liDHUrxJjalYqbhxPq+/V2zz8=")
         return [stun, turn]
     }
     

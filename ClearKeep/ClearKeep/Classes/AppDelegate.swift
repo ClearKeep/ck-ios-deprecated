@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
+        UserDefaults.standard.setValue(token, forKey: Constants.keySaveTokenPushNotifyAPNS)
+
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -80,6 +82,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
                 options: [.alert, .sound, .badge]) { [weak self] granted, _ in
                 print("Permission granted: \(granted)")
                 guard granted else { return }
+//                DispatchQueue.main.async {
+//                  UIApplication.shared.registerForRemoteNotifications()
+//                }
+                
                 self?.getNotificationSettings()
             }
         

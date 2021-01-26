@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Indicators
 
 @available(iOS 13.0, *)
 public enum HUDMode {

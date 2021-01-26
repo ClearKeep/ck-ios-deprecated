@@ -57,11 +57,11 @@ class CallViewModel: NSObject, ObservableObject {
     func getStatusMessage() -> String {
         switch callStatus {
         case .calling:
-            return "Đang liên hệ..."
+            return "Calling..."
         case .ringing:
-            return "Đang rung chuông..."
+            return "Connecting..."
         case .ended:
-            return "Kêt thúc cuộc gọi..."
+            return "End call..."
         default:
             return ""
         }

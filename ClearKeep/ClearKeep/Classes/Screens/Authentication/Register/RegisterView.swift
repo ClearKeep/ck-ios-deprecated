@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import TTProgressHUD
 
 struct RegisterView: View {
     

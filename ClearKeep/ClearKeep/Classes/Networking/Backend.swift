@@ -287,7 +287,10 @@ class Backend: ObservableObject {
     func registerTokenDevice(_ completion: @escaping (Bool) -> Void){
         let header = self.getHeaderApi()
         let tokenPush = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotify)
+//        let tokenPushApns = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotifyAPNS) ?? ""
         let deviceID = UIDevice.current.identifierForVendor
+        
+//        let multipleToken = "\(tokenPush),\(tokenPushApns)"
 
         if let header = header , let token = tokenPush , let deviceID = deviceID?.uuidString {
             var req = NotifyPush_RegisterTokenRequest()
