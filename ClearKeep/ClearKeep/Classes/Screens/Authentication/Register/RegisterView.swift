@@ -18,56 +18,103 @@ struct RegisterView: View {
     @State var lastName: String = ""
     @Binding var isPresentModel: Bool
     @State var hudVisible = false
+    @State var isShowAlert = false
+    @State var messageAlert = ""
+    @State private var isEmailValid : Bool = true
+    @State private var isDisplayNameValid: Bool = true
+    @State private var isPasswordValid: Bool = true
+    @State private var titleAlert = ""
     
     var body: some View {
         VStack {
             TitleLabel("Register Account")
-            TextFieldContent(key: "Email", value: $email)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            TextFieldContent(key: "UserName", value: $userName)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            PasswordSecureField(password: $passWord)
-//            TextFieldContent(key: "FirstName", value: $firstName)
-//                .autocapitalization(.none)
-//                .disableAutocorrection(true)
-//            TextFieldContent(key: "LastName", value: $lastName)
-//                .autocapitalization(.none)
-//                .disableAutocorrection(true)
+            TextField("Email", text: $email, onEditingChanged: { (isChanged) in
+                if !isChanged {
+                    self.isEmailValid = self.email.textFieldValidatorEmail()
+                }
+            })
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .padding()
+            if !self.isEmailValid {
+                Text("Email is Not Valid")
+                    .font(Font.system(size: 13))
+                    .foregroundColor(Color.red)
+            }
+            TextField("Display Name", text: $userName , onEditingChanged: { (isChanged) in
+                if !isChanged {
+                    self.isDisplayNameValid = !self.userName.isEmpty
+                }
+            })
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+            .padding()
+            if !self.isDisplayNameValid {
+                Text("Display Name is not empty")
+                    .font(Font.system(size: 13))
+                    .foregroundColor(Color.red)
+            }
+            SecureField("Password", text: $passWord)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            if !self.isPasswordValid {
+                Text("Password is not empty")
+                    .font(Font.system(size: 13))
+                    .foregroundColor(Color.red)
+            }
+            
             Button(action: register) {
-                ButtonContent("REGISTER")
+                ButtonContent("REGISTER").padding()
             }
         }
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .alert(isPresented: self.$isShowAlert, content: {
+            Alert(title: Text(self.titleAlert),
+                  message: Text(self.messageAlert),
+                  dismissButton: .default(Text("OK")))
+        })
     }
 }
 
 extension RegisterView {
     private func register(){
+        if !self.isEmailValid || !self.isDisplayNameValid {
+            return
+        } else if self.passWord.isEmpty {
+            self.isPasswordValid = false
+            return
+        }
         hudVisible = true
         var request = Auth_RegisterReq()
-        request.username = self.userName
+        request.displayName = self.userName
         request.password = self.passWord
         request.email = self.email
         request.firstName = self.firstName
         request.lastName = self.lastName
         
-        Backend.shared.register(request) { (result) in
+        Backend.shared.register(request) { (result , error) in
             hudVisible = false
-            if result {
-//                self.viewRouter.current = .login
-                isPresentModel = false
+            if let result = result {
+                if result.baseResponse.success {
+                    isPresentModel = false
+                    self.messageAlert = "Please confirm your account in the mail"
+                    self.titleAlert = "Register Successfully"
+                    self.isShowAlert = true
+                } else {
+                    self.titleAlert = "Register Error"
+                    self.messageAlert = result.baseResponse.errors.message
+                    self.isShowAlert = true
+                }
             } else {
+                self.titleAlert = "Register Error"
+                self.messageAlert = error.debugDescription
+                self.isShowAlert = true
                 print("Register account fail")
             }
         }
     }
 }
 
-//struct RegisterView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RegisterView(Con)
-//    }
-//}

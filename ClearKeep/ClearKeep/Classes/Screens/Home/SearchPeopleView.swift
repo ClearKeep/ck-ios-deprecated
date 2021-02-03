@@ -16,46 +16,33 @@ struct SearchPeopleView: View {
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: .top) {
-                Color(.white).opacity(0.2).edgesIgnoringSafeArea(.all)
-                VStack {
-                    HStack {
-                        Button(action: {
-                            viewRouter.current = .tabview
-                        }){
-                            Image(systemName: "chevron.backward")
-                        }
-                        TextFieldContent(key: "username", value: $keySearch)
-                        Button(action: {
-                            viewModel.searchUser(self.keySearch)
-                        }){
-                            Image("ic_search").resizable().frame(width: 25, height: 25)
-                        }
+            VStack {
+                HStack {
+                    TextFieldContent(key: "username", value: $keySearch)
+                    Button(action: {
+                        viewModel.searchUser(self.keySearch)
+                    }){
+                        Image("ic_search").resizable().frame(width: 25, height: 25)
                     }
-                    Group {
-                        List(viewModel.users){ user in
-                            NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                            .environmentObject(RealmGroups()).environmentObject(RealmMessages()))
-                            {
-                                Image(systemName: "person.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                VStack(alignment: .leading) {
-                                    Text(user.userName)
-                                    Text(user.id)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                            }
+                }
+                List(viewModel.users){ user in
+                    NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                    .environmentObject(RealmGroups()).environmentObject(RealmMessages()))
+                    {
+                        Image(systemName: "person.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                        VStack(alignment: .leading) {
+                            Text(user.userName)
+                            Text(user.id)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                         }
                     }
                 }
             }
-            .padding()
-            .navigationBarTitle(Text(""), displayMode: .inline)
-            
+            .navigationBarTitle(Text("Search User"), displayMode: .inline)
         }
-        
     }
 }
 

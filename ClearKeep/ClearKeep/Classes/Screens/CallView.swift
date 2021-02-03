@@ -31,13 +31,14 @@ struct CallView: View {
                         if (viewModel.callStatus == .answered) { Spacer() }
                         VideoView(rtcVideoView: videoView)
                             .frame(width: viewModel.callStatus == .answered ? 120 : reader.frame(in: .global).width,
-                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height - 45)
+                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height)
                             .clipShape(Rectangle())
                             .cornerRadius(viewModel.callStatus == .answered ? 15 : 0)
                             .animation(.easeInOut(duration: 0.6))
-                    }.padding(.top, viewModel.callStatus == .answered ? 45 : 0)
-                    .edgesIgnoringSafeArea(.all)
-                    .padding(.horizontal)
+                    }
+//                    .padding(.top, viewModel.callStatus == .answered ? 45 : 0)
+//                    .edgesIgnoringSafeArea(.all)
+//                    .padding(.horizontal)
                 }
 
 //                // Info call
@@ -47,8 +48,8 @@ struct CallView: View {
                         // Receive avatar
                         Image(systemName: "person.circle")
                             .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(Color.white)
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(Color.white.opacity(0.8))
                             .padding()
 
                         // Receive name

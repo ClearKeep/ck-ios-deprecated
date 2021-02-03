@@ -17,7 +17,7 @@ class InviteMemberViewModel: ObservableObject, Identifiable {
                 DispatchQueue.main.async {
                     self.peoples.removeAll()
                     result.lstUser.forEach { (people) in
-                        self.peoples.append(People(id: people.id, userName: people.username))
+                        self.peoples.append(People(id: people.id, userName: people.displayName))
                     }
                 }
             }

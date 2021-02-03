@@ -82,9 +82,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
                 options: [.alert, .sound, .badge]) { [weak self] granted, _ in
                 print("Permission granted: \(granted)")
                 guard granted else { return }
-//                DispatchQueue.main.async {
-//                  UIApplication.shared.registerForRemoteNotifications()
-//                }
+                DispatchQueue.main.async {
+                  UIApplication.shared.registerForRemoteNotifications()
+                }
                 
                 self?.getNotificationSettings()
             }

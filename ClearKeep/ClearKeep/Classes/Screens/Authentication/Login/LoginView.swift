@@ -5,7 +5,7 @@ let isGroupChat = true
 
 struct LoginView: View {
     
-    @State var username: String = ""
+    @State var email: String = ""
     @State var password: String = ""
     @State var deviceID: String = ""
     
@@ -13,17 +13,34 @@ struct LoginView: View {
     @State var authenticationDidSucceed: Bool = false
     @EnvironmentObject var viewRouter: ViewRouter
     @State var isRegister: Bool = false
+    @State var isForgotPassword: Bool = false
     @State var hudVisible = false
-    
+    @State var isShowAlert = false
+    @State var messageAlert = ""
+    @State private var isEmailValid : Bool = true
+    @State private var isPasswordValid: Bool = true
+
     var body: some View {
         NavigationView {
             ZStack {
                 VStack {
                     TitleLabel("ClearKeep")
-                    TextFieldContent(key: "Username", value: $username)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
+                    TextField("Email", text: $email, onEditingChanged: { (isChanged) in
+                        if !isChanged {
+                            self.isEmailValid = self.email.textFieldValidatorEmail()
+                        }
+                    })
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
                     PasswordSecureField(password: $password)
+                    if !self.isEmailValid {
+                        Text("Email is Not Valid")
+                            .font(Font.system(size: 13))
+                            .foregroundColor(Color.red)
+                            .padding(.bottom, 10)
+                    }
                     HStack {
                         Button(action: login) {
                             ButtonContent("LOGIN")
@@ -37,13 +54,29 @@ struct LoginView: View {
                                 ButtonContent("REGISTER")
                             }
                         }
-                        
+                    }
+                    NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
+                        Button(action: {
+                            isForgotPassword = true
+                        }) {
+                            Text("Forgot Password?")
+                                .underline()
+                                .font(Font.system(size: 13))
+                                .padding()
+                                .foregroundColor(.blue)
+                        }
                     }
                 }
                 .padding()
                 .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             }
         }
+        .alert(isPresented: self.$isShowAlert, content: {
+            Alert(title: Text("Login Error"),
+                  message: Text(self.messageAlert),
+                  dismissButton: .default(Text("OK")))
+        })
+
     }
     
 }
@@ -76,7 +109,7 @@ extension LoginView {
     
     private func registerWithGroup() {
         guard let deviceID: Int32 = Int32(deviceID),
-              let myAccount = CKAccount(username: username, deviceId: deviceID, accountType: .none),
+              let myAccount = CKAccount(username: email, deviceId: deviceID, accountType: .none),
               let connectionDb = CKDatabaseManager.shared.database?.newConnection() else {
             print("DeviceID always number")
             return
@@ -90,7 +123,7 @@ extension LoginView {
             let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
                                                                               databaseConnection: connectionDb)
             
-            let address = SignalAddress(name: username, deviceId: deviceID)
+            let address = SignalAddress(name: email, deviceId: deviceID)
             let groupSessionBuilder = SignalGroupSessionBuilder(context: ourSignalEncryptionMng.signalContext)
             let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
             let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
@@ -99,12 +132,12 @@ extension LoginView {
             CKSignalCoordinate.shared.myAccount = myAccount
             
             Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-                                                       clientId: username,
+                                                       clientId: email,
                                                        deviceId: deviceID,
                                                        senderKeyData: signalSKDM.serializedData()) { (result, error) in
                 print("Register group with result: \(result)")
                 if result {
-                    Backend.shared.signalSubscrible(clientId: self.username)
+                    Backend.shared.signalSubscrible(clientId: self.email)
                     self.viewRouter.current = .masterDetail
                 }
             }
@@ -127,53 +160,83 @@ extension LoginView {
         //            self.hudVisible = false
         //        }
         //        return
+        
+        //TODO: Waiting BE fixed
+//        if !self.isEmailValid {
+//            return
+//        } else if self.password.isEmpty {
+//            self.isPasswordValid = false
+//            return
+//        }
+        
         hudVisible = true
         var request = Auth_AuthReq()
-        request.username = self.username
+        request.email = self.email
         request.password = self.password
         request.authType = 1
         
         Backend.shared.login(request) { (result, error) in
             if let result = result {
-                do {
-                    var user = User(id: "", token: result.accessToken, hash: result.hashKey,userName: self.username)
-                    try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                    UserDefaults.standard.setValue(self.username, forKey: Constants.keySaveUserNameLogin)
-                    Backend.shared.getLoginUserID { (userID) in
-                        do {
-                            if userID.isEmpty {
-                                print("getLoginUserID Empty")
-                                hudVisible = false
-                                return
-                            }
-                            user.id = userID
-                            try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                            //                            let randomID = Int32.random(in: 1...Int32.max)
-                            //TODO: hashcode device id
-                            let address = SignalAddress(name: userID, deviceId: Int32(555))
-                            Backend.shared.authenticator.register(address: address) { (result, error) in
-                                if result {
-                                    loginForUser(clientID: userID)
-                                } else {
-                                    print("Reigster Key Error \(error?.localizedDescription ?? "")")
+                if result.baseResponse.success{
+                    do {
+                        var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                        try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                        Backend.shared.getLoginUserID { (userID) in
+                            do {
+                                if userID.isEmpty {
+                                    print("getLoginUserID Empty")
                                     hudVisible = false
+                                    return
                                 }
+                                user.id = userID
+                                UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
+                                try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                                //                            let randomID = Int32.random(in: 1...Int32.max)
+                                //TODO: hashcode device id
+                                let address = SignalAddress(name: userID, deviceId: Int32(555))
+                                Backend.shared.authenticator.register(address: address) { (result, error) in
+                                    if result {
+                                        loginForUser(clientID: userID)
+                                    } else {
+                                        print("Register Key Error \(error?.localizedDescription ?? "")")
+                                        hudVisible = false
+                                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                    }
+                                }
+                            } catch {
+                                print("save user error")
+                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                hudVisible = false
+                                self.messageAlert = "Something when wrong"
+                                self.isShowAlert = true
                             }
-                        } catch {
-                            print("save user error")
-                            hudVisible = false
                         }
+                    } catch {
+                        print(error.localizedDescription)
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                        hudVisible = false
+                        self.messageAlert = "Something when wrong"
+                        self.isShowAlert = true
                     }
-                } catch {
-                    print(error.localizedDescription)
+                }else {
                     hudVisible = false
+                    self.isShowAlert = true
+                    self.messageAlert = result.baseResponse.errors.message
                 }
             } else if let error = error {
                 print(error)
+                self.messageAlert = "Login information is not correct. Please try again"
+                self.isShowAlert = true
                 hudVisible = false
             }
         }
     }
+    
+    struct Test: Codable {
+        let code: Int
+        let message: String
+    }
+
     
     private func loginForUser(clientID : String) {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
@@ -203,6 +266,11 @@ extension LoginView {
                             if response {
                                 hudVisible = false
                                 self.viewRouter.current = .tabview
+                            }else {
+                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                hudVisible = false
+                                self.messageAlert = "Something when wrong"
+                                self.isShowAlert = true
                             }
                         }
                     }else {
@@ -243,59 +311,6 @@ extension LoginView {
         } catch {
             print("Login with error: \(error)")
             hudVisible = false
-        }
-    }
-    
-    private func getLoginUserId(){
-        
-    }
-    
-    private func getSenderKeyInGroupTest() {
-        let groupId: Int64 = 1234
-        Backend.shared.authenticator.requestKeyGroup(byClientId: username, groupId: groupId) { (result, error, response) in
-            guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
-            do {
-                // save account
-                var myAccount: CKAccount?
-                var isAddAccount = false
-                dbConnection.readWrite({ (transaction) in
-                    let accounts = CKAccount.allAccounts(withUsername: self.username, transaction: transaction)
-                    if accounts.count > 0 {
-                        myAccount = accounts.first
-                    } else {
-                        myAccount = CKAccount(username: self.username, deviceId: (response?.clientKey.deviceID)!, accountType: .none)
-                        myAccount?.save(with: transaction)
-                        isAddAccount = true
-                    }
-                })
-                if let account = myAccount {
-                    let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
-                                                                                    databaseConnection: dbConnection)
-                    
-                    CKSignalCoordinate.shared.myAccount = account
-                    CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
-                    if isAddAccount,
-                       let deviceId = response?.clientKey.deviceID,
-                       let senderKeyData = response?.clientKey.clientKeyDistribution,
-                       let senderId = response?.clientKey.clientID,
-                       let groupId = response?.groupID {
-                        let address = SignalAddress(name: senderId, deviceId: deviceId)
-                        let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-                        if !ourEncryptionManager.senderKeyExistsForUsername(senderId, deviceId: deviceId, groupId: groupId) {
-                            let _ = ourEncryptionManager.storage.storeSenderKey(senderKeyData, senderKeyName: senderKeyName)
-                            //                            try ourEncryptionManager.consumeIncoming(toGroup: groupId, address: address, skdmDtata: senderKeyData)
-                            
-                        }
-                    }
-                }
-                
-                if result {
-                    Backend.shared.signalSubscrible(clientId: self.username)
-                    self.viewRouter.current = .tabview
-                }
-            } catch {
-                print("Login with error: \(error)")
-            }
         }
     }
 }

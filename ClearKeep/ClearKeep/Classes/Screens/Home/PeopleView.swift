@@ -15,6 +15,7 @@ struct PeopleView: View {
     @EnvironmentObject var messsagesRealms : RealmMessages
     @State var presentingModal = false
     @State var userSelected: People?
+    @State var isSearchMember : Bool = false
     
     var body: some View {
         NavigationView {
@@ -42,15 +43,12 @@ struct PeopleView: View {
             //            })
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("People"),
-                                trailing: Button(action: {
-                                    viewRouter.current = .search
-                                }){
-                                    Image("ic_search")
-                                        .resizable()
-                                        .frame(width: 25, height: 25)
-                                }).onAppear(){
-                                    viewModel.getUser()
-                                }
+                                trailing: NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
+                                    Text("Search")
+                                }))
+            .onAppear(){
+                viewModel.getUser()
+            }
         }
         //        .onAppear(){
         //            viewModel.getUser()

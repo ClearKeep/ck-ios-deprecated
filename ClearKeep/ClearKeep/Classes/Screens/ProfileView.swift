@@ -44,7 +44,7 @@ struct ProfileView: View {
                 if let result = result {
                     self.id = result.id
                     self.email = result.email
-                    self.userName = result.username
+                    self.userName = result.displayName
                     self.firstName = result.firstName
                     self.lastName = result.lastName
                 }

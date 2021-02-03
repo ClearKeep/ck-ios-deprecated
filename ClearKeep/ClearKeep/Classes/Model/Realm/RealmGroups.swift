@@ -40,10 +40,11 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    func updateLastMessage(groupID: Int64 ,lastMessage: Data){
+    func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64){
         if let index = all.firstIndex(where: { $0.groupID == groupID }) {
             if var group = all.filter({$0.groupID == groupID}).first {
                 group.lastMessage = lastMessage
+                group.lastMessageAt = lastMessageAt
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group

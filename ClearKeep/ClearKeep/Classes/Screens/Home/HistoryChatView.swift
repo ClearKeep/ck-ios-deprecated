@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HistoryChatView: View {
     
-    @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var viewModel = HistoryChatViewModel()
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
@@ -48,7 +47,7 @@ struct HistoryChatView: View {
                     }
                 }else {
                     NavigationLink(destination:  viewGroup) {
-                        Image(systemName: "person.3.fill")
+                        Image(systemName: "person.2.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
                         VStack(alignment: .leading) {
@@ -65,12 +64,13 @@ struct HistoryChatView: View {
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarItems(leading: Text("Chat"), trailing: Button(action: {
-                self.pushActive = true
-            }, label: {
-                NavigationLink(destination: CreateRoomView() , isActive: self.$pushActive) { }
-                Text("Create Room")
-            }))
+            .navigationBarItems(leading: Text("Chat"), trailing: NavigationLink(
+                destination: CreateRoomView(isPresentModel: self.$pushActive),
+                isActive: self.$pushActive
+            ) {
+                Text("CreateRoom")
+            }
+            .isDetailLink(false))
         }.onAppear(){
             self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
             self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
@@ -115,33 +115,24 @@ extension HistoryChatView {
                     if let group = self.groupRealms.filterGroup(groupId: groupResponse.groupID){
                         if group.lastMessageAt == groupResponse.lastMessageAt {
                         } else {
-                            if let ourEncryptionMng = self.ourEncryptionManager {
-                                do {
-                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
-                                                                                                name: groupResponse.lastMessage.fromClientID,
-                                                                                                deviceId: UInt32(111))
-                                    let lastMessage = groupResponse.lastMessage
-                                    DispatchQueue.main.async {
-                                        let message = MessageModel(id: lastMessage.id,
-                                                                   groupID: lastMessage.groupID,
-                                                                   groupType: lastMessage.groupType,
-                                                                   fromClientID: lastMessage.fromClientID,
-                                                                   clientID: lastMessage.clientID,
-                                                                   message: decryptedData,
-                                                                   createdAt: lastMessage.createdAt,
-                                                                   updatedAt: lastMessage.updatedAt)
-                                        self.messsagesRealms.add(message: message)
-                                        self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData)
-                                    }
-                                } catch {
-                                    print("decrypt message error: ---- getJoinnedGroup")
-                                }
-                            }
+                            let lastMessageResponse = groupResponse.lastMessage
+                            var messageResponse = Message_MessageObjectResponse()
+                            messageResponse.id = lastMessageResponse.id
+                            messageResponse.groupID = lastMessageResponse.groupID
+                            messageResponse.groupType = lastMessageResponse.groupType
+                            messageResponse.fromClientID = lastMessageResponse.fromClientID
+                            messageResponse.clientID = lastMessageResponse.clientID
+                            messageResponse.message = lastMessageResponse.message
+                            messageResponse.createdAt = lastMessageResponse.createdAt
+                            messageResponse.updatedAt = lastMessageResponse.updatedAt
+                            messageResponse.unknownFields = lastMessageResponse.unknownFields
+                            
+                            self.decryptionMessage(publication: messageResponse)
                         }
                         
                     } else {
                         DispatchQueue.main.async {
-                            let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.username)}
+                            let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
                             let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                         groupName: groupResponse.groupName,
                                                         groupToken: groupResponse.groupRtcToken,
@@ -198,7 +189,7 @@ extension HistoryChatView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.messsagesRealms.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
                         }
                         return
                     }
@@ -285,7 +276,7 @@ extension HistoryChatView {
                                                 updatedAt: publication.updatedAt)
                         DispatchQueue.main.async {
                             self.messsagesRealms.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
                             
                             print("message decypt realm: ----- \(viewModel.getMessage(data: self.groupRealms.all[0].lastMessage))")
                             
@@ -293,7 +284,7 @@ extension HistoryChatView {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: message[0].message)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: message[0].message, lastMessageAt: publication.createdAt)
                         }
                     }
                     

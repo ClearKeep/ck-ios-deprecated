@@ -100,10 +100,15 @@ class JanusRole: JanusPlugin {
     }
     
     func defaultSTUNServer() -> [RTCIceServer] {
+        
+        let turnUser = UserDefaults.standard.string(forKey: Constants.keySaveTurnServerUser) ?? ""
+        let turnPWD = UserDefaults.standard.string(forKey: Constants.keySaveTurnServerPWD) ?? ""
+        //8f87a00be37f0bfe19c0168ed0614966d70f2f8513ad66bda31a4a0a55fa89bd
+        //leZgnMWJMJ8QRFapC5liDHUrxJjalYqbhxPq+/V2zz8=
         let stun = RTCIceServer(urlStrings: ["stun:stun.l.google.com:19302"])
         let turn = RTCIceServer(urlStrings: ["turn:global.turn.twilio.com:3478"],
-                                username: "8f87a00be37f0bfe19c0168ed0614966d70f2f8513ad66bda31a4a0a55fa89bd",
-                                credential: "leZgnMWJMJ8QRFapC5liDHUrxJjalYqbhxPq+/V2zz8=")
+                                username: turnUser,
+                                credential: turnPWD)
         return [stun, turn]
     }
     

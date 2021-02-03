@@ -23,7 +23,7 @@ struct MotherView: View {
             case .register: RegisterView(isPresentModel: .constant(true))
             case .tabview: TabViewContainer().transition(.move(edge: .trailing))
             case .search: SearchPeopleView()
-            case .createRoom: CreateRoomView()
+//            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             case .callVideo: CallView()
             }
@@ -46,7 +46,7 @@ class ViewRouter: ObservableObject {
         case register
         case tabview
         case search
-        case createRoom
+//        case createRoom
         case history
         case callVideo
     }

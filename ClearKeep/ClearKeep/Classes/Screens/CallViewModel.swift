@@ -19,6 +19,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var speakerEnable = false
     @Published var callStatus: CallStatus = .calling
     @Published var callGroup = false
+    @Published var timeCall = ""
     
     var callBox: CallBox?
     var callTimer: Timer?
@@ -156,6 +157,7 @@ class CallViewModel: NSObject, ObservableObject {
     
     @objc private func timeTick(timer: Timer) {
         let timeNow = timeCounter.timeNow()
+        timeCall = timeNow
     }
     
     private func stopCallTimer() {

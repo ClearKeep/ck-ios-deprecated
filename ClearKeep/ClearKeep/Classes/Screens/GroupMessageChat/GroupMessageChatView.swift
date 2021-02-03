@@ -58,6 +58,7 @@ struct GroupMessageChatView: View {
                 HStack(spacing: 15){
                     HStack(spacing: 15){
                         TextField("Message", text: $messageStr)
+                            .foregroundColor(.black)
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal)
@@ -224,7 +225,7 @@ extension GroupMessageChatView {
                         print("Message decryption: \(messageDecryption ?? "Empty error")")
                         
                         DispatchQueue.main.async {
-                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
                             let post = MessageModel(id: publication.id,
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
@@ -320,7 +321,7 @@ extension GroupMessageChatView {
                                                     createdAt: result.createdAt,
                                                     updatedAt: result.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
                             self.reloadData()
                         }
                     }

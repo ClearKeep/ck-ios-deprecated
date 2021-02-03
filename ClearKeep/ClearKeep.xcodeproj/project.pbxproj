@@ -118,6 +118,23 @@
 		686F25EF255E766E00953C5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25EE255E766E00953C5E /* User.swift */; };
 		686F25F5255E774600953C5E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25F4255E774600953C5E /* Constant.swift */; };
 		6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6873AA8C259B1D4D009FD141 /* CallView.swift */; };
+		6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB6825C7A198009EDA73 /* ErrorResponse.swift */; };
+		6881DB7125C7F43C009EDA73 /* auth.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7025C7F43C009EDA73 /* auth.grpc.swift */; };
+		6881DB8425C7F44D009EDA73 /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7525C7F44C009EDA73 /* signal.pb.swift */; };
+		6881DB8525C7F44D009EDA73 /* video_call.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7625C7F44C009EDA73 /* video_call.grpc.swift */; };
+		6881DB8625C7F44D009EDA73 /* user.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7725C7F44C009EDA73 /* user.grpc.swift */; };
+		6881DB8725C7F44D009EDA73 /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7825C7F44C009EDA73 /* signal.grpc.swift */; };
+		6881DB8825C7F44D009EDA73 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7925C7F44C009EDA73 /* message.pb.swift */; };
+		6881DB8925C7F44D009EDA73 /* notify_push.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7A25C7F44C009EDA73 /* notify_push.pb.swift */; };
+		6881DB8A25C7F44D009EDA73 /* user.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7B25C7F44C009EDA73 /* user.pb.swift */; };
+		6881DB8B25C7F44D009EDA73 /* notify.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7C25C7F44C009EDA73 /* notify.grpc.swift */; };
+		6881DB8C25C7F44D009EDA73 /* notify.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7D25C7F44C009EDA73 /* notify.pb.swift */; };
+		6881DB8D25C7F44D009EDA73 /* message.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7E25C7F44C009EDA73 /* message.grpc.swift */; };
+		6881DB8E25C7F44D009EDA73 /* group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB7F25C7F44C009EDA73 /* group.pb.swift */; };
+		6881DB8F25C7F44D009EDA73 /* auth.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB8025C7F44C009EDA73 /* auth.pb.swift */; };
+		6881DB9025C7F44D009EDA73 /* notify_push.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB8125C7F44C009EDA73 /* notify_push.grpc.swift */; };
+		6881DB9125C7F44D009EDA73 /* group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB8225C7F44C009EDA73 /* group.grpc.swift */; };
+		6881DB9225C7F44D009EDA73 /* video_call.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB8325C7F44D009EDA73 /* video_call.pb.swift */; };
 		6887F46A257895D900ACB377 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F469257895D900ACB377 /* NotificationService.swift */; };
 		688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67A82570B5FF00B95235 /* RealmHelper.swift */; };
 		688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67D22570F4CA00B95235 /* FileGroups.swift */; };
@@ -132,26 +149,12 @@
 		689247BC2565144800EAD2B7 /* HistoryChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247BB2565144800EAD2B7 /* HistoryChatView.swift */; };
 		689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247FB256611C700EAD2B7 /* HistoryChatViewModel.swift */; };
 		689248012566123A00EAD2B7 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689248002566123A00EAD2B7 /* Group.swift */; };
+		68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */; };
+		68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */; };
 		68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C036F6256DF54E00B9D49A /* EventHub.swift */; };
 		68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */; };
 		68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */; };
 		68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF962574E4600018F5D5 /* RealmMessages.swift */; };
-		68CBC68725932B3500997D93 /* notify.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67725932B2600997D93 /* notify.grpc.swift */; };
-		68CBC68825932B3500997D93 /* message.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67825932B2700997D93 /* message.grpc.swift */; };
-		68CBC68925932B3500997D93 /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67925932B2800997D93 /* signal.pb.swift */; };
-		68CBC68A25932B3500997D93 /* user.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67A25932B2900997D93 /* user.pb.swift */; };
-		68CBC68B25932B3500997D93 /* group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67B25932B2A00997D93 /* group.grpc.swift */; };
-		68CBC68C25932B3500997D93 /* notify_push.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */; };
-		68CBC68D25932B3500997D93 /* user.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67D25932B2C00997D93 /* user.grpc.swift */; };
-		68CBC68E25932B3500997D93 /* auth.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67E25932B2D00997D93 /* auth.grpc.swift */; };
-		68CBC68F25932B3500997D93 /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC67F25932B2F00997D93 /* signal.grpc.swift */; };
-		68CBC69025932B3500997D93 /* notify.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68025932B3000997D93 /* notify.pb.swift */; };
-		68CBC69125932B3500997D93 /* group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68125932B3100997D93 /* group.pb.swift */; };
-		68CBC69225932B3500997D93 /* auth.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68225932B3200997D93 /* auth.pb.swift */; };
-		68CBC69325932B3500997D93 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68325932B3300997D93 /* message.pb.swift */; };
-		68CBC69425932B3500997D93 /* notify_push.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68425932B3400997D93 /* notify_push.pb.swift */; };
-		68CBC69525932B3500997D93 /* video_call.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68525932B3500997D93 /* video_call.pb.swift */; };
-		68CBC69625932B3500997D93 /* video_call.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CBC68625932B3500997D93 /* video_call.grpc.swift */; };
 		68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68CBC6B325944AC100997D93 /* PushKit.framework */; };
 		68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA4B825677E0B00109725 /* MotherViewModel.swift */; };
 		68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA512256C9F3600109725 /* CreateRoomView.swift */; };
@@ -312,6 +315,23 @@
 		686F25EE255E766E00953C5E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		686F25F4255E774600953C5E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		6873AA8C259B1D4D009FD141 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
+		6881DB6825C7A198009EDA73 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
+		6881DB7025C7F43C009EDA73 /* auth.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = auth.grpc.swift; path = ../../../../../Desktop/proto/auth.grpc.swift; sourceTree = "<group>"; };
+		6881DB7525C7F44C009EDA73 /* signal.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = signal.pb.swift; path = ../../../../../Desktop/proto/signal.pb.swift; sourceTree = "<group>"; };
+		6881DB7625C7F44C009EDA73 /* video_call.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = video_call.grpc.swift; path = ../../../../../Desktop/proto/video_call.grpc.swift; sourceTree = "<group>"; };
+		6881DB7725C7F44C009EDA73 /* user.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = user.grpc.swift; path = ../../../../../Desktop/proto/user.grpc.swift; sourceTree = "<group>"; };
+		6881DB7825C7F44C009EDA73 /* signal.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = signal.grpc.swift; path = ../../../../../Desktop/proto/signal.grpc.swift; sourceTree = "<group>"; };
+		6881DB7925C7F44C009EDA73 /* message.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = message.pb.swift; path = ../../../../../Desktop/proto/message.pb.swift; sourceTree = "<group>"; };
+		6881DB7A25C7F44C009EDA73 /* notify_push.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = notify_push.pb.swift; path = ../../../../../Desktop/proto/notify_push.pb.swift; sourceTree = "<group>"; };
+		6881DB7B25C7F44C009EDA73 /* user.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = user.pb.swift; path = ../../../../../Desktop/proto/user.pb.swift; sourceTree = "<group>"; };
+		6881DB7C25C7F44C009EDA73 /* notify.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = notify.grpc.swift; path = ../../../../../Desktop/proto/notify.grpc.swift; sourceTree = "<group>"; };
+		6881DB7D25C7F44C009EDA73 /* notify.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = notify.pb.swift; path = ../../../../../Desktop/proto/notify.pb.swift; sourceTree = "<group>"; };
+		6881DB7E25C7F44C009EDA73 /* message.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = message.grpc.swift; path = ../../../../../Desktop/proto/message.grpc.swift; sourceTree = "<group>"; };
+		6881DB7F25C7F44C009EDA73 /* group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = group.pb.swift; path = ../../../../../Desktop/proto/group.pb.swift; sourceTree = "<group>"; };
+		6881DB8025C7F44C009EDA73 /* auth.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = auth.pb.swift; path = ../../../../../Desktop/proto/auth.pb.swift; sourceTree = "<group>"; };
+		6881DB8125C7F44C009EDA73 /* notify_push.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = notify_push.grpc.swift; path = ../../../../../Desktop/proto/notify_push.grpc.swift; sourceTree = "<group>"; };
+		6881DB8225C7F44C009EDA73 /* group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = group.grpc.swift; path = ../../../../../Desktop/proto/group.grpc.swift; sourceTree = "<group>"; };
+		6881DB8325C7F44D009EDA73 /* video_call.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = video_call.pb.swift; path = ../../../../../Desktop/proto/video_call.pb.swift; sourceTree = "<group>"; };
 		6887F469257895D900ACB377 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		688B67A82570B5FF00B95235 /* RealmHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
 		688B67D22570F4CA00B95235 /* FileGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGroups.swift; sourceTree = "<group>"; };
@@ -326,26 +346,12 @@
 		689247BB2565144800EAD2B7 /* HistoryChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryChatView.swift; sourceTree = "<group>"; tabWidth = 4; };
 		689247FB256611C700EAD2B7 /* HistoryChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryChatViewModel.swift; sourceTree = "<group>"; };
 		689248002566123A00EAD2B7 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassWordView.swift; sourceTree = "<group>"; };
+		68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		68C036F6256DF54E00B9D49A /* EventHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHub.swift; sourceTree = "<group>"; };
 		68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPeopleEvent.swift; sourceTree = "<group>"; };
 		68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessage.swift; sourceTree = "<group>"; };
 		68C0AF962574E4600018F5D5 /* RealmMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessages.swift; sourceTree = "<group>"; };
-		68CBC67725932B2600997D93 /* notify.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.grpc.swift; sourceTree = "<group>"; };
-		68CBC67825932B2700997D93 /* message.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.grpc.swift; sourceTree = "<group>"; };
-		68CBC67925932B2800997D93 /* signal.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.pb.swift; sourceTree = "<group>"; };
-		68CBC67A25932B2900997D93 /* user.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.pb.swift; sourceTree = "<group>"; };
-		68CBC67B25932B2A00997D93 /* group.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.grpc.swift; sourceTree = "<group>"; };
-		68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify_push.grpc.swift; sourceTree = "<group>"; };
-		68CBC67D25932B2C00997D93 /* user.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.grpc.swift; sourceTree = "<group>"; };
-		68CBC67E25932B2D00997D93 /* auth.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.grpc.swift; sourceTree = "<group>"; };
-		68CBC67F25932B2F00997D93 /* signal.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signal.grpc.swift; sourceTree = "<group>"; };
-		68CBC68025932B3000997D93 /* notify.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify.pb.swift; sourceTree = "<group>"; };
-		68CBC68125932B3100997D93 /* group.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = group.pb.swift; sourceTree = "<group>"; };
-		68CBC68225932B3200997D93 /* auth.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.pb.swift; sourceTree = "<group>"; };
-		68CBC68325932B3300997D93 /* message.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = message.pb.swift; sourceTree = "<group>"; };
-		68CBC68425932B3400997D93 /* notify_push.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notify_push.pb.swift; sourceTree = "<group>"; };
-		68CBC68525932B3500997D93 /* video_call.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = video_call.pb.swift; sourceTree = "<group>"; };
-		68CBC68625932B3500997D93 /* video_call.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = video_call.grpc.swift; sourceTree = "<group>"; };
 		68CBC69A25942FD600997D93 /* ClearKeep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearKeep.entitlements; sourceTree = "<group>"; };
 		68CBC6B325944AC100997D93 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		68CFA4B825677E0B00109725 /* MotherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherViewModel.swift; sourceTree = "<group>"; };
@@ -445,6 +451,7 @@
 				686F25EE255E766E00953C5E /* User.swift */,
 				689247AC2563B67A00EAD2B7 /* People.swift */,
 				689248002566123A00EAD2B7 /* Group.swift */,
+				6881DB6825C7A198009EDA73 /* ErrorResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -505,6 +512,7 @@
 		16208E41252D72EB000A6CE7 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				68A2ACB525C3E636002873E5 /* ForgotPassword */,
 				686F25CB255CE7F900953C5E /* Register */,
 				16208E43252D7339000A6CE7 /* Login */,
 			);
@@ -601,22 +609,22 @@
 		1664F1EA252C6D0400FF37AD /* protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				68CBC67E25932B2D00997D93 /* auth.grpc.swift */,
-				68CBC68225932B3200997D93 /* auth.pb.swift */,
-				68CBC67B25932B2A00997D93 /* group.grpc.swift */,
-				68CBC68125932B3100997D93 /* group.pb.swift */,
-				68CBC67825932B2700997D93 /* message.grpc.swift */,
-				68CBC68325932B3300997D93 /* message.pb.swift */,
-				68CBC67C25932B2B00997D93 /* notify_push.grpc.swift */,
-				68CBC68425932B3400997D93 /* notify_push.pb.swift */,
-				68CBC67725932B2600997D93 /* notify.grpc.swift */,
-				68CBC68025932B3000997D93 /* notify.pb.swift */,
-				68CBC67F25932B2F00997D93 /* signal.grpc.swift */,
-				68CBC67925932B2800997D93 /* signal.pb.swift */,
-				68CBC67D25932B2C00997D93 /* user.grpc.swift */,
-				68CBC67A25932B2900997D93 /* user.pb.swift */,
-				68CBC68625932B3500997D93 /* video_call.grpc.swift */,
-				68CBC68525932B3500997D93 /* video_call.pb.swift */,
+				6881DB7025C7F43C009EDA73 /* auth.grpc.swift */,
+				6881DB8025C7F44C009EDA73 /* auth.pb.swift */,
+				6881DB8225C7F44C009EDA73 /* group.grpc.swift */,
+				6881DB7F25C7F44C009EDA73 /* group.pb.swift */,
+				6881DB7E25C7F44C009EDA73 /* message.grpc.swift */,
+				6881DB7925C7F44C009EDA73 /* message.pb.swift */,
+				6881DB8125C7F44C009EDA73 /* notify_push.grpc.swift */,
+				6881DB7A25C7F44C009EDA73 /* notify_push.pb.swift */,
+				6881DB7C25C7F44C009EDA73 /* notify.grpc.swift */,
+				6881DB7D25C7F44C009EDA73 /* notify.pb.swift */,
+				6881DB7825C7F44C009EDA73 /* signal.grpc.swift */,
+				6881DB7525C7F44C009EDA73 /* signal.pb.swift */,
+				6881DB7725C7F44C009EDA73 /* user.grpc.swift */,
+				6881DB7B25C7F44C009EDA73 /* user.pb.swift */,
+				6881DB7625C7F44C009EDA73 /* video_call.grpc.swift */,
+				6881DB8325C7F44D009EDA73 /* video_call.pb.swift */,
 			);
 			path = protobuf;
 			sourceTree = "<group>";
@@ -896,6 +904,7 @@
 			isa = PBXGroup;
 			children = (
 				686F25E6255E748E00953C5E /* CKExtensions.swift */,
+				68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -925,6 +934,14 @@
 				68C0AF962574E4600018F5D5 /* RealmMessages.swift */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		68A2ACB525C3E636002873E5 /* ForgotPassword */ = {
+			isa = PBXGroup;
+			children = (
+				68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */,
+			);
+			path = ForgotPassword;
 			sourceTree = "<group>";
 		};
 		7510310A1AC48EF5487B6EBC /* Frameworks */ = {
@@ -1197,29 +1214,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				689247BC2565144800EAD2B7 /* HistoryChatView.swift in Sources */,
-				68CBC68E25932B3500997D93 /* auth.grpc.swift in Sources */,
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
 				56694AD925B53C8A008E8EC5 /* CircularProgressShape.swift in Sources */,
 				6887F46A257895D900ACB377 /* NotificationService.swift in Sources */,
-				68CBC69125932B3500997D93 /* group.pb.swift in Sources */,
 				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
-				68CBC69625932B3500997D93 /* video_call.grpc.swift in Sources */,
 				56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */,
-				68CBC68925932B3500997D93 /* signal.pb.swift in Sources */,
 				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
-				68CBC69225932B3500997D93 /* auth.pb.swift in Sources */,
 				689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */,
 				56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
 				56694AE025B53C8A008E8EC5 /* InfoIndicator.swift in Sources */,
+				6881DB9125C7F44D009EDA73 /* group.grpc.swift in Sources */,
 				1664F1B7252C6B4700FF37AD /* SceneDelegate.swift in Sources */,
 				56694AA825B53C39008E8EC5 /* HUD.swift in Sources */,
 				569FFBCA254BEC0E00C487F5 /* SecondaryIndexes.swift in Sources */,
@@ -1227,74 +1240,74 @@
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
+				6881DB8B25C7F44D009EDA73 /* notify.grpc.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
 				689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */,
 				5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
 				569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */,
-				68CBC69425932B3500997D93 /* notify_push.pb.swift in Sources */,
 				56694AE625B53C8A008E8EC5 /* LinearWaitingShape.swift in Sources */,
-				68CBC68F25932B3500997D93 /* signal.grpc.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
 				56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
 				56205B1525A2C36D00B39D07 /* JanusRolePublish.swift in Sources */,
+				6881DB9225C7F44D009EDA73 /* video_call.pb.swift in Sources */,
 				56694ADE25B53C8A008E8EC5 /* Indicator.swift in Sources */,
 				56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */,
+				6881DB8F25C7F44D009EDA73 /* auth.pb.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
 				56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */,
 				56694AE225B53C8A008E8EC5 /* FailureIndicator.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
-				68CBC68B25932B3500997D93 /* group.grpc.swift in Sources */,
-				68CBC68D25932B3500997D93 /* user.grpc.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
 				56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				56694ADA25B53C8A008E8EC5 /* LinearProgressIndicator.swift in Sources */,
-				68CBC68C25932B3500997D93 /* notify_push.grpc.swift in Sources */,
 				56205B0F25A2C36D00B39D07 /* Janus.swift in Sources */,
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
 				56205B0C25A2C36D00B39D07 /* JanusWebsocket.swift in Sources */,
 				6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */,
-				68CBC69025932B3500997D93 /* notify.pb.swift in Sources */,
+				6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
-				68CBC68725932B3500997D93 /* notify.grpc.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
 				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
+				6881DB8625C7F44D009EDA73 /* user.grpc.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				686F25F5255E774600953C5E /* Constant.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
 				56694ADB25B53C8A008E8EC5 /* CircularProgressIndicator.swift in Sources */,
+				68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */,
 				56694AE125B53C8A008E8EC5 /* FailureShape.swift in Sources */,
 				56694AE525B53C8A008E8EC5 /* LinearWaitingIndicator.swift in Sources */,
 				56694AD825B53C8A008E8EC5 /* SuccessShape.swift in Sources */,
 				56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */,
 				56205B4425A2FB9100B39D07 /* GridView.swift in Sources */,
-				68CBC68A25932B3500997D93 /* user.pb.swift in Sources */,
 				56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */,
 				5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */,
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
+				6881DB8725C7F44D009EDA73 /* signal.grpc.swift in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
+				6881DB8825C7F44D009EDA73 /* message.pb.swift in Sources */,
 				56205B0825A2C36D00B39D07 /* JanusVideoRoom.swift in Sources */,
+				6881DB8C25C7F44D009EDA73 /* notify.pb.swift in Sources */,
 				56205B0B25A2C36D00B39D07 /* CameraSession.swift in Sources */,
-				68CBC68825932B3500997D93 /* message.grpc.swift in Sources */,
+				6881DB8D25C7F44D009EDA73 /* message.grpc.swift in Sources */,
 				569FFB92254BCB1E00C487F5 /* CKSignalObject.m in Sources */,
 				686F25EF255E766E00953C5E /* User.swift in Sources */,
 				569FFBBC254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */,
 				6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */,
 				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
-				68CBC69525932B3500997D93 /* video_call.pb.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
@@ -1305,10 +1318,12 @@
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
 				68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */,
+				6881DB8925C7F44D009EDA73 /* notify_push.pb.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,
-				68CBC69325932B3500997D93 /* message.pb.swift in Sources */,
 				56694AF625B56A52008E8EC5 /* Tools.m in Sources */,
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
+				6881DB9025C7F44D009EDA73 /* notify_push.grpc.swift in Sources */,
+				6881DB8A25C7F44D009EDA73 /* user.pb.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
 				56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */,
 				56694AD725B53C8A008E8EC5 /* SuccessIndicator.swift in Sources */,
@@ -1316,10 +1331,15 @@
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
 				68CFA522256CF04600109725 /* InviteMemberViewModel.swift in Sources */,
 				689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */,
+				6881DB7125C7F43C009EDA73 /* auth.grpc.swift in Sources */,
+				68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */,
 				56694AA625B53C39008E8EC5 /* ViewExtension.swift in Sources */,
 				56694ADC25B53C8A008E8EC5 /* InnerIndicatorText.swift in Sources */,
+				6881DB8525C7F44D009EDA73 /* video_call.grpc.swift in Sources */,
 				56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */,
 				688B67E42570F86000B95235 /* RealmGroups.swift in Sources */,
+				6881DB8425C7F44D009EDA73 /* signal.pb.swift in Sources */,
+				6881DB8E25C7F44D009EDA73 /* group.pb.swift in Sources */,
 				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
 				56694AE425B53C8A008E8EC5 /* CircularWaitingIndicator.swift in Sources */,
 				56694AA725B53C39008E8EC5 /* HUDModifier.swift in Sources */,
@@ -1503,7 +1523,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1535,7 +1555,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;

@@ -38,7 +38,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         self.groupType = groupType
     }
     
-    func callPeerToPeer(group: GroupModel, completion: (() -> ())? = nil){
+    func callPeerToPeer(group: GroupModel, clientId: String, completion: (() -> ())? = nil){
         if isRequesting { return }
         isRequesting = true
         requestVideoCall(clientId: clientId, groupId: group.groupID, groupToken: group.groupToken, completion: completion)
@@ -49,8 +49,11 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             self.isRequesting = false
             completion?()
             if let response = response {
-                if response.success {
+                if response.hasStunServer {
                     DispatchQueue.main.async {
+                        UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
+                        UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
+                        
                         AVCaptureDevice.authorizeVideo(completion: { (status) in
                             AVCaptureDevice.authorizeAudio(completion: { (status) in
                                 if status == .alreadyAuthorized || status == .justAuthorized {
@@ -71,14 +74,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     func createGroup(username: String, clientId: String, completion: ((GroupModel) -> ())?) {
         guard let myAccount = CKSignalCoordinate.shared.myAccount else { return print("My Account is nil") }
         var req = Group_CreateGroupRequest()
-        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
         req.groupName = "\(username)-\(userNameLogin)"
         req.groupType = "peer"
         req.createdByClientID = myAccount.username
         req.lstClientID = [myAccount.username , clientId]
         
         Backend.shared.createRoom(req) { (result) in
-            let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.username)}
+            let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
             
             DispatchQueue.main.async {
                 let group = GroupModel(groupID: result.groupID,

@@ -20,6 +20,8 @@ struct CreateRoomView: View {
     @ObservedObject var selectObserver = CreateRoomViewModel()
     
     @EnvironmentObject var realmGroups : RealmGroups
+    @Binding var isPresentModel: Bool
+    @State var hudVisible = false
     
     
     var body: some View {
@@ -43,6 +45,7 @@ struct CreateRoomView: View {
             }
         }
         .padding()
+        .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
     }
 }
 
@@ -53,18 +56,24 @@ extension CreateRoomView {
     }
     
     private func getAllMember() -> String{
-        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
-        var name = "\(userNameLogin)"
+//        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
+        var name = ""
         self.selectObserver.peoples.forEach { (people) in
-            name += ",\(people.userName)"
+            name += "\(people.userName),"
         }
-        return name
+        return String(name.dropLast())
     }
     
     private func createRoom(){
         
+        if groupName.isEmpty {
+            return
+        }
+        
+        self.hudVisible = true
+        
         if let account = CKSignalCoordinate.shared.myAccount {
-            let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+            let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
             var lstClientID = self.selectObserver.peoples.map{ GroupMember(id: $0.id, username: $0.userName)}
             lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
             
@@ -75,6 +84,7 @@ extension CreateRoomView {
             req.lstClientID = lstClientID.map{$0.id}
             
             Backend.shared.createRoom(req) { (result) in
+                self.hudVisible = false
                 DispatchQueue.main.async {
                     let group = GroupModel(groupID: result.groupID,
                                            groupName: result.groupName,
@@ -90,16 +100,11 @@ extension CreateRoomView {
                                            lastMessage: Data())
                     
                     self.realmGroups.add(group: group)
-                    self.viewRouter.current = .history
+                    self.viewRouter.current = .tabview
                 }
+//                self.isPresentModel = false
             }
         }
     }
     
-}
-
-struct CreateRoomView_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateRoomView()
-    }
 }

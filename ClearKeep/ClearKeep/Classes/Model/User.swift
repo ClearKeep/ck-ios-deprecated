@@ -11,5 +11,6 @@ struct User: Codable {
     var id: String
     var token: String
     var hash: String
-    var userName: String
+    var displayName: String
+    var email: String
 }

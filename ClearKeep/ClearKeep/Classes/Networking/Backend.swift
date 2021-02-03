@@ -46,9 +46,9 @@ class Backend: ObservableObject {
     
     
     
-    init(host: String = "54.235.68.160", port: Int = 5000) {
+//    init(host: String = "54.235.68.160", port: Int = 5000) {
 //    init(host: String = "172.16.6.232", port: Int = 5000) {
-//    init(host: String = "172.16.6.34", port: Int = 5000) {
+    init(host: String = "54.235.68.160", port: Int = 5000) {
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -170,13 +170,13 @@ class Backend: ObservableObject {
         }
     }
     
-    func register(_ request: Auth_RegisterReq, _ completion: @escaping (Bool) -> Void){
+    func register(_ request: Auth_RegisterReq, _ completion: @escaping (Auth_RegisterRes? , Error?) -> Void){
         clientAuth.register(request).response.whenComplete { (result) in
             switch result {
-            case .success(_):
-                completion(true)
-            case .failure(_):
-                completion(false)
+            case .success(let response):
+                completion(response , nil)
+            case .failure(let error):
+                completion(nil , error)
             }
         }
     }
@@ -286,15 +286,15 @@ class Backend: ObservableObject {
     
     func registerTokenDevice(_ completion: @escaping (Bool) -> Void){
         let header = self.getHeaderApi()
-        let tokenPush = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotify)
-//        let tokenPushApns = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotifyAPNS) ?? ""
+        let tokenPush = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotify) ?? ""
+        let tokenPushApns = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotifyAPNS) ?? ""
         let deviceID = UIDevice.current.identifierForVendor
         
-//        let multipleToken = "\(tokenPush),\(tokenPushApns)"
+        let multipleToken = "\(tokenPush),\(tokenPushApns)"
 
-        if let header = header , let token = tokenPush , let deviceID = deviceID?.uuidString {
+        if let header = header, let deviceID = deviceID?.uuidString {
             var req = NotifyPush_RegisterTokenRequest()
-            req.token = token
+            req.token = multipleToken
             req.deviceType = "ios"
             req.deviceID = deviceID
             
@@ -309,7 +309,21 @@ class Backend: ObservableObject {
         }
     }
     
-    func videoCall(_ clientID: String ,_ groupID: Int64 , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
+    func forgotPassword(email: String , _ completion: @escaping (Auth_BaseResponse? , Bool) -> Void){
+        var req = Auth_FogotPassWord()
+        req.email = email
+        
+        clientAuth.fogot_password(req).response.whenComplete { (result) in
+            switch result {
+            case .success(let response):
+                completion(response , true)
+            case .failure(_):
+                completion(nil ,false)
+            }
+        }
+    }
+    
+    func videoCall(_ clientID: String ,_ groupID: Int64 , _ completion: @escaping (VideoCall_ServerResponse? , Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {
             var req = VideoCall_VideoCallRequest()

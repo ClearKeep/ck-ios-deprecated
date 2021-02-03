@@ -119,12 +119,12 @@ struct MessageChatView: View {
                         hudVisible = true
                         // CallManager call
                         if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                            viewModel.callPeerToPeer(group: group) {
+                            viewModel.callPeerToPeer(group: group, clientId: clientId) {
                                 hudVisible = false
                             }
                         } else {
                             viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                                viewModel.callPeerToPeer(group: group) {
+                                viewModel.callPeerToPeer(group: group, clientId: clientId) {
                                     hudVisible = false
                                 }
                             }
@@ -170,53 +170,6 @@ struct MessageChatView: View {
                 self.didReceiveMessage(userInfo: obj.userInfo)
             }
         }
-        //        VStack {
-        //            List(self.realmMessages.allMessageInGroup(groupId: self.myGroupID), id: \.id) { model in
-        //                MessageView(mesgModel: model,chatWithUserID: self.clientId,chatWithUserName: self.userName)
-        //            }
-        //            .navigationBarTitle(Text(self.userName))
-        //            .navigationBarItems(trailing: Button(action: {
-        //                // CallManager call
-        //                if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-        //                    viewModel.callPeerToPeer(group: group)
-        //                } else {
-        //                    viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-        //                        viewModel.callPeerToPeer(group: group)
-        //                    }
-        //                }
-        //
-        //            }, label: {
-        //                Image(systemName: "video")
-        //            }))
-        //            HStack {
-        //                TextFieldContent(key: "Next message", value: self.$nextMessage)
-        //                Button( action: {
-        //                    self.send()
-        //                }){
-        //                    Image(systemName: "paperplane")
-        //                }.padding(.trailing)
-        //            }.onAppear() {
-        //                UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
-        //                viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
-        //                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-        //                    viewModel.groupId = group.groupID
-        //                }
-        //                self.myGroupID = viewModel.groupId
-        //                self.viewModel.requestBundleRecipient(byClientId: self.clientId)
-        //                self.realmMessages.loadSavedData()
-        //                self.groupRealms.loadSavedData()
-        //                self.reloadData()
-        //                self.getMessageInRoom()
-        //            }
-        //            .onDisappear(){
-        //                UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
-        //            }
-        //            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
-        //                if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
-        //                    self.didReceiveMessage(userInfo: obj.userInfo)
-        //                }
-        //            }
-        //        }
     }
 }
 
@@ -248,7 +201,7 @@ extension MessageChatView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
                         }
                     } catch {
                         print("Decryption message error: \(error)")
@@ -345,6 +298,7 @@ extension MessageChatView {
                                                             createdAt: result.createdAt,
                                                             updatedAt: result.updatedAt)
                                     self.realmMessages.add(message: post)
+                                    self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
                                     self.reloadData()
                                     self.scrollingProxy.scrollTo(.end)
                                 }
@@ -364,7 +318,7 @@ extension MessageChatView {
                                                         createdAt: result.createdAt,
                                                         updatedAt: result.updatedAt)
                                 self.realmMessages.add(message: post)
-                                self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload)
+                                self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt)
                                 self.reloadData()
                             }
                         }
@@ -432,7 +386,7 @@ struct MessageView: View {
     }
     
     private func sender() -> String {
-        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserNameLogin) ?? "") as String
+        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
         let myAccount = CKSignalCoordinate.shared.myAccount?.username ?? ""
         
         if isGroup {
