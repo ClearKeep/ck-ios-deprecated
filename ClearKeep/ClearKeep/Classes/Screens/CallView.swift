@@ -145,10 +145,10 @@ struct CallView: View {
                     .background(Color.black.opacity(0.85))
                     .clipShape(RoundedTopShape())
                 }
-                .edgesIgnoringSafeArea(.all)
+//                .edgesIgnoringSafeArea(.all)
             }
             .background(Color.black.opacity(0.3))
-            .edgesIgnoringSafeArea(.all)
+//            .edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
             .onAppear(perform: {
                 if let callBox = CallManager.shared.calls.first {

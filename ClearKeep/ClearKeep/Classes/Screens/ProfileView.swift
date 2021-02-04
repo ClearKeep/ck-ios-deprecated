@@ -19,6 +19,9 @@ struct ProfileView: View {
     @State var lastName: String = ""
     @State var isDisable: Bool = true
     @State var hudVisible = false
+    @State var isShowAlert = false
+    @State var messageAlert = ""
+    @State private var titleAlert = ""
 
     var body: some View {
         VStack {
@@ -32,13 +35,18 @@ struct ProfileView: View {
             TextFieldProfile(key: "Email", value: $email, disable: $isDisable)
             TextFieldProfile(key: "UserName", value: $userName, disable: $isDisable)
             // Logout button
-//            Button(action: logout) {
-//                ButtonContent("LOGOUT")
-//                    .padding(.trailing, 25)
-//            }
+            Button(action: confirmDelete) {
+                ButtonContent("LOGOUT")
+                    .padding(.trailing, 25)
+            }
         }
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .alert(isPresented: self.$isShowAlert, content: {
+            Alert(title: Text(self.titleAlert),
+                  message: Text(self.messageAlert),
+                  dismissButton: .default(Text("OK")))
+        })
         .onAppear(){
             Backend.shared.getMyProfile { (result, error) in
                 if let result = result {
@@ -50,35 +58,51 @@ struct ProfileView: View {
                 }
             }
         }
-//        .actionSheet(isPresented: $showActionSheet) {
-//            self.confirmationSheet
-//        }
+        .actionSheet(isPresented: $showActionSheet) {
+            self.confirmationSheet
+        }
     }
 
     private func logout() {
         hudVisible = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            hudVisible = false
-            // clear data user default
-            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-            // clear data user in database
-            guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
-            connectionDb.readWrite { (transaction) in
-                CKAccount.removeAllAccounts(in: transaction)
+        Backend.shared.logout { (result) in
+            if let result = result {
+                if result.success {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        hudVisible = false
+                        // clear data user default
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                        // clear data user in database
+                        guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
+                        connectionDb.readWrite { (transaction) in
+                            CKAccount.removeAllAccounts(in: transaction)
+                        }
+                        CKSignalCoordinate.shared.myAccount = nil
+                        
+                        self.viewRouter.current = .login
+                    }
+                } else {
+                    hudVisible = false
+                    self.isShowAlert = true
+                    self.messageAlert = result.errors.message
+                }
             }
-            CKSignalCoordinate.shared.myAccount = nil
-            
-            self.viewRouter.current = .login
         }
+        
+        
+        
+
+        
+        
     }
     
     private var confirmationSheet: ActionSheet {
         ActionSheet(
-            title: Text("Delete Account"),
+            title: Text("Logout Account"),
             message: Text("Are you sure?"),
             buttons: [
                 .cancel {},
-                .destructive(Text("Delete")) {
+                .destructive(Text("Logout")) {
                     self.delete()
                 }
             ]
@@ -90,7 +114,7 @@ struct ProfileView: View {
     }
 
     private func delete() {
-        
+        logout()
     }
 }
 

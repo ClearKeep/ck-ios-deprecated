@@ -30,9 +30,9 @@ struct HistoryChatView: View {
                                                groupID : group.groupID,
                                                userName: viewModel.getGroupName(group: group),
                                                groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-
+                
                 let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-
+                
                 if group.groupType == "peer" {
                     NavigationLink(destination:  viewPeer) {
                         Image(systemName: "person.circle.fill")
@@ -127,7 +127,37 @@ extension HistoryChatView {
                             messageResponse.updatedAt = lastMessageResponse.updatedAt
                             messageResponse.unknownFields = lastMessageResponse.unknownFields
                             
-                            self.decryptionMessage(publication: messageResponse)
+                            if groupResponse.groupType == "peer" {
+                                self.viewModel.requestBundleRecipient(byClientId: messageResponse
+                                                                        .fromClientID) {
+                                    if let ourEncryptionMng = self.ourEncryptionManager {
+                                        do {
+                                            let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
+                                                                                                        name: groupResponse.lastMessage.fromClientID,
+                                                                                                        deviceId: UInt32(111))
+                                            let lastMessage = groupResponse.lastMessage
+                                            DispatchQueue.main.async {
+                                                let message = MessageModel(id: lastMessage.id,
+                                                                           groupID: lastMessage.groupID,
+                                                                           groupType: lastMessage.groupType,
+                                                                           fromClientID: lastMessage.fromClientID,
+                                                                           clientID: lastMessage.clientID,
+                                                                           message: decryptedData,
+                                                                           createdAt: lastMessage.createdAt,
+                                                                           updatedAt: lastMessage.updatedAt)
+                                                self.messsagesRealms.add(message: message)
+                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.createdAt)
+                                            }
+                                        } catch {
+                                            print("decrypt message error: ---- getJoinnedGroup")
+                                        }
+                                    }
+                                    
+                                }
+                            } else {
+                                self.decryptionMessage(publication: messageResponse)
+                            }
+                            
                         }
                         
                     } else {

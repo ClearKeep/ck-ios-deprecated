@@ -180,7 +180,9 @@ extension LoginView {
                 if result.baseResponse.success{
                     do {
                         var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                        UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
                         try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                        
                         Backend.shared.getLoginUserID { (userID) in
                             do {
                                 if userID.isEmpty {
@@ -201,11 +203,13 @@ extension LoginView {
                                         print("Register Key Error \(error?.localizedDescription ?? "")")
                                         hudVisible = false
                                         UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                     }
                                 }
                             } catch {
                                 print("save user error")
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                 hudVisible = false
                                 self.messageAlert = "Something when wrong"
                                 self.isShowAlert = true
@@ -214,6 +218,7 @@ extension LoginView {
                     } catch {
                         print(error.localizedDescription)
                         UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                         hudVisible = false
                         self.messageAlert = "Something when wrong"
                         self.isShowAlert = true
@@ -225,7 +230,7 @@ extension LoginView {
                 }
             } else if let error = error {
                 print(error)
-                self.messageAlert = "Login information is not correct. Please try again"
+                self.messageAlert = "Something when wrong"
                 self.isShowAlert = true
                 hudVisible = false
             }

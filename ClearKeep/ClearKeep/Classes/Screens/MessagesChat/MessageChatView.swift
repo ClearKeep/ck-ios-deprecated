@@ -239,6 +239,7 @@ extension MessageChatView {
                                                                 updatedAt: message.updatedAt)
                                         self.realmMessages.add(message: post)
                                         self.myGroupID = message.groupID
+                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt)
                                         self.reloadData()
                                     }
                                 } catch {

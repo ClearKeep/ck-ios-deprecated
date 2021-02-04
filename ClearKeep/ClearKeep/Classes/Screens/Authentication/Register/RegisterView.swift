@@ -38,7 +38,7 @@ struct RegisterView: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding()
             if !self.isEmailValid {
-                Text("Email is Not Valid")
+                Text("Email is invalid")
                     .font(Font.system(size: 13))
                     .foregroundColor(Color.red)
             }
@@ -52,7 +52,7 @@ struct RegisterView: View {
             .disableAutocorrection(true)
             .padding()
             if !self.isDisplayNameValid {
-                Text("Display Name is not empty")
+                Text("Display name must not be blank")
                     .font(Font.system(size: 13))
                     .foregroundColor(Color.red)
             }
@@ -60,7 +60,7 @@ struct RegisterView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             if !self.isPasswordValid {
-                Text("Password is not empty")
+                Text("Password must not be blank")
                     .font(Font.system(size: 13))
                     .foregroundColor(Color.red)
             }

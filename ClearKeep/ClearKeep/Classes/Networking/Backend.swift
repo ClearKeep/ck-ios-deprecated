@@ -340,6 +340,26 @@ class Backend: ObservableObject {
         }
     }
     
+    func logout(_ completion: @escaping(Auth_BaseResponse?) -> Void){
+        let header = self.getHeaderApi()
+        let deviceID = UIDevice.current.identifierForVendor
+        let refreshToken = UserDefaults.standard.string(forKey: Constants.keySaveRefreshToken)
+        if let header = header , let deviceID = deviceID?.uuidString , let refreshToken = refreshToken {
+            var req = Auth_LogoutReq()
+            req.refreshToken = refreshToken
+            req.deviceID = deviceID
+            clientAuth.logout(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response)
+                case .failure(_):
+                    completion(nil)
+                }
+            }
+        }
+        
+    }
+    
     private func getHeaderApi() -> CallOptions?{
         do {
             let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
