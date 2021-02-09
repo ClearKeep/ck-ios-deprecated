@@ -327,6 +327,25 @@ extension HistoryChatView {
                     }
                     
                 } catch {
+                    
+                    DispatchQueue.main.async {
+                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+                        
+                        let post = MessageModel(id: publication.id,
+                                                groupID: publication.groupID,
+                                                groupType: publication.groupType,
+                                                fromClientID: publication.fromClientID,
+                                                clientID: publication.clientID,
+                                                message: messageError,
+                                                createdAt: publication.createdAt,
+                                                updatedAt: publication.updatedAt)
+                        self.messsagesRealms.add(message: post)
+                        self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt)
+                    }
+                    
+                    
+                    
+                    
                     print("Decryption message error: \(error)")
                 }
             }

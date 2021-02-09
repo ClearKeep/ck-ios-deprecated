@@ -205,6 +205,21 @@ extension MessageChatView {
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
                         }
                     } catch {
+                        //save message error when can't decrypt
+                        DispatchQueue.main.async {
+                            let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+                            
+                            let post = MessageModel(id: publication.id,
+                                                    groupID: publication.groupID,
+                                                    groupType: publication.groupType,
+                                                    fromClientID: publication.fromClientID,
+                                                    clientID: publication.clientID,
+                                                    message: messageError,
+                                                    createdAt: publication.createdAt,
+                                                    updatedAt: publication.updatedAt)
+                            self.realmMessages.add(message: post)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt)
+                        }
                         print("Decryption message error: \(error)")
                     }
                 }
@@ -244,6 +259,22 @@ extension MessageChatView {
                                         self.reloadData()
                                     }
                                 } catch {
+                                    DispatchQueue.main.async {
+                                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+
+                                        let post = MessageModel(id: message.id,
+                                                                groupID: message.groupID,
+                                                                groupType: message.groupType,
+                                                                fromClientID: message.fromClientID,
+                                                                clientID: message.clientID,
+                                                                message: messageError,
+                                                                createdAt: message.createdAt,
+                                                                updatedAt: message.updatedAt)
+                                        self.realmMessages.add(message: post)
+                                        self.myGroupID = message.groupID
+                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: messageError, lastMessageAt: message.createdAt)
+                                        self.reloadData()
+                                    }
                                     print("Decryption message error: \(error)")
                                 }
                             }

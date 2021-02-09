@@ -55,6 +55,7 @@ class RealmMessages: ObservableObject {
         let realm = try! Realm()
         try! realm.write {
             realm.deleteAll()
+            self.all.removeAll()
         }
     }
     
