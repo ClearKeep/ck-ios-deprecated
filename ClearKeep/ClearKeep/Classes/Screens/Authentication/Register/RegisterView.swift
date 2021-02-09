@@ -100,7 +100,7 @@ extension RegisterView {
             if let result = result {
                 if result.baseResponse.success {
                     isPresentModel = false
-                    self.messageAlert = "Please confirm your account in the mail"
+                    self.messageAlert = "Please check your email to activate account"
                     self.titleAlert = "Register Successfully"
                     self.isShowAlert = true
                 } else {

@@ -37,7 +37,7 @@ struct TabViewContainer: View {
                     }
                 }
             
-            ProfileView()
+            ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
                 .tabItem {
                     VStack {
                         Image(systemName: "person.fill")

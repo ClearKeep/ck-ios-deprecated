@@ -62,6 +62,13 @@ class RealmGroups: ObservableObject {
             }
         }
     }
+    
+    func removeAll(){
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
+    }
 
     // MARK: - Private functions
     private func write(group: RealmGroup) -> Bool {

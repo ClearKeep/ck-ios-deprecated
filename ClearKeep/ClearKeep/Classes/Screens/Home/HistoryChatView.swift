@@ -62,6 +62,13 @@ struct HistoryChatView: View {
             .onAppear(){
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
+                self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+                self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
+                DispatchQueue.main.async {
+                    self.groupRealms.loadSavedData()
+                    self.messsagesRealms.loadSavedData()
+                }
+                self.getJoinedGroup()
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("Chat"), trailing: NavigationLink(
@@ -71,15 +78,16 @@ struct HistoryChatView: View {
                 Text("CreateRoom")
             }
             .isDetailLink(false))
-        }.onAppear(){
-            self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-            self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
-            DispatchQueue.main.async {
-                self.groupRealms.loadSavedData()
-                self.messsagesRealms.loadSavedData()
-            }
-            self.getJoinedGroup()
         }
+//        .onAppear(){
+//            self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+//            self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
+//            DispatchQueue.main.async {
+//                self.groupRealms.loadSavedData()
+//                self.messsagesRealms.loadSavedData()
+//            }
+//            self.getJoinedGroup()
+//        }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
             self.didReceiveMessageGroup(userInfo: obj.userInfo)
         })
@@ -173,7 +181,7 @@ extension HistoryChatView {
                                                         updatedByClientID: groupResponse.updatedByClientID,
                                                         lstClientID: lstClientID,
                                                         updatedAt: groupResponse.updatedAt,
-                                                        lastMessageAt: groupResponse.lastMessageAt,
+                                                        lastMessageAt: 0,
                                                         lastMessage: Data())
                             self.groupRealms.add(group: groupModel)
                         }

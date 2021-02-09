@@ -18,7 +18,7 @@ struct SearchPeopleView: View {
         NavigationView {
             VStack {
                 HStack {
-                    TextFieldContent(key: "username", value: $keySearch)
+                    TextFieldContent(key: "search user...", value: $keySearch)
                     Button(action: {
                         viewModel.searchUser(self.keySearch)
                     }){

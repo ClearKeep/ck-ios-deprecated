@@ -19,7 +19,7 @@ struct MotherView: View {
                     TabViewContainer().transition(.move(edge: .trailing))
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
-            case .profile: ProfileView()
+            case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             case .register: RegisterView(isPresentModel: .constant(true))
             case .tabview: TabViewContainer().transition(.move(edge: .trailing))
             case .search: SearchPeopleView()

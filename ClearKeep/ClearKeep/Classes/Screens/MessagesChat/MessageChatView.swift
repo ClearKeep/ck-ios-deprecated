@@ -75,6 +75,7 @@ struct MessageChatView: View {
                 HStack(spacing: 15){
                     TextField("Message", text: $messageStr)
                         .foregroundColor(.black)
+                        .offset()
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal)
@@ -159,8 +160,8 @@ struct MessageChatView: View {
             self.viewModel.requestBundleRecipient(byClientId: self.clientId)
             self.realmMessages.loadSavedData()
             self.groupRealms.loadSavedData()
-            self.reloadData()
             self.getMessageInRoom()
+            self.reloadData()
         }
         .onDisappear(){
             UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
@@ -257,6 +258,7 @@ extension MessageChatView {
     private func reloadData(){
         DispatchQueue.main.async {
             self.messages = self.realmMessages.allMessageInGroup(groupId: viewModel.groupId)
+            self.scrollingProxy.scrollTo(.end)
         }
     }
     
@@ -321,6 +323,7 @@ extension MessageChatView {
                                 self.realmMessages.add(message: post)
                                 self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt)
                                 self.reloadData()
+                                self.scrollingProxy.scrollTo(.end)
                             }
                         }
                     }

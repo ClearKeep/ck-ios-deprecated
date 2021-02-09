@@ -36,7 +36,7 @@ struct LoginView: View {
                     .padding()
                     PasswordSecureField(password: $password)
                     if !self.isEmailValid {
-                        Text("Email is Not Valid")
+                        Text("Email is invalid")
                             .font(Font.system(size: 13))
                             .foregroundColor(Color.red)
                             .padding(.bottom, 10)
@@ -55,17 +55,17 @@ struct LoginView: View {
                             }
                         }
                     }
-                    NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
-                        Button(action: {
-                            isForgotPassword = true
-                        }) {
-                            Text("Forgot Password?")
-                                .underline()
-                                .font(Font.system(size: 13))
-                                .padding()
-                                .foregroundColor(.blue)
-                        }
-                    }
+//                    NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
+//                        Button(action: {
+//                            isForgotPassword = true
+//                        }) {
+//                            Text("Forgot Password?")
+//                                .underline()
+//                                .font(Font.system(size: 13))
+//                                .padding()
+//                                .foregroundColor(.blue)
+//                        }
+//                    }
                 }
                 .padding()
                 .hud(.waiting(.circular, "Waiting..."), show: hudVisible)

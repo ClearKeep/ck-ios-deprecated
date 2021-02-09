@@ -51,6 +51,13 @@ class RealmMessages: ObservableObject {
         }
     }
     
+    func removeAll(){
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
+    }
+    
     func allMessageInGroup(groupId: Int64) -> [MessageModel] {
         return all.filter{$0.groupID == groupId}
     }

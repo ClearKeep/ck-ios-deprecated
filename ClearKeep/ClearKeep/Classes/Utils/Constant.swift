@@ -9,7 +9,6 @@ import Foundation
 
 struct Constants {
     static let keySaveUser = "keySaveUser"
-    static let keySaveGroup = "keySaveGroup"
     static let isChatRoom = "isChatRoom"
     static let isChatGroup = "isChatGroup"
     static let keySaveTokenPushNotify = "keySaveTokenPushNotify"

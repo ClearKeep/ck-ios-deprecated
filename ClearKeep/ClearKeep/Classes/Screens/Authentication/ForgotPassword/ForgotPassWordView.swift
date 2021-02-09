@@ -32,7 +32,7 @@ struct ForgotPassWordView: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding()
             if !self.isEmailValid {
-                Text("Email is Not Valid")
+                Text("Email is invalid")
                     .font(Font.system(size: 13))
                     .foregroundColor(Color.red)
             }

@@ -21,6 +21,9 @@ struct GroupMessageChatView: View {
     
     @State var messages = [MessageModel]()
     @State var messageStr = ""
+    
+    private let scrollingProxy = ListScrollingProxy()
+
         
     init(groupModel: GroupModel) {
         self.groupModel = groupModel
@@ -39,7 +42,9 @@ struct GroupMessageChatView: View {
                             ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                 
                                 // Chat Bubbles...
-                                MessageBubble(msg: msg, userName: getUserName(msg: msg))
+                                MessageBubble(msg: msg, userName: getUserName(msg: msg)).background (
+                                    ListScrollingHelper(proxy: self.scrollingProxy)
+                                )
                             }
                             // when ever a new data is inserted scroll to bottom...
                             //                        .onChange(of: allMessages.messages) { (value) in
@@ -98,10 +103,10 @@ struct GroupMessageChatView: View {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 //                self.requestAllKeyInGroup(byGroupId: self.selectedRoom)
                 self.registerWithGroup(groupModel.groupID)
-                self.reloadData()
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
                 self.getMessageInRoom()
+                self.reloadData()
             }
             .onDisappear(){
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
@@ -191,7 +196,7 @@ extension GroupMessageChatView {
     }
     
     private func getUserName(msg: MessageModel) -> String? {
-        if let mem = groupModel.lstClientID.filter{ $0.id == msg.fromClientID }.first {
+        if let mem = groupModel.lstClientID.filter({ $0.id == msg.fromClientID }).first {
             return mem.username
         }
         return nil
@@ -199,6 +204,7 @@ extension GroupMessageChatView {
     
     private func reloadData(){
         self.messages = self.realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+        self.scrollingProxy.scrollTo(.end)
     }
     
     private func send() {
@@ -235,9 +241,9 @@ extension GroupMessageChatView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
+                            self.reloadData()
                         }
                         
-                        self.reloadData()
                         return
                     }else {
                         requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
@@ -323,6 +329,7 @@ extension GroupMessageChatView {
                             self.realmMessages.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
                             self.reloadData()
+                            self.scrollingProxy.scrollTo(.end)
                         }
                     }
                     print("Send message to group \(groupModel.groupID) result")

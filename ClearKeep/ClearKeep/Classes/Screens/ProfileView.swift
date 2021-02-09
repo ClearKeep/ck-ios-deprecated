@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
+    @EnvironmentObject var groupRealms : RealmGroups
+    @EnvironmentObject var realmMessages : RealmMessages
     @State private var showActionSheet = false
     
     @State var id: String = ""
@@ -72,14 +74,18 @@ struct ProfileView: View {
                         hudVisible = false
                         // clear data user default
                         UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUserID)
+                        
                         // clear data user in database
                         guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
                         connectionDb.readWrite { (transaction) in
                             CKAccount.removeAllAccounts(in: transaction)
                         }
                         CKSignalCoordinate.shared.myAccount = nil
-                        
+                        self.realmMessages.removeAll()
+                        self.groupRealms.removeAll()
                         self.viewRouter.current = .login
+
                     }
                 } else {
                     hudVisible = false
