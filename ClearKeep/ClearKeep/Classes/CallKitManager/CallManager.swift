@@ -139,6 +139,24 @@ final class CallManager: NSObject {
            let notifyType = jsonData["notify_type"].string {
             let avatar = jsonData["from_client_avatar"].string
             let token = jsonData["group_rtc_token"].string
+            
+            // Save turnUser and turnPwd
+            let turnString = jsonData["turn_server"].stringValue
+            let turnData = Data(turnString.utf8)
+            do {
+                // make sure this JSON is in the format we expect
+                if let turnJson = try JSONSerialization.jsonObject(with: turnData, options: []) as? [String: Any] {
+                    let turnUser = turnJson["user"] as? String
+                    let turnPwd = turnJson["user"] as? String
+                    
+                    UserDefaults.standard.setValue(turnUser, forKey: Constants.keySaveTurnServerUser)
+                    UserDefaults.standard.setValue(turnPwd, forKey: Constants.keySaveTurnServerPWD)
+                    UserDefaults.standard.synchronize()
+                }
+            } catch let error as NSError {
+                print("Failed to load: \(error.localizedDescription)")
+            }
+            
             reportIncomingCall(roomId: roomId,
                                clientId: clientId,
                                avatar: avatar,

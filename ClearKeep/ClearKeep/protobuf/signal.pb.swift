@@ -71,17 +71,17 @@ struct Signal_PeerRegisterClientKeyRequest {
 
   var deviceID: Int32 = 0
 
-  var identityKeyPublic: Data = SwiftProtobuf.Internal.emptyData
+  var identityKeyPublic: Data = Data()
 
   var preKeyID: Int32 = 0
 
-  var preKey: Data = SwiftProtobuf.Internal.emptyData
+  var preKey: Data = Data()
 
   var signedPreKeyID: Int32 = 0
 
-  var signedPreKey: Data = SwiftProtobuf.Internal.emptyData
+  var signedPreKey: Data = Data()
 
-  var signedPreKeySignature: Data = SwiftProtobuf.Internal.emptyData
+  var signedPreKeySignature: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -113,17 +113,17 @@ struct Signal_PeerGetClientKeyResponse {
 
   var deviceID: Int32 = 0
 
-  var identityKeyPublic: Data = SwiftProtobuf.Internal.emptyData
+  var identityKeyPublic: Data = Data()
 
   var preKeyID: Int32 = 0
 
-  var preKey: Data = SwiftProtobuf.Internal.emptyData
+  var preKey: Data = Data()
 
   var signedPreKeyID: Int32 = 0
 
-  var signedPreKey: Data = SwiftProtobuf.Internal.emptyData
+  var signedPreKey: Data = Data()
 
-  var signedPreKeySignature: Data = SwiftProtobuf.Internal.emptyData
+  var signedPreKeySignature: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -143,7 +143,7 @@ struct Signal_GroupRegisterClientKeyRequest {
 
   var deviceID: Int32 = 0
 
-  var clientKeyDistribution: Data = SwiftProtobuf.Internal.emptyData
+  var clientKeyDistribution: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -160,7 +160,7 @@ struct Signal_GroupClientKeyObject {
 
   var deviceID: Int32 = 0
 
-  var clientKeyDistribution: Data = SwiftProtobuf.Internal.emptyData
+  var clientKeyDistribution: Data = Data()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -247,9 +247,12 @@ extension Signal_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
@@ -282,9 +285,12 @@ extension Signal_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
       default: break
       }
     }
@@ -324,16 +330,19 @@ extension Signal_PeerRegisterClientKeyRequest: SwiftProtobuf.Message, SwiftProto
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 2: try decoder.decodeSingularInt32Field(value: &self.registrationID)
-      case 3: try decoder.decodeSingularInt32Field(value: &self.deviceID)
-      case 4: try decoder.decodeSingularBytesField(value: &self.identityKeyPublic)
-      case 5: try decoder.decodeSingularInt32Field(value: &self.preKeyID)
-      case 6: try decoder.decodeSingularBytesField(value: &self.preKey)
-      case 7: try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID)
-      case 8: try decoder.decodeSingularBytesField(value: &self.signedPreKey)
-      case 9: try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self.registrationID) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.identityKeyPublic) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.preKeyID) }()
+      case 6: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
+      case 7: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
+      case 8: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 9: try { try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature) }()
       default: break
       }
     }
@@ -393,8 +402,11 @@ extension Signal_PeerGetClientKeyRequest: SwiftProtobuf.Message, SwiftProtobuf._
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
       default: break
       }
     }
@@ -430,16 +442,19 @@ extension Signal_PeerGetClientKeyResponse: SwiftProtobuf.Message, SwiftProtobuf.
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 2: try decoder.decodeSingularInt32Field(value: &self.registrationID)
-      case 3: try decoder.decodeSingularInt32Field(value: &self.deviceID)
-      case 4: try decoder.decodeSingularBytesField(value: &self.identityKeyPublic)
-      case 5: try decoder.decodeSingularInt32Field(value: &self.preKeyID)
-      case 6: try decoder.decodeSingularBytesField(value: &self.preKey)
-      case 7: try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID)
-      case 8: try decoder.decodeSingularBytesField(value: &self.signedPreKey)
-      case 9: try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self.registrationID) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.identityKeyPublic) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.preKeyID) }()
+      case 6: try { try decoder.decodeSingularBytesField(value: &self.preKey) }()
+      case 7: try { try decoder.decodeSingularInt32Field(value: &self.signedPreKeyID) }()
+      case 8: try { try decoder.decodeSingularBytesField(value: &self.signedPreKey) }()
+      case 9: try { try decoder.decodeSingularBytesField(value: &self.signedPreKeySignature) }()
       default: break
       }
     }
@@ -502,11 +517,14 @@ extension Signal_GroupRegisterClientKeyRequest: SwiftProtobuf.Message, SwiftProt
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 3: try decoder.decodeSingularInt32Field(value: &self.deviceID)
-      case 4: try decoder.decodeSingularBytesField(value: &self.clientKeyDistribution)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.clientKeyDistribution) }()
       default: break
       }
     }
@@ -548,10 +566,13 @@ extension Signal_GroupClientKeyObject: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 3: try decoder.decodeSingularInt32Field(value: &self.deviceID)
-      case 4: try decoder.decodeSingularBytesField(value: &self.clientKeyDistribution)
+      case 2: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self.deviceID) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.clientKeyDistribution) }()
       default: break
       }
     }
@@ -588,9 +609,12 @@ extension Signal_GroupGetClientKeyRequest: SwiftProtobuf.Message, SwiftProtobuf.
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
       default: break
       }
     }
@@ -623,9 +647,12 @@ extension Signal_GroupGetClientKeyResponse: SwiftProtobuf.Message, SwiftProtobuf
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 2: try decoder.decodeSingularMessageField(value: &self._clientKey)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._clientKey) }()
       default: break
       }
     }
@@ -657,8 +684,11 @@ extension Signal_GroupGetAllClientKeyRequest: SwiftProtobuf.Message, SwiftProtob
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
       default: break
       }
     }
@@ -687,9 +717,12 @@ extension Signal_GroupGetAllClientKeyResponse: SwiftProtobuf.Message, SwiftProto
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 2: try decoder.decodeRepeatedMessageField(value: &self.lstClientKey)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.lstClientKey) }()
       default: break
       }
     }

@@ -81,6 +81,8 @@ struct VideoCall_ServerResponse {
   /// Clears the value of `turnServer`. Subsequent reads from it will return its default value.
   mutating func clearTurnServer() {self._turnServer = nil}
 
+  var groupRtcToken: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -151,9 +153,12 @@ extension VideoCall_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
@@ -186,9 +191,12 @@ extension VideoCall_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
       default: break
       }
     }
@@ -217,13 +225,18 @@ extension VideoCall_ServerResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "stun_server"),
     2: .standard(proto: "turn_server"),
+    3: .standard(proto: "group_rtc_token"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._stunServer)
-      case 2: try decoder.decodeSingularMessageField(value: &self._turnServer)
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._stunServer) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._turnServer) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.groupRtcToken) }()
       default: break
       }
     }
@@ -236,12 +249,16 @@ extension VideoCall_ServerResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if let v = self._turnServer {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }
+    if !self.groupRtcToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupRtcToken, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: VideoCall_ServerResponse, rhs: VideoCall_ServerResponse) -> Bool {
     if lhs._stunServer != rhs._stunServer {return false}
     if lhs._turnServer != rhs._turnServer {return false}
+    if lhs.groupRtcToken != rhs.groupRtcToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -256,9 +273,12 @@ extension VideoCall_StunServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.server)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.port)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.server) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.port) }()
       default: break
       }
     }
@@ -294,12 +314,15 @@ extension VideoCall_TurnServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.server)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.port)
-      case 3: try decoder.decodeSingularStringField(value: &self.type)
-      case 4: try decoder.decodeSingularStringField(value: &self.user)
-      case 5: try decoder.decodeSingularStringField(value: &self.pwd)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.server) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.port) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.type) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.user) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.pwd) }()
       default: break
       }
     }
@@ -344,9 +367,12 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.groupID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
       default: break
       }
     }
