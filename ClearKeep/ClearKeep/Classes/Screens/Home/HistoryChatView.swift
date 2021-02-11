@@ -37,24 +37,38 @@ struct HistoryChatView: View {
                     NavigationLink(destination:  viewPeer) {
                         Image(systemName: "person.circle.fill")
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
-                        VStack(alignment: .leading) {
-                            Text(viewModel.getGroupName(group: group))
-                            Text(viewModel.getMessage(data: group.lastMessage))
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        if group.lastMessage.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text(viewModel.getGroupName(group: group))
+                            }
+                        } else {
+                            VStack(alignment: .leading) {
+                                Text(viewModel.getGroupName(group: group))
+                                Text(viewModel.getMessage(data: group.lastMessage))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }else {
                     NavigationLink(destination:  viewGroup) {
                         Image(systemName: "person.2.fill")
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
-                        VStack(alignment: .leading) {
-                            Text(viewModel.getGroupName(group: group))
-                            Text(viewModel.getMessage(data: group.lastMessage))
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        if group.lastMessage.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text(viewModel.getGroupName(group: group))
+                            }
+                        } else {
+                            VStack(alignment: .leading) {
+                                Text(viewModel.getGroupName(group: group))
+                                Text(viewModel.getMessage(data: group.lastMessage))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }

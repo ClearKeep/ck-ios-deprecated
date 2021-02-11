@@ -41,7 +41,7 @@ struct CreateRoomView: View {
                 .padding()
             }
             Button(action: createRoom){
-                ButtonContent("CREATE")
+                ButtonContent("Create")
             }
         }
         .padding()
@@ -102,7 +102,7 @@ extension CreateRoomView {
                     self.realmGroups.add(group: group)
                     self.viewRouter.current = .tabview
                 }
-//                self.isPresentModel = false
+                self.isPresentModel = false
             }
         }
     }

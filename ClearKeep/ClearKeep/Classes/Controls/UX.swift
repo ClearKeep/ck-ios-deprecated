@@ -117,7 +117,7 @@ struct MultipleSelectionRow: View {
                     .frame(width: 16, height: 16)
                     .foregroundColor(.blue)
             }
-        }.onTapGesture(count: 1, perform: {
+        }.background(Color.white).onTapGesture(count: 1, perform: {
             if self.isSelected {
                 self.selectedItems.remove(self.people)
             } else {

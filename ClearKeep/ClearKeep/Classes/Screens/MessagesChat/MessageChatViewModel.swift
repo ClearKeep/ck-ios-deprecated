@@ -46,7 +46,6 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     
     func requestVideoCall(clientId: String, groupId: Int64, completion: (() -> ())?) {
         Backend.shared.videoCall(clientId, groupId) { (response, error) in
-            print("Group RTC Key: \(response?.groupRtcToken)")
             self.isRequesting = false
             completion?()
             if let response = response {
