@@ -69,7 +69,7 @@ struct ProfileView: View {
         hudVisible = true
         Backend.shared.logout { (result) in
             if let result = result {
-                if result.success {
+//                if result.success {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         hudVisible = false
                         // clear data user default
@@ -87,11 +87,11 @@ struct ProfileView: View {
                         self.viewRouter.current = .login
 
                     }
-                } else {
-                    hudVisible = false
-                    self.isShowAlert = true
-                    self.messageAlert = result.errors.message
-                }
+//                } else {
+//                    hudVisible = false
+//                    self.isShowAlert = true
+//                    self.messageAlert = result.errors.message
+//                }
             }
         }
         

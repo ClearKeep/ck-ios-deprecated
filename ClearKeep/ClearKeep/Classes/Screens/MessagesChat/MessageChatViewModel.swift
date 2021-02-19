@@ -102,15 +102,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func requestBundleRecipient(byClientId clientId: String) {
-        
-        //        let realm = RealmHelper<DeviceIdForClientId>()
-        //        let lstDeviceId = realm.findAll()
-        //        if let existDevice = lstDeviceId.filter({$0.clientId == clientId}).first {
-        //            DispatchQueue.main.async {
-        //                self.recipientDeviceId = UInt32(existDevice.recipient)
-        //            }
-        //        } else {
+    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
+
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
@@ -121,13 +114,6 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
                     self?.recipientDeviceId = UInt32(555)
-                    //                        DispatchQueue.main.async {
-                    //                            self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-                    //                            let realmDevice = DeviceIdForClientId()
-                    //                            realmDevice.clientId = clientId
-                    //                            realmDevice.recipient = recipientResponse.deviceID
-                    //                            realm.add(object: realmDevice)
-                    //                        }
                     if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {
@@ -161,6 +147,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                         //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
                     }
                     print("processPreKeyBundle recipient finished")
+                    completion()
+                } else {
+                    completion()
                 }
             }
         //        }

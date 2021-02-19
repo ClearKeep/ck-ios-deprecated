@@ -157,7 +157,7 @@ struct MessageChatView: View {
                 viewModel.groupId = group.groupID
             }
             self.myGroupID = viewModel.groupId
-            self.viewModel.requestBundleRecipient(byClientId: self.clientId)
+            self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
             self.realmMessages.loadSavedData()
             self.groupRealms.loadSavedData()
             self.getMessageInRoom()
@@ -259,22 +259,22 @@ extension MessageChatView {
                                         self.reloadData()
                                     }
                                 } catch {
-                                    DispatchQueue.main.async {
-                                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-
-                                        let post = MessageModel(id: message.id,
-                                                                groupID: message.groupID,
-                                                                groupType: message.groupType,
-                                                                fromClientID: message.fromClientID,
-                                                                clientID: message.clientID,
-                                                                message: messageError,
-                                                                createdAt: message.createdAt,
-                                                                updatedAt: message.updatedAt)
-                                        self.realmMessages.add(message: post)
-                                        self.myGroupID = message.groupID
-                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: messageError, lastMessageAt: message.createdAt)
-                                        self.reloadData()
-                                    }
+//                                    DispatchQueue.main.async {
+//                                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+//
+//                                        let post = MessageModel(id: message.id,
+//                                                                groupID: message.groupID,
+//                                                                groupType: message.groupType,
+//                                                                fromClientID: message.fromClientID,
+//                                                                clientID: message.clientID,
+//                                                                message: messageError,
+//                                                                createdAt: message.createdAt,
+//                                                                updatedAt: message.updatedAt)
+//                                        self.realmMessages.add(message: post)
+//                                        self.myGroupID = message.groupID
+//                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: messageError, lastMessageAt: message.createdAt)
+//                                        self.reloadData()
+//                                    }
                                     print("Decryption message error: \(error)")
                                 }
                             }
@@ -304,22 +304,41 @@ extension MessageChatView {
             return
         }
         
-        if let myAccount = CKSignalCoordinate.shared.myAccount {
-            do {
-                //                self.viewModel.requestBundleRecipient(byClientId: clientId)
-                
-                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
-                                                                                     name: clientId,
-                                                                                     deviceId: self.viewModel.recipientDeviceId) else { return }
-                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                    viewModel.groupId = group.groupID
-                    self.myGroupID = group.groupID
-                }
-                if viewModel.groupId == 0 {
-                    viewModel.createGroup(username: self.userName, clientId: clientId) { (group) in
-                        self.groupRealms.add(group: group)
+        self.viewModel.requestBundleRecipient(byClientId: clientId) {
+            if let myAccount = CKSignalCoordinate.shared.myAccount {
+                do {
+                    guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                                                                                         name: clientId,
+                                                                                         deviceId: self.viewModel.recipientDeviceId) else { return }
+                    if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                        viewModel.groupId = group.groupID
                         self.myGroupID = group.groupID
-                        
+                    }
+                    if viewModel.groupId == 0 {
+                        viewModel.createGroup(username: self.userName, clientId: clientId) { (group) in
+                            self.groupRealms.add(group: group)
+                            self.myGroupID = group.groupID
+                            
+                            Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
+                                if let result = result {
+                                    DispatchQueue.main.async {
+                                        let post = MessageModel(id: result.id,
+                                                                groupID: result.groupID,
+                                                                groupType: result.groupType,
+                                                                fromClientID: result.fromClientID,
+                                                                clientID: result.clientID,
+                                                                message: payload,
+                                                                createdAt: result.createdAt,
+                                                                updatedAt: result.updatedAt)
+                                        self.realmMessages.add(message: post)
+                                        self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
+                                        self.reloadData()
+                                        self.scrollingProxy.scrollTo(.end)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
                         Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
                             if let result = result {
                                 DispatchQueue.main.async {
@@ -332,36 +351,17 @@ extension MessageChatView {
                                                             createdAt: result.createdAt,
                                                             updatedAt: result.updatedAt)
                                     self.realmMessages.add(message: post)
-                                    self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
+                                    self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt)
                                     self.reloadData()
                                     self.scrollingProxy.scrollTo(.end)
                                 }
                             }
                         }
                     }
-                } else {
-                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
-                        if let result = result {
-                            DispatchQueue.main.async {
-                                let post = MessageModel(id: result.id,
-                                                        groupID: result.groupID,
-                                                        groupType: result.groupType,
-                                                        fromClientID: result.fromClientID,
-                                                        clientID: result.clientID,
-                                                        message: payload,
-                                                        createdAt: result.createdAt,
-                                                        updatedAt: result.updatedAt)
-                                self.realmMessages.add(message: post)
-                                self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt)
-                                self.reloadData()
-                                self.scrollingProxy.scrollTo(.end)
-                            }
-                        }
-                    }
+                    
+                } catch {
+                    print("Send message error: \(error)")
                 }
-                
-            } catch {
-                print("Send message error: \(error)")
             }
         }
         self.reloadData()

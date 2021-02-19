@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import KeychainAccess
 
 class CKExtensions {
     static func getUserToken() -> String{
@@ -16,6 +17,33 @@ class CKExtensions {
             return ""
         }
     }
+    
+     func getUUID() -> String {
+        let userDefaults = UserDefaults.standard
+        if let uuid = userDefaults.string(forKey: Constants.userDefaultUUID) {
+          return uuid
+        } else {
+          let keychain = Keychain(service: Constants.keyChainService)
+          if let token = try? keychain.get(Constants.keyChainUUID) {
+            userDefaults.setValue(token, forKey: Constants.userDefaultUUID)
+            return token
+
+          } else {
+            return self.generateNewUUID()
+          }
+        }
+      }
+
+      func generateNewUUID() -> String {
+        let userDefaults = UserDefaults.standard
+        let keychain = Keychain(service: Constants.keyChainService)
+
+        let UUID = NSUUID().uuidString
+        userDefaults.setValue(UUID, forKey: Constants.userDefaultUUID)
+        userDefaults.synchronize()
+        keychain[Constants.keyChainUUID] = UUID
+        return UUID
+      }
     
 //    static var getAllGroup: [GroupModel] {
 //          let defaultObject = GroupModel(id: 0, groupID: "", groupName: "", groupAvatar: "", groupType: "", createdByClientID: "", createdAt: 1, updatedByClientID: "", lstClientID: [""], updatedAt: 1)

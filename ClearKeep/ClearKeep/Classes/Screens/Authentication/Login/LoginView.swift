@@ -187,7 +187,11 @@ extension LoginView {
                             do {
                                 if userID.isEmpty {
                                     print("getLoginUserID Empty")
+                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                     hudVisible = false
+                                    self.messageAlert = "Something when wrong"
+                                    self.isShowAlert = true
                                     return
                                 }
                                 user.id = userID

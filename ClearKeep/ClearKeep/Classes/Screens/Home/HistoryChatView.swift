@@ -111,10 +111,11 @@ struct HistoryChatView: View {
                 
                 if publication.groupType == "peer" {
                     if !UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
-                        self.viewModel.requestBundleRecipient(byClientId: publication
-                                                                .fromClientID) {
-                            self.didReceiveMessagePeer(userInfo: userInfo)
-                        }
+//                        self.viewModel.requestBundleRecipient(byClientId: publication
+//                                                                .fromClientID) {
+//                        }
+                        self.didReceiveMessagePeer(userInfo: userInfo)
+
                     }
                 } else {
                     if !UserDefaults.standard.bool(forKey: Constants.isChatGroup) {
@@ -171,6 +172,23 @@ extension HistoryChatView {
                                                 self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.createdAt)
                                             }
                                         } catch {
+                                            
+                                            //save message error when can't decrypt
+                                            DispatchQueue.main.async {
+                                                let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+                                                let lastMessage = groupResponse.lastMessage
+
+                                                let message = MessageModel(id: lastMessage.id,
+                                                                           groupID: lastMessage.groupID,
+                                                                           groupType: lastMessage.groupType,
+                                                                           fromClientID: lastMessage.fromClientID,
+                                                                           clientID: lastMessage.clientID,
+                                                                           message: messageError,
+                                                                           createdAt: lastMessage.createdAt,
+                                                                           updatedAt: lastMessage.updatedAt)
+                                                self.messsagesRealms.add(message: message)
+                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: messageError, lastMessageAt: groupResponse.createdAt)
+                                            }
                                             print("decrypt message error: ---- getJoinnedGroup")
                                         }
                                     }
@@ -198,6 +216,7 @@ extension HistoryChatView {
                                                         lastMessageAt: 0,
                                                         lastMessage: Data())
                             self.groupRealms.add(group: groupModel)
+                            self.getJoinedGroup()
                         }
                     }
                 }

@@ -288,11 +288,11 @@ class Backend: ObservableObject {
         let header = self.getHeaderApi()
         let tokenPush = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotify) ?? ""
         let tokenPushApns = UserDefaults.standard.string(forKey: Constants.keySaveTokenPushNotifyAPNS) ?? ""
-        let deviceID = UIDevice.current.identifierForVendor
+        let deviceID = CKExtensions().getUUID()
         
         let multipleToken = "\(tokenPush),\(tokenPushApns)"
 
-        if let header = header, let deviceID = deviceID?.uuidString {
+        if let header = header{
             var req = NotifyPush_RegisterTokenRequest()
             req.token = multipleToken
             req.deviceType = "ios"

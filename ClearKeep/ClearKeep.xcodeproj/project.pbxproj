@@ -137,6 +137,7 @@
 		686F25F5255E774600953C5E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25F4255E774600953C5E /* Constant.swift */; };
 		6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6873AA8C259B1D4D009FD141 /* CallView.swift */; };
 		6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB6825C7A198009EDA73 /* ErrorResponse.swift */; };
+		6881DBCC25DF5B00009EDA73 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6881DBCB25DF5B00009EDA73 /* KeychainAccess */; };
 		6887F46A257895D900ACB377 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F469257895D900ACB377 /* NotificationService.swift */; };
 		688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67A82570B5FF00B95235 /* RealmHelper.swift */; };
 		688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67D22570F4CA00B95235 /* FileGroups.swift */; };
@@ -380,6 +381,7 @@
 				56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */,
 				68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */,
 				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
+				6881DBCC25DF5B00009EDA73 /* KeychainAccess in Frameworks */,
 				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
 				16C83CB425300887002E3115 /* GRPC in Frameworks */,
 				AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */,
@@ -985,6 +987,7 @@
 				16C83CB525300887002E3115 /* CGRPCZlib */,
 				56205AEE25A2BB8500B39D07 /* SwiftyJSON */,
 				5603463625B1402F00F57ED6 /* IQKeyboardManagerSwift */,
+				6881DBCB25DF5B00009EDA73 /* KeychainAccess */,
 			);
 			productName = ClearKeep;
 			productReference = 1664F1B1252C6B4700FF37AD /* ClearKeep.app */;
@@ -1066,6 +1069,7 @@
 				16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */,
 				56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				5603463525B1402F00F57ED6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 1664F1B2252C6B4700FF37AD /* Products */;
 			projectDirPath = "";
@@ -1531,7 +1535,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1563,7 +1567,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1746,6 +1750,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1773,6 +1785,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		6881DBCB25DF5B00009EDA73 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -147,7 +147,7 @@ final class CallManager: NSObject {
                 // make sure this JSON is in the format we expect
                 if let turnJson = try JSONSerialization.jsonObject(with: turnData, options: []) as? [String: Any] {
                     let turnUser = turnJson["user"] as? String
-                    let turnPwd = turnJson["user"] as? String
+                    let turnPwd = turnJson["pwd"] as? String
                     
                     UserDefaults.standard.setValue(turnUser, forKey: Constants.keySaveTurnServerUser)
                     UserDefaults.standard.setValue(turnPwd, forKey: Constants.keySaveTurnServerPWD)

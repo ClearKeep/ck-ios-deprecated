@@ -17,5 +17,9 @@ struct Constants {
     static let keySaveTurnServerPWD = "keySaveTurnServerPWD"
     static let keySaveUserID = "keySaveUserID"
     static let keySaveRefreshToken = "keySaveRefreshToken"
+    
+    static let keyChainService = "keyChainService"
+    static let keyChainUUID = "keyChainUUID"
+    static let userDefaultUUID = "userDefaultUUID"
 
 }
