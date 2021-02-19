@@ -202,7 +202,7 @@ extension MessageChatView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                         }
                     } catch {
                         //save message error when can't decrypt
@@ -218,7 +218,7 @@ extension MessageChatView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt)
+                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                         }
                         print("Decryption message error: \(error)")
                     }
@@ -255,7 +255,7 @@ extension MessageChatView {
                                                                 updatedAt: message.updatedAt)
                                         self.realmMessages.add(message: post)
                                         self.myGroupID = message.groupID
-                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt)
+                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
                                         self.reloadData()
                                     }
                                 } catch {
@@ -331,7 +331,7 @@ extension MessageChatView {
                                                                 createdAt: result.createdAt,
                                                                 updatedAt: result.updatedAt)
                                         self.realmMessages.add(message: post)
-                                        self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
+                                        self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
                                         self.reloadData()
                                         self.scrollingProxy.scrollTo(.end)
                                     }
@@ -351,7 +351,7 @@ extension MessageChatView {
                                                             createdAt: result.createdAt,
                                                             updatedAt: result.updatedAt)
                                     self.realmMessages.add(message: post)
-                                    self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt)
+                                    self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
                                     self.reloadData()
                                     self.scrollingProxy.scrollTo(.end)
                                 }

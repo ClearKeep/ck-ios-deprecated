@@ -97,7 +97,7 @@ extension CreateRoomView {
                                            lstClientID: lstClientID,
                                            updatedAt: result.updatedAt,
                                            lastMessageAt: result.lastMessageAt,
-                                           lastMessage: Data())
+                                           lastMessage: Data(), idLastMessage: result.lastMessage.id)
                     
                     self.realmGroups.add(group: group)
                     self.viewRouter.current = .tabview

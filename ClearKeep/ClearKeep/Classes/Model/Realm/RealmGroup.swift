@@ -21,6 +21,7 @@ class RealmGroup: Object {
     @objc dynamic var createdAt: Int64 = 0
     @objc dynamic var updatedByClientID: String = ""
     @objc dynamic var updatedAt: Int64 = 0
+    @objc dynamic var idLastMsg: String = ""
     
     override class func primaryKey() -> String? {
         return "groupId"

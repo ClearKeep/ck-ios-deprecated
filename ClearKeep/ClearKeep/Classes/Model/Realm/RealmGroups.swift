@@ -40,11 +40,12 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64){
+    func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64 , idLastMessage: String){
         if let index = all.firstIndex(where: { $0.groupID == groupID }) {
             if var group = all.filter({$0.groupID == groupID}).first {
                 group.lastMessage = lastMessage
                 group.lastMessageAt = lastMessageAt
+                group.idLastMessage = idLastMessage
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
@@ -168,7 +169,7 @@ class RealmGroups: ObservableObject {
                                lstClientID: lstClientId,
                                updatedAt: realmGroup.updatedAt,
                                lastMessageAt: realmGroup.lastMessageAt,
-                               lastMessage: realmGroup.lastMessage)
+                               lastMessage: realmGroup.lastMessage, idLastMessage: realmGroup.idLastMsg)
 
         return group
     }

@@ -37,7 +37,6 @@ class CallViewModel: NSObject, ObservableObject {
     func updateCallBox(callBox: CallBox) {
         self.callBox = callBox
         updateVideoView()
-        speakerChange()
 
         self.callBox?.stateDidChange = { [weak self] in
             DispatchQueue.main.async {

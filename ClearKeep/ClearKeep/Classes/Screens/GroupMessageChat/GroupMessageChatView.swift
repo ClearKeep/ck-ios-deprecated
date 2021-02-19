@@ -101,7 +101,7 @@ struct GroupMessageChatView: View {
             .background(Color.white)
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                //                self.requestAllKeyInGroup(byGroupId: self.selectedRoom)
+                self.requestAllKeyInGroup(byGroupId: groupModel.groupID)
                 self.registerWithGroup(groupModel.groupID)
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
@@ -119,39 +119,6 @@ struct GroupMessageChatView: View {
                     }
                 }
             }
-            
-            
-//            List(self.realmMessages.allMessageInGroup(groupId: self.selectedRoom), id: \.id) { model in
-//                MessageView(mesgModel: model, chatWithUserID: "", chatWithUserName: "" , isGroup: true)
-//            }
-//            .navigationBarTitle(Text(self.groupName))
-//            HStack {
-//                TextFieldContent(key: "Next message", value: self.$nextMessage)
-//                Button( action: {
-//                    self.send()
-//                }){
-//                    Image(systemName: "paperplane")
-//                }.padding(.trailing)
-//            }.onAppear() {
-//                UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-//                //                self.requestAllKeyInGroup(byGroupId: self.selectedRoom)
-//                self.registerWithGroup(self.selectedRoom)
-//                self.reloadData()
-//                self.realmMessages.loadSavedData()
-//                self.groupRealms.loadSavedData()
-//                self.getMessageInRoom()
-//            }
-//            .onDisappear(){
-//                UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
-//                if let userInfo = obj.userInfo,
-//                   let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-//                    if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-//                        self.decryptionMessage(publication: publication)
-//                    }
-//                }
-//            }
         }
     }
 }
@@ -214,6 +181,9 @@ extension GroupMessageChatView {
     
     
     func decryptionMessage(publication: Message_MessageObjectResponse) {
+        
+        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
+        
         if let ourEncryptionMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             do {
@@ -231,7 +201,7 @@ extension GroupMessageChatView {
                         print("Message decryption: \(messageDecryption ?? "Empty error")")
                         
                         DispatchQueue.main.async {
-                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             let post = MessageModel(id: publication.id,
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
@@ -327,7 +297,7 @@ extension GroupMessageChatView {
                                                     createdAt: result.createdAt,
                                                     updatedAt: result.updatedAt)
                             self.realmMessages.add(message: post)
-                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload, lastMessageAt: result.createdAt)
+                            self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
                             self.reloadData()
                             self.scrollingProxy.scrollTo(.end)
                         }

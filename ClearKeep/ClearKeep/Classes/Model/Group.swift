@@ -22,6 +22,7 @@ struct GroupModel: Identifiable , Codable {
     var updatedAt: Int64
     var lastMessageAt: Int64 = 0
     var lastMessage = Data()
+    var idLastMessage: String
 }
 
 struct GroupMember: Identifiable , Codable {
