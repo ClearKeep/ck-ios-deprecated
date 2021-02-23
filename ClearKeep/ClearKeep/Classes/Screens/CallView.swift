@@ -27,18 +27,33 @@ struct CallView: View {
                 
                 // local video
                 if let videoView = viewModel.localVideoView {
-                    HStack(alignment: .top) {
-                        if (viewModel.callStatus == .answered) { Spacer() }
+                    if viewModel.callStatus == .answered {
+
+                        let widthOfContainerView: CGFloat = 120.0
+                        let heightOfContainerView: CGFloat = CGFloat.Magnitude.greatestFiniteMagnitude // this value will be adjust by widthOfContainerView
+                        let containerFrame = CGRect.init(x: 0, y: 0, width: widthOfContainerView, height: heightOfContainerView)
+                        let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: containerFrame)
+                        
+                        HStack(alignment: .top) {
+                            Spacer()
+                            VideoView(rtcVideoView: videoView)
+                                .frame(width: newVideoViewFrame.width,
+                                       height: newVideoViewFrame.height,
+                                       alignment: .center)
+                                .clipShape(Rectangle())
+                                .cornerRadius(15)
+                                .animation(.easeInOut(duration: 0.6))
+                        }
+                    } else {
+                        let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: reader.frame(in: .global))
+
                         VideoView(rtcVideoView: videoView)
-                            .frame(width: viewModel.callStatus == .answered ? 120 : reader.frame(in: .global).width,
-                                   height: viewModel.callStatus == .answered ? 180 : reader.size.height)
+                            .frame(width: newVideoViewFrame.width,
+                                   height: newVideoViewFrame.height,
+                                   alignment: .center)
                             .clipShape(Rectangle())
-                            .cornerRadius(viewModel.callStatus == .answered ? 15 : 0)
                             .animation(.easeInOut(duration: 0.6))
                     }
-//                    .padding(.top, viewModel.callStatus == .answered ? 45 : 0)
-//                    .edgesIgnoringSafeArea(.all)
-//                    .padding(.horizontal)
                 }
 
 //                // Info call

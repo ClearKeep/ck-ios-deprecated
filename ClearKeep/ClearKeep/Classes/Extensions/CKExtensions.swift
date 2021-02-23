@@ -111,3 +111,22 @@ enum ObjectSavableError: String, LocalizedError {
         rawValue
     }
 }
+
+extension CGSize {
+    func aspectFitScale(in container: CGSize) -> CGFloat {
+
+        if height <= container.height && width > container.width {
+            return container.width / width
+        }
+        if height > container.height && width > container.width {
+            return min(container.width / width, container.height / height)
+        }
+        if height > container.height && width <= container.width {
+            return container.height / height
+        }
+        if height <= container.height && width <= container.width {
+            return min(container.width / width, container.height / height)
+        }
+        return 1.0
+    }
+}

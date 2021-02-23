@@ -133,6 +133,19 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
+    func getNewVideoViewFrame(videoViewFrame: CGRect, containerFrame: CGRect) -> CGRect {
+        if videoViewFrame == CGRect.zero {
+            return containerFrame
+        }
+        
+        var videoFrame = AVMakeRect(aspectRatio: videoViewFrame.size, insideRect: containerFrame)
+        let scale = videoFrame.size.aspectFitScale(in: containerFrame.size)
+        videoFrame.size.width = videoFrame.size.width * CGFloat(scale)
+        videoFrame.size.height = videoFrame.size.height * CGFloat(scale)
+
+        return videoFrame
+    }
+    
     private func startCallTimout() {
         // Check timeout for call
         timeoutTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(CallViewModel.checkCallTimeout), userInfo: nil, repeats: true)
