@@ -342,9 +342,9 @@ class Backend: ObservableObject {
     
     func logout(_ completion: @escaping(Auth_BaseResponse?) -> Void){
         let header = self.getHeaderApi()
-        let deviceID = UIDevice.current.identifierForVendor
+        let deviceID = CKExtensions().getUUID()
         let refreshToken = UserDefaults.standard.string(forKey: Constants.keySaveRefreshToken)
-        if let header = header , let deviceID = deviceID?.uuidString , let refreshToken = refreshToken {
+        if let header = header , let refreshToken = refreshToken {
             var req = Auth_LogoutReq()
             req.refreshToken = refreshToken
             req.deviceID = deviceID

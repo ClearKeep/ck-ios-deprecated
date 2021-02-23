@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        UIApplication.shared.applicationIconBadgeNumber += 1
         
     }
     
@@ -75,6 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         // Override point for customization after application launch.
         CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
         IQKeyboardManager.shared.enable = true
+        UIApplication.shared.applicationIconBadgeNumber = 0
         // cheating fix callkit request failure in the first time
         let _ = CallManager.shared
         UNUserNotificationCenter.current()
