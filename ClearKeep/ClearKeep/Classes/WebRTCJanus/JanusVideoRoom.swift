@@ -57,9 +57,9 @@ class JanusVideoRoom: NSObject {
         self.delegate = delegate
         let localConfig = JanusPublishMediaConstraints()
 //        localConfig.resolution = CGSize(width: 4032, height: 3024)
-//        localConfig.resolution = CGSize(width: 1280, height: 720)
+        localConfig.resolution = CGSize(width: 1280, height: 720)
 //        localConfig.resolution = CGSize(width: 1024, height: 768)
-        localConfig.resolution = CGSize(width: 960, height: 540)
+//        localConfig.resolution = CGSize(width: 960, height: 540)
 //        localConfig.resolution = CGSize(width: 640, height: 480)
 //        localConfig.resolution = CGSize(width: 480, height: 640)
 //        localConfig.resolution = CGSize(width: 192, height: 144)
