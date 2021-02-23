@@ -156,6 +156,7 @@ extension JanusRoleListen: RTCVideoViewDelegate {
                 listenDelegate.janusRoleListen(role: self, firstRenderWithSize: size)
             }
         } else {
+            renderSize = size
             if let listenDelegate = self.delegate as? JanusRoleListenDelegate {
                 listenDelegate.janusRoleListen(role: self, renderSizeChangeWithSize: size)
             }
