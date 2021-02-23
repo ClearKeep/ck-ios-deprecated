@@ -23,17 +23,17 @@ struct CallView: View {
                 } else if let videoView = viewModel.remoteVideoView {
                     // show full screen
                     let videoViewFrame = CGRect.init(origin: CGPoint.zero, size: viewModel.getRemoteVideoRenderSize(videoView: videoView))
-
                     let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoViewFrame, containerFrame: reader.frame(in: .global))
 
-                    VStack {
-                        Spacer()
-                        VideoView(rtcVideoView: videoView)
-                            .frame(width: newVideoViewFrame.width,
-                                   height: newVideoViewFrame.height,
-                                   alignment: .center)
-                        Spacer()
-                    }
+                    let leadingPadding = -(newVideoViewFrame.width - reader.frame(in: .global).width)/2
+                    let topPadding = -(newVideoViewFrame.height - reader.frame(in: .global).height)/2
+                    
+                    VideoView(rtcVideoView: videoView)
+                        .frame(width: newVideoViewFrame.width,
+                               height: newVideoViewFrame.height,
+                               alignment: .center)
+                        .padding(.leading, leadingPadding)
+                        .padding(.top, topPadding)
                 }
                 
                 // local video
@@ -41,9 +41,12 @@ struct CallView: View {
                     if viewModel.callStatus == .answered {
 
                         let widthOfContainerView: CGFloat = 120.0
-                        let heightOfContainerView: CGFloat = CGFloat.Magnitude.greatestFiniteMagnitude // this value will be adjust by widthOfContainerView
+                        let heightOfContainerView: CGFloat = 200
                         let containerFrame = CGRect.init(x: 0, y: 0, width: widthOfContainerView, height: heightOfContainerView)
                         let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: containerFrame)
+                        
+                        let leadingPadding = -(newVideoViewFrame.width - containerFrame.width)/2
+                        let topPadding = -(newVideoViewFrame.height - containerFrame.height)/2
                         
                         HStack(alignment: .top) {
                             Spacer()
@@ -51,9 +54,10 @@ struct CallView: View {
                                 .frame(width: newVideoViewFrame.width,
                                        height: newVideoViewFrame.height,
                                        alignment: .center)
+                                .padding(.leading, leadingPadding)
+                                .padding(.top, topPadding)
                                 .clipShape(Rectangle())
                                 .cornerRadius(15)
-                                .padding(.trailing, 15)
                                 .animation(.easeInOut(duration: 0.6))
                         }
                     } else {

@@ -133,6 +133,9 @@ class CallViewModel: NSObject, ObservableObject {
     
     func getNewVideoViewFrame(videoViewFrame: CGRect, containerFrame: CGRect) -> CGRect {
         if videoViewFrame == CGRect.zero {
+            if containerFrame == CGRect.zero {
+                return CGRect.zero
+            }
             return containerFrame
         }
         
