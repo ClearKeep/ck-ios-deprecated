@@ -43,6 +43,10 @@ class RealmGroups: ObservableObject {
     func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64 , idLastMessage: String){
         if let index = all.firstIndex(where: { $0.groupID == groupID }) {
             if var group = all.filter({$0.groupID == groupID}).first {
+                if lastMessageAt < group.lastMessageAt {
+                    return
+                }
+                
                 group.lastMessage = lastMessage
                 group.lastMessageAt = lastMessageAt
                 group.idLastMessage = idLastMessage

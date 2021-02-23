@@ -55,17 +55,6 @@ struct LoginView: View {
                             }
                         }
                     }
-//                    NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
-//                        Button(action: {
-//                            isForgotPassword = true
-//                        }) {
-//                            Text("Forgot Password?")
-//                                .underline()
-//                                .font(Font.system(size: 13))
-//                                .padding()
-//                                .foregroundColor(.blue)
-//                        }
-//                    }
                 }
                 .padding()
                 .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
@@ -161,13 +150,18 @@ extension LoginView {
         //        }
         //        return
         
-        //TODO: Waiting BE fixed
-//        if !self.isEmailValid {
-//            return
-//        } else if self.password.isEmpty {
-//            self.isPasswordValid = false
-//            return
-//        }
+        if self.email.isEmpty {
+            self.messageAlert = "Email can't empty"
+            self.isShowAlert = true
+            return
+        } else if !self.isEmailValid {
+            return
+        } else if self.password.isEmpty {
+            self.isPasswordValid = false
+            self.messageAlert = "Password can't empty"
+            self.isShowAlert = true
+            return
+        }
         
         hudVisible = true
         var request = Auth_AuthReq()
@@ -190,7 +184,7 @@ extension LoginView {
                                     UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                     UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                     hudVisible = false
-                                    self.messageAlert = "Something when wrong"
+                                    self.messageAlert = "Something went wrong"
                                     self.isShowAlert = true
                                     return
                                 }
@@ -215,7 +209,7 @@ extension LoginView {
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                 hudVisible = false
-                                self.messageAlert = "Something when wrong"
+                                self.messageAlert = "Something went wrong"
                                 self.isShowAlert = true
                             }
                         }
@@ -224,7 +218,7 @@ extension LoginView {
                         UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                         UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                         hudVisible = false
-                        self.messageAlert = "Something when wrong"
+                        self.messageAlert = "Something went wrong"
                         self.isShowAlert = true
                     }
                 }else {
@@ -234,7 +228,7 @@ extension LoginView {
                 }
             } else if let error = error {
                 print(error)
-                self.messageAlert = "Something when wrong"
+                self.messageAlert = "Something went wrong"
                 self.isShowAlert = true
                 hudVisible = false
             }
@@ -278,7 +272,7 @@ extension LoginView {
                             }else {
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                 hudVisible = false
-                                self.messageAlert = "Something when wrong"
+                                self.messageAlert = "Something went wrong"
                                 self.isShowAlert = true
                             }
                         }

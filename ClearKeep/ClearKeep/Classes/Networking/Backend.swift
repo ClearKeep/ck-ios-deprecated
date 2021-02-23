@@ -371,7 +371,8 @@ class Backend: ObservableObject {
             var option = CallOptions()
             option.customMetadata = header
             return option
-        } catch {
+        } catch let error as NSError{
+            print(error)
             return nil
         }
     }

@@ -71,8 +71,9 @@ class RealmMessages: ObservableObject {
     func getTimeStampPreLastMessage(groupId: Int64) -> Int64{
         let messageInGroup = all.filter{$0.groupID == groupId}
         var timeStamp : Int64 = 0
-        if !messageInGroup.isEmpty {
-            timeStamp = messageInGroup[messageInGroup.count - 1].createdAt
+        
+        if messageInGroup.count > 1 {
+            timeStamp = messageInGroup[messageInGroup.count - 2].createdAt
         }
         return timeStamp
     }

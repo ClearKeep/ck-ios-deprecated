@@ -151,8 +151,8 @@ extension HistoryChatView {
                             messageResponse.unknownFields = lastMessageResponse.unknownFields
                             
                             if groupResponse.groupType == "peer" {
-                                self.viewModel.requestBundleRecipient(byClientId: messageResponse
-                                                                        .fromClientID) {
+//                                self.viewModel.requestBundleRecipient(byClientId: messageResponse
+//                                                                        .fromClientID) {
                                     if let ourEncryptionMng = self.ourEncryptionManager {
                                         do {
                                             let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
@@ -169,7 +169,7 @@ extension HistoryChatView {
                                                                            createdAt: lastMessage.createdAt,
                                                                            updatedAt: lastMessage.updatedAt)
                                                 self.messsagesRealms.add(message: message)
-                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.createdAt, idLastMessage: groupResponse.lastMessage.id)
+                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
                                             }
                                         } catch {
                                             
@@ -193,7 +193,7 @@ extension HistoryChatView {
                                         }
                                     }
                                     
-                                }
+//                                }
                             } else {
                                 self.decryptionMessage(publication: messageResponse)
                             }

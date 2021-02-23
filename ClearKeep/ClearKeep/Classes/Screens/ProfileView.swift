@@ -68,38 +68,24 @@ struct ProfileView: View {
     private func logout() {
         hudVisible = true
         Backend.shared.logout { (result) in
-            if let result = result {
-//                if result.success {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        hudVisible = false
-                        // clear data user default
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUserID)
-                        
-                        // clear data user in database
-                        guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
-                        connectionDb.readWrite { (transaction) in
-                            CKAccount.removeAllAccounts(in: transaction)
-                        }
-                        CKSignalCoordinate.shared.myAccount = nil
-                        self.realmMessages.removeAll()
-                        self.groupRealms.removeAll()
-                        self.viewRouter.current = .login
-
-                    }
-//                } else {
-//                    hudVisible = false
-//                    self.isShowAlert = true
-//                    self.messageAlert = result.errors.message
-//                }
-            }
         }
-        
-        
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            hudVisible = false
+            // clear data user default
+            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+            UserDefaults.standard.removeObject(forKey: Constants.keySaveUserID)
+            
+            // clear data user in database
+            guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
+            connectionDb.readWrite { (transaction) in
+                CKAccount.removeAllAccounts(in: transaction)
+            }
+            CKSignalCoordinate.shared.myAccount = nil
+            self.realmMessages.removeAll()
+            self.groupRealms.removeAll()
+            self.viewRouter.current = .login
 
-        
-        
+        }
     }
     
     private var confirmationSheet: ActionSheet {

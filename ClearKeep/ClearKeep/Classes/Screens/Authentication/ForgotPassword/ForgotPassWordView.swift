@@ -75,7 +75,7 @@ extension ForgotPassWordView {
                 }
             } else {
                 self.titleAlert = "Forgot Pasword Error"
-                self.messageAlert = "Something when wrong"
+                self.messageAlert = "Something went wrong"
                 self.isShowAlert = true
             }
         }
