@@ -22,7 +22,18 @@ struct CallView: View {
                     }
                 } else if let videoView = viewModel.remoteVideoView {
                     // show full screen
-                    VideoView(rtcVideoView: videoView)
+                    let videoViewFrame = CGRect.init(origin: CGPoint.zero, size: viewModel.getRemoteVideoRenderSize(videoView: videoView))
+
+                    let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoViewFrame, containerFrame: reader.frame(in: .global))
+
+                    VStack {
+                        Spacer()
+                        VideoView(rtcVideoView: videoView)
+                            .frame(width: newVideoViewFrame.width,
+                                   height: newVideoViewFrame.height,
+                                   alignment: .center)
+                        Spacer()
+                    }
                 }
                 
                 // local video
@@ -42,6 +53,7 @@ struct CallView: View {
                                        alignment: .center)
                                 .clipShape(Rectangle())
                                 .cornerRadius(15)
+                                .padding(.trailing, 15)
                                 .animation(.easeInOut(duration: 0.6))
                         }
                     } else {

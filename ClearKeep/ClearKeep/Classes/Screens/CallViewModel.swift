@@ -30,8 +30,6 @@ class CallViewModel: NSObject, ObservableObject {
     
     override init() {
         super.init()
-        
-        
     }
     
     func updateCallBox(callBox: CallBox) {
@@ -144,6 +142,13 @@ class CallViewModel: NSObject, ObservableObject {
         videoFrame.size.height = videoFrame.size.height * CGFloat(scale)
 
         return videoFrame
+    }
+    
+    func getRemoteVideoRenderSize(videoView: RTCEAGLVideoView) -> CGSize {
+        if let renderSize = callBox?.videoRoom?.remotes.first(where: { $0.value.videoRenderView == videoView })?.value.renderSize {
+            return renderSize
+        }
+        return CGSize.zero
     }
     
     private func startCallTimout() {
