@@ -46,9 +46,8 @@ class Backend: ObservableObject {
     
     
     
-//    init(host: String = "54.235.68.160", port: Int = 5000) {
-//    init(host: String = "172.16.6.232", port: Int = 5000) {
-    init(host: String = "54.235.68.160", port: Int = 5000) {
+//    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
+    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
