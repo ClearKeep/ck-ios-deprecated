@@ -66,6 +66,16 @@ struct MessageChatView: View {
                     }
                     .padding([.horizontal,.bottom])
                     .padding(.top, 25)
+                    .onAppear {
+                        DispatchQueue.main.async {
+                            scrollingProxy.scrollTo(.end)
+                        }
+                    }
+                    .onAppear {
+                        DispatchQueue.main.async {
+                            scrollingProxy.scrollTo(.end)
+                        }
+                    }
                     //                }
                 })
             }
@@ -74,7 +84,7 @@ struct MessageChatView: View {
             HStack(spacing: 15){
                 HStack(spacing: 15){
                     TextField("Message", text: $messageStr)
-                        .foregroundColor(.black)
+//                        .foregroundColor(.black)
                         .offset()
                 }
                 .padding(.vertical, 12)
@@ -91,7 +101,6 @@ struct MessageChatView: View {
                         withAnimation(.easeIn){
                             self.send()
                         }
-                        scrollingProxy.scrollTo(.end)
                         messageStr = ""
                     }, label: {
                         Image(systemName: "paperplane.fill")
@@ -149,7 +158,7 @@ struct MessageChatView: View {
         })
         // since bottom edge is ignored....
         //        .padding(.bottom,UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-        .background(Color.white)
+//        .background(Color.white)
         .onAppear() {
             UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
             viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
@@ -203,6 +212,7 @@ extension MessageChatView {
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                            self.reloadData()
                         }
                     } catch {
                         //save message error when can't decrypt
@@ -219,13 +229,14 @@ extension MessageChatView {
                                                     updatedAt: publication.updatedAt)
                             self.realmMessages.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                            self.reloadData()
                         }
                         print("Decryption message error: \(error)")
                     }
                 }
             }
         }
-        self.messages = self.realmMessages.allMessageInGroup(groupId: self.myGroupID)
+//        self.messages = self.realmMessages.allMessageInGroup(groupId: self.myGroupID)
     }
     
     func getMessageInRoom(){
@@ -288,7 +299,7 @@ extension MessageChatView {
     
     private func reloadData(){
         DispatchQueue.main.async {
-            self.messages = self.realmMessages.allMessageInGroup(groupId: viewModel.groupId)
+            self.realmMessages.loadSavedData()
             self.scrollingProxy.scrollTo(.end)
         }
     }
@@ -296,10 +307,16 @@ extension MessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func sendMessage(messageStr: String) {
+        
+        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {
+            return
+        }
+        
+        
         guard let payload = messageStr.data(using: .utf8) else {
             return
         }

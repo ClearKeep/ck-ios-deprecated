@@ -36,14 +36,14 @@ struct MessageBubble: View {
                     Text(dateTime())
                         .font(.caption)
                         .padding(.top, 5)
-                        .foregroundColor(Color.gray.opacity(0.4))
+//                        .foregroundColor(Color.gray.opacity(0.4))
                 }
                 
                 // profile Image...
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .clipShape(Circle())
+//                Image(systemName: "person.circle.fill")
+//                    .resizable()
+//                    .frame(width: 30, height: 30)
+//                    .clipShape(Circle())
             }
             else {
                 // profile Image...
@@ -58,13 +58,12 @@ struct MessageBubble: View {
                         Text(username)
                             .font(.body)
                             .padding(.top, 5)
-                            .foregroundColor(Color.black)
+//                            .foregroundColor(Color.black)
                     }
                     if msg.photo == nil{
                         Text(stringValue())
-                            .foregroundColor(.black)
                             .padding(.all, 8)
-                            .background(Color.black.opacity(0.06))
+                            .background(Color(UIColor.secondarySystemBackground))
                             .clipShape(BubbleArrow(myMsg: msg.myMsg))
                     }
                     else {

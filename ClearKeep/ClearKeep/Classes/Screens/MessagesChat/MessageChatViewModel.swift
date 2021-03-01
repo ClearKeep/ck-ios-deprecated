@@ -53,7 +53,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     DispatchQueue.main.async {
                         UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
                         UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
-                        
+                        UserDefaults.standard.synchronize()
+
                         AVCaptureDevice.authorizeVideo(completion: { (status) in
                             AVCaptureDevice.authorizeAudio(completion: { (status) in
                                 if status == .alreadyAuthorized || status == .justAuthorized {
@@ -113,7 +114,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 }
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                    self?.recipientDeviceId = UInt32(555)
+                    self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
                     if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {

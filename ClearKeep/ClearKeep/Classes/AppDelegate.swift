@@ -46,8 +46,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         print("Failed to register: \(error)")
     }
     
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                didReceive response: UNNotificationResponse,
+                withCompletionHandler completionHandler:
+                   @escaping () -> Void) {
+            
+       // Always call the completion handler when done.
+       completionHandler()
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+             willPresent notification: UNNotification,
+             withCompletionHandler completionHandler:
+                @escaping (UNNotificationPresentationOptions) -> Void) {
+
+
+        completionHandler(
+            [UNNotificationPresentationOptions.alert,
+                UNNotificationPresentationOptions.sound,
+                UNNotificationPresentationOptions.badge])
+    }
+    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        let content = UNMutableNotificationContent()
+        content.title = userInfo[""] as? String ?? ""
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request)
+
         UIApplication.shared.applicationIconBadgeNumber += 1
+        
         
     }
     
@@ -75,6 +108,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
+        
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
+        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
         IQKeyboardManager.shared.enable = true
         UIApplication.shared.applicationIconBadgeNumber = 0
         // cheating fix callkit request failure in the first time

@@ -21,6 +21,7 @@ struct GroupMessageChatView: View {
     
     @State var messages = [MessageModel]()
     @State var messageStr = ""
+    @State var isForceProcessKey = true
     
     private let scrollingProxy = ListScrollingProxy()
 
@@ -63,7 +64,6 @@ struct GroupMessageChatView: View {
                 HStack(spacing: 15){
                     HStack(spacing: 15){
                         TextField("Message", text: $messageStr)
-                            .foregroundColor(.black)
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal)
@@ -88,7 +88,7 @@ struct GroupMessageChatView: View {
                                 .padding(.vertical,12)
                                 .padding(.leading,12)
                                 .padding(.trailing,17)
-                                .background(Color.black.opacity(0.07))
+//                                .background(Color.black.opacity(0.07))
                                 .clipShape(Circle())
                         })
                     }
@@ -98,11 +98,12 @@ struct GroupMessageChatView: View {
                 .animation(.easeOut)
             }
             .navigationBarTitle(Text(groupModel.groupName))
-            .background(Color.white)
+//            .background(Color.white)
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                self.requestAllKeyInGroup(byGroupId: groupModel.groupID)
+//                self.requestAllKeyInGroup(byGroupId: groupModel.groupID)
                 self.registerWithGroup(groupModel.groupID)
+//                self.requestKeyInGroupPreSendMessage(byGroupId: groupModel.groupID)
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
                 self.getMessageInRoom()
@@ -132,26 +133,46 @@ extension GroupMessageChatView {
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
                         if filterMessage.isEmpty {
-                            if let ourEncryptionMng = self.ourEncryptionManager {
+                            if let ourEncryptionMng = self.ourEncryptionManager,
+                               let connectionDb = self.connectionDb {
                                 do {
-                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
-                                                                                                name: message.fromClientID,
-                                                                                                deviceId: UInt32(555))
-                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                                    print("Message decryption: \(messageDecryption ?? "Empty error")")
-                                    DispatchQueue.main.async {
-                                        let post = MessageModel(id: message.id,
-                                                                groupID: message.groupID,
-                                                                groupType: message.groupType,
-                                                                fromClientID: message.fromClientID,
-                                                                clientID: message.clientID,
-                                                                message: decryptedData,
-                                                                createdAt: message.createdAt,
-                                                                updatedAt: message.updatedAt)
-                                        self.realmMessages.add(message: post)
+                                    var account: CKAccount?
+                                    connectionDb.read { (transaction) in
+                                        account = CKAccount.allAccounts(withUsername: message.fromClientID, transaction: transaction).first
+                                    }
+                                    if let senderAccount = account {
+                                        if ourEncryptionMng.senderKeyExistsForUsername(message.fromClientID, deviceId: senderAccount.deviceId, groupId: groupModel.groupID) {
+                                            let decryptedData = try ourEncryptionMng.decryptFromGroup(message.message,
+                                                                                                      groupId: message.groupID,
+                                                                                                      name: message.fromClientID,
+                                                                                                      deviceId: UInt32(senderAccount.deviceId))
+                                            let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                                            print("Message decryption: \(messageDecryption ?? "Empty error")")
+                                            
+                                            DispatchQueue.main.async {
+                                                self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
+                                                let post = MessageModel(id: message.id,
+                                                                        groupID: message.groupID,
+                                                                        groupType: message.groupType,
+                                                                        fromClientID: message.fromClientID,
+                                                                        clientID: message.clientID,
+                                                                        message: decryptedData,
+                                                                        createdAt: message.createdAt,
+                                                                        updatedAt: message.updatedAt)
+                                                self.realmMessages.add(message: post)
+                                                self.reloadData()
+                                            }
+                                            
+                                            return
+                                        }else {
+                                            requestKeyInGroup(byGroupId: groupModel.groupID, publication: message)
+                                        }
+                                    }else {
+                                        requestKeyInGroup(byGroupId: groupModel.groupID, publication: message)
                                     }
                                 } catch {
                                     print("Decryption message error: \(error)")
+                                    requestKeyInGroup(byGroupId: groupModel.groupID, publication: message)
                                 }
                             }
                         }
@@ -170,19 +191,22 @@ extension GroupMessageChatView {
     }
     
     private func reloadData(){
-        self.messages = self.realmMessages.allMessageInGroup(groupId: groupModel.groupID)
-        self.scrollingProxy.scrollTo(.end)
+        DispatchQueue.main.async {
+            self.messages = self.realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+            self.scrollingProxy.scrollTo(.end)
+        }
     }
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     
     func decryptionMessage(publication: Message_MessageObjectResponse) {
         
-        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
+//        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
+        self.isForceProcessKey = true
         
         if let ourEncryptionMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
@@ -230,41 +254,41 @@ extension GroupMessageChatView {
     }
     
     func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
-        Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-                                                     groupId: groupId) {(result, error, response) in
-            guard let groupResponse = response else {
-                print("Request prekey \(groupId) fail")
-                return
-            }
-            if let ourEncryptionMng = self.ourEncryptionManager {
-                if !ourEncryptionMng.senderKeyExistsForUsername(groupResponse.clientKey.clientID,
-                                                                deviceId: groupResponse.clientKey.deviceID,
-                                                                groupId: groupId) {
-                    self.processSenderKey(byGroupId: groupResponse.groupID,
-                                          responseSenderKey: groupResponse.clientKey)
-                    
-                    // decrypt message again
-                    self.decryptionMessage(publication: publication)
+        
+        if self.isForceProcessKey {
+            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
+                                                         groupId: groupId) {(result, error, response) in
+                guard let groupResponse = response else {
+                    print("Request prekey \(groupId) fail")
+                    return
                 }
+                self.processSenderKey(byGroupId: groupResponse.groupID,
+                                      responseSenderKey: groupResponse.clientKey)
+                // decrypt message again
+                self.decryptionMessage(publication: publication)
+                self.isForceProcessKey = false
             }
         }
     }
     
     private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
+        
+        let deviceID = 444
+        
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             // save account infor
             connectionDb.readWrite { (transaction) in
                 var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
                 if account == nil {
-                    account = CKAccount(username: responseSenderKey.clientID, deviceId: responseSenderKey.deviceID, accountType: .none)
+                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
                     account?.save(with: transaction)
                 }
             }
             do {
                 let addresss = SignalAddress(name: responseSenderKey.clientID,
-                                             deviceId: responseSenderKey.deviceID)
+                                             deviceId: Int32(deviceID))
                 try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
                                                          address: addresss,
                                                          skdmDtata: responseSenderKey.clientKeyDistribution)
@@ -275,6 +299,11 @@ extension GroupMessageChatView {
     }
     
     func sendMessage(messageStr: String) {
+        
+        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {
+            return
+        }
+        
         guard let payload = messageStr.data(using: .utf8) else {
             return
         }
@@ -311,35 +340,39 @@ extension GroupMessageChatView {
     }
     
     func registerWithGroup(_ groupId: Int64) {
-        if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
-            let userName = myAccount.username
-            let deviceID = Int32(myAccount.deviceId)
-            let address = SignalAddress(name: userName, deviceId: deviceID)
-            let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-            let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-            
-            if !ourAccountEncryptMng.senderKeyExistsForUsername(userName,
-                                                                deviceId: deviceID,
-                                                                groupId: groupModel.groupID) {
-                do {
-                    let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-                    Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-                                                               clientId: userName,
-                                                               deviceId: deviceID,
-                                                               senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                        print("Register group with result: \(result)")
-                        if result {
-//                            Backend.shared.signalSubscrible(clientId: userName)
+        
+        if let group = self.groupRealms.filterGroup(groupId: groupId) {
+            if !group.isRegister {
+                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
+                    let userName = myAccount.username
+                    let deviceID = Int32(555)
+                    let address = SignalAddress(name: userName, deviceId: deviceID)
+                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
+                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
+                    
+                        do {
+                            let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
+                            Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                                                                       clientId: userName,
+                                                                       deviceId: deviceID,
+                                                                       senderKeyData: signalSKDM.serializedData()) { (result, error) in
+                                print("Register group with result: \(result)")
+                                if result {
+                                    self.groupRealms.registerGroup(groupId: groupId)
+                                }
+                            }
+                            
+                        } catch {
+                            print("Register group error: \(error)")
+                            
                         }
-                    }
-                    
-                } catch {
-                    print("Register group error: \(error)")
-                    
                 }
-                
             }
         }
+        
+        
+        
+
     }
     
     func requestAllKeyInGroup(byGroupId groupId: Int64) {

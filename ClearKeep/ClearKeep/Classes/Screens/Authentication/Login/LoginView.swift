@@ -34,6 +34,9 @@ struct LoginView: View {
                     .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+                    .onAppear {
+                        self.isEmailValid = true
+                    }
                     PasswordSecureField(password: $password)
                     if !self.isEmailValid {
                         Text("Email is invalid")
@@ -150,15 +153,17 @@ extension LoginView {
         //        }
         //        return
         
+        self.isEmailValid = self.email.textFieldValidatorEmail()
+        
         if self.email.isEmpty {
-            self.messageAlert = "Email can't empty"
+            self.messageAlert = "Email can't be empty"
             self.isShowAlert = true
             return
         } else if !self.isEmailValid {
             return
         } else if self.password.isEmpty {
             self.isPasswordValid = false
-            self.messageAlert = "Password can't empty"
+            self.messageAlert = "Password can't be empty"
             self.isShowAlert = true
             return
         }
@@ -199,9 +204,11 @@ extension LoginView {
                                         loginForUser(clientID: userID)
                                     } else {
                                         print("Register Key Error \(error?.localizedDescription ?? "")")
-                                        hudVisible = false
                                         UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                         UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                                        hudVisible = false
+                                        self.messageAlert = "Something went wrong"
+                                        self.isShowAlert = true
                                     }
                                 }
                             } catch {

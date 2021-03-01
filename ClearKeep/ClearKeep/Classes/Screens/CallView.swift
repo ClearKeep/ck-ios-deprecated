@@ -107,7 +107,7 @@ struct CallView: View {
                             .padding(.top, 5)
                         
                         HStack {
-                            Spacer()
+//                            Spacer()
                             // Button camera
                             Button(action: {
                                 viewModel.cameraChange()
@@ -119,6 +119,7 @@ struct CallView: View {
                                     .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
                                     .clipShape(Circle())
                             })
+                            Spacer()
                             // Button speaker
                             Button(action: {
                                 viewModel.speakerChange()
@@ -167,7 +168,7 @@ struct CallView: View {
                                     .background(Color.red)
                                     .clipShape(Circle())
                             })
-                            Spacer()
+//                            Spacer()
                         }
                         .padding(.bottom, 14)
                         .padding(.top, 5)

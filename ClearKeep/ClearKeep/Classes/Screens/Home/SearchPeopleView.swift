@@ -15,8 +15,8 @@ struct SearchPeopleView: View {
     
     
     var body: some View {
-        NavigationView {
             VStack {
+                TitleLabel("Search User")
                 HStack {
                     TextFieldContent(key: "search user...", value: $keySearch)
                     Button(action: {
@@ -40,8 +40,6 @@ struct SearchPeopleView: View {
                         }
                     }
                 }
-            }
-            .navigationBarTitle(Text("Search User"), displayMode: .inline)
         }
     }
 }

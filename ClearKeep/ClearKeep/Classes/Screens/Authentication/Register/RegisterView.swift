@@ -44,7 +44,7 @@ struct RegisterView: View {
             }
             TextField("Display Name", text: $userName , onEditingChanged: { (isChanged) in
                 if !isChanged {
-                    self.isDisplayNameValid = !self.userName.isEmpty
+                    self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
                 }
             })
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -56,7 +56,11 @@ struct RegisterView: View {
                     .font(Font.system(size: 13))
                     .foregroundColor(Color.red)
             }
-            SecureField("Password", text: $passWord)
+            TextField("Password", text: $passWord , onEditingChanged: { (isChanged) in
+                if !isChanged {
+                    self.isPasswordValid = !self.passWord.isEmpty
+                }
+            })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             if !self.isPasswordValid {

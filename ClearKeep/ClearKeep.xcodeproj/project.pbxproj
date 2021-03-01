@@ -138,6 +138,8 @@
 		6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6873AA8C259B1D4D009FD141 /* CallView.swift */; };
 		6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DB6825C7A198009EDA73 /* ErrorResponse.swift */; };
 		6881DBCC25DF5B00009EDA73 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 6881DBCB25DF5B00009EDA73 /* KeychainAccess */; };
+		6881DBE125E7AB32009EDA73 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DBE025E7AB2F009EDA73 /* ViewExtensions.swift */; };
+		6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6881DBE525E8AE20009EDA73 /* KeyboardHandler.swift */; };
 		6887F46A257895D900ACB377 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F469257895D900ACB377 /* NotificationService.swift */; };
 		688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67A82570B5FF00B95235 /* RealmHelper.swift */; };
 		688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67D22570F4CA00B95235 /* FileGroups.swift */; };
@@ -337,6 +339,8 @@
 		686F25F4255E774600953C5E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		6873AA8C259B1D4D009FD141 /* CallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		6881DB6825C7A198009EDA73 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
+		6881DBE025E7AB2F009EDA73 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		6881DBE525E8AE20009EDA73 /* KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHandler.swift; sourceTree = "<group>"; };
 		6887F469257895D900ACB377 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		688B67A82570B5FF00B95235 /* RealmHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
 		688B67D22570F4CA00B95235 /* FileGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGroups.swift; sourceTree = "<group>"; };
@@ -511,6 +515,7 @@
 				68C036F6256DF54E00B9D49A /* EventHub.swift */,
 				68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */,
 				688B67A82570B5FF00B95235 /* RealmHelper.swift */,
+				6881DBE525E8AE20009EDA73 /* KeyboardHandler.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -913,6 +918,7 @@
 			children = (
 				686F25E6255E748E00953C5E /* CKExtensions.swift */,
 				68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */,
+				6881DBE025E7AB2F009EDA73 /* ViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1233,6 +1239,7 @@
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
 				56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */,
+				6881DBE125E7AB32009EDA73 /* ViewExtensions.swift in Sources */,
 				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
@@ -1267,6 +1274,7 @@
 				56694ADE25B53C8A008E8EC5 /* Indicator.swift in Sources */,
 				56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
+				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
 				56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */,

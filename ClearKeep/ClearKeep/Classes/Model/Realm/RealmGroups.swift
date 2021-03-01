@@ -53,7 +53,7 @@ class RealmGroups: ObservableObject {
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
-//                sort()
+                sort()
             }
         }
     }
@@ -98,7 +98,7 @@ class RealmGroups: ObservableObject {
     
     func getGroup(clientId: String, type: String = "peer") -> GroupModel? {
         return all.filter{group in
-            if group.lstClientID.filter{$0.id == clientId}.count > 0 && group.groupType == type {
+            if group.lstClientID.filter({$0.id == clientId}).count > 0 && group.groupType == type {
                 return true
             }
             return false
@@ -108,6 +108,17 @@ class RealmGroups: ObservableObject {
     func filterGroup(groupId: Int64) -> GroupModel?{
         let group = self.all.filter{$0.groupID == groupId}.first
         return group
+    }
+    
+    func registerGroup(groupId: Int64){
+        if let index = all.firstIndex(where: { $0.groupID == groupId }) {
+            if var group = all.filter({$0.groupID == groupId}).first {
+                group.isRegister = true
+                let realmGroup = buildRealmGroup(group: group)
+                guard write(group: realmGroup) else { return }
+                all[index] = group
+            }
+        }
     }
 
     private func realmWrite(operation: (_ realm: Realm) -> Void) -> Bool {
@@ -173,7 +184,9 @@ class RealmGroups: ObservableObject {
                                lstClientID: lstClientId,
                                updatedAt: realmGroup.updatedAt,
                                lastMessageAt: realmGroup.lastMessageAt,
-                               lastMessage: realmGroup.lastMessage, idLastMessage: realmGroup.idLastMsg)
+                               lastMessage: realmGroup.lastMessage,
+                               idLastMessage: realmGroup.idLastMsg,
+                               isRegister: realmGroup.isRegister)
 
         return group
     }
@@ -199,10 +212,11 @@ class RealmGroups: ObservableObject {
         realmGroup.lstClientID.append(objectsIn: listClientId)
         realmGroup.lastMessage = group.lastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
+        realmGroup.isRegister = group.isRegister
     }
     
     private func sort() {
-        all.sort(by: { $0.updatedAt < $1.updatedAt } )
+        all.sort(by: { $0.updatedAt > $1.updatedAt } )
     }
 
 }

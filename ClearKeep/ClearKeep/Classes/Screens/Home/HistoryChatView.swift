@@ -21,6 +21,7 @@ struct HistoryChatView: View {
     //    }
     
     @State var pushActive = false
+    @State var isForceProcessKeyInGroup = true
     
     var body: some View {
         
@@ -111,14 +112,15 @@ struct HistoryChatView: View {
                 
                 if publication.groupType == "peer" {
                     if !UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
-//                        self.viewModel.requestBundleRecipient(byClientId: publication
-//                                                                .fromClientID) {
-//                        }
-                        self.didReceiveMessagePeer(userInfo: userInfo)
+                        self.viewModel.requestBundleRecipient(byClientId: publication
+                                                                .fromClientID) {
+                            self.didReceiveMessagePeer(userInfo: userInfo)
+                        }
 
                     }
                 } else {
                     if !UserDefaults.standard.bool(forKey: Constants.isChatGroup) {
+                        self.isForceProcessKeyInGroup = true
                         self.decryptionMessage(publication: publication)
                     }
                 }
@@ -131,6 +133,10 @@ struct HistoryChatView: View {
 extension HistoryChatView {
     func getJoinedGroup(){
         print("getJoinnedGroup")
+        DispatchQueue.main.async {
+            self.groupRealms.loadSavedData()
+            self.messsagesRealms.loadSavedData()
+        }
         
         Backend.shared.getJoinnedGroup { (result, error) in
             if let result = result {
@@ -172,23 +178,6 @@ extension HistoryChatView {
                                                 self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
                                             }
                                         } catch {
-                                            
-                                            //save message error when can't decrypt
-//                                            DispatchQueue.main.async {
-//                                                let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-//                                                let lastMessage = groupResponse.lastMessage
-//
-//                                                let message = MessageModel(id: lastMessage.id,
-//                                                                           groupID: lastMessage.groupID,
-//                                                                           groupType: lastMessage.groupType,
-//                                                                           fromClientID: lastMessage.fromClientID,
-//                                                                           clientID: lastMessage.clientID,
-//                                                                           message: messageError,
-//                                                                           createdAt: lastMessage.createdAt,
-//                                                                           updatedAt: lastMessage.updatedAt)
-//                                                self.messsagesRealms.add(message: message)
-//                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: messageError, lastMessageAt: groupResponse.createdAt)
-//                                            }
                                             print("decrypt message error: ---- getJoinnedGroup")
                                         }
                                     }
@@ -274,41 +263,42 @@ extension HistoryChatView {
     }
     
     func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
-        Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-                                                     groupId: groupId) {(result, error, response) in
-            guard let groupResponse = response else {
-                print("Request prekey \(groupId) fail")
-                return
-            }
-            if let ourEncryptionMng = self.ourEncryptionManager {
-                if !ourEncryptionMng.senderKeyExistsForUsername(groupResponse.clientKey.clientID,
-                                                                deviceId: groupResponse.clientKey.deviceID,
-                                                                groupId: groupId) {
-                    self.processSenderKey(byGroupId: groupResponse.groupID,
-                                          responseSenderKey: groupResponse.clientKey)
-                    
-                    // decrypt message again
-                    self.decryptionMessage(publication: publication)
+         
+        if self.isForceProcessKeyInGroup {
+            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
+                                                         groupId: groupId) {(result, error, response) in
+                guard let groupResponse = response else {
+                    print("Request prekey \(groupId) fail")
+                    return
                 }
+                self.processSenderKey(byGroupId: groupResponse.groupID,
+                                      responseSenderKey: groupResponse.clientKey)
+                
+                // decrypt message again
+                self.decryptionMessage(publication: publication)
+                self.isForceProcessKeyInGroup = false
             }
         }
     }
     
     private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
+        
+        let deviceID = 444
+        
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             // save account infor
             connectionDb.readWrite { (transaction) in
                 var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
                 if account == nil {
-                    account = CKAccount(username: responseSenderKey.clientID, deviceId: responseSenderKey.deviceID, accountType: .none)
+                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
                     account?.save(with: transaction)
                 }
             }
             do {
                 let addresss = SignalAddress(name: responseSenderKey.clientID,
-                                             deviceId: responseSenderKey.deviceID)
+                                             deviceId: Int32(deviceID))
                 try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
                                                          address: addresss,
                                                          skdmDtata: responseSenderKey.clientKeyDistribution)

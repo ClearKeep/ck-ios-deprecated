@@ -23,7 +23,7 @@ struct UserImage : View {
         return Image(name)
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: 150, height: 150)
+            .frame(width: UIScreen.main.bounds.size.width / 3, height: UIScreen.main.bounds.size.width / 3)
             .clipped()
             .cornerRadius(150)
             .padding()
@@ -42,7 +42,7 @@ struct ButtonContent : View {
             .font(.headline)
             .foregroundColor(.gray)
             .padding()
-            .frame(width: 150, height: 50)
+            .frame(width: UIScreen.main.bounds.size.width / 3, height: 50)
             .cornerRadius(10.0)
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1)
             )
@@ -108,6 +108,7 @@ struct MultipleSelectionRow: View {
                 .padding(.horizontal)
             Text(self.people.userName)
                 .font(.body)
+                
                 .fontWeight(.bold)
             Spacer()
             if self.isSelected {
@@ -117,7 +118,7 @@ struct MultipleSelectionRow: View {
                     .frame(width: 16, height: 16)
                     .foregroundColor(.blue)
             }
-        }.background(Color.white).onTapGesture(count: 1, perform: {
+        }.onTapGesture(count: 1, perform: {
             if self.isSelected {
                 self.selectedItems.remove(self.people)
             } else {

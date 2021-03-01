@@ -11,9 +11,7 @@ import SwiftUI
 class HistoryChatViewModel: ObservableObject, Identifiable{
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
-    
-    @Published var recipientDeviceId: UInt32 = 0
-    
+        
 //    init() {
 //        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
 //    }
@@ -22,14 +20,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
     }
     
     func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-        
-        //                let realm = RealmHelper<DeviceIdForClientId>()
-        //                let lstDeviceId = realm.findAll()
-        //                if let existDevice = lstDeviceId.filter({$0.clientId == clientId}).first {
-        //                    DispatchQueue.main.async {
-        //                        self.recipientDeviceId = UInt32(existDevice.recipient)
-        //                    }
-        //                } else {
+
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
@@ -40,15 +31,6 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                 }
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                    self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-                    
-                    //                    DispatchQueue.main.async {
-                    //                        self?.recipientDeviceId = UInt32(111)
-                    //                        let realmDevice = DeviceIdForClientId()
-                    //                        realmDevice.clientId = clientId
-                    //                        realmDevice.recipient = recipientResponse.deviceID
-                    //                        realm.add(object: realmDevice)
-                    //                    }
                     if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {
@@ -64,7 +46,7 @@ class HistoryChatViewModel: ObservableObject, Identifiable{
                                         buddy.username = recipientResponse.clientID
                                         buddy.save(with:transaction)
                                         
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
+                                        let device = CKDevice(deviceId: NSNumber(value: recipientResponse.deviceID),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: buddy.uniqueId,
                                                               parentCollection: CKBuddy.collection,

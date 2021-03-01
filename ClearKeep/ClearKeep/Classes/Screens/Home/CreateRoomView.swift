@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CreateRoomView: View {
     
-    @EnvironmentObject var viewRouter: ViewRouter
     @ObservedObject var viewModel = InviteMemberViewModel()
     
     @State var groupName: String = ""
@@ -100,7 +99,6 @@ extension CreateRoomView {
                                            lastMessage: Data(), idLastMessage: result.lastMessage.id)
                     
                     self.realmGroups.add(group: group)
-                    self.viewRouter.current = .tabview
                 }
                 self.isPresentModel = false
             }
