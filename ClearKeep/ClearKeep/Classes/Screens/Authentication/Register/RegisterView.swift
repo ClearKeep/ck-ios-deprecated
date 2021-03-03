@@ -24,6 +24,7 @@ struct RegisterView: View {
     @State private var isDisplayNameValid: Bool = true
     @State private var isPasswordValid: Bool = true
     @State private var titleAlert = ""
+    @State private var isRegisterSuccess: Bool = false
     
     var body: some View {
         VStack {
@@ -78,7 +79,11 @@ struct RegisterView: View {
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
                   message: Text(self.messageAlert),
-                  dismissButton: .default(Text("OK")))
+                  dismissButton: .default(Text("OK"), action: {
+                    if isRegisterSuccess {
+                        isPresentModel = false
+                    }
+                  }))
         })
     }
 }
@@ -103,7 +108,7 @@ extension RegisterView {
             hudVisible = false
             if let result = result {
                 if result.baseResponse.success {
-                    isPresentModel = false
+                    self.isRegisterSuccess = true
                     self.messageAlert = "Please check your email to activate account"
                     self.titleAlert = "Register Successfully"
                     self.isShowAlert = true

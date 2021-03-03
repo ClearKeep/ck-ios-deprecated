@@ -50,10 +50,11 @@ class RealmGroups: ObservableObject {
                 group.lastMessage = lastMessage
                 group.lastMessageAt = lastMessageAt
                 group.idLastMessage = idLastMessage
+                group.updatedAt = lastMessageAt
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
-                sort()
+//                sort()
             }
         }
     }
@@ -157,7 +158,7 @@ class RealmGroups: ObservableObject {
 
             DispatchQueue.main.async {
                 self.all = groups
-//                self.sort()
+                self.sort()
             }
         }
     }
@@ -215,8 +216,10 @@ class RealmGroups: ObservableObject {
         realmGroup.isRegister = group.isRegister
     }
     
-    private func sort() {
-        all.sort(by: { $0.updatedAt > $1.updatedAt } )
+    func sort() {
+        all = all.sorted { (gr1, gr2) -> Bool in
+            return gr1.updatedAt > gr2.updatedAt
+        }
     }
 
 }

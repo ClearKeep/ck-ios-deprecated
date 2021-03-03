@@ -167,7 +167,9 @@ class RealmMessages: ObservableObject {
     }
     
     private func sort() {
-        all.sort(by: { $0.createdAt < $1.createdAt } )
+        all = all.sorted { (msg1, msg2) -> Bool in
+            return msg1.createdAt < msg2.createdAt
+        }
     }
 
 }

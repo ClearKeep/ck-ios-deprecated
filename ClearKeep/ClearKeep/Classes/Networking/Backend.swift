@@ -242,11 +242,16 @@ class Backend: ObservableObject {
         }
     }
     
-    func createRoom(_ req: Group_CreateGroupRequest, _ completion: @escaping (Group_GroupObjectResponse) -> Void){
+    func createRoom(_ req: Group_CreateGroupRequest, _ completion: @escaping (Group_GroupObjectResponse?, Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {
-            clientGroup.create_group(req, callOptions: header).response.whenSuccess { (result) in
-                    completion(result)
+            clientGroup.create_group(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response, nil)
+                case .failure(let error):
+                    completion(nil, error)
+                }
             }
         }
     }

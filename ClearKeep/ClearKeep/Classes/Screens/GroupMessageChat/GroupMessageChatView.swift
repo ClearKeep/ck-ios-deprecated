@@ -24,41 +24,63 @@ struct GroupMessageChatView: View {
     @State var isForceProcessKey = true
     
     private let scrollingProxy = ListScrollingProxy()
+    
+    @State var value: CGFloat = 0
 
         
     init(groupModel: GroupModel) {
         self.groupModel = groupModel
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+        
     }
     
     var body: some View {
         VStack {
             VStack{
-                // Displaying Message....
-                GeometryReader { reader in
-                    ScrollView(.vertical, showsIndicators: false, content: {
-                        HStack { Spacer() }
-                        //                ScrollViewReader{reader in
-                        VStack(spacing: 20){
-                            ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
-                                
-                                // Chat Bubbles...
-                                MessageBubble(msg: msg, userName: getUserName(msg: msg)).background (
-                                    ListScrollingHelper(proxy: self.scrollingProxy)
-                                )
+                if #available(iOS 14.0, *) {
+                    GeometryReader { reader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            ScrollViewReader{reader in
+                                LazyVStack(spacing: 20){
+                                    ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
+                                        // Chat Bubbles...
+                                        MessageBubble(msg: msg)
+                                            .id(msg.id)
+                                    }
+                                }
+                                .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
+                                .onAppear(perform: {
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                })
+                                .padding([.horizontal,.bottom])
+                                .padding(.top, 25)
                             }
-                            // when ever a new data is inserted scroll to bottom...
-                            //                        .onChange(of: allMessages.messages) { (value) in
-                            //                            // scrolling only user message...
-                            //                            if value.last!.myMsg{
-                            //                                reader.scrollTo(value.last?.id)
-                            //                            }
-                            //                        }
-                        }
-                        .padding([.horizontal,.bottom])
-                        .padding(.top, 25)
-                        //                }
-                    })
+                        })
+                    }
+                }else {
+                    GeometryReader { reader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            VStack(spacing: 20){
+                                ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
+                                    // Chat Bubbles...
+                                    MessageBubble(msg: msg)
+                                        .id(msg.id)
+                                        .background (
+                                            ListScrollingHelper(proxy: self.scrollingProxy)
+                                        )
+                                }
+                                .onAppear {
+                                    self.reloadData()
+                                }
+                            }
+                            .padding([.horizontal,.bottom])
+                            .padding(.top, 25)
+                        })
+                    }
                 }
                 
                 HStack(spacing: 15){
@@ -84,11 +106,9 @@ struct GroupMessageChatView: View {
                             Image(systemName: "paperplane.fill")
                                 .font(.system(size: 22))
                                 .foregroundColor(Color.blue)
-                                // adjusting padding shape...
                                 .padding(.vertical,12)
                                 .padding(.leading,12)
                                 .padding(.trailing,17)
-//                                .background(Color.black.opacity(0.07))
                                 .clipShape(Circle())
                         })
                     }
@@ -98,16 +118,12 @@ struct GroupMessageChatView: View {
                 .animation(.easeOut)
             }
             .navigationBarTitle(Text(groupModel.groupName))
-//            .background(Color.white)
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-//                self.requestAllKeyInGroup(byGroupId: groupModel.groupID)
                 self.registerWithGroup(groupModel.groupID)
-//                self.requestKeyInGroupPreSendMessage(byGroupId: groupModel.groupID)
                 self.realmMessages.loadSavedData()
                 self.groupRealms.loadSavedData()
                 self.getMessageInRoom()
-                self.reloadData()
             }
             .onDisappear(){
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
@@ -116,6 +132,7 @@ struct GroupMessageChatView: View {
                 if let userInfo = obj.userInfo,
                    let publication = userInfo["publication"] as? Message_MessageObjectResponse {
                     if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
+                        self.isForceProcessKey = true
                         self.decryptionMessage(publication: publication)
                     }
                 }
@@ -125,6 +142,15 @@ struct GroupMessageChatView: View {
 }
 
 extension GroupMessageChatView {
+    
+    func getIdLastItem() -> String {
+        let msgInRoom = realmMessages.allMessageInGroup(groupId: self.groupModel.groupID)
+        var id = ""
+        if msgInRoom.count > 0 {
+            id = msgInRoom[msgInRoom.count - 1].id
+        }
+        return id
+    }
     
     func getMessageInRoom(){
         if groupModel.groupID != 0 {
@@ -206,8 +232,6 @@ extension GroupMessageChatView {
     func decryptionMessage(publication: Message_MessageObjectResponse) {
         
 //        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
-        self.isForceProcessKey = true
-        
         if let ourEncryptionMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             do {
@@ -328,7 +352,6 @@ extension GroupMessageChatView {
                             self.realmMessages.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: groupModel.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
                             self.reloadData()
-                            self.scrollingProxy.scrollTo(.end)
                         }
                     }
                     print("Send message to group \(groupModel.groupID) result")
@@ -369,10 +392,6 @@ extension GroupMessageChatView {
                 }
             }
         }
-        
-        
-        
-
     }
     
     func requestAllKeyInGroup(byGroupId groupId: Int64) {
@@ -396,10 +415,6 @@ extension GroupMessageChatView {
             }
         }
     }
-    
-    
-    
-    
 }
 
 //struct GroupMessageChatView_Previews: PreviewProvider {

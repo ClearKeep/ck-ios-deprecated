@@ -35,56 +35,61 @@ struct MessageChatView: View {
         self.clientId = clientId
         self.groupType = groupType
         self.groupId = groupID
-        
-        //        self.viewModel = MessageChatViewModel(clientId: clientId, groupId: groupID, groupType: groupType)
-        //        self.myGroupID = self.viewModel.groupId
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
     var body: some View {
         VStack {
-            // Displaying Message....
-            GeometryReader { reader in
-                ScrollView(.vertical, showsIndicators: false, content: {
-                    HStack { Spacer() }
-                    //                ScrollViewReader{reader in
-                    VStack(spacing: 20){
-                        ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
-                            // Chat Bubbles...
-                            MessageBubble(msg: msg)
-                                .background (
-                                    ListScrollingHelper(proxy: self.scrollingProxy)
-                                )
+            if #available(iOS 14.0, *) {
+                GeometryReader { reader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        HStack { Spacer() }
+                        ScrollViewReader{reader in
+                            LazyVStack(spacing: 20){
+                                ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
+                                    // Chat Bubbles...
+                                    MessageBubble(msg: msg)
+                                        .id(msg.id)
+                                }
+                            }
+                            .onChange(of: realmMessages.allMessageInGroup(groupId: self.myGroupID).count) { _ in
+                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            }
+                            .onAppear(perform: {
+                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            })
+                            .padding([.horizontal,.bottom])
+                            .padding(.top, 25)
                         }
-                        // when ever a new data is inserted scroll to bottom...
-                        //                        .onChange(of: allMessages.messages) { (value) in
-                        //                            // scrolling only user message...
-                        //                            if value.last!.myMsg{
-                        //                                reader.scrollTo(value.last?.id)
-                        //                            }
-                        //                        }
-                    }
-                    .padding([.horizontal,.bottom])
-                    .padding(.top, 25)
-                    .onAppear {
-                        DispatchQueue.main.async {
-                            scrollingProxy.scrollTo(.end)
+                    })
+                }
+            }else {
+                GeometryReader { reader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        HStack { Spacer() }
+                        VStack(spacing: 20){
+                            ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
+                                // Chat Bubbles...
+                                MessageBubble(msg: msg)
+                                    .id(msg.id)
+                                    .background (
+                                        ListScrollingHelper(proxy: self.scrollingProxy)
+                                    )
+                            }
                         }
-                    }
-                    .onAppear {
-                        DispatchQueue.main.async {
-                            scrollingProxy.scrollTo(.end)
-                        }
-                    }
-                    //                }
-                })
+                        .onAppear(perform: {
+                            self.reloadData()
+                        })
+                        .padding([.horizontal,.bottom])
+                        .padding(.top, 25)
+                    })
+                }
             }
-            
             
             HStack(spacing: 15){
                 HStack(spacing: 15){
                     TextField("Message", text: $messageStr)
-//                        .foregroundColor(.black)
+                        //                        .foregroundColor(.black)
                         .offset()
                 }
                 .padding(.vertical, 12)
@@ -144,21 +149,21 @@ struct MessageChatView: View {
                     }
                 })
             })
-              
+            
         }, label: {
             Image(systemName: "video")
         }))
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
-                        message: Text("Go to Settings?"),
-                        primaryButton: .default(Text("Settings"), action: {
-                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                        }),
-                        secondaryButton: .default(Text("Cancel")))
+                   message: Text("Go to Settings?"),
+                   primaryButton: .default(Text("Settings"), action: {
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                   }),
+                   secondaryButton: .default(Text("Cancel")))
         })
         // since bottom edge is ignored....
         //        .padding(.bottom,UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-//        .background(Color.white)
+        //        .background(Color.white)
         .onAppear() {
             UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
             viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
@@ -184,6 +189,15 @@ struct MessageChatView: View {
 }
 
 extension MessageChatView {
+    
+    func getIdLastItem() -> String {
+        let msgInRoom = realmMessages.allMessageInGroup(groupId: self.myGroupID)
+        var id = ""
+        if msgInRoom.count > 0 {
+            id = msgInRoom[msgInRoom.count - 1].id
+        }
+        return id
+    }
     
     func didReceiveMessage(userInfo: [AnyHashable : Any]?) {
         if let userInfo = userInfo,
@@ -236,7 +250,6 @@ extension MessageChatView {
                 }
             }
         }
-//        self.messages = self.realmMessages.allMessageInGroup(groupId: self.myGroupID)
     }
     
     func getMessageInRoom(){
@@ -270,22 +283,6 @@ extension MessageChatView {
                                         self.reloadData()
                                     }
                                 } catch {
-//                                    DispatchQueue.main.async {
-//                                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-//
-//                                        let post = MessageModel(id: message.id,
-//                                                                groupID: message.groupID,
-//                                                                groupType: message.groupType,
-//                                                                fromClientID: message.fromClientID,
-//                                                                clientID: message.clientID,
-//                                                                message: messageError,
-//                                                                createdAt: message.createdAt,
-//                                                                updatedAt: message.updatedAt)
-//                                        self.realmMessages.add(message: post)
-//                                        self.myGroupID = message.groupID
-//                                        self.groupRealms.updateLastMessage(groupID: message.groupID, lastMessage: messageError, lastMessageAt: message.createdAt)
-//                                        self.reloadData()
-//                                    }
                                     print("Decryption message error: \(error)")
                                 }
                             }
@@ -307,7 +304,7 @@ extension MessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        //        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func sendMessage(messageStr: String) {

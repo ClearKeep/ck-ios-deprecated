@@ -19,8 +19,15 @@ struct CreateRoomView: View {
     @ObservedObject var selectObserver = CreateRoomViewModel()
     
     @EnvironmentObject var realmGroups : RealmGroups
+    
     @Binding var isPresentModel: Bool
+    
     @State var hudVisible = false
+    @State var isShowAlert = false
+    @State private var titleAlert = ""
+    @State private var messageAlert = ""
+    @State private var createGroupSuccess = false
+
     
     
     var body: some View {
@@ -43,6 +50,15 @@ struct CreateRoomView: View {
                 ButtonContent("Create")
             }
         }
+        .alert(isPresented: self.$isShowAlert, content: {
+            Alert(title: Text(self.titleAlert),
+                  message: Text(self.messageAlert),
+                  dismissButton: .default(Text("OK"), action: {
+                    if self.createGroupSuccess {
+                        isPresentModel = false
+                    }
+                  }))
+        })
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
     }
@@ -65,7 +81,19 @@ extension CreateRoomView {
     
     private func createRoom(){
         
-        if groupName.isEmpty {
+        if groupName.trimmingCharacters(in: .whitespaces).isEmpty {
+            self.isShowAlert = true
+            self.titleAlert = "Create Room Error"
+            self.messageAlert = "Group name can't be empty"
+            return
+        }
+        
+        var lstClientID = self.selectObserver.peoples.map{ GroupMember(id: $0.id, username: $0.userName)}
+        
+        if lstClientID.isEmpty {
+            self.isShowAlert = true
+            self.titleAlert = "Create Room Error"
+            self.messageAlert = "Group need at least 2 member"
             return
         }
         
@@ -73,34 +101,36 @@ extension CreateRoomView {
         
         if let account = CKSignalCoordinate.shared.myAccount {
             let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
-            var lstClientID = self.selectObserver.peoples.map{ GroupMember(id: $0.id, username: $0.userName)}
             lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
-            
             var req = Group_CreateGroupRequest()
             req.groupName = self.groupName
             req.groupType = "group"
             req.createdByClientID = account.username
             req.lstClientID = lstClientID.map{$0.id}
             
-            Backend.shared.createRoom(req) { (result) in
+            Backend.shared.createRoom(req) { (result , error)  in
                 self.hudVisible = false
-                DispatchQueue.main.async {
-                    let group = GroupModel(groupID: result.groupID,
-                                           groupName: result.groupName,
-                                           groupToken: result.groupRtcToken,
-                                           groupAvatar: result.groupAvatar,
-                                           groupType: result.groupType,
-                                           createdByClientID: result.createdByClientID,
-                                           createdAt: result.createdAt,
-                                           updatedByClientID: result.updatedByClientID,
-                                           lstClientID: lstClientID,
-                                           updatedAt: result.updatedAt,
-                                           lastMessageAt: result.lastMessageAt,
-                                           lastMessage: Data(), idLastMessage: result.lastMessage.id)
-                    
-                    self.realmGroups.add(group: group)
+                if let result = result {
+                    DispatchQueue.main.async {
+                        let group = GroupModel(groupID: result.groupID,
+                                               groupName: result.groupName,
+                                               groupToken: result.groupRtcToken,
+                                               groupAvatar: result.groupAvatar,
+                                               groupType: result.groupType,
+                                               createdByClientID: result.createdByClientID,
+                                               createdAt: result.createdAt,
+                                               updatedByClientID: result.updatedByClientID,
+                                               lstClientID: lstClientID,
+                                               updatedAt: result.updatedAt,
+                                               lastMessageAt: result.lastMessageAt,
+                                               lastMessage: Data(), idLastMessage: result.lastMessage.id)
+                        self.realmGroups.add(group: group)
+                    }
+                    self.createGroupSuccess = true
+                    self.isShowAlert = true
+                    self.titleAlert = "Create Room Successfully"
+                    self.messageAlert = ""
                 }
-                self.isPresentModel = false
             }
         }
     }

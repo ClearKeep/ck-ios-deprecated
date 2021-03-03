@@ -29,7 +29,7 @@ struct HistoryChatView: View {
             List(groupRealms.all , id: \.groupID){ group in
                 let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
                                                groupID : group.groupID,
-                                               userName: viewModel.getGroupName(group: group),
+                                               userName: viewModel.getPeerReceiveName(inGroup: group),
                                                groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 
                 let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
@@ -46,8 +46,9 @@ struct HistoryChatView: View {
                             }
                         } else {
                             VStack(alignment: .leading) {
-                                Text(viewModel.getGroupName(group: group))
+                                Text(viewModel.getPeerReceiveName(inGroup: group))
                                 Text(viewModel.getMessage(data: group.lastMessage))
+                                    .lineLimit(1)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }
@@ -90,19 +91,12 @@ struct HistoryChatView: View {
                 destination: CreateRoomView(isPresentModel: self.$pushActive),
                 isActive: self.$pushActive
             ) {
-                Text("CreateRoom")
+                Button("CreateRoom"){
+                    self.pushActive = true
+                }
             }
             .isDetailLink(false))
         }
-//        .onAppear(){
-//            self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-//            self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
-//            DispatchQueue.main.async {
-//                self.groupRealms.loadSavedData()
-//                self.messsagesRealms.loadSavedData()
-//            }
-//            self.getJoinedGroup()
-//        }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
             self.didReceiveMessageGroup(userInfo: obj.userInfo)
         })
@@ -176,6 +170,7 @@ extension HistoryChatView {
                                                                            updatedAt: lastMessage.updatedAt)
                                                 self.messsagesRealms.add(message: message)
                                                 self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
+                                                self.groupRealms.sort()
                                             }
                                         } catch {
                                             print("decrypt message error: ---- getJoinnedGroup")
@@ -250,6 +245,7 @@ extension HistoryChatView {
                                                     updatedAt: publication.updatedAt)
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                            self.groupRealms.sort()
                         }
                         return
                     }
@@ -338,6 +334,7 @@ extension HistoryChatView {
                         DispatchQueue.main.async {
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                            self.groupRealms.sort()
                             
                             print("message decypt realm: ----- \(viewModel.getMessage(data: self.groupRealms.all[0].lastMessage))")
                             
@@ -346,6 +343,7 @@ extension HistoryChatView {
                     } else {
                         DispatchQueue.main.async {
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: message[0].message, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                            self.groupRealms.sort()
                         }
                     }
                     
@@ -364,6 +362,7 @@ extension HistoryChatView {
                                                 updatedAt: publication.updatedAt)
                         self.messsagesRealms.add(message: post)
                         self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
+                        self.groupRealms.sort()
                     }
                     
                     
