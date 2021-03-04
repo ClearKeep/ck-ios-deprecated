@@ -45,7 +45,7 @@ struct GroupMessageChatView: View {
                                 VStack(spacing: 20){
                                     ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                         // Chat Bubbles...
-                                        MessageBubble(msg: msg)
+                                        MessageBubble(msg: msg , isGroup: true)
                                             .id(msg.id)
                                     }
                                 }
@@ -67,7 +67,7 @@ struct GroupMessageChatView: View {
                             VStack(spacing: 20){
                                 ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                     // Chat Bubbles...
-                                    MessageBubble(msg: msg)
+                                    MessageBubble(msg: msg, isGroup: true)
                                         .id(msg.id)
                                         .background (
                                             ListScrollingHelper(proxy: self.scrollingProxy)
@@ -181,6 +181,7 @@ extension GroupMessageChatView {
                                                                         groupID: message.groupID,
                                                                         groupType: message.groupType,
                                                                         fromClientID: message.fromClientID,
+                                                                        fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
                                                                         clientID: message.clientID,
                                                                         message: decryptedData,
                                                                         createdAt: message.createdAt,
@@ -218,7 +219,8 @@ extension GroupMessageChatView {
     
     private func reloadData(){
         DispatchQueue.main.async {
-            self.messages = self.realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+            self.realmMessages.loadSavedData()
+            self.groupRealms.loadSavedData()
             self.scrollingProxy.scrollTo(.end)
         }
     }
@@ -254,6 +256,7 @@ extension GroupMessageChatView {
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
                                                     fromClientID: publication.fromClientID,
+                                                    fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                     clientID: publication.clientID,
                                                     message: decryptedData,
                                                     createdAt: publication.createdAt,
@@ -345,6 +348,7 @@ extension GroupMessageChatView {
                                                     groupID: result.groupID,
                                                     groupType: result.groupType,
                                                     fromClientID: result.fromClientID,
+                                                    fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
                                                     clientID: result.clientID,
                                                     message: payload,
                                                     createdAt: result.createdAt,

@@ -16,6 +16,8 @@ struct MessageModel: Identifiable {
     var groupType: String = String()
 
     var fromClientID: String = String()
+    
+    var fromDisplayName: String = String()
 
     var clientID: String = String()
 
@@ -33,6 +35,7 @@ struct MessageModel: Identifiable {
          groupID: Int64,
          groupType: String,
          fromClientID: String,
+         fromDisplayName: String,
          clientID: String,
          message: Data,
          createdAt: Int64,
@@ -41,6 +44,7 @@ struct MessageModel: Identifiable {
         self.groupID = groupID
         self.groupType = groupType
         self.fromClientID = fromClientID
+        self.fromDisplayName = fromDisplayName
         self.clientID = clientID
         self.message = message
         self.createdAt = createdAt

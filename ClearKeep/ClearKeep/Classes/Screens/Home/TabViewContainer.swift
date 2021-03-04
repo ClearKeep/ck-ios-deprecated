@@ -16,12 +16,12 @@ struct TabViewContainer: View {
             HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
                 .tabItem {
                     VStack {
-                        Image(systemName: "clock")
+                        Image(systemName: "message")
                             .renderingMode(.template)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 15, height: 15)
-                        Text("History")
+                        Text("Chat")
                     }
                 }
             

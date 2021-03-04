@@ -21,12 +21,13 @@ struct InviteMemberGroup: View {
         List(viewModel.peoples, selection: $selectedRows){ item in
             MultipleSelectionRow(people: item, selectedItems: self.$selectedRows)
         }
-        .navigationBarTitle(Text("Group members"))
+        .navigationBarTitle(Text("Add members"))
         .navigationBarItems(trailing: NavigationLink(
             destination: CreateRoomView(listMembers: self.selectedRows.map{$0})
         ) {
             Text("Next")
         })
+        .hud(.waiting(.circular, "Waiting..."), show: self.viewModel.hudVisible)
         .onAppear(){
             self.viewModel.getListUser()
         }

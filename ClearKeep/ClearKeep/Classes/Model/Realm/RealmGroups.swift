@@ -58,6 +58,12 @@ class RealmGroups: ObservableObject {
             }
         }
     }
+    
+    func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String{
+        let group = self.filterGroup(groupId: groupID)
+        let from = group?.lstClientID.filter{$0.id == fromClientId}.first
+        return from?.username ?? ""
+    }
 
     func remove(groupRemove: GroupModel) {
         for (index, group) in all.enumerated() {
@@ -165,15 +171,20 @@ class RealmGroups: ObservableObject {
 
     private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
         
-        var lstClientId = Array<GroupMember>()
-        realmGroup.lstClientID.forEach { (str) in
-            let components = str.components(separatedBy: ",")
-            if components.count > 0 {
-                lstClientId.append(GroupMember(id: components.first!, username: components.last!))
-            }
-            
-        }
+//        var lstClientId = Array<GroupMember>()
+//        realmGroup.lstClientID.forEach { (str) in
+//            let components = str.components(separatedBy: ",")
+//            if components.count > 0 {
+//                lstClientId.append(GroupMember(id: components.first!, username: components.last!))
+//            }
+//
+//        }
         
+        var lstClientId = Array<GroupMember>()
+        realmGroup.lstClientID.forEach { (member) in
+            lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+        }
+
         let group = GroupModel(groupID: realmGroup.groupId,
                                groupName: realmGroup.groupName,
                                groupToken: realmGroup.groupToken,
@@ -201,7 +212,15 @@ class RealmGroups: ObservableObject {
     }
 
     private func copyGroupAttributes(from group: GroupModel, to realmGroup: RealmGroup) {
-        let listClientId = group.lstClientID.map{"\($0.id),\($0.username)"}
+        
+        var listMember = List<RealmGroupMember>()
+        group.lstClientID.forEach { (member) in
+            let realmMember = RealmGroupMember()
+            realmMember.id = member.id
+            realmMember.displayName = member.username
+            listMember.append(realmMember)
+        }
+                
         realmGroup.groupName = group.groupName
         realmGroup.groupToken = group.groupToken
         realmGroup.avatarGroup = group.groupAvatar
@@ -210,8 +229,9 @@ class RealmGroups: ObservableObject {
         realmGroup.createdAt = group.createdAt
         realmGroup.updatedByClientID = group.updatedByClientID
         realmGroup.updatedAt = group.updatedAt
-        realmGroup.lstClientID.append(objectsIn: listClientId)
+        realmGroup.lstClientID = listMember
         realmGroup.lastMessage = group.lastMessage
+        realmGroup.idLastMsg = group.idLastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
         realmGroup.isRegister = group.isRegister
     }

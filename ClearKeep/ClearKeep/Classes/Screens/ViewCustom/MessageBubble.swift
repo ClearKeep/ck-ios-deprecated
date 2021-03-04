@@ -10,6 +10,7 @@ import SwiftUI
 struct MessageBubble: View {
     var msg : MessageModel
     var userName: String? = nil
+    var isGroup: Bool = false
     var body: some View {
         // Automatic scroll To Bottom...
         // First Assigning Id To Each Row...
@@ -61,6 +62,12 @@ struct MessageBubble: View {
 //                            .foregroundColor(Color.black)
                     }
                     if msg.photo == nil{
+                        if isGroup {
+                            Text(msg.fromDisplayName)
+                                .fontWeight(.regular)
+                                .font(Font.system(size: 10))
+                                .foregroundColor(Color.gray.opacity(0.4))
+                        }
                         Text(stringValue())
                             .padding(.all, 8)
                             .background(Color(UIColor.secondarySystemBackground))

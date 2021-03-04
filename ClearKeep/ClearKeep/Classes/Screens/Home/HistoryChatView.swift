@@ -88,7 +88,7 @@ struct HistoryChatView: View {
                 destination: InviteMemberGroup(isPresentModel: self.$pushActive),
                 isActive: self.$pushActive
             ) {
-                Button("CreateRoom"){
+                Button("Create Group"){
                     self.pushActive = true
                 }
             }
@@ -161,6 +161,7 @@ extension HistoryChatView {
                                                                            groupID: lastMessage.groupID,
                                                                            groupType: lastMessage.groupType,
                                                                            fromClientID: lastMessage.fromClientID,
+                                                                           fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: lastMessage.fromClientID, groupID: lastMessage.groupID),
                                                                            clientID: lastMessage.clientID,
                                                                            message: decryptedData,
                                                                            createdAt: lastMessage.createdAt,
@@ -236,6 +237,7 @@ extension HistoryChatView {
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
                                                     fromClientID: publication.fromClientID,
+                                                    fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                     clientID: publication.clientID,
                                                     message: decryptedData,
                                                     createdAt: publication.createdAt,
@@ -324,6 +326,7 @@ extension HistoryChatView {
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
+                                                fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: decryptedData,
                                                 createdAt: publication.createdAt,
@@ -353,6 +356,7 @@ extension HistoryChatView {
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
+                                                fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: messageError,
                                                 createdAt: publication.createdAt,
