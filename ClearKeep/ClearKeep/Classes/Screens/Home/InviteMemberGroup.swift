@@ -10,20 +10,25 @@ import SwiftUI
 struct InviteMemberGroup: View {
     
     @ObservedObject var viewModel = InviteMemberViewModel()
-    
-    var selectObserver : CreateRoomViewModel
-
+        
     @State var selectedRows = Set<People>()
+    
+    @Binding var isPresentModel: Bool
+
             
     var body: some View {
         
         List(viewModel.peoples, selection: $selectedRows){ item in
             MultipleSelectionRow(people: item, selectedItems: self.$selectedRows)
-        }.navigationBarTitle(Text("Add members"))
+        }
+        .navigationBarTitle(Text("Group members"))
+        .navigationBarItems(trailing: NavigationLink(
+            destination: CreateRoomView(listMembers: self.selectedRows.map{$0})
+        ) {
+            Text("Next")
+        })
         .onAppear(){
             self.viewModel.getListUser()
-        }.onDisappear() {
-            self.selectObserver.peoples = self.selectedRows.map{$0}
         }
     }
 }

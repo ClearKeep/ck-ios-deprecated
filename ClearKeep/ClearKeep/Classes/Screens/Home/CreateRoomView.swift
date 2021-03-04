@@ -8,44 +8,34 @@
 import SwiftUI
 
 struct CreateRoomView: View {
-    
-    @ObservedObject var viewModel = InviteMemberViewModel()
-    
+        
     @State var groupName: String = ""
     @State var userName: String = ""
     @State var isDisable = true
     @State private var showSelectMemberView = false
     
-    @ObservedObject var selectObserver = CreateRoomViewModel()
-    
+    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var realmGroups : RealmGroups
-    
-    @Binding var isPresentModel: Bool
-    
+    @EnvironmentObject var messsagesRealms : RealmMessages
+
     @State var hudVisible = false
     @State var isShowAlert = false
     @State private var titleAlert = ""
     @State private var messageAlert = ""
     @State private var createGroupSuccess = false
 
+    private let listMembers : [People]
     
-    
+    init(listMembers: [People]) {
+        self.listMembers = listMembers
+    }
+
     var body: some View {
         VStack {
             TitleLabel("Create Room Chat")
             TextFieldContent(key: "Group Name", value: $groupName)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-            VStack {
-                HStack() {
-                    Text("Members:")
-                    Text(self.getAllMember()).lineLimit(1)
-                }
-                NavigationLink(destination: InviteMemberGroup(selectObserver: selectObserver)) {
-                    Text("Add members")
-                }
-                .padding()
-            }
             Button(action: createRoom){
                 ButtonContent("Create")
             }
@@ -55,7 +45,7 @@ struct CreateRoomView: View {
                   message: Text(self.messageAlert),
                   dismissButton: .default(Text("OK"), action: {
                     if self.createGroupSuccess {
-                        isPresentModel = false
+                        self.viewRouter.current = .tabview
                     }
                   }))
         })
@@ -65,19 +55,7 @@ struct CreateRoomView: View {
 }
 
 extension CreateRoomView {
-    
-    private func handleSelected(){
-        
-    }
-    
-    private func getAllMember() -> String{
-//        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
-        var name = ""
-        self.selectObserver.peoples.forEach { (people) in
-            name += "\(people.userName),"
-        }
-        return String(name.dropLast())
-    }
+
     
     private func createRoom(){
         
@@ -88,7 +66,7 @@ extension CreateRoomView {
             return
         }
         
-        var lstClientID = self.selectObserver.peoples.map{ GroupMember(id: $0.id, username: $0.userName)}
+        var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName)}
         
         if lstClientID.isEmpty {
             self.isShowAlert = true

@@ -16,10 +16,6 @@ struct HistoryChatView: View {
     @State var ourEncryptionManager: CKAccountSignalEncryptionManager?
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
-    //    init(){
-    //        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-    //    }
-    
     @State var pushActive = false
     @State var isForceProcessKeyInGroup = true
     
@@ -68,6 +64,7 @@ struct HistoryChatView: View {
                             VStack(alignment: .leading) {
                                 Text(viewModel.getGroupName(group: group))
                                 Text(viewModel.getMessage(data: group.lastMessage))
+                                    .lineLimit(1)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }
@@ -88,7 +85,7 @@ struct HistoryChatView: View {
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("Chat"), trailing: NavigationLink(
-                destination: CreateRoomView(isPresentModel: self.$pushActive),
+                destination: InviteMemberGroup(isPresentModel: self.$pushActive),
                 isActive: self.$pushActive
             ) {
                 Button("CreateRoom"){
@@ -373,9 +370,6 @@ extension HistoryChatView {
             }
         }
     }
-    
-    
-    
 }
 
 struct HistoryChatView_Previews: PreviewProvider {

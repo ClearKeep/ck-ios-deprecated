@@ -42,7 +42,7 @@ struct GroupMessageChatView: View {
                         ScrollView(.vertical, showsIndicators: false, content: {
                             HStack { Spacer() }
                             ScrollViewReader{reader in
-                                LazyVStack(spacing: 20){
+                                VStack(spacing: 20){
                                     ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                         // Chat Bubbles...
                                         MessageBubble(msg: msg)
@@ -89,7 +89,7 @@ struct GroupMessageChatView: View {
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal)
-                    .background(Color.black.opacity(0.06))
+                    .background(Color(UIColor.secondarySystemBackground))
                     .clipShape(Capsule())
                     
                     // Send Button...
@@ -203,7 +203,7 @@ extension GroupMessageChatView {
                             }
                         }
                     }
-                    self.reloadData()
+//                    self.reloadData()
                 }
             }
         }

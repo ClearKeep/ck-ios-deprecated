@@ -94,7 +94,7 @@ struct MessageChatView: View {
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal)
-                .background(Color.black.opacity(0.06))
+                .background(Color(UIColor.secondarySystemBackground))
                 .clipShape(Capsule())
                 
                 // Send Button...

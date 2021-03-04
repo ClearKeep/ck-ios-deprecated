@@ -10,7 +10,6 @@ import SwiftUI
 struct TabViewContainer: View {
     
     @ObservedObject var viewModel = MotherViewModel()
-
     
     var body: some View {
         TabView {
