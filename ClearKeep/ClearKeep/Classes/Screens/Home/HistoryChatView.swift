@@ -196,7 +196,7 @@ extension HistoryChatView {
                                                         lstClientID: lstClientID,
                                                         updatedAt: groupResponse.updatedAt,
                                                         lastMessageAt: 0,
-                                                        lastMessage: Data(), idLastMessage: groupResponse.lastMessage.id)
+                                                        lastMessage: Data(), idLastMessage: "")
                             self.groupRealms.add(group: groupModel)
                             self.getJoinedGroup()
                         }

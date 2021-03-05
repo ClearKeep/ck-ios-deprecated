@@ -344,6 +344,23 @@ class Backend: ObservableObject {
         }
     }
     
+    func cancelRequestCall(_ clientID: String ,_ groupID: Int64 , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
+        let header = self.getHeaderApi()
+        if let header = header {
+            var req = VideoCall_VideoCallRequest()
+            req.clientID = clientID
+            req.groupID = groupID
+            clientVideoCall.cancel_request_call(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response , nil)
+                case .failure(let error):
+                    completion(nil , error)
+                }
+            }
+        }
+    }
+    
     func logout(_ completion: @escaping(Auth_BaseResponse?) -> Void){
         let header = self.getHeaderApi()
         let deviceID = CKExtensions().getUUID()

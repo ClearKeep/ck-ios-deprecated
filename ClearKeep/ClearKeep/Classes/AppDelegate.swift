@@ -88,9 +88,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         if type == PKPushType.voIP {
             // check login
             if CKExtensions.getUserToken().isEmpty { return }
-            let backGroundTaskIndet = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
-            CallManager.shared.handleIncomingPushEvent(payload: payload) { (_) in
-                UIApplication.shared.endBackgroundTask(backGroundTaskIndet)
+            if let notifiType = payload.dictionaryPayload["notify_type"] as? String {
+                if notifiType == "cancel_request_call" {
+                    if let roomId = payload.dictionaryPayload["group_id"] as? String {
+                        let calls = CallManager.shared.calls.filter{$0.roomId == Int(roomId) ?? 0}
+                        calls.forEach { (call) in
+                            CallManager.shared.end(call: call)
+                        }
+                    }
+                } else {
+                    let backGroundTaskIndet = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                    CallManager.shared.handleIncomingPushEvent(payload: payload) { (_) in
+                        UIApplication.shared.endBackgroundTask(backGroundTaskIndet)
+                    }
+                }
             }
         }
     }

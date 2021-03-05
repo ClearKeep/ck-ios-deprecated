@@ -35,7 +35,7 @@ struct Group_MessageObjectResponse {
 
   var clientID: String = String()
 
-  var message: Data = Data()
+  var message: Data = SwiftProtobuf.Internal.emptyData
 
   var createdAt: Int64 = 0
 
@@ -65,75 +65,42 @@ struct Group_GroupObjectResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var groupID: Int64 {
-    get {return _storage._groupID}
-    set {_uniqueStorage()._groupID = newValue}
-  }
+  var groupID: Int64 = 0
 
-  var groupName: String {
-    get {return _storage._groupName}
-    set {_uniqueStorage()._groupName = newValue}
-  }
+  var groupName: String = String()
 
-  var groupAvatar: String {
-    get {return _storage._groupAvatar}
-    set {_uniqueStorage()._groupAvatar = newValue}
-  }
+  var groupAvatar: String = String()
 
-  var groupType: String {
-    get {return _storage._groupType}
-    set {_uniqueStorage()._groupType = newValue}
-  }
+  var groupType: String = String()
 
-  var lstClient: [Group_ClientInGroupResponse] {
-    get {return _storage._lstClient}
-    set {_uniqueStorage()._lstClient = newValue}
-  }
+  var lstClient: [Group_ClientInGroupResponse] = []
 
-  var lastMessageAt: Int64 {
-    get {return _storage._lastMessageAt}
-    set {_uniqueStorage()._lastMessageAt = newValue}
-  }
+  var lastMessageAt: Int64 = 0
 
   var lastMessage: Group_MessageObjectResponse {
-    get {return _storage._lastMessage ?? Group_MessageObjectResponse()}
-    set {_uniqueStorage()._lastMessage = newValue}
+    get {return _lastMessage ?? Group_MessageObjectResponse()}
+    set {_lastMessage = newValue}
   }
   /// Returns true if `lastMessage` has been explicitly set.
-  var hasLastMessage: Bool {return _storage._lastMessage != nil}
+  var hasLastMessage: Bool {return self._lastMessage != nil}
   /// Clears the value of `lastMessage`. Subsequent reads from it will return its default value.
-  mutating func clearLastMessage() {_uniqueStorage()._lastMessage = nil}
+  mutating func clearLastMessage() {self._lastMessage = nil}
 
-  var createdByClientID: String {
-    get {return _storage._createdByClientID}
-    set {_uniqueStorage()._createdByClientID = newValue}
-  }
+  var createdByClientID: String = String()
 
-  var createdAt: Int64 {
-    get {return _storage._createdAt}
-    set {_uniqueStorage()._createdAt = newValue}
-  }
+  var createdAt: Int64 = 0
 
-  var updatedByClientID: String {
-    get {return _storage._updatedByClientID}
-    set {_uniqueStorage()._updatedByClientID = newValue}
-  }
+  var updatedByClientID: String = String()
 
-  var updatedAt: Int64 {
-    get {return _storage._updatedAt}
-    set {_uniqueStorage()._updatedAt = newValue}
-  }
+  var updatedAt: Int64 = 0
 
-  var groupRtcToken: String {
-    get {return _storage._groupRtcToken}
-    set {_uniqueStorage()._groupRtcToken = newValue}
-  }
+  var groupRtcToken: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _lastMessage: Group_MessageObjectResponse? = nil
 }
 
 ///errors response
@@ -328,18 +295,15 @@ extension Group_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.groupType) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.fromClientID) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
-      case 6: try { try decoder.decodeSingularBytesField(value: &self.message) }()
-      case 7: try { try decoder.decodeSingularInt64Field(value: &self.createdAt) }()
-      case 8: try { try decoder.decodeSingularInt64Field(value: &self.updatedAt) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularInt64Field(value: &self.groupID)
+      case 3: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 4: try decoder.decodeSingularStringField(value: &self.fromClientID)
+      case 5: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 6: try decoder.decodeSingularBytesField(value: &self.message)
+      case 7: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 8: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
       default: break
       }
     }
@@ -396,12 +360,9 @@ extension Group_ClientInGroupResponse: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.displayName) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularStringField(value: &self.displayName)
       default: break
       }
     }
@@ -442,136 +403,79 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     12: .standard(proto: "group_rtc_token"),
   ]
 
-  fileprivate class _StorageClass {
-    var _groupID: Int64 = 0
-    var _groupName: String = String()
-    var _groupAvatar: String = String()
-    var _groupType: String = String()
-    var _lstClient: [Group_ClientInGroupResponse] = []
-    var _lastMessageAt: Int64 = 0
-    var _lastMessage: Group_MessageObjectResponse? = nil
-    var _createdByClientID: String = String()
-    var _createdAt: Int64 = 0
-    var _updatedByClientID: String = String()
-    var _updatedAt: Int64 = 0
-    var _groupRtcToken: String = String()
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _groupID = source._groupID
-      _groupName = source._groupName
-      _groupAvatar = source._groupAvatar
-      _groupType = source._groupType
-      _lstClient = source._lstClient
-      _lastMessageAt = source._lastMessageAt
-      _lastMessage = source._lastMessage
-      _createdByClientID = source._createdByClientID
-      _createdAt = source._createdAt
-      _updatedByClientID = source._updatedByClientID
-      _updatedAt = source._updatedAt
-      _groupRtcToken = source._groupRtcToken
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularInt64Field(value: &_storage._groupID) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._groupName) }()
-        case 3: try { try decoder.decodeSingularStringField(value: &_storage._groupAvatar) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._groupType) }()
-        case 5: try { try decoder.decodeRepeatedMessageField(value: &_storage._lstClient) }()
-        case 6: try { try decoder.decodeSingularInt64Field(value: &_storage._lastMessageAt) }()
-        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._lastMessage) }()
-        case 8: try { try decoder.decodeSingularStringField(value: &_storage._createdByClientID) }()
-        case 9: try { try decoder.decodeSingularInt64Field(value: &_storage._createdAt) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._updatedByClientID) }()
-        case 11: try { try decoder.decodeSingularInt64Field(value: &_storage._updatedAt) }()
-        case 12: try { try decoder.decodeSingularStringField(value: &_storage._groupRtcToken) }()
-        default: break
-        }
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
+      case 2: try decoder.decodeSingularStringField(value: &self.groupName)
+      case 3: try decoder.decodeSingularStringField(value: &self.groupAvatar)
+      case 4: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 5: try decoder.decodeRepeatedMessageField(value: &self.lstClient)
+      case 6: try decoder.decodeSingularInt64Field(value: &self.lastMessageAt)
+      case 7: try decoder.decodeSingularMessageField(value: &self._lastMessage)
+      case 8: try decoder.decodeSingularStringField(value: &self.createdByClientID)
+      case 9: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 10: try decoder.decodeSingularStringField(value: &self.updatedByClientID)
+      case 11: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
+      case 12: try decoder.decodeSingularStringField(value: &self.groupRtcToken)
+      default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if _storage._groupID != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._groupID, fieldNumber: 1)
-      }
-      if !_storage._groupName.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupName, fieldNumber: 2)
-      }
-      if !_storage._groupAvatar.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupAvatar, fieldNumber: 3)
-      }
-      if !_storage._groupType.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupType, fieldNumber: 4)
-      }
-      if !_storage._lstClient.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._lstClient, fieldNumber: 5)
-      }
-      if _storage._lastMessageAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._lastMessageAt, fieldNumber: 6)
-      }
-      if let v = _storage._lastMessage {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-      }
-      if !_storage._createdByClientID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._createdByClientID, fieldNumber: 8)
-      }
-      if _storage._createdAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._createdAt, fieldNumber: 9)
-      }
-      if !_storage._updatedByClientID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._updatedByClientID, fieldNumber: 10)
-      }
-      if _storage._updatedAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._updatedAt, fieldNumber: 11)
-      }
-      if !_storage._groupRtcToken.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupRtcToken, fieldNumber: 12)
-      }
+    if self.groupID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 1)
+    }
+    if !self.groupName.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupName, fieldNumber: 2)
+    }
+    if !self.groupAvatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupAvatar, fieldNumber: 3)
+    }
+    if !self.groupType.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupType, fieldNumber: 4)
+    }
+    if !self.lstClient.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.lstClient, fieldNumber: 5)
+    }
+    if self.lastMessageAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.lastMessageAt, fieldNumber: 6)
+    }
+    if let v = self._lastMessage {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }
+    if !self.createdByClientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.createdByClientID, fieldNumber: 8)
+    }
+    if self.createdAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 9)
+    }
+    if !self.updatedByClientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.updatedByClientID, fieldNumber: 10)
+    }
+    if self.updatedAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 11)
+    }
+    if !self.groupRtcToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupRtcToken, fieldNumber: 12)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Group_GroupObjectResponse, rhs: Group_GroupObjectResponse) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._groupID != rhs_storage._groupID {return false}
-        if _storage._groupName != rhs_storage._groupName {return false}
-        if _storage._groupAvatar != rhs_storage._groupAvatar {return false}
-        if _storage._groupType != rhs_storage._groupType {return false}
-        if _storage._lstClient != rhs_storage._lstClient {return false}
-        if _storage._lastMessageAt != rhs_storage._lastMessageAt {return false}
-        if _storage._lastMessage != rhs_storage._lastMessage {return false}
-        if _storage._createdByClientID != rhs_storage._createdByClientID {return false}
-        if _storage._createdAt != rhs_storage._createdAt {return false}
-        if _storage._updatedByClientID != rhs_storage._updatedByClientID {return false}
-        if _storage._updatedAt != rhs_storage._updatedAt {return false}
-        if _storage._groupRtcToken != rhs_storage._groupRtcToken {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
+    if lhs.groupID != rhs.groupID {return false}
+    if lhs.groupName != rhs.groupName {return false}
+    if lhs.groupAvatar != rhs.groupAvatar {return false}
+    if lhs.groupType != rhs.groupType {return false}
+    if lhs.lstClient != rhs.lstClient {return false}
+    if lhs.lastMessageAt != rhs.lastMessageAt {return false}
+    if lhs._lastMessage != rhs._lastMessage {return false}
+    if lhs.createdByClientID != rhs.createdByClientID {return false}
+    if lhs.createdAt != rhs.createdAt {return false}
+    if lhs.updatedByClientID != rhs.updatedByClientID {return false}
+    if lhs.updatedAt != rhs.updatedAt {return false}
+    if lhs.groupRtcToken != rhs.groupRtcToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -586,12 +490,9 @@ extension Group_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
+      case 2: try decoder.decodeSingularStringField(value: &self.message)
       default: break
       }
     }
@@ -624,12 +525,9 @@ extension Group_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
       default: break
       }
     }
@@ -664,14 +562,11 @@ extension Group_CreateGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._Messag
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.groupName) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.groupType) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.createdByClientID) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.lstClientID) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.groupName)
+      case 2: try decoder.decodeSingularStringField(value: &self.groupType)
+      case 3: try decoder.decodeSingularStringField(value: &self.createdByClientID)
+      case 4: try decoder.decodeRepeatedStringField(value: &self.lstClientID)
       default: break
       }
     }
@@ -714,14 +609,11 @@ extension Group_UpdateGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._Messag
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.groupName) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.groupAvatar) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.updatedByClientID) }()
+      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
+      case 2: try decoder.decodeSingularStringField(value: &self.groupName)
+      case 3: try decoder.decodeSingularStringField(value: &self.groupAvatar)
+      case 4: try decoder.decodeSingularStringField(value: &self.updatedByClientID)
       default: break
       }
     }
@@ -761,11 +653,8 @@ extension Group_GetGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
       default: break
       }
     }
@@ -793,11 +682,8 @@ extension Group_GetJoinedGroupsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
       default: break
       }
     }
@@ -825,11 +711,8 @@ extension Group_GetJoinedGroupsResponse: SwiftProtobuf.Message, SwiftProtobuf._M
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.lstGroup) }()
+      case 1: try decoder.decodeRepeatedMessageField(value: &self.lstGroup)
       default: break
       }
     }
@@ -857,11 +740,8 @@ extension Group_SearchGroupsRequest: SwiftProtobuf.Message, SwiftProtobuf._Messa
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.keyword) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.keyword)
       default: break
       }
     }
@@ -889,11 +769,8 @@ extension Group_SearchGroupsResponse: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.lstGroup) }()
+      case 1: try decoder.decodeRepeatedMessageField(value: &self.lstGroup)
       default: break
       }
     }
@@ -923,13 +800,10 @@ extension Group_InviteToGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.fromClientID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
-      case 3: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.fromClientID)
+      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 3: try decoder.decodeSingularInt64Field(value: &self.groupID)
       default: break
       }
     }
@@ -966,12 +840,9 @@ extension Group_JoinGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 2: try decoder.decodeSingularInt64Field(value: &self.groupID)
       default: break
       }
     }

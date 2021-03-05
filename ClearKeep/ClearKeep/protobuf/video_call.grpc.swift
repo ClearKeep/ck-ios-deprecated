@@ -32,6 +32,11 @@ internal protocol VideoCall_VideoCallClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_ServerResponse>
 
+  func cancel_request_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
+
 }
 
 extension VideoCall_VideoCallClientProtocol {
@@ -48,6 +53,23 @@ extension VideoCall_VideoCallClientProtocol {
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_ServerResponse> {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/video_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to cancel_request_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to cancel_request_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func cancel_request_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/cancel_request_call",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -72,6 +94,7 @@ internal final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtoco
 /// To build a server, implement a class that conforms to this protocol.
 internal protocol VideoCall_VideoCallProvider: CallHandlerProvider {
   func video_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_ServerResponse>
+  func cancel_request_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
 }
 
 extension VideoCall_VideoCallProvider {
@@ -85,6 +108,13 @@ extension VideoCall_VideoCallProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.video_call(request: request, context: context)
+        }
+      }
+
+    case "cancel_request_call":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.cancel_request_call(request: request, context: context)
         }
       }
 
