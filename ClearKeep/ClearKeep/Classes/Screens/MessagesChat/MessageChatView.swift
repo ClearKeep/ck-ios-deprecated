@@ -127,7 +127,6 @@ struct MessageChatView: View {
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .navigationBarTitle(Text(self.userName))
         .navigationBarItems(trailing: Button(action: {
-            
             AVCaptureDevice.authorizeVideo(completion: { (status) in
                 AVCaptureDevice.authorizeAudio(completion: { (status) in
                     if status == .alreadyAuthorized || status == .justAuthorized {
@@ -185,6 +184,9 @@ struct MessageChatView: View {
                 self.didReceiveMessage(userInfo: obj.userInfo)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
+            self.getMessageInRoom()
+        })
     }
 }
 
@@ -255,9 +257,9 @@ extension MessageChatView {
     }
     
     func getMessageInRoom(){
-        if viewModel.groupId != 0 {
-            Backend.shared.getMessageInRoom(viewModel.groupId,
-                                            self.realmMessages.getTimeStampPreLastMessage(groupId: viewModel.groupId)) { (result, error) in
+        if self.groupId != 0 {
+            Backend.shared.getMessageInRoom(self.groupId,
+                                            self.realmMessages.getTimeStampPreLastMessage(groupId: self.groupId)) { (result, error) in
                 if let result = result {
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
@@ -307,7 +309,7 @@ extension MessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        //        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func sendMessage(messageStr: String) {

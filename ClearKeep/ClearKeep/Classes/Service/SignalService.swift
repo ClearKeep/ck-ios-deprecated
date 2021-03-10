@@ -51,4 +51,15 @@ extension SignalService {
             completion()
         }
     }
+    
+    func unsubscribe(clientId: String, completion: @escaping (() -> Void)){
+        print("unsubscribe to \(clientId)")
+        var request = Message_UnSubscribeRequest()
+        request.clientID = clientId
+        clientSignal.unSubscribe(request).response.whenComplete { (result) in
+            print(result, "unsubscribe complete")
+            completion()
+        }
+        
+    }
 }

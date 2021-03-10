@@ -48,6 +48,8 @@ class Backend: ObservableObject {
     
 //    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
     init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
+//        init(host: String = "172.16.6.34", port: Int = 15000) { // dev server 2
+
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
@@ -97,6 +99,17 @@ class Backend: ObservableObject {
             self?.signalService?.listen(clientId: clientId, heard: self!.heard)
         })
     }
+    
+    func signalUnsubcrible(clientId: String) -> Void {
+        signalService?.unsubscribe(clientId: clientId, completion: {
+        })
+    }
+    
+    func notificationUnSubscrible(clientId: String) -> Void {
+        notificationService?.unsubscribe(clientId: clientId, completion: {
+        })
+    }
+    
     
     private func heard(_ clienId: String, publication: Message_MessageObjectResponse) {
         let userInfo: [String : Any] = ["clientId": clienId, "publication": publication]

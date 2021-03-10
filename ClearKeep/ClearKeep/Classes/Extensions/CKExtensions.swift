@@ -72,6 +72,8 @@ extension NSNotification {
     static let ReceiveMessage = NSNotification.Name.init("ReceiveMessage")
     
     static let Notification = NSNotification.Name.init("Notification")
+    
+    static let AppBecomeActive = NSNotification.Name.init("AppBecomeActive")
 }
 
 extension UserDefaults: ObjectSavable {

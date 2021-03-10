@@ -147,7 +147,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         
         voipRegistry.desiredPushTypes = [PKPushType.voIP]
         
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+        
+        NetworkMonitor.shared.startMonitoring()
+
         return true
+    }
+    
+    @objc func applicationDidBecomeActive() {
+        print("------------ become app")
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.notificationSubscrible(clientId: myAccount.username)
+            Backend.shared.signalSubscrible(clientId: myAccount.username)
+            
+            let userInfo = Dictionary<AnyHashable, Any>()
+            NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
+                                            object: nil,
+                                            userInfo: userInfo)
+        }
+    }
+    
+    @objc func applicationDidEnterBackground() {
+        print("------------ enter background app")
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.signalUnsubcrible(clientId: myAccount.username)
+            Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
+        }
     }
     
     func getNotificationSettings() {

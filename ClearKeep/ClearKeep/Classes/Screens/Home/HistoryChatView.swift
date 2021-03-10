@@ -117,6 +117,9 @@ struct HistoryChatView: View {
                 }
             }
         })
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
+                self.getJoinedGroup()
+        })
     }
     
 }
@@ -196,8 +199,10 @@ extension HistoryChatView {
                                                         lstClientID: lstClientID,
                                                         updatedAt: groupResponse.updatedAt,
                                                         lastMessageAt: 0,
-                                                        lastMessage: Data(), idLastMessage: "")
+                                                        lastMessage: Data(),
+                                                        idLastMessage: "")
                             self.groupRealms.add(group: groupModel)
+                            self.registerWithGroup(groupResponse.groupID)
                             self.getJoinedGroup()
                         }
                     }
@@ -216,6 +221,8 @@ extension HistoryChatView {
     }
     
     func decryptionMessage(publication: Message_MessageObjectResponse) {
+        
+//        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
         if let ourEncryptionMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             do {
@@ -246,14 +253,49 @@ extension HistoryChatView {
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
                         }
+                        
                         return
+                    }else {
+                        requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
                     }
+                }else {
+                    requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
                 }
             } catch {
                 print("Decryption message error: \(error)")
                 requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
             }
-            requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
+        }
+    }
+    
+    func registerWithGroup(_ groupId: Int64) {
+        if let group = self.groupRealms.filterGroup(groupId: groupId) {
+            if !group.isRegister {
+                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
+                    let userName = myAccount.username
+                    let deviceID = Int32(555)
+                    let address = SignalAddress(name: userName, deviceId: deviceID)
+                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
+                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
+                    
+                        do {
+                            let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
+                            Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                                                                       clientId: userName,
+                                                                       deviceId: deviceID,
+                                                                       senderKeyData: signalSKDM.serializedData()) { (result, error) in
+                                print("Register group with result: \(result)")
+                                if result {
+                                    self.groupRealms.registerGroup(groupId: groupId)
+                                }
+                            }
+                            
+                        } catch {
+                            print("Register group error: \(error)")
+                            
+                        }
+                }
+            }
         }
     }
     

@@ -88,12 +88,8 @@ class CallViewModel: NSObject, ObservableObject {
     func endCall() {
         if let callBox = self.callBox {
             Backend.shared.cancelRequestCall(callBox.clientId, callBox.roomId) { (result, error) in
-                if let result = result {
-                    if result.success {
-                        CallManager.shared.end(call: callBox)
-                    }
-                }
             }
+            CallManager.shared.end(call: callBox)
         }
     }
     

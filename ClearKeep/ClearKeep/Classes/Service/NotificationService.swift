@@ -58,4 +58,14 @@ extension NotificationService {
             completion()
         }
     }
+    
+    func unsubscribe(clientId: String, completion: @escaping (() -> Void)) {
+        print("unsubscribe notify to \(clientId)")
+        var request = Notification_UnSubscribeRequest()
+        request.clientID = clientId
+        clientSignal.un_subscribe(request).response.whenComplete { (result) in
+            print(result, "unsubscribe notify complete")
+            completion()
+        }
+    }
 }

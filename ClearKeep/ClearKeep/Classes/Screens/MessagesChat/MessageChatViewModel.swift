@@ -117,7 +117,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 // check exist session recipient in database
                 if let ourAccountEncryptMng = self?.ourEncryptionManager {
                     self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
+//                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
                            let myAccount = CKSignalCoordinate.shared.myAccount {
                             // save devcice by recipient account
@@ -132,7 +132,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                         buddy.username = recipientResponse.clientID
                                         buddy.save(with:transaction)
                                         
-                                        let device = CKDevice(deviceId: NSNumber(value:recipientResponse.deviceID),
+                                        let device = CKDevice(deviceId: NSNumber(value:555),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: buddy.uniqueId,
                                                               parentCollection: CKBuddy.collection,
@@ -151,9 +151,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     }
                     print("processPreKeyBundle recipient finished")
                     completion()
-                } else {
-                    completion()
-                }
+//                } else {
+//                    completion()
+//                }
             }
         //        }
     }
