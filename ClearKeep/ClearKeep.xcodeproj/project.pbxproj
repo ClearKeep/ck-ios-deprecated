@@ -160,6 +160,7 @@
 		68C4D55025F0D9FE00F31F77 /* server_info.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C4D53E25F0D9FE00F31F77 /* server_info.grpc.swift */; };
 		68C4D55125F0D9FE00F31F77 /* video_call.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C4D53F25F0D9FE00F31F77 /* video_call.pb.swift */; };
 		68C4D55225F0D9FE00F31F77 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C4D54025F0D9FE00F31F77 /* message.pb.swift */; };
+		68C4D56925F60E4800F31F77 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C4D56825F60E4800F31F77 /* NetworkMonitor.swift */; };
 		68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68CBC6B325944AC100997D93 /* PushKit.framework */; };
 		68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA4B825677E0B00109725 /* MotherViewModel.swift */; };
 		68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA512256C9F3600109725 /* CreateRoomView.swift */; };
@@ -361,6 +362,7 @@
 		68C4D53E25F0D9FE00F31F77 /* server_info.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = server_info.grpc.swift; path = ../../../../../Desktop/proto/server_info.grpc.swift; sourceTree = "<group>"; };
 		68C4D53F25F0D9FE00F31F77 /* video_call.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = video_call.pb.swift; path = ../../../../../Desktop/proto/video_call.pb.swift; sourceTree = "<group>"; };
 		68C4D54025F0D9FE00F31F77 /* message.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = message.pb.swift; path = ../../../../../Desktop/proto/message.pb.swift; sourceTree = "<group>"; };
+		68C4D56825F60E4800F31F77 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		68CBC69A25942FD600997D93 /* ClearKeep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearKeep.entitlements; sourceTree = "<group>"; };
 		68CBC6B325944AC100997D93 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		68CFA4B825677E0B00109725 /* MotherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherViewModel.swift; sourceTree = "<group>"; };
@@ -919,6 +921,7 @@
 				686F25E6255E748E00953C5E /* CKExtensions.swift */,
 				68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */,
 				6881DBE025E7AB2F009EDA73 /* ViewExtensions.swift */,
+				68C4D56825F60E4800F31F77 /* NetworkMonitor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1251,6 +1254,7 @@
 				56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
+				68C4D56925F60E4800F31F77 /* NetworkMonitor.swift in Sources */,
 				56694AE025B53C8A008E8EC5 /* InfoIndicator.swift in Sources */,
 				1664F1B7252C6B4700FF37AD /* SceneDelegate.swift in Sources */,
 				56694AA825B53C39008E8EC5 /* HUD.swift in Sources */,
@@ -1543,7 +1547,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1575,7 +1579,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
