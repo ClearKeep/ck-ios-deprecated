@@ -259,8 +259,11 @@ extension MessageChatView {
     func getMessageInRoom(){
         if self.groupId != 0 {
             Backend.shared.getMessageInRoom(self.groupId,
-                                            self.realmMessages.getTimeStampPreLastMessage(groupId: self.groupId)) { (result, error) in
+                                            self.groupRealms.getTimeSyncInGroup(groupID: self.groupId)) { (result, error) in
                 if let result = result {
+                    if !result.lstMessage.isEmpty {
+                        self.groupRealms.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                    }
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
                         if filterMessage.isEmpty {
@@ -302,6 +305,7 @@ extension MessageChatView {
     private func reloadData(){
         DispatchQueue.main.async {
             self.realmMessages.loadSavedData()
+            self.messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
             self.scrollingProxy.scrollTo(.end)
         }
     }

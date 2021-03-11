@@ -97,7 +97,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                            lstClientID: lstClientID,
                                            updatedAt: result.updatedAt,
                                            lastMessageAt: result.lastMessageAt,
-                                           lastMessage: Data(), idLastMessage: result.lastMessage.id)
+                                           lastMessage: Data(),
+                                           idLastMessage: result.lastMessage.id,
+                                           timeSyncMessage: 0)
                     self.groupId = group.groupID
                     completion?(group)
                 }

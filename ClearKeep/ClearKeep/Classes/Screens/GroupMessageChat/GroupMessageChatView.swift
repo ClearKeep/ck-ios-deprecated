@@ -157,8 +157,11 @@ extension GroupMessageChatView {
     
     func getMessageInRoom(){
         if groupModel.groupID != 0 {
-            Backend.shared.getMessageInRoom(groupModel.groupID , self.realmMessages.getTimeStampPreLastMessage(groupId: groupModel.groupID)) { (result, error) in
+            Backend.shared.getMessageInRoom(groupModel.groupID , self.groupRealms.getTimeSyncInGroup(groupID: groupModel.groupID)) { (result, error) in
                 if let result = result {
+                    if !result.lstMessage.isEmpty {
+                        self.groupRealms.updateTimeSyncMessageInGroup(groupID: groupModel.groupID, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                    }
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
                         if filterMessage.isEmpty {

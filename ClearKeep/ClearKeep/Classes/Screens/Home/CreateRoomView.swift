@@ -101,7 +101,9 @@ extension CreateRoomView {
                                                lstClientID: lstClientID,
                                                updatedAt: result.updatedAt,
                                                lastMessageAt: result.lastMessageAt,
-                                               lastMessage: Data(), idLastMessage: result.lastMessage.id)
+                                               lastMessage: Data(),
+                                               idLastMessage: result.lastMessage.id,
+                                               timeSyncMessage: 0)
                         self.realmGroups.add(group: group)
                     }
                     self.createGroupSuccess = true

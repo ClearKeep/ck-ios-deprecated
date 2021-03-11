@@ -18,11 +18,12 @@ struct HistoryChatView: View {
     
     @State var pushActive = false
     @State var isForceProcessKeyInGroup = true
+    @State var allGroup = [GroupModel]()
     
     var body: some View {
         
         NavigationView {
-            List(groupRealms.all , id: \.groupID){ group in
+            List(self.groupRealms.all , id: \.groupID){ group in
                 let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
                                                groupID : group.groupID,
                                                userName: viewModel.getPeerReceiveName(inGroup: group),
@@ -77,10 +78,7 @@ struct HistoryChatView: View {
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
                 self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
                 self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
-                DispatchQueue.main.async {
-                    self.groupRealms.loadSavedData()
-                    self.messsagesRealms.loadSavedData()
-                }
+                self.reloadData()
                 self.getJoinedGroup()
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
@@ -125,12 +123,17 @@ struct HistoryChatView: View {
 }
 
 extension HistoryChatView {
-    func getJoinedGroup(){
-        print("getJoinnedGroup")
+    
+    func reloadData(){
         DispatchQueue.main.async {
             self.groupRealms.loadSavedData()
             self.messsagesRealms.loadSavedData()
+            self.allGroup = self.groupRealms.all
         }
+    }
+    
+    func getJoinedGroup(){
+        print("getJoinnedGroup")
         
         Backend.shared.getJoinnedGroup { (result, error) in
             if let result = result {
@@ -138,53 +141,8 @@ extension HistoryChatView {
                     if let group = self.groupRealms.filterGroup(groupId: groupResponse.groupID){
                         if group.idLastMessage == groupResponse.lastMessage.id {
                         } else {
-                            let lastMessageResponse = groupResponse.lastMessage
-                            var messageResponse = Message_MessageObjectResponse()
-                            messageResponse.id = lastMessageResponse.id
-                            messageResponse.groupID = lastMessageResponse.groupID
-                            messageResponse.groupType = lastMessageResponse.groupType
-                            messageResponse.fromClientID = lastMessageResponse.fromClientID
-                            messageResponse.clientID = lastMessageResponse.clientID
-                            messageResponse.message = lastMessageResponse.message
-                            messageResponse.createdAt = lastMessageResponse.createdAt
-                            messageResponse.updatedAt = lastMessageResponse.updatedAt
-                            messageResponse.unknownFields = lastMessageResponse.unknownFields
-                            
-                            if groupResponse.groupType == "peer" {
-//                                self.viewModel.requestBundleRecipient(byClientId: messageResponse
-//                                                                        .fromClientID) {
-                                    if let ourEncryptionMng = self.ourEncryptionManager {
-                                        do {
-                                            let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
-                                                                                                        name: groupResponse.lastMessage.fromClientID,
-                                                                                                        deviceId: UInt32(111))
-                                            let lastMessage = groupResponse.lastMessage
-                                            DispatchQueue.main.async {
-                                                let message = MessageModel(id: lastMessage.id,
-                                                                           groupID: lastMessage.groupID,
-                                                                           groupType: lastMessage.groupType,
-                                                                           fromClientID: lastMessage.fromClientID,
-                                                                           fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: lastMessage.fromClientID, groupID: lastMessage.groupID),
-                                                                           clientID: lastMessage.clientID,
-                                                                           message: decryptedData,
-                                                                           createdAt: lastMessage.createdAt,
-                                                                           updatedAt: lastMessage.updatedAt)
-                                                self.messsagesRealms.add(message: message)
-                                                self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
-                                                self.groupRealms.sort()
-                                            }
-                                        } catch {
-                                            print("decrypt message error: ---- getJoinnedGroup")
-                                        }
-                                    }
-                                    
-//                                }
-                            } else {
-                                self.decryptionMessage(publication: messageResponse)
-                            }
-                            
+                            self.updateLastMessageInGroup(groupResponse: groupResponse)
                         }
-                        
                     } else {
                         DispatchQueue.main.async {
                             let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
@@ -200,14 +158,60 @@ extension HistoryChatView {
                                                         updatedAt: groupResponse.updatedAt,
                                                         lastMessageAt: 0,
                                                         lastMessage: Data(),
-                                                        idLastMessage: "")
+                                                        idLastMessage: "",
+                                                        timeSyncMessage: 0)
                             self.groupRealms.add(group: groupModel)
                             self.registerWithGroup(groupResponse.groupID)
-                            self.getJoinedGroup()
+                            self.updateLastMessageInGroup(groupResponse: groupResponse)
                         }
                     }
                 }
             }
+            self.reloadData()
+        }
+    }
+    
+    func updateLastMessageInGroup(groupResponse: Group_GroupObjectResponse){
+        let lastMessageResponse = groupResponse.lastMessage
+        var messageResponse = Message_MessageObjectResponse()
+        messageResponse.id = lastMessageResponse.id
+        messageResponse.groupID = lastMessageResponse.groupID
+        messageResponse.groupType = lastMessageResponse.groupType
+        messageResponse.fromClientID = lastMessageResponse.fromClientID
+        messageResponse.clientID = lastMessageResponse.clientID
+        messageResponse.message = lastMessageResponse.message
+        messageResponse.createdAt = lastMessageResponse.createdAt
+        messageResponse.updatedAt = lastMessageResponse.updatedAt
+        messageResponse.unknownFields = lastMessageResponse.unknownFields
+        
+        if groupResponse.groupType == "peer" {
+                if let ourEncryptionMng = self.ourEncryptionManager {
+                    do {
+                        let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
+                                                                                    name: groupResponse.lastMessage.fromClientID,
+                                                                                    deviceId: UInt32(111))
+                        let lastMessage = groupResponse.lastMessage
+                        DispatchQueue.main.async {
+                            let message = MessageModel(id: lastMessage.id,
+                                                       groupID: lastMessage.groupID,
+                                                       groupType: lastMessage.groupType,
+                                                       fromClientID: lastMessage.fromClientID,
+                                                       fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: lastMessage.fromClientID, groupID: lastMessage.groupID),
+                                                       clientID: lastMessage.clientID,
+                                                       message: decryptedData,
+                                                       createdAt: lastMessage.createdAt,
+                                                       updatedAt: lastMessage.updatedAt)
+                            self.messsagesRealms.add(message: message)
+                            self.groupRealms.updateLastMessage(groupID: groupResponse.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
+                            self.groupRealms.sort()
+                            self.reloadData()
+                        }
+                    } catch {
+                        print("decrypt message error: ---- getJoinnedGroup")
+                    }
+                }
+        } else {
+            self.decryptionMessage(publication: messageResponse)
         }
     }
     
@@ -252,6 +256,7 @@ extension HistoryChatView {
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
+                            self.reloadData()
                         }
                         
                         return
@@ -377,6 +382,7 @@ extension HistoryChatView {
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
+                            self.reloadData()
                             
                             print("message decypt realm: ----- \(viewModel.getMessage(data: self.groupRealms.all[0].lastMessage))")
                             
@@ -386,6 +392,7 @@ extension HistoryChatView {
                         DispatchQueue.main.async {
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: message[0].message, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
+                            self.reloadData()
                         }
                     }
                     
@@ -406,11 +413,8 @@ extension HistoryChatView {
                         self.messsagesRealms.add(message: post)
                         self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                         self.groupRealms.sort()
+                        self.reloadData()
                     }
-                    
-                    
-                    
-                    
                     print("Decryption message error: \(error)")
                 }
             }

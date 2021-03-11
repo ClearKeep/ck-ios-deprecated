@@ -59,6 +59,25 @@ class RealmGroups: ObservableObject {
         }
     }
     
+    func updateTimeSyncMessageInGroup(groupID: Int64 , lastMessageAt: Int64){
+        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
+            if var group = all.filter({$0.groupID == groupID}).first {
+                group.timeSyncMessage = lastMessageAt
+                let realmGroup = buildRealmGroup(group: group)
+                guard write(group: realmGroup) else { return }
+                all[index] = group
+            }
+        }
+    }
+    
+    func getTimeSyncInGroup(groupID: Int64) -> Int64{
+        var time: Int64 = 0
+        if let group = all.filter({$0.groupID == groupID}).first {
+            time = group.timeSyncMessage
+        }
+        return time
+    }
+    
     func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String{
         let group = self.filterGroup(groupId: groupID)
         let from = group?.lstClientID.filter{$0.id == fromClientId}.first
@@ -198,7 +217,8 @@ class RealmGroups: ObservableObject {
                                lastMessageAt: realmGroup.lastMessageAt,
                                lastMessage: realmGroup.lastMessage,
                                idLastMessage: realmGroup.idLastMsg,
-                               isRegister: realmGroup.isRegister)
+                               isRegister: realmGroup.isRegister,
+                               timeSyncMessage: realmGroup.timeSyncMessage)
 
         return group
     }
@@ -234,6 +254,7 @@ class RealmGroups: ObservableObject {
         realmGroup.idLastMsg = group.idLastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
         realmGroup.isRegister = group.isRegister
+        realmGroup.timeSyncMessage = group.timeSyncMessage
     }
     
     func sort() {
