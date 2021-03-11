@@ -99,16 +99,18 @@ struct HistoryChatView: View {
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
                 
+                let isChatRoom = UserDefaults.standard.bool(forKey: Constants.isChatRoom)
+                let isChatGroup = UserDefaults.standard.bool(forKey: Constants.isChatGroup)
+                
                 if publication.groupType == "peer" {
-                    if !UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                    if !isChatRoom && !isChatGroup {
                         self.viewModel.requestBundleRecipient(byClientId: publication
                                                                 .fromClientID) {
                             self.didReceiveMessagePeer(userInfo: userInfo)
                         }
-
                     }
                 } else {
-                    if !UserDefaults.standard.bool(forKey: Constants.isChatGroup) {
+                    if !isChatRoom && !isChatGroup {
                         self.isForceProcessKeyInGroup = true
                         self.decryptionMessage(publication: publication)
                     }
@@ -128,7 +130,6 @@ extension HistoryChatView {
         DispatchQueue.main.async {
             self.groupRealms.loadSavedData()
             self.messsagesRealms.loadSavedData()
-            self.allGroup = self.groupRealms.all
         }
     }
     

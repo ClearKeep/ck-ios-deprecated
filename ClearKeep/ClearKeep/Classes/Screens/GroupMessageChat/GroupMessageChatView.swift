@@ -131,9 +131,11 @@ struct GroupMessageChatView: View {
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
                 if let userInfo = obj.userInfo,
                    let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                    if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-                        self.isForceProcessKey = true
-                        self.decryptionMessage(publication: publication)
+                    if publication.groupType == "group"{
+                        if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
+                            self.isForceProcessKey = true
+                            self.decryptionMessage(publication: publication)
+                        }
                     }
                 }
             }

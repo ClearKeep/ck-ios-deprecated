@@ -181,7 +181,12 @@ struct MessageChatView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
-                self.didReceiveMessage(userInfo: obj.userInfo)
+                if let userInfo = obj.userInfo,
+                   let publication = userInfo["publication"] as? Message_MessageObjectResponse {
+                    if publication.groupType == "peer" {
+                        self.didReceiveMessage(userInfo: obj.userInfo)
+                    }
+                }
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in

@@ -29,10 +29,10 @@ class NetworkMonitor {
                         Backend.shared.notificationSubscrible(clientId: myAccount.username)
                         Backend.shared.signalSubscrible(clientId: myAccount.username)
                         
-//                        let userInfo = Dictionary<AnyHashable, Any>()
-//                        NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
-//                                                        object: nil,
-//                                                        userInfo: userInfo)
+                        let userInfo = Dictionary<AnyHashable, Any>()
+                        NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
+                                                        object: nil,
+                                                        userInfo: userInfo)
                 }
                 }
             } else {

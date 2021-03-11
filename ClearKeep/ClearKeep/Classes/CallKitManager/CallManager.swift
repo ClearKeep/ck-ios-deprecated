@@ -78,6 +78,7 @@ final class CallManager: NSObject {
         transaction.addAction(endCallAction)
 
         requestTransaction(transaction, action: Call.end.rawValue)
+        self.removeCall(call)
     }
 
     func setHeld(call: CallBox, onHold: Bool) {
@@ -117,7 +118,8 @@ final class CallManager: NSObject {
     }
 
     private func removeCall(_ call: CallBox) {
-        calls = calls.filter {$0 === call}
+//        calls = calls.filter {$0 === call}
+        calls.removeAll()
         Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
         }
         self.postCallsChangedNotification(userInfo: ["action": Call.end.rawValue])
