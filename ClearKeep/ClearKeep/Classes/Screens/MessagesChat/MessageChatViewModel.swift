@@ -15,11 +15,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     var isRequesting = false
     var groupId: Int64 = 0
     var clientId: String = ""
-    var username: String = "" {
-        didSet {
-            print("new Value: \(username)")
-        }
-    }
+    var username: String = ""
     var groupType: String = "peer"
     @Published var recipientDeviceId: UInt32 = 0
     
