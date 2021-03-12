@@ -22,6 +22,11 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var timeCall = ""
     @Published var remoteViewRenderSize: CGSize = CGSize.zero
     
+    enum RenderScaleMode {
+        case scaleToFit
+        case scaleToFill
+    }
+    
     var callBox: CallBox?
     var callTimer: Timer?
     lazy var timeCounter = TimeCounter()
@@ -143,7 +148,8 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func getNewVideoViewFrame(videoViewFrame: CGRect, containerFrame: CGRect) -> CGRect {
+    func getNewVideoViewFrame(videoViewFrame: CGRect, containerFrame: CGRect,_ renderScaleMode: RenderScaleMode = .scaleToFill) -> CGRect {
+        
         if videoViewFrame == CGRect.zero {
             if containerFrame == CGRect.zero {
                 return CGRect.zero
@@ -152,7 +158,14 @@ class CallViewModel: NSObject, ObservableObject {
         }
         
         var videoFrame = AVMakeRect(aspectRatio: videoViewFrame.size, insideRect: containerFrame)
-        let scale = videoFrame.size.aspectFillScale(in: containerFrame.size)
+        var scale: CGFloat
+        switch renderScaleMode {
+        case .scaleToFit:
+            scale = videoFrame.size.aspectFitScale(in: containerFrame.size)
+        default:
+            scale = videoFrame.size.aspectFillScale(in: containerFrame.size)
+        }
+        
         videoFrame.size.width = videoFrame.size.width * CGFloat(scale)
         videoFrame.size.height = videoFrame.size.height * CGFloat(scale)
         

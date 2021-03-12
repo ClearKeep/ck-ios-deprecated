@@ -37,8 +37,8 @@ struct CallView: View {
                 if let videoView = viewModel.localVideoView {
                     if viewModel.callStatus == .answered {
 
-                        let widthOfContainerView: CGFloat = 120.0
-                        let heightOfContainerView: CGFloat = 200
+                        let widthOfContainerView: CGFloat = 150
+                        let heightOfContainerView: CGFloat = 180
                         let containerFrame = CGRect.init(x: 0, y: 0, width: widthOfContainerView, height: heightOfContainerView)
                         let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: containerFrame)
                         
@@ -47,15 +47,19 @@ struct CallView: View {
                         
                         HStack(alignment: .top) {
                             Spacer()
-                            VideoView(rtcVideoView: videoView)
-                                .frame(width: newVideoViewFrame.width,
-                                       height: newVideoViewFrame.height,
-                                       alignment: .center)
-                                .padding(.leading, leadingPadding)
-                                .padding(.top, topPadding)
-                                .clipShape(Rectangle())
-                                .cornerRadius(15)
-                                .animation(.easeInOut(duration: 0.6))
+                            VStack {
+                                VideoView(rtcVideoView: videoView)
+                                    .frame(width: newVideoViewFrame.width,
+                                           height: newVideoViewFrame.height,
+                                           alignment: .center)
+                                    .padding(.leading, leadingPadding)
+                                    .padding(.top, topPadding)
+                                    .clipShape(Rectangle())
+                                    .cornerRadius(15)
+                                    .animation(.easeInOut(duration: 0.6))
+                            }.frame(width: widthOfContainerView, height: heightOfContainerView, alignment: .center)
+                            .fixedSize()
+                            .clipped()
                         }
                     } else {
                         let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: reader.frame(in: .global))
@@ -99,7 +103,6 @@ struct CallView: View {
                     Spacer()
                     CallActionsView(viewModel: viewModel).frame(width: UIScreen.main.bounds.width)
                 }
-                .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
             }
             .frame(width: UIScreen.main.bounds.width)
             .background(Color.black.opacity(0.3))
