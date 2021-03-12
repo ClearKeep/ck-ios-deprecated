@@ -16,7 +16,6 @@ struct CreateRoomView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var realmGroups : RealmGroups
-    @EnvironmentObject var messsagesRealms : RealmMessages
 
     @State var hudVisible = false
     @State var isShowAlert = false

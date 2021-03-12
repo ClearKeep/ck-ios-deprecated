@@ -19,6 +19,8 @@ struct HistoryChatView: View {
     @State var pushActive = false
     @State var isForceProcessKeyInGroup = true
     @State var allGroup = [GroupModel]()
+    @EnvironmentObject var viewRouter: ViewRouter
+
     
     var body: some View {
         
@@ -82,15 +84,9 @@ struct HistoryChatView: View {
                 self.getJoinedGroup()
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarItems(leading: Text("Chat"), trailing: NavigationLink(
-                destination: InviteMemberGroup(isPresentModel: self.$pushActive),
-                isActive: self.$pushActive
-            ) {
-                Button("Create Group"){
-                    self.pushActive = true
-                }
-            }
-            .isDetailLink(false))
+            .navigationBarItems(leading: Text("Chat"), trailing:  Button("Create Group"){
+                viewRouter.current = .inviteMember
+            })
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
             self.didReceiveMessageGroup(userInfo: obj.userInfo)

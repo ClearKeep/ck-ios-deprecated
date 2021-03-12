@@ -119,10 +119,10 @@ final class CallManager: NSObject {
 
     private func removeCall(_ call: CallBox) {
 //        calls = calls.filter {$0 === call}
-        calls.removeAll()
         Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
         }
         self.postCallsChangedNotification(userInfo: ["action": Call.end.rawValue])
+        calls.removeAll()
     }
 
     private func removeAllCalls() {
