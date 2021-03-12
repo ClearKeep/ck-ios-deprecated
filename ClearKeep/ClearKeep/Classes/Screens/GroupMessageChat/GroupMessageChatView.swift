@@ -121,8 +121,10 @@ struct GroupMessageChatView: View {
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 self.registerWithGroup(groupModel.groupID)
-                self.realmMessages.loadSavedData()
-                self.groupRealms.loadSavedData()
+                DispatchQueue.main.async {
+                    self.realmMessages.loadSavedData()
+                    self.groupRealms.loadSavedData()
+                }
                 self.getMessageInRoom()
             }
             .onDisappear(){
@@ -162,7 +164,9 @@ extension GroupMessageChatView {
             Backend.shared.getMessageInRoom(groupModel.groupID , self.groupRealms.getTimeSyncInGroup(groupID: groupModel.groupID)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
-                        self.groupRealms.updateTimeSyncMessageInGroup(groupID: groupModel.groupID, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                        DispatchQueue.main.async {
+                            self.groupRealms.updateTimeSyncMessageInGroup(groupID: groupModel.groupID, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                        }
                     }
                     result.lstMessage.forEach { (message) in
                         let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
@@ -235,7 +239,7 @@ extension GroupMessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        //        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     

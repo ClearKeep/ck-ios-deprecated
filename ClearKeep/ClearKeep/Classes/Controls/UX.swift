@@ -39,7 +39,7 @@ struct ButtonContent : View {
     
     var body: some View {
         return Text(text)
-            .font(.headline)
+            .font(.subheadline)
             .foregroundColor(.gray)
             .padding()
             .frame(width: UIScreen.main.bounds.size.width / 3, height: 50)
