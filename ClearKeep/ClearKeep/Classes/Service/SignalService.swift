@@ -42,24 +42,23 @@ extension SignalService {
     }
     
     func subscribe(clientId: String, completion: @escaping (() -> Void)) {
-        print("subscribe to \(clientId)")
+        print("subscribe signal to \(clientId)")
         let request: Message_SubscribeRequest = .with {
             $0.clientID = clientId
         }
         clientSignal.subscribe(request).response.whenComplete { (result) in
-            print(result, "subscribe complete")
+            print(result, "subscribe signal complete")
             completion()
         }
     }
     
     func unsubscribe(clientId: String, completion: @escaping (() -> Void)){
-        print("unsubscribe to \(clientId)")
+        print("unsubscribe signal to \(clientId)")
         var request = Message_UnSubscribeRequest()
         request.clientID = clientId
         clientSignal.unSubscribe(request).response.whenComplete { (result) in
-            print(result, "unsubscribe complete")
+            print(result, "unsubscribe signal complete")
             completion()
         }
-        
     }
 }

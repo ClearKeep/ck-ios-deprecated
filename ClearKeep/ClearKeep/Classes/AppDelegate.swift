@@ -9,7 +9,6 @@ import UIKit
 import UserNotifications
 import PushKit
 import CallKit
-import IQKeyboardManagerSwift
 
 //@main
 @UIApplicationMain
@@ -120,11 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         // Override point for customization after application launch.
         CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
         
-        IQKeyboardManager.shared.enableAutoToolbar = false
-        IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
-        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-        IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
-        IQKeyboardManager.shared.enable = true
         UIApplication.shared.applicationIconBadgeNumber = 0
         // cheating fix callkit request failure in the first time
         let _ = CallManager.shared

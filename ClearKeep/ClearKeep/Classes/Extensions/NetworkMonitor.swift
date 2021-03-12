@@ -18,27 +18,25 @@ class NetworkMonitor {
 
     func startMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
-            self?.status = path.status
-            self?.isReachableOnCellular = path.isExpensive
+            if self?.status != path.status {
+                self?.status = path.status
+                self?.isReachableOnCellular = path.isExpensive
 
-            if path.status == .satisfied {
-                print("We're connected!")
-                // post connected notification
-                DispatchQueue.main.async {
-                    if let myAccount = CKSignalCoordinate.shared.myAccount {
-                        Backend.shared.notificationSubscrible(clientId: myAccount.username)
-                        Backend.shared.signalSubscrible(clientId: myAccount.username)
-                        
-                        let userInfo = Dictionary<AnyHashable, Any>()
-                        NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
-                                                        object: nil,
-                                                        userInfo: userInfo)
+                if path.status == .satisfied {
+                    print("We're connected!")
+                    // post connected notification
+                    DispatchQueue.main.async {
+                        if let myAccount = CKSignalCoordinate.shared.myAccount {
+                            Backend.shared.notificationSubscrible(clientId: myAccount.username)
+                            Backend.shared.signalSubscrible(clientId: myAccount.username)
+                        }
+                    }
+                } else {
+                    print("No connection.")
+                    // post disconnected notification
                 }
-                }
-            } else {
-                print("No connection.")
-                // post disconnected notification
             }
+            
             print(path.isExpensive)
         }
 

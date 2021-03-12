@@ -28,13 +28,15 @@ struct MessageChatView: View {
     @State var messageStr = ""
     @State var hudVisible = false
     @State var alertVisible = false
+        
     private let scrollingProxy = ListScrollingProxy()
-    
+
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
         self.clientId = clientId
         self.groupType = groupType
         self.groupId = groupID
+        viewModel.setup(clientId: clientId, username: self.userName, groupId: groupId, groupType: groupType)
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
@@ -62,7 +64,11 @@ struct MessageChatView: View {
                             .padding(.top, 25)
                         }
                     })
-                }
+                }.gesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            UIApplication.shared.endEditing()
+                        })
             }else {
                 GeometryReader { reader in
                     ScrollView(.vertical, showsIndicators: false, content: {
@@ -83,7 +89,11 @@ struct MessageChatView: View {
                         .padding([.horizontal,.bottom])
                         .padding(.top, 25)
                     })
-                }
+                }.gesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            UIApplication.shared.endEditing()
+                        })
             }
             
             HStack(spacing: 15){
@@ -165,7 +175,6 @@ struct MessageChatView: View {
         //        .background(Color.white)
         .onAppear() {
             UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
-            viewModel.setup(clientId: clientId, groupId: groupId, groupType: groupType)
             if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
                 viewModel.groupId = group.groupID
             }
@@ -322,7 +331,6 @@ extension MessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func sendMessage(messageStr: String) {

@@ -63,7 +63,8 @@ final class CallManager: NSObject {
         self.outgoingCall = call
         self.addCall(call)
         
-        let handle = CXHandle(type: .generic, value: clientId)
+        let receiverName = (clientName ?? "").isEmpty ? clientId : clientName
+        let handle = CXHandle(type: .generic, value: receiverName ?? "")
         let startCallAction = CXStartCallAction(call: call.uuid, handle: handle)
 
         startCallAction.isVideo = video

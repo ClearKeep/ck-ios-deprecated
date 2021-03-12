@@ -59,7 +59,11 @@ struct GroupMessageChatView: View {
                                 .padding(.top, 25)
                             }
                         })
-                    }
+                    }.gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                UIApplication.shared.endEditing()
+                            })
                 }else {
                     GeometryReader { reader in
                         ScrollView(.vertical, showsIndicators: false, content: {
@@ -80,7 +84,11 @@ struct GroupMessageChatView: View {
                             .padding([.horizontal,.bottom])
                             .padding(.top, 25)
                         })
-                    }
+                    }.gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                UIApplication.shared.endEditing()
+                            })
                 }
                 
                 HStack(spacing: 15){
@@ -239,7 +247,6 @@ extension GroupMessageChatView {
     
     private func send() {
         self.sendMessage(messageStr: $messageStr.wrappedValue)
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     

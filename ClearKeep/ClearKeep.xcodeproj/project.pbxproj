@@ -30,7 +30,7 @@
 		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
 		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
-		5603463725B1402F00F57ED6 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5603463625B1402F00F57ED6 /* IQKeyboardManagerSwift */; };
+		328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */; };
 		5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603463B25B145BA00F57ED6 /* MessageBubble.swift */; };
 		56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AE825A2B72B00B39D07 /* CallManager.swift */; };
 		56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 56205AEE25A2BB8500B39D07 /* SwiftyJSON */; };
@@ -221,6 +221,7 @@
 		16E32C772538338D007ED99A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		1D1A7615AE34C5F264B3034C /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
+		328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
 		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
 		5603463B25B145BA00F57ED6 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		56205AE825A2B72B00B39D07 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
@@ -383,7 +384,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5603463725B1402F00F57ED6 /* IQKeyboardManagerSwift in Frameworks */,
 				56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */,
 				68CBC6B425944AC100997D93 /* PushKit.framework in Frameworks */,
 				1664F22B252C7CBF00FF37AD /* SwiftProtobuf in Frameworks */,
@@ -922,6 +922,7 @@
 				68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */,
 				6881DBE025E7AB2F009EDA73 /* ViewExtensions.swift */,
 				68C4D56825F60E4800F31F77 /* NetworkMonitor.swift */,
+				328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -995,7 +996,6 @@
 				16C83CB325300887002E3115 /* GRPC */,
 				16C83CB525300887002E3115 /* CGRPCZlib */,
 				56205AEE25A2BB8500B39D07 /* SwiftyJSON */,
-				5603463625B1402F00F57ED6 /* IQKeyboardManagerSwift */,
 				6881DBCB25DF5B00009EDA73 /* KeychainAccess */,
 			);
 			productName = ClearKeep;
@@ -1077,7 +1077,6 @@
 				1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */,
 				56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				5603463525B1402F00F57ED6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 1664F1B2252C6B4700FF37AD /* Products */;
@@ -1338,6 +1337,7 @@
 				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
+				328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */,
 				6880CF5B25F9C1C100F3DECE /* notify.pb.swift in Sources */,
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
@@ -1746,14 +1746,6 @@
 				revision = e2e138df61dcbfc2dc1cf284fdab6f983539ab48;
 			};
 		};
-		5603463525B1402F00F57ED6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.5.6;
-			};
-		};
 		56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -1787,11 +1779,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
 			productName = CGRPCZlib;
-		};
-		5603463625B1402F00F57ED6 /* IQKeyboardManagerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5603463525B1402F00F57ED6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
 		};
 		56205AEE25A2BB8500B39D07 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
