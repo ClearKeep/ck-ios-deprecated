@@ -20,6 +20,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var callStatus: CallStatus = .calling
     @Published var callGroup = false
     @Published var timeCall = ""
+    @Published var remoteViewRenderSize: CGSize = CGSize.zero
     
     var callBox: CallBox?
     var callTimer: Timer?
@@ -50,6 +51,15 @@ class CallViewModel: NSObject, ObservableObject {
                 self?.callStatus = (self?.callBox!.status)!
                 self?.updateVideoView()
             }
+        }
+        
+        self.callBox?.renderSizeChangeWithSize = { [weak self] (size, uId) in
+            guard let self = self else {
+                return
+            }
+            
+            // Just support only call 1:1 for now
+            self.remoteViewRenderSize = size
         }
     }
     
@@ -142,10 +152,15 @@ class CallViewModel: NSObject, ObservableObject {
         }
         
         var videoFrame = AVMakeRect(aspectRatio: videoViewFrame.size, insideRect: containerFrame)
-        let scale = videoFrame.size.aspectFitScale(in: containerFrame.size)
+        let scale = videoFrame.size.aspectFillScale(in: containerFrame.size)
         videoFrame.size.width = videoFrame.size.width * CGFloat(scale)
         videoFrame.size.height = videoFrame.size.height * CGFloat(scale)
+        
+        let leadingPadding = (videoFrame.width - containerFrame.width)/2
+        let topPadding = (videoFrame.height - containerFrame.height)/2
 
+        videoFrame.origin = CGPoint.init(x: -leadingPadding, y: -topPadding)
+        
         return videoFrame
     }
     
