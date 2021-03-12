@@ -22,18 +22,15 @@ struct CallView: View {
                     }
                 } else if let videoView = viewModel.remoteVideoView {
                     // show full screen
-                    let videoViewFrame = CGRect.init(origin: CGPoint.zero, size: viewModel.getRemoteVideoRenderSize(videoView: videoView))
+                    let videoViewFrame = CGRect.init(origin: CGPoint.zero, size: viewModel.remoteViewRenderSize)
                     let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoViewFrame, containerFrame: reader.frame(in: .global))
-
-                    let leadingPadding = -(newVideoViewFrame.width - reader.frame(in: .global).width)/2
-                    let topPadding = -(newVideoViewFrame.height - reader.frame(in: .global).height)/2
                     
                     VideoView(rtcVideoView: videoView)
-                        .frame(width: newVideoViewFrame.width,
-                               height: newVideoViewFrame.height,
+                        .frame(width: newVideoViewFrame.size.width,
+                               height: newVideoViewFrame.size.height,
                                alignment: .center)
-                        .padding(.leading, leadingPadding)
-                        .padding(.top, topPadding)
+                        .padding(.leading, newVideoViewFrame.origin.x)
+                        .padding(.top, newVideoViewFrame.origin.y)
                 }
                 
                 // local video
@@ -100,11 +97,11 @@ struct CallView: View {
                 // action on view bottom
                 VStack {
                     Spacer()
-                    CallActionsView(viewModel: viewModel).padding(.bottom, 0)
+                    CallActionsView(viewModel: viewModel).frame(width: UIScreen.main.bounds.width)
                 }
                 .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
             }
-            .fixedSize(horizontal: false, vertical: false)
+            .frame(width: UIScreen.main.bounds.width)
             .background(Color.black.opacity(0.3))
             .navigationBarHidden(true)
             .onAppear(perform: {
@@ -194,7 +191,7 @@ struct CallActionsView: View {
                     .padding(.bottom, 14)
                     .padding(.top, 5)
                 }
-                .background(Color.black.opacity(0.85))
+                .background(Color.black.opacity(0.5))
                 .clipShape(RoundedTopShape())
             }.background(Color.clear)
         }.background(Color.clear)

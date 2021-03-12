@@ -16,6 +16,7 @@ protocol JanusVideoRoomDelegate: NSObject {
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteUnPublishedWithUid clientId: Int)
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, firstFrameDecodeWithSize size: CGSize, uId: Int)
+    func janusVideoRoom(janusRoom: JanusVideoRoom, renderSizeChangeWithSize size: CGSize, uId: Int)
 }
 
 extension JanusVideoRoomDelegate {
@@ -26,8 +27,6 @@ extension JanusVideoRoomDelegate {
     func janusVideoRoom(janusRoom: JanusVideoRoom, newRemoteJoinWithID clientId: Int) { }
     
     func janusVideoRoomDidLeaveRoom(janusRoom: JanusVideoRoom) { }
-    
-    func janusVideoRoom(janusRoom: JanusVideoRoom, renderSizeChangeWithSize size: CGSize, uId: Int) { }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, fatalErrorWithID code: RTCErrorCode) { }
     

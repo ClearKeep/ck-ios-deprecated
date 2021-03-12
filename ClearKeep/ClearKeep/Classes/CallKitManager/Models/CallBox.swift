@@ -69,6 +69,8 @@ final class CallBox: NSObject {
     var hasConnectedDidChange: (() -> Void)?
     var hasEndedDidChange: (() -> Void)?
     var audioChange: (() -> Void)?
+    var renderView: (() -> Void)?
+    var renderSizeChangeWithSize: ((_ size: CGSize,_ uId: Int) -> Void)?
 
     // MARK: Derived Properties
 
@@ -222,10 +224,17 @@ extension CallBox: JanusVideoRoomDelegate {
     }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, firstFrameDecodeWithSize size: CGSize, uId: Int) {
+        print("=================>>>>>>>>>>>>>>>>>>> firstFrameDecodeWithSize")
         status = .answered
         self.stateDidChange?()
-        print("=================>>>>>>>>>>>>>>>>>>> firstFrameDecodeWithSize")
+        self.renderSizeChangeWithSize?(size, uId)
     }
+    
+    func janusVideoRoom(janusRoom: JanusVideoRoom, renderSizeChangeWithSize size: CGSize, uId: Int) {
+        print("=================>>>>>>>>>>>>>>>>>>> renderSizeChangeWithSize")
+        self.renderSizeChangeWithSize?(size, uId)
+    }
+                            
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, fatalErrorWithID code: RTCErrorCode) {
         CallManager.shared.end(call: self)
