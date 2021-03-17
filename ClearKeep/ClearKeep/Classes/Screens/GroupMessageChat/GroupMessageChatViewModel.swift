@@ -112,7 +112,7 @@ class GroupMessageChatViewModel: ObservableObject, Identifiable {
                                                            senderKeyData: signalSKDM.serializedData()) { (result, error) in
                     print("Register group with result: \(result)")
                     if result {
-                        Backend.shared.signalSubscrible(clientId: userName)
+//                        Backend.shared.signalSubscrible(clientId: userName)
                     }
                 }
                 

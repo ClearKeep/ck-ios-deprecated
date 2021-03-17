@@ -153,6 +153,7 @@ struct GroupMessageChatView: View {
                 self.getMessageInRoom()
             })
         }
+        .keyboardManagment()
     }
 }
 

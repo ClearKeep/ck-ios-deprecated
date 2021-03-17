@@ -14,6 +14,7 @@ struct RegisterView: View {
     @State var email: String = ""
     @State var userName: String = ""
     @State var passWord: String = ""
+    @State var passWordConfirm: String = ""
     @State var firstName: String = ""
     @State var lastName: String = ""
     @Binding var isPresentModel: Bool
@@ -22,59 +23,73 @@ struct RegisterView: View {
     @State var messageAlert = ""
     @State private var isEmailValid : Bool = true
     @State private var isDisplayNameValid: Bool = true
-    @State private var isPasswordValid: Bool = true
     @State private var titleAlert = ""
     @State private var isRegisterSuccess: Bool = false
     
     var body: some View {
         VStack {
-            TitleLabel("Register Account")
-            TextField("Email", text: $email, onEditingChanged: { (isChanged) in
-                if !isChanged {
-                    self.isEmailValid = self.email.textFieldValidatorEmail()
-                }
-            })
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-            if !self.isEmailValid {
-                Text("Email is invalid")
-                    .font(Font.system(size: 13))
-                    .foregroundColor(Color.red)
-            }
-            TextField("Display Name", text: $userName , onEditingChanged: { (isChanged) in
-                if !isChanged {
-                    self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
-                }
-            })
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
-            .padding()
-            if !self.isDisplayNameValid {
-                Text("Display name must not be blank")
-                    .font(Font.system(size: 13))
-                    .foregroundColor(Color.red)
-            }
-            TextField("Password", text: $passWord , onEditingChanged: { (isChanged) in
-                if !isChanged {
-                    self.isPasswordValid = !self.passWord.isEmpty
-                }
-            })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            if !self.isPasswordValid {
-                Text("Password must not be blank")
-                    .font(Font.system(size: 13))
-                    .foregroundColor(Color.red)
-            }
-            
-            Button(action: register) {
-                ButtonContent("REGISTER").padding()
+            GeometryReader { reader in
+                ScrollView(.vertical, showsIndicators: false, content: {
+                    VStack {
+                        TitleLabel("Register Account")
+                        TextField("Email", text: $email, onEditingChanged: { (isChanged) in
+                            if !isChanged {
+                                self.isEmailValid = self.email.textFieldValidatorEmail()
+                            }
+                        })
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                        if !self.isEmailValid {
+                            Text("Email is invalid")
+                                .font(Font.system(size: 13))
+                                .foregroundColor(Color.red)
+                        }
+                        TextField("Display Name", text: $userName , onEditingChanged: { (isChanged) in
+                            if !isChanged {
+                                self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
+                            }
+                        })
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .padding()
+                        if !self.isDisplayNameValid {
+                            Text("Display name must not be blank")
+                                .font(Font.system(size: 13))
+                                .foregroundColor(Color.red)
+                        }
+                        
+                        PasswordSecureField(password: $passWord)
+                        
+                        SecureField("Password Confirm", text: $passWordConfirm)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                        
+                        Button(action: register) {
+                            ButtonContent("REGISTER").padding()
+                        }
+                    }
+                })
             }
         }
+        .navigationBarItems(leading:
+                                Image("ic_back_navigation")
+                                .scaledToFit()
+                                .foregroundColor(Color.blue)
+                                .frame(width: 50, height: 50)
+                                .onTapGesture {
+                                    self.isPresentModel = false
+                                })
+        .navigationBarBackButtonHidden(true)
+        .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    UIApplication.shared.endEditing()
+                })
         .padding()
+        .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
@@ -93,7 +108,14 @@ extension RegisterView {
         if !self.isEmailValid || !self.isDisplayNameValid {
             return
         } else if self.passWord.isEmpty {
-            self.isPasswordValid = false
+            self.messageAlert = "Password must not be blank"
+            self.titleAlert = "Register Error"
+            self.isShowAlert = true
+            return
+        } else if self.passWord != self.passWordConfirm {
+            self.messageAlert = "Password confirm is not correct"
+            self.titleAlert = "Register Error"
+            self.isShowAlert = true
             return
         }
         hudVisible = true

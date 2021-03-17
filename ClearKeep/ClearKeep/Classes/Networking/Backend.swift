@@ -96,11 +96,11 @@ class Backend: ObservableObject {
     }
     
     func signalSubscrible(clientId: String) -> Void {
-        signalService?.unsubscribe(clientId: clientId, completion: { [weak self] in
-            self?.signalService?.subscribe(clientId: clientId, completion: { [weak self] in
+//        signalService?.unsubscribe(clientId: clientId, completion: { [weak self] in
+            self.signalService?.subscribe(clientId: clientId, completion: { [weak self] in
                 self?.signalService?.listen(clientId: clientId, heard: self!.heard)
             })
-        })
+//        })
     }
     
     func signalUnsubcrible(clientId: String) -> Void {
@@ -123,11 +123,11 @@ class Backend: ObservableObject {
     }
     
     func notificationSubscrible(clientId: String) -> Void{
-        notificationService?.unsubscribe(clientId: clientId, completion: { [weak self] in
-            self?.notificationService?.subscribe(clientId: clientId, completion: { [weak self] in
+//        notificationService?.unsubscribe(clientId: clientId, completion: { [weak self] in
+            self.notificationService?.subscribe(clientId: clientId, completion: { [weak self] in
                 self?.notificationService?.listen(clientId: clientId, heard: self!.heardNotification)
             })
-        })
+//        })
     }
     
     private func heardNotification(publication: Notification_NotifyObjectResponse) {

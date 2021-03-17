@@ -50,6 +50,11 @@ struct CreateRoomView: View {
         })
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    UIApplication.shared.endEditing()
+                })
     }
 }
 

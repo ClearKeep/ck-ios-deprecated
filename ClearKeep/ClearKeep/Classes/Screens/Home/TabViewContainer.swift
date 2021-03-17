@@ -51,8 +51,8 @@ struct TabViewContainer: View {
             do {
                 let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
                 viewModel.getUserInDatabase(clientID: userLogin.id)
-                self.subscribleMessages()
-                self.subscribleNotify()
+//                self.subscribleMessages()
+//                self.subscribleNotify()
             } catch {
                 print("get user login error")
             }

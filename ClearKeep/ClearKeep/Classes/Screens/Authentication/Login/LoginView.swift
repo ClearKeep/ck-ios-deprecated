@@ -44,21 +44,27 @@ struct LoginView: View {
                             .foregroundColor(Color.red)
                             .padding(.bottom, 10)
                     }
-                    HStack {
+                    VStack {
                         Button(action: login) {
                             ButtonContent("LOGIN")
-                                .padding(.trailing, 25)
+                                .padding(.bottom, 25)
                         }
                         NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
                             Button(action: {
                                 //                                register()
                                 isRegister = true
                             }) {
-                                ButtonContent("REGISTER")
+                                Text("Register")
+                                    .foregroundColor(Color.blue)
+                                    .underline()
+                                
+//                                ButtonContent("REGISTER")
                             }
                         }
+                        .isDetailLink(true)
                     }
                 }
+                .keyboardManagment()
                 .padding()
                 .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             }
@@ -68,7 +74,12 @@ struct LoginView: View {
                   message: Text(self.messageAlert),
                   dismissButton: .default(Text("OK")))
         })
-
+        .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    UIApplication.shared.endEditing()
+                })
+        .padding()
     }
     
 }
@@ -76,28 +87,8 @@ struct LoginView: View {
 extension LoginView {
     
     private func register() {
-        //        if isGroupChat {
-        //            registerWithGroup()
-        //        } else {
-        //            registerByAddress()
-        //        }
         self.viewRouter.current = .register
     }
-    
-    //    private func registerByAddress() {
-    //        guard let deviceID: Int32 = Int32(deviceID) else {
-    //            print("DeviceID always number")
-    //            return
-    //        }
-    //        let address = SignalAddress(name: username, deviceId: Int32(deviceID))
-    //        Backend.shared.authenticator.register(address: address) { (result, error) in
-    //            print("Register result: \(result)")
-    //            if result {
-    //                Backend.shared.signalSubscrible(clientId: self.username)
-    //                self.viewRouter.current = .masterDetail
-    //            }
-    //        }
-    //    }
     
     private func registerWithGroup() {
         guard let deviceID: Int32 = Int32(deviceID),
@@ -129,7 +120,7 @@ extension LoginView {
                                                        senderKeyData: signalSKDM.serializedData()) { (result, error) in
                 print("Register group with result: \(result)")
                 if result {
-                    Backend.shared.signalSubscrible(clientId: self.email)
+//                    Backend.shared.signalSubscrible(clientId: self.email)
                     self.viewRouter.current = .masterDetail
                 }
             }
@@ -270,6 +261,8 @@ extension LoginView {
                         
                         CKSignalCoordinate.shared.myAccount = account
                         CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
+                        Backend.shared.signalSubscrible(clientId: account.username)
+                        Backend.shared.notificationSubscrible(clientId: account.username)
                     }
                     if result {
                         Backend.shared.registerTokenDevice { (response) in

@@ -32,19 +32,36 @@ extension Notification {
     }
 }
 
-struct KeyboardAdaptive: ViewModifier {
-    @State private var keyboardHeight: CGFloat = 0
-
+struct KeyboardManagment: ViewModifier {
+    @State private var offset: CGFloat = 0
     func body(content: Content) -> some View {
-        content
-            .padding(.bottom, keyboardHeight)
-            .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
+        GeometryReader { geo in
+            content
+                .onAppear {
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
+                        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+                        withAnimation(Animation.easeOut(duration: 0.5)) {
+                            if #available(iOS 14.0, *) {
+                                offset = 0
+                            } else {
+                                offset = keyboardFrame.height - geo.safeAreaInsets.bottom
+                            }
+                        }
+                    }
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (notification) in
+                        withAnimation(Animation.easeOut(duration: 0.1)) {
+                            offset = 0
+                        }
+                    }
+                }
+                .padding(.bottom, offset)
+        }
     }
 }
-
 extension View {
-    func keyboardAdaptive() -> some View {
-        ModifiedContent(content: self, modifier: KeyboardAdaptive())
+    
+    func keyboardManagment() -> some View {
+        return self.modifier(KeyboardManagment())
     }
 }
 

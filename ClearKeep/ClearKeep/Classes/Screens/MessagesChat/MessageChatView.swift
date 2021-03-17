@@ -134,6 +134,7 @@ struct MessageChatView: View {
             .padding(.bottom, 8)
             .animation(.easeOut)
         }
+        .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .navigationBarTitle(Text(self.userName))
         .navigationBarItems(trailing: Button(action: {
@@ -161,6 +162,7 @@ struct MessageChatView: View {
             
         }, label: {
             Image(systemName: "video")
+                .frame(width: 50, height: 50, alignment: .trailing)
         }))
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
