@@ -10,7 +10,7 @@ struct TitleLabel : View {
     
     var body: some View {
         return Text(text)
-            .font(.largeTitle)
+            .font(.title)
             .fontWeight(.semibold)
             .padding()//.bottom, 10)
     }
@@ -39,7 +39,7 @@ struct ButtonContent : View {
     
     var body: some View {
         return Text(text)
-            .font(.subheadline)
+            .font(.system(size: 17))
             .foregroundColor(.gray)
             .padding()
             .frame(width: UIScreen.main.bounds.size.width / 3, height: 50)

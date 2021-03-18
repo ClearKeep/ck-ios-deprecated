@@ -19,67 +19,79 @@ struct LoginView: View {
     @State var messageAlert = ""
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
-
+    
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack {
-                    TitleLabel("ClearKeep")
-                    TextField("Email", text: $email, onEditingChanged: { (isChanged) in
-                        if !isChanged {
-                            self.isEmailValid = self.email.textFieldValidatorEmail()
-                        }
-                    })
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                    .onAppear {
-                        self.isEmailValid = true
-                    }
-                    PasswordSecureField(password: $password)
-                    if !self.isEmailValid {
-                        Text("Email is invalid")
-                            .font(Font.system(size: 13))
-                            .foregroundColor(Color.red)
-                            .padding(.bottom, 10)
-                    }
-                    VStack {
-                        Button(action: login) {
-                            ButtonContent("LOGIN")
-                                .padding(.bottom, 25)
-                        }
-                        NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
-                            Button(action: {
-                                //                                register()
-                                isRegister = true
-                            }) {
-                                Text("Register")
-                                    .foregroundColor(Color.blue)
-                                    .underline()
-                                
-//                                ButtonContent("REGISTER")
+            VStack {
+                GeometryReader { reader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        VStack {
+                            TitleLabel("ClearKeep")
+                            Image("ic_app")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: UIScreen.main.bounds.size.width / 3, height: UIScreen.main.bounds.size.width / 3, alignment: .center)
+                                .padding(.bottom, 20)
+                            
+                            TextField("Email", text: $email, onEditingChanged: { (isChanged) in
+                                if !isChanged {
+                                    self.isEmailValid = self.email.textFieldValidatorEmail()
+                                }
+                            })
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .onAppear {
+                                self.isEmailValid = true
+                            }
+                            if !self.isEmailValid {
+                                Text("Email is invalid")
+                                    .font(Font.system(size: 13))
+                                    .foregroundColor(Color.red)
+                            }
+                            PasswordSecureField(password: $password)
+                            Button(action: login) {
+                                Text("Login")
+                                    .foregroundColor(.white)
+                                    .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                                    .background(Color("Blue-2"))
+                            }
+                            .cornerRadius(10)
+                            .padding()
+                            
+                            NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
+                                Button(action: {
+                                    isRegister = true
+                                }) {
+                                    Text("Register")
+                                        .foregroundColor(.white)
+                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                                        .background(Color("Blue"))
+                                }
+                                .cornerRadius(10)
+                                .padding()
                             }
                         }
-                        .isDetailLink(true)
-                    }
+                    })
                 }
-                .keyboardManagment()
-                .padding()
-                .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             }
+            .navigationBarHidden(true)
+            .navigationBarTitle("", displayMode: .inline)
+            .keyboardManagment()
+            .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+            .alert(isPresented: self.$isShowAlert, content: {
+                Alert(title: Text("Login Error"),
+                      message: Text(self.messageAlert),
+                      dismissButton: .default(Text("OK")))
+            })
+            .gesture(
+                TapGesture()
+                    .onEnded { _ in
+                        UIApplication.shared.endEditing()
+                    })
+            .padding()
         }
-        .alert(isPresented: self.$isShowAlert, content: {
-            Alert(title: Text("Login Error"),
-                  message: Text(self.messageAlert),
-                  dismissButton: .default(Text("OK")))
-        })
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
-        .padding()
     }
     
 }
@@ -120,7 +132,7 @@ extension LoginView {
                                                        senderKeyData: signalSKDM.serializedData()) { (result, error) in
                 print("Register group with result: \(result)")
                 if result {
-//                    Backend.shared.signalSubscrible(clientId: self.email)
+                    //                    Backend.shared.signalSubscrible(clientId: self.email)
                     self.viewRouter.current = .masterDetail
                 }
             }
@@ -237,7 +249,7 @@ extension LoginView {
         let code: Int
         let message: String
     }
-
+    
     
     private func loginForUser(clientID : String) {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in

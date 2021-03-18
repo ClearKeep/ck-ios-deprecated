@@ -39,6 +39,7 @@ struct CreateRoomView: View {
                 ButtonContent("Create")
             }
         }
+        .navigationBarTitle("", displayMode: .inline)
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
                   message: Text(self.messageAlert),
@@ -48,6 +49,7 @@ struct CreateRoomView: View {
                     }
                   }))
         })
+        .keyboardManagment()
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .gesture(
