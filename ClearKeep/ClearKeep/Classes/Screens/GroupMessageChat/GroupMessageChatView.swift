@@ -23,8 +23,8 @@ struct GroupMessageChatView: View {
     @State var messageStr = ""
     @State var isForceProcessKey = true
     
-    private let scrollingProxy = ListScrollingProxy()
-    
+    @State private var scrollingProxy = ListScrollingProxy()
+
     @State var value: CGFloat = 0
     
     
@@ -57,6 +57,9 @@ struct GroupMessageChatView: View {
                                 })
                                 .padding([.horizontal,.bottom])
                                 .padding(.top, 25)
+                                .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
                             }
                         })
                     }.gesture(
@@ -78,12 +81,18 @@ struct GroupMessageChatView: View {
                                         )
                                 }
                                 .onAppear {
+                                    self.scrollingProxy = ListScrollingProxy()
                                     self.reloadData()
                                 }
                             }
                             .padding([.horizontal,.bottom])
                             .padding(.top, 25)
                         })
+                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    self.scrollingProxy.scrollTo(.end)
+                                }
+                        }
                     }.gesture(
                         TapGesture()
                             .onEnded { _ in

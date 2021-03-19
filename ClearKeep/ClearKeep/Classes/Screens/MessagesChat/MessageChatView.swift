@@ -29,7 +29,7 @@ struct MessageChatView: View {
     @State var hudVisible = false
     @State var alertVisible = false
         
-    private let scrollingProxy = ListScrollingProxy()
+    @State private var scrollingProxy = ListScrollingProxy()
 
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
@@ -43,7 +43,7 @@ struct MessageChatView: View {
     var body: some View {
         VStack {
             if #available(iOS 14.0, *) {
-                GeometryReader { reader in
+                GeometryReader { geoReader in
                     ScrollView(.vertical, showsIndicators: false, content: {
                         HStack { Spacer() }
                         ScrollViewReader{reader in
@@ -62,8 +62,12 @@ struct MessageChatView: View {
                             })
                             .padding([.horizontal,.bottom])
                             .padding(.top, 25)
+                            .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            }
                         }
                     })
+
                 }.gesture(
                     TapGesture()
                         .onEnded { _ in
@@ -84,11 +88,17 @@ struct MessageChatView: View {
                             }
                         }
                         .onAppear(perform: {
+                            self.scrollingProxy = ListScrollingProxy()
                             self.reloadData()
                         })
                         .padding([.horizontal,.bottom])
                         .padding(.top, 25)
                     })
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.scrollingProxy.scrollTo(.end)
+                            }
+                    }
                 }.gesture(
                     TapGesture()
                         .onEnded { _ in

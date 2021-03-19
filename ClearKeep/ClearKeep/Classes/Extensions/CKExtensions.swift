@@ -74,6 +74,8 @@ extension NSNotification {
     static let Notification = NSNotification.Name.init("Notification")
     
     static let AppBecomeActive = NSNotification.Name.init("AppBecomeActive")
+    
+    static let keyBoardWillShow = NSNotification.Name.init("keyBoardWillShow")
 }
 
 extension UserDefaults: ObjectSavable {

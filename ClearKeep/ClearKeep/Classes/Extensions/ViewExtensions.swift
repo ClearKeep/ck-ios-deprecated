@@ -41,6 +41,11 @@ struct KeyboardManagment: ViewModifier {
                     NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
                         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
                         withAnimation(Animation.easeOut(duration: 0.5)) {
+                            
+                            NotificationCenter.default.post(name: NSNotification.keyBoardWillShow,
+                                                            object: nil,
+                                                            userInfo: nil)
+                            
                             if #available(iOS 14.0, *) {
                                 offset = 0
                             } else {
