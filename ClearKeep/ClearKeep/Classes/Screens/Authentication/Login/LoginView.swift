@@ -42,6 +42,7 @@ struct LoginView: View {
                                         colorBorder = self.isEmailValid ? Color.gray : Color.red
                                     }
                                 })
+                                .keyboardType(.emailAddress)
                                 .font(.system(size: 20))
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
