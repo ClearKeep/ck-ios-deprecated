@@ -20,57 +20,77 @@ struct LoginView: View {
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
     
+    @State private var colorBorder = Color.gray
+    
     var body: some View {
         NavigationView {
             VStack {
                 GeometryReader { reader in
                     ScrollView(.vertical, showsIndicators: false, content: {
-                        VStack {
+                        VStack(alignment: .center) {
                             TitleLabel("ClearKeep")
                             Image("ic_app")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: UIScreen.main.bounds.size.width / 3, height: UIScreen.main.bounds.size.width / 3, alignment: .center)
+                                .frame(width: 100, height: 100, alignment: .center)
                                 .padding(.bottom, 20)
-                            
-                            TextField("Email", text: $email, onEditingChanged: { (isChanged) in
-                                if !isChanged {
-                                    self.isEmailValid = self.email.textFieldValidatorEmail()
+                            VStack(alignment: .leading , spacing: 10){
+                                TitleTextField("Email")
+                                TextField("", text: $email, onEditingChanged: { (isChanged) in
+                                    if !isChanged {
+                                        self.isEmailValid = self.email.textFieldValidatorEmail()
+                                        colorBorder = self.isEmailValid ? Color.gray : Color.red
+                                    }
+                                })
+                                .font(.system(size: 20))
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .frame(height: 50)
+                                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(colorBorder, lineWidth: 1))
+                                .textFieldStyle(MyTextFieldStyle())
+                                .padding([.leading , .trailing], 1)
+
+                                .onAppear {
+                                    self.isEmailValid = true
                                 }
-                            })
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                            .onAppear {
-                                self.isEmailValid = true
+                                if !self.isEmailValid {
+                                    Text("Email is invalid")
+                                        .font(Font.system(size: 13))
+                                        .foregroundColor(Color.red)
+                                }
+                                TitleTextField("Password")
+                                    .padding(.top , 10)
+                                PasswordSecureField(password: $password)
+                                    .frame(height: 50)
+                                    .textFieldStyle(MyTextFieldStyle())
+                                    .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
+                                    .padding([.leading , .trailing], 1)
+                                    .padding(.bottom, 10)
+                                
+                                Button(action: login) {
+                                    Text("Login")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(.white)
+                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 50, idealHeight: 50)
+                                        .background(Color("Blue-2"))
+                                }
+                                .cornerRadius(10)
+                                .padding(.top, 20)
+                                .padding(.bottom, 10)
                             }
-                            if !self.isEmailValid {
-                                Text("Email is invalid")
-                                    .font(Font.system(size: 13))
-                                    .foregroundColor(Color.red)
-                            }
-                            PasswordSecureField(password: $password)
-                            Button(action: login) {
-                                Text("Login")
-                                    .foregroundColor(.white)
-                                    .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
-                                    .background(Color("Blue-2"))
-                            }
-                            .cornerRadius(10)
-                            .padding()
                             
                             NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
                                 Button(action: {
                                     isRegister = true
                                 }) {
                                     Text("Register")
-                                        .foregroundColor(.white)
-                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
-                                        .background(Color("Blue"))
+                                        .underline()
+                                        .foregroundColor(.blue)
+                                    //                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                                    //                                        .background(Color("Blue"))
                                 }
-                                .cornerRadius(10)
-                                .padding()
+                                //                                .cornerRadius(10)
+                                .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                             }
                         }
                     })
@@ -157,6 +177,7 @@ extension LoginView {
         //        return
         
         self.isEmailValid = self.email.textFieldValidatorEmail()
+        colorBorder = self.isEmailValid ? Color.gray : Color.red
         
         if self.email.isEmpty {
             self.messageAlert = "Email can't be empty"

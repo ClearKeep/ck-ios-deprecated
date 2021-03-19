@@ -26,6 +26,9 @@ struct RegisterView: View {
     @State private var titleAlert = ""
     @State private var isRegisterSuccess: Bool = false
     
+    @State private var colorBorderEmail = Color.gray
+    @State private var colorBorderDisplayName = Color.gray
+
     var body: some View {
         VStack {
             GeometryReader { reader in
@@ -34,51 +37,87 @@ struct RegisterView: View {
                         Image("ic_app")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: UIScreen.main.bounds.size.width / 3, height: UIScreen.main.bounds.size.width / 3, alignment: .center)
-                        TextField("Email", text: $email, onEditingChanged: { (isChanged) in
-                            if !isChanged {
-                                self.isEmailValid = self.email.textFieldValidatorEmail()
-                            }
-                        })
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                        if !self.isEmailValid {
-                            Text("Email is invalid")
-                                .font(Font.system(size: 13))
-                                .foregroundColor(Color.red)
-                        }
-                        TextField("Display Name", text: $userName , onEditingChanged: { (isChanged) in
-                            if !isChanged {
-                                self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
-                            }
-                        })
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .padding()
-                        if !self.isDisplayNameValid {
-                            Text("Display name must not be blank")
-                                .font(Font.system(size: 13))
-                                .foregroundColor(Color.red)
-                        }
+                            .frame(width: 100, height: 100, alignment: .center)
+                            .padding(.top , 15)
                         
-                        PasswordSecureField(password: $passWord)
-                        
-                        SecureField("Confirm Password", text: $passWordConfirm)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                            .padding(.bottom, 25)
+                        VStack(alignment:.leading, spacing: 10) {
+                            
+                            TitleTextField("Email")
+                            TextField("", text: $email, onEditingChanged: { (isChanged) in
+                                if !isChanged {
+                                    self.isEmailValid = self.email.textFieldValidatorEmail()
+                                    colorBorderEmail = self.isEmailValid ? Color.gray : Color.red
+                                }
+                            })
+                            .font(.system(size: 20))
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .frame(height: 50)
+                            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(colorBorderEmail, lineWidth: 1))
+                            .textFieldStyle(MyTextFieldStyle())
+                            .padding([.leading , .trailing], 1)
+                            .onAppear {
+                                self.isEmailValid = true
+                            }
+                            
+                            if !self.isEmailValid {
+                                Text("Email is invalid")
+                                    .font(.system(size: 13))
+                                    .foregroundColor(Color.red)
+                            }
+                            
+                            TitleTextField("Display Name")
+                                .padding(.top, 10)
+                            TextField("", text: $userName , onEditingChanged: { (isChanged) in
+                                if !isChanged {
+                                    self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
+                                    colorBorderDisplayName = self.isDisplayNameValid ? Color.gray : Color.red
+                                }
+                            })
+                            .font(.system(size: 20))
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .frame(height: 50)
+                            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(colorBorderDisplayName, lineWidth: 1))
+                            .textFieldStyle(MyTextFieldStyle())
+                            .padding([.leading , .trailing], 1)
+                            
+                            if !self.isDisplayNameValid {
+                                Text("Display name must not be blank")
+                                    .font(Font.system(size: 13))
+                                    .foregroundColor(Color.red)
+                            }
+
+                            TitleTextField("Password")
+                                .padding(.top, 10)
+                            
+                            PasswordSecureField(password: $passWord)
+                                .frame(height: 50)
+                                .textFieldStyle(MyTextFieldStyle())
+                                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
+                                .padding([.leading , .trailing], 1)
+                                .padding(.bottom, 10)
+                            TitleTextField("Confirm Password")
+                            
+                            PasswordSecureField(password: $passWordConfirm)
+                                .frame(height: 50)
+                                .textFieldStyle(MyTextFieldStyle())
+                                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
+                                .padding([.leading , .trailing], 1)
+                                .padding(.bottom, 10)
+                        }
                         
                         Button(action: register) {
                             Text("Create an account")
+                                .font(.system(size: 20))
                                 .foregroundColor(.white)
-                                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 50, idealHeight: 50)
                                 .background(Color("Blue-2"))
                         }
                         .cornerRadius(10)
-                        .padding()
+                        .padding(.top, 20)
+                        .padding(.bottom, 10)
+
                     }
                 })
             }
@@ -125,8 +164,13 @@ extension RegisterView {
             self.titleAlert = "Register Error"
             self.isShowAlert = true
             return
+        } else if self.passWord.count < 6 {
+            self.messageAlert = "Password must have at least 6 characters"
+            self.titleAlert = "Register Error"
+            self.isShowAlert = true
+            return
         } else if self.passWord != self.passWordConfirm {
-            self.messageAlert = "Password confirm is not correct"
+            self.messageAlert = "Password and Confirm password do not match. Please try again!"
             self.titleAlert = "Register Error"
             self.isShowAlert = true
             return

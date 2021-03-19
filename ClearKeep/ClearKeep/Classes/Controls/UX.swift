@@ -16,6 +16,29 @@ struct TitleLabel : View {
     }
 }
 
+struct TitleTextField : View {
+    private let text: String
+    
+    init(_ text: String) {
+        self.text = text
+    }
+    
+    var body: some View {
+        return Text(text)
+            .font(.system(size: 15))
+            .fontWeight(.semibold)
+            .padding(.bottom, 5)
+    }
+}
+
+struct MyTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .textFieldStyle(PlainTextFieldStyle())
+            .padding(.leading , 10)
+    }
+}
+
 struct UserImage : View {
     let name: String
     
@@ -82,9 +105,7 @@ struct PasswordSecureField : View {
     @Binding var password: String
     
     var body: some View {
-        return SecureField("Password", text: $password)
-            .padding()
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+        return SecureField("", text: $password)
     }
 }
 
