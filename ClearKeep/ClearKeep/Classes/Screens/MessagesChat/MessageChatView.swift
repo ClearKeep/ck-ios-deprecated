@@ -63,7 +63,9 @@ struct MessageChatView: View {
                             .padding([.horizontal,.bottom])
                             .padding(.top, 25)
                             .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
                             }
                         }
                     })
