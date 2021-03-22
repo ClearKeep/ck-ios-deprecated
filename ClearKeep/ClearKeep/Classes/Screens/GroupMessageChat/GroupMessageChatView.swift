@@ -104,12 +104,13 @@ struct GroupMessageChatView: View {
                 
                 HStack(spacing: 15){
                     HStack(spacing: 15){
-                        TextField("Message", text: $messageStr)
+                        MultilineTextField("Message", text: $messageStr)
                     }
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 4)
                     .padding(.horizontal)
                     .background(Color(UIColor.secondarySystemBackground))
-                    .clipShape(Capsule())
+                    .cornerRadius(30)
+                    .clipped()
                     
                     // Send Button...
                     // hiding view...

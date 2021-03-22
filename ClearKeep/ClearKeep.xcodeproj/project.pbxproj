@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C9362608754B0081C135 /* MultilineTextField.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
 		160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
 		16208E62252D7906000A6CE7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16208E61252D7906000A6CE7 /* HomeView.swift */; };
@@ -191,6 +192,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1013C9362608754B0081C135 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
@@ -727,6 +729,7 @@
 				56205B4B25A316F400B39D07 /* ShapeCustom.swift */,
 				68DE38C625B1445500554555 /* ChatBubbleView.swift */,
 				5603463B25B145BA00F57ED6 /* MessageBubble.swift */,
+				1013C9362608754B0081C135 /* MultilineTextField.swift */,
 			);
 			path = ViewCustom;
 			sourceTree = "<group>";
@@ -1286,6 +1289,7 @@
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
 				6880CF5C25F9C1C100F3DECE /* notify_push.grpc.swift in Sources */,
+				1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
 				56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */,
