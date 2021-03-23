@@ -41,6 +41,7 @@ struct SearchPeopleView: View {
                     }
                 }
         }
+            .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
     }
 }
 

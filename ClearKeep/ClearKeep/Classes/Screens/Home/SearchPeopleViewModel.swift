@@ -9,12 +9,15 @@ import Foundation
 class SearchPeopleViewModel : ObservableObject, Identifiable {
     
     @Published var users: [People] = []
+    @Published var hudVisible = false
     
     init() {
     }
 
     func searchUser(_ keySearch: String){
+        self.hudVisible = true
         Backend.shared.searchUser(keySearch.lowercased()) { (result, error) in
+            self.hudVisible = false
             if let result = result {
                 DispatchQueue.main.async {
                     self.users.removeAll()
