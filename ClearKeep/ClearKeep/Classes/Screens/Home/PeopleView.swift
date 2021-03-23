@@ -19,20 +19,31 @@ struct PeopleView: View {
     
     var body: some View {
         NavigationView {
-            List(viewModel.users){ user in
-                
-                NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                .environmentObject(groupRealms)
-                                .environmentObject(messsagesRealms))
-                {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                    VStack(alignment: .leading) {
-                        Text(user.userName)
-                        //                            Text(user.id)
-                        //                                .font(.subheadline)
-                        //                                .foregroundColor(.gray)
+            Group {
+                if viewModel.users.isEmpty {
+                    Text("No contact found")
+                        .font(.title)
+                        .foregroundColor(.gray)
+                        .lineLimit(nil)
+                        .frame(width: 300, alignment: .center)
+                        .multilineTextAlignment(.center)
+                } else {
+                    List(viewModel.users){ user in
+                        
+                        NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                        .environmentObject(groupRealms)
+                                        .environmentObject(messsagesRealms))
+                        {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                            VStack(alignment: .leading) {
+                                Text(user.userName)
+                                //                            Text(user.id)
+                                //                                .font(.subheadline)
+                                //                                .foregroundColor(.gray)
+                            }
+                        }
                     }
                 }
             }
