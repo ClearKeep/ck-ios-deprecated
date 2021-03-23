@@ -207,7 +207,7 @@ extension LoginView {
                         UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
                         try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                         
-                        Backend.shared.getLoginUserID { (userID) in
+                        Backend.shared.getLoginUserID { (userID, displayName) in
                             do {
                                 if userID.isEmpty {
                                     print("getLoginUserID Empty")
@@ -219,6 +219,7 @@ extension LoginView {
                                     return
                                 }
                                 user.id = userID
+                                user.displayName = displayName
                                 UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
                                 try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                                 //                            let randomID = Int32.random(in: 1...Int32.max)

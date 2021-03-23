@@ -62,7 +62,7 @@ struct HistoryChatView: View {
                                     }
                                 }
                             }
-                        }else {
+                        } else {
                             NavigationLink(destination:  viewGroup) {
                                 Image(systemName: "person.2.fill")
                                     .resizable()
