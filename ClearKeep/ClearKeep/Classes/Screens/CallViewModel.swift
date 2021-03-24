@@ -21,6 +21,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var callGroup = false
     @Published var timeCall = ""
     @Published var remoteViewRenderSize: CGSize = CGSize.zero
+    @Published var isVideoRequesting = false
     
     enum RenderScaleMode {
         case scaleToFit
