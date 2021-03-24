@@ -21,5 +21,14 @@ struct Constants {
     static let keyChainService = "keyChainService"
     static let keyChainUUID = "keyChainUUID"
     static let userDefaultUUID = "userDefaultUUID"
+    
+    struct User {
+        static let loginDate = "loginDateTime"
+    }
+    
+    enum CallType: String {
+        case audio
+        case video
+    }
 
 }
