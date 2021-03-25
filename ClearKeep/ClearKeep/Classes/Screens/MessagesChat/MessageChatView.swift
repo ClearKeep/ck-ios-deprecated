@@ -214,8 +214,25 @@ struct MessageChatView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
+            if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                if let userInfo = obj.userInfo,
+                   let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
+                    if publication.notifyType == "peer-update-key" {
+                        self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
+                    }
+                }
+            }
+        })
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
-            self.getMessageInRoom()
+            if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                self.getMessageInRoom()
+                if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
+                    if isNetWork {
+                        self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
+                    }
+                }
+            }
         })
     }
 }
@@ -358,7 +375,7 @@ extension MessageChatView {
             return
         }
         
-        self.viewModel.requestBundleRecipient(byClientId: clientId) {
+//        self.viewModel.requestBundleRecipient(byClientId: clientId) {
             if let myAccount = CKSignalCoordinate.shared.myAccount {
                 do {
                     guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
@@ -419,7 +436,7 @@ extension MessageChatView {
                     print("Send message error: \(error)")
                 }
             }
-        }
+//        }
         self.reloadData()
     }
 }

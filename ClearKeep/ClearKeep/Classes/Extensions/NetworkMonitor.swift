@@ -29,6 +29,9 @@ class NetworkMonitor {
                         if let myAccount = CKSignalCoordinate.shared.myAccount {
                             Backend.shared.notificationSubscrible(clientId: myAccount.username)
                             Backend.shared.signalSubscrible(clientId: myAccount.username)
+                            NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
+                                                            object: nil,
+                                                            userInfo:["net_work" : true])
                         }
                     }
                 } else {
