@@ -52,7 +52,7 @@ struct GroupChatDetailView: View {
                             Text("Add members")
                         }
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                 })
 
             NavigationLink(
@@ -68,7 +68,7 @@ struct GroupChatDetailView: View {
                             Text("Show members")
                         }
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                 })
 
             Spacer()

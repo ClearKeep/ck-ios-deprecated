@@ -144,7 +144,7 @@ struct GroupMessageChatView: View {
                     label: {
                         Text(groupModel.groupName)
                             .font(.system(size: 16, weight: .bold, design: .default))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
                     })
             })
