@@ -10,26 +10,26 @@ import SwiftUI
 import WebRTC
 
 //#if arch(arm64)
-//struct VideoView: UIViewRepresentable {
-//    let rtcVideoView: RTCMTLVideoView
-//
-//    func makeUIView(context: Context) -> RTCMTLVideoView {
-//        rtcVideoView.videoContentMode = .scaleAspectFit
-//        return rtcVideoView
-//    }
-//
-//    func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
-//    }
-//}
-//#else
 struct VideoView: UIViewRepresentable {
-    let rtcVideoView: RTCEAGLVideoView
+    let rtcVideoView: RTCMTLVideoView
 
-    func makeUIView(context: Context) -> RTCEAGLVideoView {
+    func makeUIView(context: Context) -> RTCMTLVideoView {
+        rtcVideoView.videoContentMode = .scaleAspectFill
         return rtcVideoView
     }
 
-    func updateUIView(_ videoView: RTCEAGLVideoView, context: Context) {
+    func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
     }
 }
+//#else
+//struct VideoView: UIViewRepresentable {
+//    let rtcVideoView: RTCEAGLVideoView
+//
+//    func makeUIView(context: Context) -> RTCEAGLVideoView {
+//        return rtcVideoView
+//    }
+//
+//    func updateUIView(_ videoView: RTCEAGLVideoView, context: Context) {
+//    }
+//}
 //#endif

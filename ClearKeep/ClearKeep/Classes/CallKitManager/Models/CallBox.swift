@@ -27,6 +27,7 @@ final class CallBox: NSObject {
     var avatar: String?
     let isOutgoing: Bool
     var status = CallStatus.calling
+    var type: Constants.CallType = .audio
 
     // MARK: Call State Properties
 
@@ -166,6 +167,7 @@ final class CallBox: NSObject {
             } else {
                 self?.status = .ringing
                 self?.stateDidChange?()
+                self?.videoRoom?.publisher?.localVideoTrack.isEnabled = self?.type == .video
             }
         })
     }

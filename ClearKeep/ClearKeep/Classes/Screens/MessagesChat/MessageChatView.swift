@@ -149,33 +149,20 @@ struct MessageChatView: View {
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .navigationBarTitle(Text(self.userName))
-        .navigationBarItems(trailing: Button(action: {
-            AVCaptureDevice.authorizeVideo(completion: { (status) in
-                AVCaptureDevice.authorizeAudio(completion: { (status) in
-                    if status == .alreadyAuthorized || status == .justAuthorized {
-                        hudVisible = true
-                        // CallManager call
-                        if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                            viewModel.callPeerToPeer(group: group, clientId: clientId) {
-                                hudVisible = false
-                            }
-                        } else {
-                            viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                                viewModel.callPeerToPeer(group: group, clientId: clientId) {
-                                    hudVisible = false
-                                }
-                            }
-                        }
-                    } else {
-                        self.alertVisible = true
-                    }
-                })
+        .navigationBarItems(trailing: HStack{
+            Button(action: {
+                call(callType: .audio)
+            }, label: {
+                Image(systemName: "phone.fill")
+                    .frame(width: 50, height: 50, alignment: .trailing)
             })
-            
-        }, label: {
-            Image(systemName: "video")
-                .frame(width: 50, height: 50, alignment: .trailing)
-        }))
+            Button(action: {
+                call(callType: .video)
+            }, label: {
+                Image(systemName: "video.fill")
+                    .frame(width: 50, height: 50, alignment: .trailing)
+            })
+        })
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),
@@ -238,6 +225,30 @@ struct MessageChatView: View {
 }
 
 extension MessageChatView {
+    
+    func call(callType type: Constants.CallType) {
+        AVCaptureDevice.authorizeVideo(completion: { (status) in
+            AVCaptureDevice.authorizeAudio(completion: { (status) in
+                if status == .alreadyAuthorized || status == .justAuthorized {
+                    hudVisible = true
+                    // CallManager call
+                    if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                        viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
+                            hudVisible = false
+                        }
+                    } else {
+                        viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
+                            viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
+                                hudVisible = false
+                            }
+                        }
+                    }
+                } else {
+                    self.alertVisible = true
+                }
+            })
+        })
+    }
     
     func getIdLastItem() -> String {
         let msgInRoom = realmMessages.allMessageInGroup(groupId: self.myGroupID)

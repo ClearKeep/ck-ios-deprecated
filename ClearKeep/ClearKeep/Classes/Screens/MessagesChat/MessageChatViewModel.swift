@@ -38,14 +38,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         self.groupType = groupType
     }
     
-    func callPeerToPeer(group: GroupModel, clientId: String, completion: (() -> ())? = nil){
+    func callPeerToPeer(group: GroupModel, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
         if isRequesting { return }
         isRequesting = true
-        requestVideoCall(clientId: clientId, groupId: group.groupID, completion: completion)
+        requestVideoCall(clientId: clientId, groupId: group.groupID, callType: type, completion: completion)
     }
     
-    func requestVideoCall(clientId: String, groupId: Int64, completion: (() -> ())?) {
-        Backend.shared.videoCall(clientId, groupId) { (response, error) in
+    func requestVideoCall(clientId: String, groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
+        Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
             self.isRequesting = false
             completion?()
             if let response = response {
@@ -62,7 +62,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                  clientName: self.username,
                                                                  avatar: "",
                                                                  groupId: groupId,
-                                                                 groupToken: response.groupRtcToken)
+                                                                 groupToken: response.groupRtcToken,
+                                                                 callType: type)
                                 }
                             })
                         })

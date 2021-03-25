@@ -47,12 +47,13 @@ final class CallManager: NSObject {
     // MARK: Actions
     func startCall(clientId: String, clientName: String?,
                    avatar: String? = nil, groupId: Int64, groupToken: String,
-                   video: Bool = true) {
+                   callType type: Constants.CallType = .audio) {
         let call = CallBox(uuid: UUID(), clientId: clientId, isOutgoing: true)
         call.clientName = clientName
         call.groupToken = groupToken
         call.avatar = avatar
         call.roomId = groupId
+        call.type = type
         call.hasStartedConnectingDidChange = { [weak self] in
             self?.provider.reportOutgoingCall(with: call.uuid, startedConnectingAt: call.connectingDate)
         }
@@ -67,7 +68,7 @@ final class CallManager: NSObject {
         let handle = CXHandle(type: .generic, value: receiverName ?? "")
         let startCallAction = CXStartCallAction(call: call.uuid, handle: handle)
 
-        startCallAction.isVideo = video
+        startCallAction.isVideo = true
         let transaction = CXTransaction()
         transaction.addAction(startCallAction)
         requestTransaction(transaction, action: Call.start.rawValue)
@@ -141,7 +142,7 @@ final class CallManager: NSObject {
         if let username = jsonData["from_client_name"].string,
            let roomId = jsonData["group_id"].string,
            let clientId = jsonData["from_client_id"].string,
-           let notifyType = jsonData["notify_type"].string {
+           let callType = jsonData["call_type"].string {
             let avatar = jsonData["from_client_avatar"].string
             let token = jsonData["group_rtc_token"].string
             

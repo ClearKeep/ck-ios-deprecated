@@ -37,6 +37,11 @@ internal protocol VideoCall_VideoCallClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
 
+  func update_call(
+    _ request: VideoCall_UpdateCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>
+
 }
 
 extension VideoCall_VideoCallClientProtocol {
@@ -74,6 +79,23 @@ extension VideoCall_VideoCallClientProtocol {
       callOptions: callOptions ?? self.defaultCallOptions
     )
   }
+
+  /// Unary call to update_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to update_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func update_call(
+    _ request: VideoCall_UpdateCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_UpdateCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/update_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
 }
 
 internal final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtocol {
@@ -95,6 +117,7 @@ internal final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtoco
 internal protocol VideoCall_VideoCallProvider: CallHandlerProvider {
   func video_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_ServerResponse>
   func cancel_request_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+  func update_call(request: VideoCall_UpdateCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
 }
 
 extension VideoCall_VideoCallProvider {
@@ -115,6 +138,13 @@ extension VideoCall_VideoCallProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.cancel_request_call(request: request, context: context)
+        }
+      }
+
+    case "update_call":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.update_call(request: request, context: context)
         }
       }
 

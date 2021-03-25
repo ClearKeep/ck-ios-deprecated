@@ -9,9 +9,9 @@ import Foundation
 import WebRTC
 
 class CallViewModel: NSObject, ObservableObject {
-    @Published var localVideoView: RTCEAGLVideoView?
-    @Published var remoteVideoView: RTCEAGLVideoView?
-    @Published var remotesVideoView = [RTCEAGLVideoView]()
+    @Published var localVideoView: RTCMTLVideoView?
+    @Published var remoteVideoView: RTCMTLVideoView?
+    @Published var remotesVideoView = [RTCMTLVideoView]()
     
     @Published var cameraOn = true
     @Published var cameraFront = false
@@ -21,6 +21,8 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var callGroup = false
     @Published var timeCall = ""
     @Published var remoteViewRenderSize: CGSize = CGSize.zero
+    @Published var isVideoRequesting = false
+    @Published var callType: Constants.CallType = .audio
     
     enum RenderScaleMode {
         case scaleToFit
@@ -40,6 +42,7 @@ class CallViewModel: NSObject, ObservableObject {
     
     func updateCallBox(callBox: CallBox) {
         self.callBox = callBox
+        self.callType = callBox.type
         updateVideoView()
 
         self.callBox?.stateDidChange = { [weak self] in
@@ -233,6 +236,36 @@ class CallViewModel: NSObject, ObservableObject {
 //                CallManager.shared.hangup()
 //            }
             endCall()
+        }
+    }
+    
+    func updateCallTypeVideo() {
+        guard let callBox = self.callBox else { return }
+        Backend.shared.updateVideoCall(callBox.roomId, callType: .video) { [weak self](response, error) in
+            if error == nil {
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.callType = .video
+                    self.callBox?.type = .video
+                    self.callBox?.videoRoom?.publisher?.cameraOn()
+                }
+            }
+        }
+    }
+    
+    func didReceiveMessageGroup(userInfo: [AnyHashable : Any]?) {
+        if let userInfo = userInfo,
+           let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
+            if publication.notifyType == "audio" ||  publication.notifyType == "video" {
+                if publication.notifyType == "video" {
+                    DispatchQueue.main.async {
+                        self.callType = .video
+                        self.callBox?.type = .video
+                        self.callBox?.videoRoom?.publisher?.cameraOn()
+                    }
+                }
+                // TODO: Check audio type update
+            }
         }
     }
 }

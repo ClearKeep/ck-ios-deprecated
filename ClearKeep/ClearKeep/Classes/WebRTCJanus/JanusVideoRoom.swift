@@ -66,7 +66,7 @@ class JanusVideoRoom: NSObject {
 //        localConfig.resolution = CGSize(width: 480, height: 640)
 //        localConfig.resolution = CGSize(width: 192, height: 144)
         localConfig.fps = 30
-        localConfig.videoBitrate = 256
+        localConfig.videoBitrate = 512
         localConfig.audioBirate = 200
         localConfig.frequency = 44100
         publisher?.mediaConstraints = localConfig
