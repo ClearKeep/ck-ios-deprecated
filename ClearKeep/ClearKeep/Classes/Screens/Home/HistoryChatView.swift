@@ -144,6 +144,7 @@ extension HistoryChatView {
         print("getJoinnedGroup")
         
         Backend.shared.getJoinnedGroup { (result, error) in
+            DispatchQueue.main.async {
             if let result = result {
                 result.lstGroup.forEach { (groupResponse) in
                     if let group = self.groupRealms.filterGroup(groupId: groupResponse.groupID){
@@ -152,7 +153,7 @@ extension HistoryChatView {
                             self.updateLastMessageInGroup(groupResponse: groupResponse)
                         }
                     } else {
-                        DispatchQueue.main.async {
+//                        DispatchQueue.main.async {
                             let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
                             let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                         groupName: groupResponse.groupName,
@@ -171,15 +172,24 @@ extension HistoryChatView {
                             self.groupRealms.add(group: groupModel)
                             self.registerWithGroup(groupResponse.groupID)
                             self.updateLastMessageInGroup(groupResponse: groupResponse)
-                        }
+//                        }
                     }
                 }
             }
             self.reloadData()
+            }
         }
     }
     
     func updateLastMessageInGroup(groupResponse: Group_GroupObjectResponse){
+        // break last message with time login
+        if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
+            let updateAt = NSDate(timeIntervalSince1970: TimeInterval(groupResponse.lastMessage.createdAt/1000))
+            if loginDate.compare(updateAt as Date) == ComparisonResult.orderedDescending {
+                return
+            }
+        }
+        
         let lastMessageResponse = groupResponse.lastMessage
         var messageResponse = Message_MessageObjectResponse()
         messageResponse.id = lastMessageResponse.id

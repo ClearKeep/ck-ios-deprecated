@@ -302,6 +302,7 @@ extension LoginView {
                     if result {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
+                                UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
                                 hudVisible = false
                                 self.viewRouter.current = .tabview
                             }else {
