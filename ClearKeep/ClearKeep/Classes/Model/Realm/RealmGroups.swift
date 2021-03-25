@@ -11,29 +11,29 @@ import RealmSwift
 /// Class should be created only once
 /// (typically, initialize in SceneDelegate and inject where needed)
 class RealmGroups: ObservableObject {
-
+    
     // MARK:- Persons conformance
     @Published var all = [GroupModel]()
-
-//    var allPublished: Published<[GroupModel]> { _all }
-//    var allPublisher: Published<[GroupModel]>.Publisher { $all }
-
+    
+    //    var allPublished: Published<[GroupModel]> { _all }
+    //    var allPublisher: Published<[GroupModel]>.Publisher { $all }
+    
     init() {
         loadSavedData()
     }
-
+    
     func add(group: GroupModel) {
         let realmGroup = buildRealmGroup(group: group)
         guard write(group: realmGroup) else { return }
-            all.append(group)
+        all.append(group)
     }
-
+    
     func update(group: GroupModel) {
         if let index = all.firstIndex(where: { $0.groupID == group.groupID }) {
             let realmGroup = buildRealmGroup(group: group)
             guard write(group: realmGroup) else { return }
             all[index] = group
-//            sort()
+            //            sort()
         }
         else {
             print("group not found")
@@ -54,7 +54,7 @@ class RealmGroups: ObservableObject {
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
-//                sort()
+                //                sort()
             }
         }
     }
@@ -71,9 +71,17 @@ class RealmGroups: ObservableObject {
     }
     
     func getTimeSyncInGroup(groupID: Int64) -> Int64{
+        
         var time: Int64 = 0
         if let group = all.filter({$0.groupID == groupID}).first {
             time = group.timeSyncMessage
+        }
+        if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
+            let timeLoginInterval = Int64(loginDate.timeIntervalSince1970)
+            if timeLoginInterval > time/1000 {
+                time = timeLoginInterval
+                self.updateTimeSyncMessageInGroup(groupID: groupID, lastMessageAt: time)
+            }
         }
         return time
     }
@@ -83,7 +91,7 @@ class RealmGroups: ObservableObject {
         let from = group?.lstClientID.filter{$0.id == fromClientId}.first
         return from?.username ?? ""
     }
-
+    
     func remove(groupRemove: GroupModel) {
         for (index, group) in all.enumerated() {
             if group.groupID == groupRemove.groupID {
@@ -101,18 +109,18 @@ class RealmGroups: ObservableObject {
             self.all.removeAll()
         }
     }
-
+    
     // MARK: - Private functions
     private func write(group: RealmGroup) -> Bool {
         realmWrite { realm in
             realm.add(group, update: .modified)
         }
     }
-
+    
     private func delete(group: RealmGroup) -> Bool {
         realmWrite { realm in
             if let group = realm.object(ofType: RealmGroup.self,
-                                         forPrimaryKey: group.groupId) {
+                                        forPrimaryKey: group.groupId) {
                 realm.delete(group)
             }
         }
@@ -146,10 +154,10 @@ class RealmGroups: ObservableObject {
             }
         }
     }
-
+    
     private func realmWrite(operation: (_ realm: Realm) -> Void) -> Bool {
         guard let realm = getRealm() else { return false }
-
+        
         do {
             try realm.write { operation(realm) }
         }
@@ -157,10 +165,10 @@ class RealmGroups: ObservableObject {
             print(error.localizedDescription)
             return false
         }
-
+        
         return true
     }
-
+    
     private func getRealm() -> Realm? {
         do {
             return try Realm()
@@ -170,40 +178,31 @@ class RealmGroups: ObservableObject {
             return nil
         }
     }
-
+    
     func loadSavedData() {
         DispatchQueue.global().async {
             guard let realm = self.getRealm() else { return }
-
+            
             let objects = realm.objects(RealmGroup.self)
-
+            
             let groups: [GroupModel] = objects.map { object in
                 self.buildGroup(realmGroup: object)
             }
-
+            
             DispatchQueue.main.async {
                 self.all = groups
                 self.sort()
             }
         }
     }
-
+    
     private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
-        
-//        var lstClientId = Array<GroupMember>()
-//        realmGroup.lstClientID.forEach { (str) in
-//            let components = str.components(separatedBy: ",")
-//            if components.count > 0 {
-//                lstClientId.append(GroupMember(id: components.first!, username: components.last!))
-//            }
-//
-//        }
         
         var lstClientId = Array<GroupMember>()
         realmGroup.lstClientID.forEach { (member) in
             lstClientId.append(GroupMember(id: member.id, username: member.displayName))
         }
-
+        
         let group = GroupModel(groupID: realmGroup.groupId,
                                groupName: realmGroup.groupName,
                                groupToken: realmGroup.groupToken,
@@ -219,18 +218,18 @@ class RealmGroups: ObservableObject {
                                idLastMessage: realmGroup.idLastMsg,
                                isRegister: realmGroup.isRegister,
                                timeSyncMessage: realmGroup.timeSyncMessage)
-
+        
         return group
     }
-
+    
     private func buildRealmGroup(group: GroupModel) -> RealmGroup {
         let realmGroup = RealmGroup()
         realmGroup.groupId = group.groupID
         copyGroupAttributes(from: group, to: realmGroup)
-
+        
         return realmGroup
     }
-
+    
     private func copyGroupAttributes(from group: GroupModel, to realmGroup: RealmGroup) {
         
         var listMember = List<RealmGroupMember>()
@@ -240,7 +239,7 @@ class RealmGroups: ObservableObject {
             realmMember.displayName = member.username
             listMember.append(realmMember)
         }
-                
+        
         realmGroup.groupName = group.groupName
         realmGroup.groupToken = group.groupToken
         realmGroup.avatarGroup = group.groupAvatar
@@ -262,5 +261,5 @@ class RealmGroups: ObservableObject {
             return gr1.updatedAt > gr2.updatedAt
         }
     }
-
+    
 }

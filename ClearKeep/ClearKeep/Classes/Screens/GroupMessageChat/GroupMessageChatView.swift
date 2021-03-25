@@ -196,7 +196,10 @@ extension GroupMessageChatView {
                 if let result = result {
                     if !result.lstMessage.isEmpty {
                         DispatchQueue.main.async {
-                            self.groupRealms.updateTimeSyncMessageInGroup(groupID: groupModel.groupID, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
+                                return msg1.createdAt > msg2.createdAt
+                            }
+                            self.groupRealms.updateTimeSyncMessageInGroup(groupID: groupModel.groupID, lastMessageAt: listMsgSorted[0].createdAt)
                         }
                     }
                     result.lstMessage.forEach { (message) in
