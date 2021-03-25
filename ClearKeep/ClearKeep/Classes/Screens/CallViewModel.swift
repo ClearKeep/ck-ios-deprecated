@@ -9,9 +9,9 @@ import Foundation
 import WebRTC
 
 class CallViewModel: NSObject, ObservableObject {
-    @Published var localVideoView: RTCEAGLVideoView?
-    @Published var remoteVideoView: RTCEAGLVideoView?
-    @Published var remotesVideoView = [RTCEAGLVideoView]()
+    @Published var localVideoView: RTCMTLVideoView?
+    @Published var remoteVideoView: RTCMTLVideoView?
+    @Published var remotesVideoView = [RTCMTLVideoView]()
     
     @Published var cameraOn = true
     @Published var cameraFront = false
@@ -247,6 +247,7 @@ class CallViewModel: NSObject, ObservableObject {
                     guard let self = self else { return }
                     self.callType = .video
                     self.callBox?.type = .video
+                    self.callBox?.videoRoom?.publisher?.cameraOn()
                 }
             }
         }
@@ -260,6 +261,7 @@ class CallViewModel: NSObject, ObservableObject {
                     DispatchQueue.main.async {
                         self.callType = .video
                         self.callBox?.type = .video
+                        self.callBox?.videoRoom?.publisher?.cameraOn()
                     }
                 }
                 // TODO: Check audio type update

@@ -167,6 +167,7 @@ final class CallBox: NSObject {
             } else {
                 self?.status = .ringing
                 self?.stateDidChange?()
+                self?.videoRoom?.publisher?.localVideoTrack.isEnabled = self?.type == .video
             }
         })
     }
