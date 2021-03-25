@@ -137,7 +137,17 @@ struct GroupMessageChatView: View {
                 .padding(.bottom, 8)
                 .animation(.easeOut)
             }
-            .navigationBarTitle(Text(groupModel.groupName))
+            .navigationBarTitle("")
+            .navigationBarItems(leading: HStack {
+                NavigationLink(
+                    destination: GroupChatDetailView(groupModel: groupModel),
+                    label: {
+                        Text(groupModel.groupName)
+                            .font(.system(size: 16, weight: .bold, design: .default))
+                            .foregroundColor(.black)
+                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
+                    })
+            })
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 self.registerWithGroup(groupModel.groupID)

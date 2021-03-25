@@ -274,15 +274,15 @@ class Backend: ObservableObject {
         }
     }
     
-    func getLoginUserID(_ completion: @escaping (String) -> Void) {
+    func getLoginUserID(_ completion: @escaping (String, String) -> Void) {
         let header = self.getHeaderApi()
         if let header = header {
             clientUser.get_profile(User_Empty(), callOptions: header).response.whenComplete { (result) in
                 switch result {
                 case .success(let response):
-                    completion(response.id)
+                    completion(response.id, response.displayName)
                 case .failure(_):
-                    completion("")
+                    completion("", "")
                 }
             }
         }
@@ -416,7 +416,7 @@ class Backend: ObservableObject {
         }
     }
     
-    private func getUserLogin() -> User?{
+    func getUserLogin() -> User?{
         do {
             let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
             return userLogin

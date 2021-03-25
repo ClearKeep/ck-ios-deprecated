@@ -17,6 +17,34 @@ extension String {
         return emailPredicate.evaluate(with: self)
     }
 
+    /// Returns the first element of the collection of string. If a collection
+    /// is empty, returns nil.
+    var first: Character? {
+        if isEmpty {
+            return nil
+        }
+        return self[index(startIndex, offsetBy: 0)]
+    }
+    
+    func prefixShortName(useSingleLetter: Bool = true) -> String {
+        var letters = String()
+        var components = self.components(separatedBy: " ")
+        
+        if let firstWord = components.first {
+            if let letter = firstWord.first {
+                letters.append(letter)
+                components.removeFirst()
+            }
+        }
+        
+        if !useSingleLetter && !components.isEmpty {
+            if let letter = components.first?.first {
+                letters.append(letter)
+            }
+        }
+        
+        return letters.uppercased()
+    }
 }
 
 extension String
