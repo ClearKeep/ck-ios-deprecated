@@ -19,7 +19,6 @@ struct LetterAvatarView: View {
     }
     
     var body: some View {
-        
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center)) {
             if let loadedImage = image {
                 loadedImage
@@ -37,7 +36,8 @@ struct LetterAvatarView: View {
                 Text(text.prefixShortName())
                     .font(.system(size: 60, weight: .bold, design: .default))
                     .frame(alignment: .center)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.primary)
+                    .colorInvert()
             }
         }
         .clipShape(Circle())
