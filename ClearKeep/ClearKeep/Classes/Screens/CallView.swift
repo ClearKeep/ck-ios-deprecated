@@ -10,59 +10,132 @@ struct CallView: View {
             ZStack(alignment: .top) {
                 
                 // MARK: - Content Answer
-                if viewModel.callBox?.type == .audio {
+                if viewModel.callType == .audio {
                     // avatar blur
-                    Image("ic_app")
-                        .resizable()
-                        .frame(width: .infinity, height: .infinity, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/) // TODO: Fix bug
-                        .blur(radius: 70)
+//                    Image("ic_app")
+//                        .resizable()
+//                        .frame(width: 375, height: .infinity, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/) // TODO: Fixed ic_app
+//                        .blur(radius: 70)
                 } else {
                     // Video Container View display
-                    VideoContainerView(viewModel: viewModel)
-                }
-                
-                // MARK: - Top View
-                CallHeaderView(viewModel: viewModel)
-
-//                // Info call
-                if (viewModel.callStatus != .answered && viewModel.callBox?.type == .video) ||
-                    (viewModel.callBox?.type == .audio) {
-                    VStack(alignment: .center) {
-                        Spacer(minLength: 30)
-                        // Receive avatar
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(Color.white.opacity(0.8))
-                            .padding()
-
-                        // Receive name
-                        Text(viewModel.getUserName())
-                            .font(.system(size: 24))
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.white)
-
-                        
-                        if viewModel.callBox?.type == .audio, viewModel.callStatus == .answered {
-                            // show time call
-                            Text(viewModel.timeCall)
-                                .font(.system(size: 16))
-                                .foregroundColor(Color.white)
-                        } else {
-                            // Call status
-                            Text(viewModel.getStatusMessage())
-                                .font(.system(size: 16))
-                                .foregroundColor(Color.white)
+//                    VideoContainerView(viewModel: viewModel)
+                    if viewModel.callGroup {
+                        // show short
+                        VStack {
+                            GridView(columns: 3, list: viewModel.remotesVideoView) { videoView in
+                                VideoView(rtcVideoView: videoView)
+                                    .frame(width: 120, height: 150)
+                                    .clipShape(Capsule())
+                            }
+                            .padding([.horizontal, .bottom])
+                            Spacer()
                         }
-                        Spacer()
+                    } else if let videoView = viewModel.remoteVideoView {
+                        // show full screen
+                        let videoViewFrame = CGRect.init(origin: CGPoint.zero, size: viewModel.remoteViewRenderSize)
+                        let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoViewFrame, containerFrame: reader.frame(in: .global))
+                        
+                        VideoView(rtcVideoView: videoView)
+                            .frame(width: newVideoViewFrame.size.width,
+                                   height: newVideoViewFrame.size.height,
+                                   alignment: .center)
+                            .padding(.leading, newVideoViewFrame.origin.x)
+                            .padding(.top, newVideoViewFrame.origin.y)
+                    }
+                    
+                    // local video
+                    if let videoView = viewModel.localVideoView {
+                        if viewModel.callStatus == .answered {
+                            
+                            let widthOfContainerView: CGFloat = 150
+                            let heightOfContainerView: CGFloat = 180
+                            let containerFrame = CGRect.init(x: 0, y: 0, width: widthOfContainerView, height: heightOfContainerView)
+                            let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: containerFrame)
+                            
+                            let leadingPadding = -(newVideoViewFrame.width - containerFrame.width)/2
+                            let topPadding = -(newVideoViewFrame.height - containerFrame.height)/2
+                            
+                            HStack(alignment: .top) {
+                                Spacer()
+                                VideoView(rtcVideoView: videoView)
+                                    .frame(width: newVideoViewFrame.width,
+                                           height: newVideoViewFrame.height,
+                                           alignment: .center)
+                                    .padding(.leading, leadingPadding)
+                                    .padding(.top, topPadding)
+                                    .padding(.trailing, 20)
+                                    .clipShape(Rectangle())
+                                    .cornerRadius(15)
+                                    .animation(.easeInOut(duration: 0.6))
+//                                VStack {
+//                                    VideoView(rtcVideoView: videoView)
+//                                        .frame(width: newVideoViewFrame.width,
+//                                               height: newVideoViewFrame.height,
+//                                               alignment: .center)
+//                                        .padding(.leading, leadingPadding)
+//                                        .padding(.top, topPadding)
+//                                        .clipShape(Rectangle())
+//                                        .cornerRadius(15)
+//                                        .animation(.easeInOut(duration: 0.6))
+//                                }.frame(width: widthOfContainerView, height: heightOfContainerView, alignment: .center)
+//                                .fixedSize()
+//                                .clipped()
+//                                .padding(.trailing, 20)
+                            }
+                        } else {
+                            let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: reader.frame(in: .global))
+                            
+                            VideoView(rtcVideoView: videoView)
+                                .frame(width: newVideoViewFrame.width,
+                                       height: newVideoViewFrame.height,
+                                       alignment: .center)
+                                .clipShape(Rectangle())
+                                .animation(.easeInOut(duration: 0.6))
+                        }
                     }
                 }
                 
-                // action on view bottom
-                VStack {
-                    Spacer()
-                    CallActionsView(viewModel: viewModel).frame(width: UIScreen.main.bounds.width)
-                }
+                // MARK: - Top View
+//                CallHeaderView(viewModel: viewModel)
+//
+////                // Info call
+//                if (viewModel.callStatus != .answered && viewModel.callType == .video) ||
+//                    (viewModel.callType == .audio) {
+//                    VStack(alignment: .center) {
+////                        Spacer(minLength: 30)
+//                        // Receive avatar
+//                        Image(systemName: "person.circle")
+//                            .resizable()
+//                            .frame(width: 60, height: 60)
+//                            .foregroundColor(Color.white.opacity(0.8))
+//                            .padding()
+//
+//                        // Receive name
+//                        Text(viewModel.getUserName())
+//                            .font(.system(size: 24))
+//                            .fontWeight(.bold)
+//                            .foregroundColor(Color.white)
+//
+//                        if viewModel.callType == .audio, viewModel.callStatus == .answered {
+//                            // show time call
+//                            Text(viewModel.timeCall)
+//                                .font(.system(size: 16))
+//                                .foregroundColor(Color.white)
+//                        } else {
+//                            // Call status
+//                            Text(viewModel.getStatusMessage())
+//                                .font(.system(size: 16))
+//                                .foregroundColor(Color.white)
+//                        }
+//                        Spacer()
+//                    }
+//                }
+//
+//                // action on view bottom
+//                VStack {
+//                    Spacer()
+//                    CallActionsView(viewModel: viewModel).frame(width: UIScreen.main.bounds.width)
+//                }
             }
             .frame(width: UIScreen.main.bounds.width)
             .background(Color.black.opacity(0.3))
@@ -71,6 +144,9 @@ struct CallView: View {
                 if let callBox = CallManager.shared.calls.first {
                     viewModel.updateCallBox(callBox: callBox)
                 }
+            })
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
+                viewModel.didReceiveMessageGroup(userInfo: obj.userInfo)
             })
         }
     }
@@ -83,24 +159,24 @@ struct CallHeaderView: View {
     var body: some View {
         // Top bar
         if viewModel.callStatus == .answered,
-           viewModel.callBox?.type == Constants.CallType.audio {
+           viewModel.callType == Constants.CallType.audio {
             HStack() {
                 Spacer()
                 // button camera switch
-                if viewModel.isVideoRequesting {
-                    Button(action: {
-                        viewModel.isVideoRequesting = false
-                    }, label: {
-                        Image(systemName: "video.fill")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.white)
-                            .padding(8)
-                            .background(Color(.lightGray).opacity(0.7))
-                            .clipShape(Circle())
-                    })
+                if viewModel.callType != .audio { // TODO: check requesting audio
+//                    Button(action: {
+//                        viewModel.isVideoRequesting = false
+//                    }, label: {
+//                        Image(systemName: "video.fill")
+//                            .font(.system(size: 16))
+//                            .foregroundColor(Color.white)
+//                            .padding(8)
+//                            .background(Color(.lightGray).opacity(0.7))
+//                            .clipShape(Circle())
+//                    })
                 } else {
                     Button(action: {
-                        viewModel.isVideoRequesting = true
+                        viewModel.updateCallTypeVideo()
                     }, label: {
                         HStack {
                             Image(systemName: "video.slash.fill")
@@ -165,6 +241,7 @@ struct VideoContainerView: View {
                         let topPadding = -(newVideoViewFrame.height - containerFrame.height)/2
                         
                         HStack(alignment: .top) {
+                            Color(.green).opacity(0.5)
                             Spacer()
                             VStack {
                                 VideoView(rtcVideoView: videoView)
@@ -179,6 +256,7 @@ struct VideoContainerView: View {
                             }.frame(width: widthOfContainerView, height: heightOfContainerView, alignment: .center)
                             .fixedSize()
                             .clipped()
+                            .background(Color(.red))
                         }
                     } else {
                         let newVideoViewFrame = viewModel.getNewVideoViewFrame(videoViewFrame: videoView.frame, containerFrame: reader.frame(in: .global))

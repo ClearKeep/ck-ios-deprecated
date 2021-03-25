@@ -363,6 +363,24 @@ class Backend: ObservableObject {
         }
     }
     
+    func updateVideoCall(_ groupID: Int64, callType type: Constants.CallType = .audio, _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
+        let header = self.getHeaderApi()
+        if let header = header {
+            var req = VideoCall_UpdateCallRequest()
+//            req.clientID = clientID
+            req.groupID = groupID
+            req.updateType = type.rawValue
+            clientVideoCall.update_call(req, callOptions: header).response.whenComplete { (result) in
+                switch result {
+                case .success(let response):
+                    completion(response , nil)
+                case .failure(let error):
+                    completion(nil , error)
+                }
+            }
+        }
+    }
+    
     func cancelRequestCall(_ clientID: String ,_ groupID: Int64 , _ completion: @escaping (VideoCall_BaseResponse? , Error?) -> Void){
         let header = self.getHeaderApi()
         if let header = header {

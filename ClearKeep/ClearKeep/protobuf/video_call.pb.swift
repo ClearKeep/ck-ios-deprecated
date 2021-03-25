@@ -149,8 +149,6 @@ struct VideoCall_UpdateCallRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var clientID: String = String()
-
   var groupID: Int64 = 0
 
   var updateType: String = String()
@@ -425,9 +423,8 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 extension VideoCall_UpdateCallRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".UpdateCallRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "client_id"),
-    2: .standard(proto: "group_id"),
-    3: .standard(proto: "update_type"),
+    1: .standard(proto: "group_id"),
+    2: .standard(proto: "update_type"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -436,29 +433,24 @@ extension VideoCall_UpdateCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mes
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.updateType) }()
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.updateType) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.clientID.isEmpty {
-      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
-    }
     if self.groupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 2)
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 1)
     }
     if !self.updateType.isEmpty {
-      try visitor.visitSingularStringField(value: self.updateType, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.updateType, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: VideoCall_UpdateCallRequest, rhs: VideoCall_UpdateCallRequest) -> Bool {
-    if lhs.clientID != rhs.clientID {return false}
     if lhs.groupID != rhs.groupID {return false}
     if lhs.updateType != rhs.updateType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

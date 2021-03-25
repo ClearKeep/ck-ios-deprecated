@@ -45,7 +45,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func requestVideoCall(clientId: String, groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
-        Backend.shared.videoCall(clientId, groupId) { (response, error) in
+        Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
             self.isRequesting = false
             completion?()
             if let response = response {
