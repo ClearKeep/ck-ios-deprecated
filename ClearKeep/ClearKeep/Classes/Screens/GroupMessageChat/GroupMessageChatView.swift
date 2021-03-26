@@ -150,12 +150,15 @@ struct GroupMessageChatView: View {
             })
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                self.registerWithGroup(groupModel.groupID)
                 DispatchQueue.main.async {
                     self.realmMessages.loadSavedData()
                     self.groupRealms.loadSavedData()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.registerWithGroup(groupModel.groupID)
+                        self.getMessageInRoom()
+                    }
                 }
-                self.getMessageInRoom()
             }
             .onDisappear(){
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)

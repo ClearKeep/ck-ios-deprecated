@@ -45,7 +45,8 @@ struct CreateRoomView: View {
                   message: Text(self.messageAlert),
                   dismissButton: .default(Text("OK"), action: {
                     if self.createGroupSuccess {
-                        self.viewRouter.current = .tabview
+                        //self.viewRouter.current = .tabview
+                        self.viewRouter.current = .recentCreatedGroupChat
                     }
                   }))
         })
@@ -111,6 +112,7 @@ extension CreateRoomView {
                                                idLastMessage: result.lastMessage.id,
                                                timeSyncMessage: 0)
                         self.realmGroups.add(group: group)
+                        self.viewRouter.recentCreatedGroupModel = group
                     }
                     self.createGroupSuccess = true
                     self.isShowAlert = true

@@ -9,11 +9,13 @@ import SwiftUI
 
 struct TabViewContainer: View {
     
+    @EnvironmentObject var groupRealms : RealmGroups
+    @EnvironmentObject var messsagesRealms : RealmMessages
     @ObservedObject var viewModel = MotherViewModel()
     
     var body: some View {
         TabView {
-            HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            HistoryChatView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 .tabItem {
                     VStack {
                         Image(systemName: "message")
@@ -25,7 +27,7 @@ struct TabViewContainer: View {
                     }
                 }
             
-            PeopleView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 .tabItem {
                     VStack {
                         Image(systemName: "person.3.fill")
@@ -36,7 +38,7 @@ struct TabViewContainer: View {
                     }
                 }
             
-            ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            ProfileView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 .tabItem {
                     VStack {
                         Image(systemName: "person.fill")

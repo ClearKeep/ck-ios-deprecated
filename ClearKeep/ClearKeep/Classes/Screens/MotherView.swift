@@ -7,6 +7,8 @@ import Combine
 
 struct MotherView: View {
     
+    @EnvironmentObject var groupRealms : RealmGroups
+    @EnvironmentObject var messsagesRealms : RealmMessages
     @EnvironmentObject var viewRouter: ViewRouter
     
     var body: some View {
@@ -19,14 +21,15 @@ struct MotherView: View {
                     TabViewContainer().transition(.move(edge: .trailing))
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
-            case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .profile: ProfileView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             case .register: RegisterView(isPresentModel: .constant(true))
-            case .tabview: TabViewContainer().transition(.move(edge: .trailing))
+            case .tabview: TabViewContainer().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms).transition(.move(edge: .trailing))
             case .search: SearchPeopleView()
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
-            case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .history: HistoryChatView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             case .callVideo: CallView()
             case .inviteMember: InviteMemberGroup()
+            case .recentCreatedGroupChat: RecentCreatedGroupChatView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             }
         }
     }
@@ -51,6 +54,7 @@ class ViewRouter: ObservableObject {
         case history
         case callVideo
         case inviteMember
+        case recentCreatedGroupChat
     }
     
     private static func initialPage() -> Page {
@@ -68,4 +72,6 @@ class ViewRouter: ObservableObject {
             }
         }
     }
+    
+    var recentCreatedGroupModel: GroupModel? = nil
 }
