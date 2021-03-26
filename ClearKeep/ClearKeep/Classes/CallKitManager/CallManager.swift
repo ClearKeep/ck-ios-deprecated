@@ -163,11 +163,14 @@ final class CallManager: NSObject {
                 print("Failed to load: \(error.localizedDescription)")
             }
             
+            let hasVideo = callType == "video"
+            
             reportIncomingCall(roomId: roomId,
                                clientId: clientId,
                                avatar: avatar,
                                token: token,
                                callerName: username,
+                               hasVideo: hasVideo,
                                completion: completion)
         }
     }
