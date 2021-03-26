@@ -92,7 +92,7 @@ struct RegisterView: View {
                             TitleTextField("Password")
                                 .padding(.top, 10)
                             
-                            PasswordSecureField(password: $passWord)
+                            SecureInputView("", text: $passWord)
                                 .frame(height: 50)
                                 .textFieldStyle(MyTextFieldStyle())
                                 .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
@@ -100,7 +100,7 @@ struct RegisterView: View {
                                 .padding(.bottom, 10)
                             TitleTextField("Confirm Password")
                             
-                            PasswordSecureField(password: $passWordConfirm)
+                            SecureInputView("", text: $passWordConfirm)
                                 .frame(height: 50)
                                 .textFieldStyle(MyTextFieldStyle())
                                 .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))

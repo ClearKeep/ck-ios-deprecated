@@ -61,7 +61,7 @@ struct LoginView: View {
                                 }
                                 TitleTextField("Password")
                                     .padding(.top , 10)
-                                PasswordSecureField(password: $password)
+                                SecureInputView("", text: $password)
                                     .frame(height: 50)
                                     .textFieldStyle(MyTextFieldStyle())
                                     .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
