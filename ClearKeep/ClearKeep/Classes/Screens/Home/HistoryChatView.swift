@@ -21,11 +21,20 @@ struct HistoryChatView: View {
     @State var allGroup = [GroupModel]()
     @EnvironmentObject var viewRouter: ViewRouter
 
+    @State var showInviteMemberGroup = false
+    @State private var recentCreatedGroupChatID: Int64 = 0
     
     var body: some View {
         
         NavigationView {
-            Group {
+            VStack {
+                NavigationLink(
+                    destination: InviteMemberGroup(showInviteMemberGroup: $showInviteMemberGroup, recentCreatedGroupChatID: $recentCreatedGroupChatID),
+                    isActive: $showInviteMemberGroup
+                ) {
+                    EmptyView()
+                }
+                
                 if self.groupRealms.all.isEmpty {
                     Text("Start a conversation by clicking Chat or Create Room")
                         .font(.title)
@@ -35,15 +44,14 @@ struct HistoryChatView: View {
                         .multilineTextAlignment(.center)
                 } else {
                     List(self.groupRealms.all , id: \.groupID){ group in
-                        let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
-                                                       groupID : group.groupID,
-                                                       userName: viewModel.getPeerReceiveName(inGroup: group),
-                                                       groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                        
-                        let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                         
                         if group.groupType == "peer" {
-                            NavigationLink(destination:  viewPeer) {
+                            let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
+                                                           groupID : group.groupID,
+                                                           userName: viewModel.getPeerReceiveName(inGroup: group),
+                                                           groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+//                            NavigationLink(destination: viewPeer, tag: "\(group.groupID)", selection: self.$recentCreatedGroupChatID) {
+                            NavigationLink(destination: viewPeer) {
                                 Image(systemName: "person.circle.fill")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -63,7 +71,10 @@ struct HistoryChatView: View {
                                 }
                             }
                         } else {
-                            NavigationLink(destination:  viewGroup) {
+                            
+                            let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                            //                            NavigationLink(destination: viewGroup, tag: "\(group.groupID)", selection: self.$recentCreatedGroupChatID) {
+                                                        NavigationLink(destination: viewGroup) {
                                 Image(systemName: "person.2.fill")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -96,7 +107,8 @@ struct HistoryChatView: View {
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarItems(leading: Text("Chat"), trailing:  Button("Create Group"){
-                viewRouter.current = .inviteMember
+                //viewRouter.current = .inviteMember
+                self.showInviteMemberGroup = true
             })
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in

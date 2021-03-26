@@ -16,6 +16,7 @@ struct CreateRoomView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var realmGroups : RealmGroups
+    @EnvironmentObject var messsagesRealms : RealmMessages
 
     @State var hudVisible = false
     @State var isShowAlert = false
@@ -23,14 +24,31 @@ struct CreateRoomView: View {
     @State private var messageAlert = ""
     @State private var createGroupSuccess = false
 
+    @Binding var showInviteMemberGroup: Bool
+    @Binding var recentCreatedGroupChatID: Int64
+    
+    @State var showRecentCreatedGroupChat = false
+    @State var groupChatModel: GroupModel? = nil
+
     private let listMembers : [People]
     
-    init(listMembers: [People]) {
+    init(listMembers: [People], showInviteMemberGroup: Binding<Bool>, recentCreatedGroupChatID: Binding<Int64>) {
         self.listMembers = listMembers
+        self._showInviteMemberGroup = showInviteMemberGroup
+        self._recentCreatedGroupChatID = recentCreatedGroupChatID
     }
 
     var body: some View {
         VStack {
+            if let groupModel = groupChatModel {
+                NavigationLink(
+                    destination: GroupMessageChatView(groupModel: groupModel).environmentObject(self.realmGroups).environmentObject(self.messsagesRealms),
+                    isActive: $showRecentCreatedGroupChat
+                ) {
+                    EmptyView()
+                }
+            }
+
             TitleLabel("Create Room Chat")
             TextFieldContent(key: "Group Name", value: $groupName)
                 .autocapitalization(.none)
@@ -45,7 +63,11 @@ struct CreateRoomView: View {
                   message: Text(self.messageAlert),
                   dismissButton: .default(Text("OK"), action: {
                     if self.createGroupSuccess {
-                        self.viewRouter.current = .tabview
+                        //self.viewRouter.current = .tabview
+                        self.showRecentCreatedGroupChat = true
+                        if let id = groupChatModel?.groupID {
+                            self.recentCreatedGroupChatID = id
+                        }
                     }
                   }))
         })
@@ -111,6 +133,7 @@ extension CreateRoomView {
                                                idLastMessage: result.lastMessage.id,
                                                timeSyncMessage: 0)
                         self.realmGroups.add(group: group)
+                        self.groupChatModel = group
                     }
                     self.createGroupSuccess = true
                     self.isShowAlert = true

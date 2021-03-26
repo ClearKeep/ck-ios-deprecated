@@ -26,7 +26,7 @@ struct MotherView: View {
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             case .callVideo: CallView()
-            case .inviteMember: InviteMemberGroup()
+//            case .inviteMember: InviteMemberGroup(showInviteMemberGroup: .constant(true))
             }
         }
     }
@@ -50,7 +50,7 @@ class ViewRouter: ObservableObject {
 //        case createRoom
         case history
         case callVideo
-        case inviteMember
+//        case inviteMember
     }
     
     private static func initialPage() -> Page {
