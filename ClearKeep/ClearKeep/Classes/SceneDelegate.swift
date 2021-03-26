@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func show(_ scene: UIScene) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let contentView = MotherView()
+        let contentView = MotherView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             .environmentObject(appDelegate.viewRouter)
 
         if let windowScene = scene as? UIWindowScene {
