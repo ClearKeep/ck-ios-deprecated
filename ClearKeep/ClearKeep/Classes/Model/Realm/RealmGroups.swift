@@ -77,9 +77,16 @@ class RealmGroups: ObservableObject {
             time = group.timeSyncMessage
         }
         if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
-            let timeLoginInterval = Int64(loginDate.timeIntervalSince1970)
-            if timeLoginInterval > time/1000 {
-                time = timeLoginInterval
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.calendar = Calendar.current
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .medium
+            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                        
+            let updateAt = NSDate(timeIntervalSince1970: TimeInterval(time/1000))
+            if loginDate.compare(updateAt as Date) == ComparisonResult.orderedDescending {
+                time = Int64(loginDate.timeIntervalSince1970) * 1000
                 self.updateTimeSyncMessageInGroup(groupID: groupID, lastMessageAt: time)
             }
         }
