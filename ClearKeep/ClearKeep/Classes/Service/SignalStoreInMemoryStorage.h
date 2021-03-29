@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-@import SignalProtocolObjC;
+//@import SignalProtocolObjC;
+#import <SignalProtocol/SignalProtocol.h>
+#import <SignalProtocol/SignalProtocol-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
 @interface SignalStoreInMemoryStorage : NSObject <SignalStore>

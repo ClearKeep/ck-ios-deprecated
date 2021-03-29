@@ -7,7 +7,7 @@ target 'ClearKeep' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  pod 'SignalProtocolObjC', :git =>'https://github.com/nohtbook/SignalProtocol-ObjC.git'
+#  pod 'SignalProtocolObjC', :git =>'https://github.com/nohtbook/SignalProtocol-ObjC.git'
   # Waiting on merge https://github.com/yapstudios/YapDatabase/pull/492
   pod 'YapDatabase/SQLCipher', '~> 4.0'
   pod 'Mantle', '~> 2.1.6'
