@@ -31,4 +31,50 @@ struct Constants {
         case video
     }
 
+    static let googleSignInClientId = "1092685949059-gfkapttahq1tuagf85lk3osr3d5i0bsg.apps.googleusercontent.com"
 }
+
+extension Constants {
+    
+    enum Mode {
+        case development
+        case stagging
+        case production
+        
+        var grpc: String {
+            switch self {
+            case .development: return "54.235.68.160"
+            case .stagging: return "54.235.68.160"
+            case .production: return "54.235.68.160"
+            }
+        }
+        
+        var grpc_port: Int {
+            switch self {
+            case .development: return 25000
+            case .stagging: return 15000
+            case .production: return 5000
+            }
+        }
+
+        var webrtc: String {
+            switch self {
+            case .development: return "ws://54.235.68.160:28188/janus"
+            case .stagging: return "ws://54.235.68.160:18188/janus"
+            case .production: return "ws://54.235.68.160:8188/janus"
+            }
+        }
+    }
+}
+
+//development:
+//grpc: 54.235.68.160:25000
+//webrtc: ws://54.235.68.160:28188/janus
+//
+//stagging:
+//grpc: 54.235.68.160:15000
+//webrtc: ws://54.235.68.160:18188/janus
+//
+//production:
+//grpc: 54.235.68.160:5000
+//webrtc: ws://54.235.68.160:8188/janus

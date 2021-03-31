@@ -1,17 +1,17 @@
 
 import SwiftUI
-
-let isGroupChat = true
+import GoogleSignIn
 
 struct LoginView: View {
-    
+
+    @EnvironmentObject var viewRouter: ViewRouter
+
     @State var email: String = ""
     @State var password: String = ""
     @State var deviceID: String = ""
     
     @State var authenticationDidFail: Bool = false
     @State var authenticationDidSucceed: Bool = false
-    @EnvironmentObject var viewRouter: ViewRouter
     @State var isRegister: Bool = false
     @State var isForgotPassword: Bool = false
     @State var hudVisible = false
@@ -19,6 +19,8 @@ struct LoginView: View {
     @State var messageAlert = ""
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
+    
+    let ggSignInBtn: GIDSignInButton = GIDSignInButton()
     
     @State private var colorBorder = Color.gray
     
@@ -93,6 +95,14 @@ struct LoginView: View {
                                 //                                .cornerRadius(10)
                                 .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                             }
+                            
+                            VStack {
+                                GoogleSignInButton(signBtn: ggSignInBtn)
+                                    .frame(width: UIScreen.main.bounds.width - 20, height: 52, alignment: .center)
+                                    .onTapGesture {
+                                        SocialLogin().attemptLoginGoogle()
+                                    }
+                            }
                         }
                     })
                 }
@@ -112,6 +122,14 @@ struct LoginView: View {
                         UIApplication.shared.endEditing()
                     })
             .padding()
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithResponse)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let user = userInfo["user"] as? GIDGoogleUser {
+                    print("Google signin success for user \(user.profile.email ?? "")")
+                    self.loginWithGoogleSignInResponse(gooleUser: user)
+                    SocialLogin().signOutGoogleAccount()
+                }
+            }
         }
     }
     
@@ -163,6 +181,20 @@ extension LoginView {
     }
 }
 
+// MARK: - Google SignIn Button
+extension LoginView {
+    
+    private func loginWithGoogleSignInResponse(gooleUser: GIDGoogleUser) {
+        hudVisible = true
+        var request = Auth_GoogleLoginReq()
+        request.idToken = gooleUser.authentication.idToken
+        
+        Backend.shared.loginWithGoogleAccount(request) { (result, error) in
+            self.didReceiveLoginResponse(result: result, error: error)
+        }
+    }
+}
+
 extension LoginView {
     
     private func login() {
@@ -197,82 +229,80 @@ extension LoginView {
         var request = Auth_AuthReq()
         request.email = self.email
         request.password = self.password
-        request.authType = 1
+        request.authType = 1    // Which values could be set here?
         
         Backend.shared.login(request) { (result, error) in
-            if let result = result {
-                if result.baseResponse.success{
-                    do {
-                        var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
-                        UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
-                        try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                        
-                        Backend.shared.getLoginUserID { (userID, displayName) in
-                            do {
-                                if userID.isEmpty {
-                                    print("getLoginUserID Empty")
-                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                                    hudVisible = false
-                                    self.messageAlert = "Something went wrong"
-                                    self.isShowAlert = true
-                                    return
-                                }
-                                user.id = userID
-                                user.displayName = displayName
-                                UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
-                                try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                                //                            let randomID = Int32.random(in: 1...Int32.max)
-                                //TODO: hashcode device id
-                                let address = SignalAddress(name: userID, deviceId: Int32(555))
-                                Backend.shared.authenticator.register(address: address) { (result, error) in
-                                    if result {
-                                        loginForUser(clientID: userID)
-                                    } else {
-                                        print("Register Key Error \(error?.localizedDescription ?? "")")
-                                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                                        hudVisible = false
-                                        self.messageAlert = "Something went wrong"
-                                        self.isShowAlert = true
-                                    }
-                                }
-                            } catch {
-                                print("save user error")
+            self.didReceiveLoginResponse(result: result, error: error)
+        }
+    }
+    
+    private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?) {
+        if let result = result {
+            if result.baseResponse.success{
+                do {
+                    var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                    UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
+                    try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                    
+                    Backend.shared.getLoginUserID { (userID, displayName) in
+                        do {
+                            if userID.isEmpty {
+                                print("getLoginUserID Empty")
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                                 hudVisible = false
                                 self.messageAlert = "Something went wrong"
                                 self.isShowAlert = true
+                                return
                             }
+                            user.id = userID
+                            user.displayName = displayName
+                            UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
+                            try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                            //                            let randomID = Int32.random(in: 1...Int32.max)
+                            //TODO: hashcode device id
+                            let address = SignalAddress(name: userID, deviceId: Int32(555))
+                            Backend.shared.authenticator.register(address: address) { (result, error) in
+                                if result {
+                                    loginForUser(clientID: userID)
+                                } else {
+                                    print("Register Key Error \(error?.localizedDescription ?? "")")
+                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                                    hudVisible = false
+                                    self.messageAlert = "Something went wrong"
+                                    self.isShowAlert = true
+                                }
+                            }
+                        } catch {
+                            print("save user error")
+                            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                            UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                            hudVisible = false
+                            self.messageAlert = "Something went wrong"
+                            self.isShowAlert = true
                         }
-                    } catch {
-                        print(error.localizedDescription)
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                        hudVisible = false
-                        self.messageAlert = "Something went wrong"
-                        self.isShowAlert = true
                     }
-                }else {
+                } catch {
+                    print(error.localizedDescription)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
                     hudVisible = false
+                    self.messageAlert = "Something went wrong"
                     self.isShowAlert = true
-                    self.messageAlert = result.baseResponse.errors.message
                 }
-            } else if let error = error {
-                print(error)
-                self.messageAlert = "Something went wrong"
-                self.isShowAlert = true
+            }else {
                 hudVisible = false
+                self.isShowAlert = true
+                self.messageAlert = result.baseResponse.errors.message
             }
+        } else if let error = error {
+            print(error)
+            self.messageAlert = "Something went wrong"
+            self.isShowAlert = true
+            hudVisible = false
         }
     }
-    
-    struct Test: Codable {
-        let code: Int
-        let message: String
-    }
-    
     
     private func loginForUser(clientID : String) {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
