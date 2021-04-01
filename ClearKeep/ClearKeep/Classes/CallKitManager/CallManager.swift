@@ -85,9 +85,9 @@ final class CallManager: NSObject {
         self.removeCall(call)
     }
     
-    func leaveRoom(call: CallBox){
-        call.videoRoom?.stopListenRemote(remoteRole: <#T##JanusRoleListen#>)
-    }
+//    func leaveRoom(call: CallBox){
+//        call.videoRoom?.stopListenRemote(remoteRole: <#T##JanusRoleListen#>)
+//    }
 
     func setHeld(call: CallBox, onHold: Bool) {
         let setHeldCallAction = CXSetHeldCallAction(call: call.uuid, onHold: onHold)
