@@ -210,6 +210,8 @@ final class CallBox: NSObject {
     }
 }
 
+// MARK: - JanusVideoRoomDelegate
+
 extension CallBox: JanusVideoRoomDelegate {
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteLeaveWithID clientId: Int) {
         if self.isCallGroup {
@@ -233,10 +235,10 @@ extension CallBox: JanusVideoRoomDelegate {
         if self.isCallGroup {
             // TODO: check if only 2 members
             let numberOfRemotes = videoRoom?.remotes.count ?? 0
-            if numberOfRemotes <= 1 {
+            if numberOfRemotes == 0 {
                 CallManager.shared.end(call: self)
             } else {
-                membersInCallDidChange?()
+                //membersInCallDidChange?()
             }
         } else {
             CallManager.shared.end(call: self)

@@ -128,18 +128,22 @@ class JanusVideoRoom: NSObject {
     }
     
     func startListenRemote(remoteRole: JanusRoleListen) {
-        self.remotes[remoteRole.id!] = remoteRole
+        guard let remoteRoleId = remoteRole.id else { return }
+        
+        self.remotes[remoteRoleId] = remoteRole
         remoteRole.joinRoom(withRoomId: roomId, username: nil) { [weak self](error) in
             asyncInMainThread {
                 if let self = self {
-                    self.delegate?.janusVideoRoom(janusRoom: self, newRemoteJoinWithID: remoteRole.id!)
+                    self.delegate?.janusVideoRoom(janusRoom: self, newRemoteJoinWithID: remoteRoleId)
                 }
             }
         }
     }
     
     func stopListenRemote(remoteRole: JanusRoleListen) {
-        self.remotes.removeValue(forKey: remoteRole.id!)
+        guard let remoteRoleId = remoteRole.id else { return }
+        
+        self.remotes.removeValue(forKey: remoteRoleId)
     }
     
     deinit {
@@ -150,11 +154,15 @@ class JanusVideoRoom: NSObject {
 extension JanusVideoRoom: JanusRoleListenDelegate {
     
     func janusRoleListen(role: JanusRoleListen, firstRenderWithSize size: CGSize) {
-        self.delegate?.janusVideoRoom(janusRoom: self, firstFrameDecodeWithSize: size, uId: role.id!)
+        guard let roleId = role.id else { return }
+        
+        self.delegate?.janusVideoRoom(janusRoom: self, firstFrameDecodeWithSize: size, uId: roleId)
     }
     
     func janusRoleListen(role: JanusRoleListen, renderSizeChangeWithSize size: CGSize) {
-        self.delegate?.janusVideoRoom(janusRoom: self, renderSizeChangeWithSize: size, uId: role.id!)
+        guard let roleId = role.id else { return }
+        
+        self.delegate?.janusVideoRoom(janusRoom: self, renderSizeChangeWithSize: size, uId: roleId)
     }
     
     func janusRole(role: JanusRole, fatalErrorWithID code: RTCErrorCode) {
@@ -169,10 +177,12 @@ extension JanusVideoRoom: JanusRoleListenDelegate {
     }
     
     func janusRole(role: JanusRole, joinRoomWithResult error: Error?) {
+        guard let roleId = role.id else { return }
+        
         if let publisher = self.publisher {
-            if role.id == publisher.id {
+            if roleId == publisher.id {
                 asyncInMainThread {
-                    self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: role.id!)
+                    self.delegate?.janusVideoRoom(janusRoom: self, didJoinRoomWithId: roleId)
                 }
             }
         }

@@ -93,7 +93,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
                     if let roomId = payload.dictionaryPayload["group_id"] as? String {
                         let calls = CallManager.shared.calls.filter{$0.roomId == Int(roomId) ?? 0}
                         calls.forEach { (call) in
-                            CallManager.shared.end(call: call)
+                            if call.isCallGroup {
+                                // TODO: handle for group call
+                            } else {
+                                CallManager.shared.end(call: call)
+                            }
                         }
                     }
                 } else {
