@@ -131,18 +131,21 @@ struct VideoContainerView: View {
         GeometryReader{ reader in
             ZStack(alignment: .top) {
                 // remote videos
-                if viewModel.callGroup {
+                if viewModel.remotesVideoView.count > 1 {
                     // show short
                     VStack {
-                        GridView(columns: 3, list: viewModel.remotesVideoView) { videoView in
-                            VideoView(rtcVideoView: videoView)
-                                .frame(width: 120, height: 150)
-                                .clipShape(Capsule())
+                        let columns = viewModel.remotesVideoView.count < 4 ? 1 : 2
+                        GridView(columns: columns, list: viewModel.remotesVideoView) { videoView in
+                            let view = VideoView(rtcVideoView: videoView)
+                            let sizeView = view.getFrame(lstVideo: viewModel.remotesVideoView)
+                                view
+                                    .frame(width: sizeView.width, height: sizeView.height)
+                                .clipShape(Rectangle())
                         }
-                        .padding([.horizontal, .bottom])
                         Spacer()
                     }
-                } else if let videoView = viewModel.remoteVideoView {
+                }
+                else if let videoView = viewModel.remoteVideoView {
                     // show full screen
                     let width = reader.frame(in: .global).width
                     let height = reader.frame(in: .global).height
@@ -154,22 +157,22 @@ struct VideoContainerView: View {
                 }
                 
                 // local video
-                if let videoView = viewModel.localVideoView {
+                if let videoView = viewModel.localVideoView , viewModel.remotesVideoView.count < 4 {
                     if viewModel.callStatus == .answered {
                         let widthOfContainerView: CGFloat = 120
                         let heightOfContainerView: CGFloat = 180
 
                         HStack(alignment: .top) {
-                            Spacer()
                             VideoView(rtcVideoView: videoView)
                                 .frame(width: widthOfContainerView,
                                        height: heightOfContainerView,
                                        alignment: .center)
                                 .clipShape(Rectangle())
                                 .cornerRadius(10)
-                                .padding(.trailing, 8)
+                                .padding(.leading, 8)
                                 .padding(.top, 8)
                                 .animation(.easeInOut(duration: 0.6))
+                            Spacer()
                         }
                     } else {
                         let width = reader.frame(in: .global).width

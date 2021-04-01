@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct GroupMessageChatView: View {
     @State private var nextMessage: String = ""
@@ -24,9 +25,11 @@ struct GroupMessageChatView: View {
     @State var isForceProcessKey = true
     
     @State private var scrollingProxy = ListScrollingProxy()
-
-    @State var value: CGFloat = 0
     
+    @State var value: CGFloat = 0
+    @State var hudVisible = false
+    @State var alertVisible = false
+    @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
     init(groupModel: GroupModel) {
         self.groupModel = groupModel
@@ -91,9 +94,9 @@ struct GroupMessageChatView: View {
                             .padding(.top, 25)
                         })
                         .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    self.scrollingProxy.scrollTo(.end)
-                                }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.scrollingProxy.scrollTo(.end)
+                            }
                         }
                     }.gesture(
                         TapGesture()
@@ -138,6 +141,30 @@ struct GroupMessageChatView: View {
                 .animation(.easeOut)
             }
             .navigationBarTitle("")
+            //            .navigationBarItems(trailing: HStack{
+            //                Button(action: {
+            //                    call(callType: .audio)
+            //                }, label: {
+            //                    Image(systemName: "phone.fill")
+            //                        .frame(width: 50, height: 50, alignment: .trailing)
+            //                })
+            //                Button(action: {
+            //                    call(callType: .video)
+            //                }, label: {
+            //                    Image(systemName: "video.fill")
+            //                        .frame(width: 50, height: 50, alignment: .trailing)
+            //                })
+            //            })
+            //            .navigationBarItems(leading: HStack {
+            //                NavigationLink(
+            //                    destination: GroupChatDetailView(groupModel: groupModel),
+            //                    label: {
+            //                        Text(groupModel.groupName)
+            //                            .font(.system(size: 16, weight: .bold, design: .default))
+            //                            .foregroundColor(.primary)
+            //                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
+            //                    })
+            //            })
             .navigationBarItems(leading: HStack {
                 NavigationLink(
                     destination: GroupChatDetailView(groupModel: groupModel),
@@ -145,8 +172,21 @@ struct GroupMessageChatView: View {
                         Text(groupModel.groupName)
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .foregroundColor(.primary)
-                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
                     })
+            },
+            trailing: HStack{
+                Button(action: {
+                    call(callType: .audio)
+                }, label: {
+                    Image(systemName: "phone.fill")
+                        .frame(width: 50, height: 50, alignment: .trailing)
+                })
+                Button(action: {
+                    call(callType: .video)
+                }, label: {
+                    Image(systemName: "video.fill")
+                        .frame(width: 50, height: 50, alignment: .trailing)
+                })
             })
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
@@ -179,10 +219,35 @@ struct GroupMessageChatView: View {
             })
         }
         .keyboardManagment()
+        .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .alert(isPresented: $alertVisible, content: {
+            Alert (title: Text("Need camera and microphone permissions"),
+                   message: Text("Go to Settings?"),
+                   primaryButton: .default(Text("Settings"), action: {
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                   }),
+                   secondaryButton: .default(Text("Cancel")))
+        })
     }
 }
 
 extension GroupMessageChatView {
+    
+    func call(callType type: Constants.CallType) {
+        AVCaptureDevice.authorizeVideo(completion: { (status) in
+            AVCaptureDevice.authorizeAudio(completion: { (status) in
+                if status == .alreadyAuthorized || status == .justAuthorized {
+                    hudVisible = true
+                    // CallManager call
+                    viewModel.callGroup(group: groupModel, callType: type) {
+                        hudVisible = false
+                    }
+                } else {
+                    self.alertVisible = true
+                }
+            })
+        })
+    }
     
     func getIdLastItem() -> String {
         let msgInRoom = realmMessages.allMessageInGroup(groupId: self.groupModel.groupID)

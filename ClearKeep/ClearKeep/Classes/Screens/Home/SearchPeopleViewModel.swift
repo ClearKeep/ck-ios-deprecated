@@ -16,7 +16,7 @@ class SearchPeopleViewModel : ObservableObject, Identifiable {
 
     func searchUser(_ keySearch: String){
         self.hudVisible = true
-        Backend.shared.searchUser(keySearch.lowercased()) { (result, error) in
+        Backend.shared.searchUser(keySearch.trimmingCharacters(in: .whitespaces).lowercased()) { (result, error) in
             self.hudVisible = false
             if let result = result {
                 DispatchQueue.main.async {

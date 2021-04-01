@@ -96,6 +96,23 @@ class CallViewModel: NSObject, ObservableObject {
             if self.remoteVideoView == nil, let listener = self.callBox?.videoRoom?.remotes.values.first {
                 self.remoteVideoView = listener.videoRenderView
             }
+            
+            if let isGroup = self.callBox?.isCallGroup {
+                self.callGroup = isGroup
+            }
+            
+            if let lstRemote = self.callBox?.videoRoom?.remotes.values {
+                self.remotesVideoView.removeAll()
+                if lstRemote.count > 2 {
+                    if let localVideo = self.localVideoView {
+                        self.remotesVideoView.append(localVideo)
+                    }
+                }
+                lstRemote.forEach { (listener) in
+                    self.remotesVideoView.append(listener.videoRenderView)
+                }
+            }
+            
         }
     }
     
@@ -105,7 +122,9 @@ class CallViewModel: NSObject, ObservableObject {
     
     func endCall() {
         if let callBox = self.callBox {
-            Backend.shared.cancelRequestCall(callBox.clientId, callBox.roomId) { (result, error) in
+            if !callBox.isCallGroup {
+                Backend.shared.cancelRequestCall(callBox.clientId, callBox.roomId) { (result, error) in
+                }
             }
             CallManager.shared.end(call: callBox)
         }

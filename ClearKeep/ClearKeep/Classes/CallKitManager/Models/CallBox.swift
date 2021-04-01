@@ -28,6 +28,7 @@ final class CallBox: NSObject {
     let isOutgoing: Bool
     var status = CallStatus.calling
     var type: Constants.CallType = .audio
+    var isCallGroup = false
 
     // MARK: Call State Properties
 

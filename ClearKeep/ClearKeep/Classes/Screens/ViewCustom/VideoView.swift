@@ -20,6 +20,28 @@ struct VideoView: UIViewRepresentable {
 
     func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
     }
+    
+    func getFrame(lstVideo: [RTCMTLVideoView]) -> CGSize{
+        let indexOfList = lstVideo.firstIndex(of: self.rtcVideoView) ?? 0
+        let width = UIScreen.main.bounds.size.width
+        let height = UIScreen.main.bounds.size.height
+        switch lstVideo.count {
+        case 2:
+            return CGSize(width: width, height: height / 2)
+        case 4:
+            return CGSize(width: width / 2, height: height / 2)
+        case 5:
+            if indexOfList < 4 {
+                return CGSize(width: width / 2, height: height / 3)
+            } else {
+                return CGSize(width: width, height: height / 3)
+            }
+        case 6:
+            return CGSize(width: width / 2, height: height / 3)
+        default:
+            return CGSize(width: 0, height: 0)
+        }
+    }
 }
 //#else
 //struct VideoView: UIViewRepresentable {

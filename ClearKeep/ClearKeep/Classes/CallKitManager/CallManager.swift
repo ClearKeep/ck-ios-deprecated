@@ -47,13 +47,15 @@ final class CallManager: NSObject {
     // MARK: Actions
     func startCall(clientId: String, clientName: String?,
                    avatar: String? = nil, groupId: Int64, groupToken: String,
-                   callType type: Constants.CallType = .audio) {
+                   callType type: Constants.CallType = .audio ,
+                   isCallGroup: Bool) {
         let call = CallBox(uuid: UUID(), clientId: clientId, isOutgoing: true)
         call.clientName = clientName
         call.groupToken = groupToken
         call.avatar = avatar
         call.roomId = groupId
         call.type = type
+        call.isCallGroup = isCallGroup
         call.hasStartedConnectingDidChange = { [weak self] in
             self?.provider.reportOutgoingCall(with: call.uuid, startedConnectingAt: call.connectingDate)
         }
@@ -81,6 +83,10 @@ final class CallManager: NSObject {
 
         requestTransaction(transaction, action: Call.end.rawValue)
         self.removeCall(call)
+    }
+    
+    func leaveRoom(call: CallBox){
+        call.videoRoom?.stopListenRemote(remoteRole: <#T##JanusRoleListen#>)
     }
 
     func setHeld(call: CallBox, onHold: Bool) {
@@ -121,7 +127,9 @@ final class CallManager: NSObject {
 
     private func removeCall(_ call: CallBox) {
 //        calls = calls.filter {$0 === call}
-        Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
+        if !call.isCallGroup {
+            Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
+            }
         }
         self.postCallsChangedNotification(userInfo: ["action": Call.end.rawValue])
         calls.removeAll()
@@ -145,6 +153,7 @@ final class CallManager: NSObject {
            let callType = jsonData["call_type"].string {
             let avatar = jsonData["from_client_avatar"].string
             let token = jsonData["group_rtc_token"].string
+            let groupType = jsonData["group_type"].string
             
             // Save turnUser and turnPwd
             let turnString = jsonData["turn_server"].stringValue
@@ -164,8 +173,10 @@ final class CallManager: NSObject {
             }
             
             let hasVideo = callType == "video"
+            let isGroupCall = groupType == "group"
             
-            reportIncomingCall(roomId: roomId,
+            reportIncomingCall(isCallGroup: isGroupCall,
+                               roomId: roomId,
                                clientId: clientId,
                                avatar: avatar,
                                token: token,
@@ -179,7 +190,7 @@ final class CallManager: NSObject {
 extension CallManager {
     // MARK: Incoming Calls
     /// Use CXProvider to report the incoming call to the system
-    func reportIncomingCall(roomId: String, clientId: String, avatar: String?, token: String?, callerName: String, hasVideo: Bool = true, completion: ((NSError?) -> Void)? = nil) {
+    func reportIncomingCall(isCallGroup: Bool, roomId: String, clientId: String, avatar: String?, token: String?, callerName: String, hasVideo: Bool = true, completion: ((NSError?) -> Void)? = nil) {
         // Construct a CXCallUpdate describing the incoming call, including the caller.
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .phoneNumber, value: callerName)
@@ -200,6 +211,8 @@ extension CallManager {
                 call.roomId = Int64(roomId) ?? 0
                 call.groupToken = token
                 call.avatar = avatar
+                call.isCallGroup = isCallGroup
+                call.type = hasVideo ? .video : .audio
                 self.addCall(call)
             }
             
