@@ -73,6 +73,7 @@ final class CallBox: NSObject {
     var audioChange: (() -> Void)?
     var renderView: (() -> Void)?
     var renderSizeChangeWithSize: ((_ size: CGSize,_ uId: Int) -> Void)?
+    var membersInCallDidChange: (() -> Void)?
 
     // MARK: Derived Properties
 
@@ -211,7 +212,14 @@ final class CallBox: NSObject {
 
 extension CallBox: JanusVideoRoomDelegate {
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteLeaveWithID clientId: Int) {
-        CallManager.shared.end(call: self)
+        if self.isCallGroup {
+            let numberOfRemotes = videoRoom?.remotes.count ?? 0
+            if numberOfRemotes > 0 {
+                membersInCallDidChange?()
+            }
+        } else {
+            CallManager.shared.end(call: self)
+        }
         print("=================>>>>>>>>>>>>>>>>>>> remoteLeaveWithID")
     }
     
@@ -222,7 +230,17 @@ extension CallBox: JanusVideoRoomDelegate {
     }
     
     func janusVideoRoom(janusRoom: JanusVideoRoom, remoteUnPublishedWithUid clientId: Int) {
-        CallManager.shared.end(call: self)
+        if self.isCallGroup {
+            // TODO: check if only 2 members
+            let numberOfRemotes = videoRoom?.remotes.count ?? 0
+            if numberOfRemotes <= 1 {
+                CallManager.shared.end(call: self)
+            } else {
+                membersInCallDidChange?()
+            }
+        } else {
+            CallManager.shared.end(call: self)
+        }
         print("=================>>>>>>>>>>>>>>>>>>> remoteUnPublishedWithUid")
     }
     
