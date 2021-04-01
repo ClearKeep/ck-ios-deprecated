@@ -154,6 +154,7 @@ final class CallManager: NSObject {
             let avatar = jsonData["from_client_avatar"].string
             let token = jsonData["group_rtc_token"].string
             let groupType = jsonData["group_type"].string
+            let groupName = jsonData["group_name"].string
             
             // Save turnUser and turnPwd
             let turnString = jsonData["turn_server"].stringValue
@@ -174,13 +175,14 @@ final class CallManager: NSObject {
             
             let hasVideo = callType == "video"
             let isGroupCall = groupType == "group"
+            let callerName = isGroupCall ? groupName : username
             
             reportIncomingCall(isCallGroup: isGroupCall,
                                roomId: roomId,
                                clientId: clientId,
                                avatar: avatar,
                                token: token,
-                               callerName: username,
+                               callerName: callerName ?? "",
                                hasVideo: hasVideo,
                                completion: completion)
         }
