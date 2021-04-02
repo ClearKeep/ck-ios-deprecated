@@ -69,6 +69,13 @@ class CallViewModel: NSObject, ObservableObject {
             // Just support only call 1:1 for now
             self.remoteViewRenderSize = size
         }
+        
+        self.callBox?.membersInCallDidChange = { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.updateVideoView()
+        }
     }
     
     func getStatusMessage() -> String {
@@ -101,6 +108,7 @@ class CallViewModel: NSObject, ObservableObject {
                 self.callGroup = isGroup
             }
             
+            print("updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
             if let lstRemote = self.callBox?.videoRoom?.remotes.values {
                 self.remotesVideoView.removeAll()
                 if lstRemote.count > 2 {

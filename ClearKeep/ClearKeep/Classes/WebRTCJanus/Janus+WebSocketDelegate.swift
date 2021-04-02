@@ -30,6 +30,7 @@ extension Janus: WebSocketDelegate {
             callback(msg)
             return
         }
+        
         repeat {
             if janus == JanusMessage.keepalive.rawValue {
                 debugPrint("JanusMessage.keepalive on session: \(sessionId)")
