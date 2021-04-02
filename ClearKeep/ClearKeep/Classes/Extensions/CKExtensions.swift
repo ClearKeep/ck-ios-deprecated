@@ -76,6 +76,12 @@ extension NSNotification {
     static let AppBecomeActive = NSNotification.Name.init("AppBecomeActive")
     
     static let keyBoardWillShow = NSNotification.Name.init("keyBoardWillShow")
+    
+    enum GoogleSignIn {
+        static let FinishedWithResponse = NSNotification.Name.init("GoogleSignIn.FinishedWithResponse")
+        static let FinishedWithError = NSNotification.Name.init("GoogleSignIn.FinishedWithError")
+        static let DisconnectedWithResponse = NSNotification.Name.init("GoogleSignIn.DisconnectedWithResponse")
+    }
 }
 
 extension UserDefaults: ObjectSavable {

@@ -45,11 +45,11 @@ class Backend: ObservableObject {
     @Published var rooms = [RoomModel]()
     
     
-    
+    init(host: String = AppConfig.buildEnvironment.grpc, port: Int = AppConfig.buildEnvironment.grpc_port) {
 //    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
-    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
-//        init(host: String = "172.16.6.34", port: Int = 15000) { // dev server 2
-//      init(host: String = "172.16.6.232", port: Int = 15000) { // dev server 3
+//    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
+//    init(host: String = "172.16.6.34", port: Int = 15000) { // dev server 2
+//    init(host: String = "172.16.6.232", port: Int = 15000) { // dev server 3
 
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
@@ -178,6 +178,17 @@ class Backend: ObservableObject {
     
     func login(_ request: Auth_AuthReq, _ completion: @escaping (Auth_AuthRes?, Error?) -> Void){
         clientAuth.login(request).response.whenComplete { (result) in
+            switch result {
+            case .success(let response):
+                completion(response, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    func loginWithGoogleAccount(_ request: Auth_GoogleLoginReq, _ completion: @escaping (Auth_AuthRes?, Error?) -> Void){
+        clientAuth.login_google(request).response.whenComplete { (result) in
             switch result {
             case .success(let response):
                 completion(response, nil)
