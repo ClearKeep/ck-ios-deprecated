@@ -98,7 +98,7 @@ struct LoginView: View {
                             
                             VStack {
                                 GoogleSignInButton(signBtn: ggSignInBtn)
-                                    .frame(width: UIScreen.main.bounds.width - 20, height: 52, alignment: .center)
+                                    .frame(width: UIScreen.main.bounds.width - 40, height: 52, alignment: .center)
                                     .onTapGesture {
                                         SocialLogin().attemptLoginGoogle()
                                     }
