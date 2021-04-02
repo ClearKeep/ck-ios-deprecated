@@ -218,6 +218,8 @@ extension CallBox: JanusVideoRoomDelegate {
             let numberOfRemotes = videoRoom?.remotes.count ?? 0
             if numberOfRemotes > 0 {
                 membersInCallDidChange?()
+            } else {
+                CallManager.shared.end(call: self)
             }
         } else {
             CallManager.shared.end(call: self)
