@@ -32,6 +32,11 @@ internal protocol ServerInfo_ServerInfoClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<ServerInfo_UpdateNTSReq, ServerInfo_BaseResponse>
 
+  func total_thread(
+    _ request: ServerInfo_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<ServerInfo_Empty, ServerInfo_GetThreadResponse>
+
 }
 
 extension ServerInfo_ServerInfoClientProtocol {
@@ -48,6 +53,23 @@ extension ServerInfo_ServerInfoClientProtocol {
   ) -> UnaryCall<ServerInfo_UpdateNTSReq, ServerInfo_BaseResponse> {
     return self.makeUnaryCall(
       path: "/server_info.ServerInfo/update_nts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to total_thread
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to total_thread.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func total_thread(
+    _ request: ServerInfo_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<ServerInfo_Empty, ServerInfo_GetThreadResponse> {
+    return self.makeUnaryCall(
+      path: "/server_info.ServerInfo/total_thread",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -72,6 +94,7 @@ internal final class ServerInfo_ServerInfoClient: ServerInfo_ServerInfoClientPro
 /// To build a server, implement a class that conforms to this protocol.
 internal protocol ServerInfo_ServerInfoProvider: CallHandlerProvider {
   func update_nts(request: ServerInfo_UpdateNTSReq, context: StatusOnlyCallContext) -> EventLoopFuture<ServerInfo_BaseResponse>
+  func total_thread(request: ServerInfo_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<ServerInfo_GetThreadResponse>
 }
 
 extension ServerInfo_ServerInfoProvider {
@@ -85,6 +108,13 @@ extension ServerInfo_ServerInfoProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.update_nts(request: request, context: context)
+        }
+      }
+
+    case "total_thread":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.total_thread(request: request, context: context)
         }
       }
 

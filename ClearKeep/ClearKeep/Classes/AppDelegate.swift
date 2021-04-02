@@ -9,10 +9,11 @@ import UIKit
 import UserNotifications
 import PushKit
 import CallKit
+import GoogleSignIn
 
 //@main
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, GIDSignInDelegate {
     let viewRouter = ViewRouter()
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
@@ -38,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         let token = tokenParts.joined()
         print("Device Token: \(token)")
         UserDefaults.standard.setValue(token, forKey: Constants.keySaveTokenPushNotifyAPNS)
-
+        
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -46,24 +47,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                didReceive response: UNNotificationResponse,
-                withCompletionHandler completionHandler:
-                   @escaping () -> Void) {
-            
-       // Always call the completion handler when done.
-       completionHandler()
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler:
+                                    @escaping () -> Void) {
+        
+        // Always call the completion handler when done.
+        completionHandler()
     }
-
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-             willPresent notification: UNNotification,
-             withCompletionHandler completionHandler:
-                @escaping (UNNotificationPresentationOptions) -> Void) {
-
-
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler:
+                                    @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        
         completionHandler(
             [UNNotificationPresentationOptions.alert,
-                UNNotificationPresentationOptions.sound,
-                UNNotificationPresentationOptions.badge])
+             UNNotificationPresentationOptions.sound,
+             UNNotificationPresentationOptions.badge])
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -73,11 +74,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         content.sound = UNNotificationSound.default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
-
+        
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-
+        
         UNUserNotificationCenter.current().add(request)
-
+        
         UIApplication.shared.applicationIconBadgeNumber += 1
         
         
@@ -128,7 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
                 print("Permission granted: \(granted)")
                 guard granted else { return }
                 DispatchQueue.main.async {
-                  UIApplication.shared.registerForRemoteNotifications()
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
                 
                 self?.getNotificationSettings()
@@ -142,17 +143,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         voipRegistry.desiredPushTypes = [PKPushType.voIP]
         
         NotificationCenter.default.addObserver(self,
-            selector: #selector(applicationDidBecomeActive),
-            name: UIApplication.didBecomeActiveNotification,
-            object: nil)
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
         
         NotificationCenter.default.addObserver(self,
-            selector: #selector(applicationDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil)
+                                               selector: #selector(applicationDidEnterBackground),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
         
         NetworkMonitor.shared.startMonitoring()
-
+        
+        // Initialize sign-in
+        GIDSignIn.sharedInstance().clientID = Constants.googleSignInClientId
+        GIDSignIn.sharedInstance().delegate = self
+        
         return true
     }
     
@@ -197,7 +202,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
+    @available(iOS 9.0, *)
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        return GIDSignIn.sharedInstance().handle(url)
+    }
     
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
+              withError error: Error!) {
+        
+        
+        if let error = error {
+            if (error as NSError).code == GIDSignInErrorCode.hasNoAuthInKeychain.rawValue {
+                print("The user has not signed in before or they have since signed out.")
+            } else {
+                print("\(error.localizedDescription)")
+            }
+            
+            let userInfo: [String : Any] = ["error": error]
+            NotificationCenter.default.post(name: NSNotification.GoogleSignIn.FinishedWithError,
+                                            object: nil,
+                                            userInfo: userInfo)
+            return
+        }
+        // Perform any operations on signed in user here.
+        let userId = user.userID                  // For client-side use only!
+        let idToken = user.authentication.idToken // Safe to send to the server
+        let fullName = user.profile.name
+        let givenName = user.profile.givenName
+        let familyName = user.profile.familyName
+        let email = user.profile.email
+        // ...
+        
+        print("UserId: \(userId!)")
+        print("idToken: \(idToken!)")
+        print("email: \(email!)")
+        
+        if let gUser = user {
+            let userInfo: [String : Any] = ["user": gUser]
+            NotificationCenter.default.post(name: NSNotification.GoogleSignIn.FinishedWithResponse,
+                                            object: nil,
+                                            userInfo: userInfo)
+        }
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
+              withError error: Error!) {
+        // Perform any operations when the user disconnects from app here.
+        // ...
+    }
 }
 
 extension AppDelegate : CXProviderDelegate {

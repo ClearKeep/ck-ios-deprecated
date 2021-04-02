@@ -14,7 +14,8 @@ target 'ClearKeep' do
   pod 'RealmSwift'
   pod 'SocketRocket'
   pod 'GoogleWebRTC'
-
+  pod 'GoogleSignIn'
+  
   target 'ClearKeepTests' do
     inherit! :search_paths
     # Pods for testing

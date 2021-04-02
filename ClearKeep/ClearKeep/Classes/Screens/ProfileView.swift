@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GoogleSignIn
 
 struct ProfileView: View {
     
@@ -107,6 +108,10 @@ struct ProfileView: View {
 
     private func delete() {
         logout()
+        
+        if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
+            GIDSignIn.sharedInstance().signOut()
+        }
     }
 }
 
