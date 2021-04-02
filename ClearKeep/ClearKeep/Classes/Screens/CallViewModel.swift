@@ -100,7 +100,8 @@ class CallViewModel: NSObject, ObservableObject {
             if self.localVideoView == nil {
                 self.localVideoView = self.callBox?.videoRoom?.publisher?.videoRenderView
             }
-            if self.remoteVideoView == nil, let listener = self.callBox?.videoRoom?.remotes.values.first {
+            
+            if let listener = self.callBox?.videoRoom?.remotes.values.first {
                 self.remoteVideoView = listener.videoRenderView
             }
             
