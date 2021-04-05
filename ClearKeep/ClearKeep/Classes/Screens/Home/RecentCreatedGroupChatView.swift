@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct RecentCreatedGroupChatView: View {
     
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
     @EnvironmentObject var viewRouter: ViewRouter
+    
+    @State var hudVisible = false
+    @State var alertVisible = false
+    @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
     var body: some View {
         NavigationView {
@@ -27,7 +32,6 @@ struct RecentCreatedGroupChatView: View {
                         .frame(width: 18, height: 18, alignment: .leading)
                         .foregroundColor(.blue)
                 }
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
                 .onTapGesture {
                     self.viewRouter.current = .tabview
                 }
@@ -38,11 +42,42 @@ struct RecentCreatedGroupChatView: View {
                         Text(self.viewRouter.recentCreatedGroupModel!.groupName)
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .foregroundColor(.primary)
-                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
                     })
+            },
+            trailing: HStack{
+                Button(action: {
+                    call(callType: .audio)
+                }, label: {
+                    Image(systemName: "phone.fill")
+                        .frame(width: 50, height: 50, alignment: .trailing)
+                })
+                Button(action: {
+                    call(callType: .video)
+                }, label: {
+                    Image(systemName: "video.fill")
+                        .frame(width: 50, height: 50, alignment: .trailing)
+                })
             })
             
         }
+    }
+}
+
+extension RecentCreatedGroupChatView {
+    func call(callType type: Constants.CallType) {
+        AVCaptureDevice.authorizeVideo(completion: { (status) in
+            AVCaptureDevice.authorizeAudio(completion: { (status) in
+                if status == .alreadyAuthorized || status == .justAuthorized {
+                    hudVisible = true
+                    // CallManager call
+                    viewModel.callGroup(group: self.viewRouter.recentCreatedGroupModel!, callType: type) {
+                        hudVisible = false
+                    }
+                } else {
+                    self.alertVisible = true
+                }
+            })
+        })
     }
 }
 
