@@ -48,7 +48,7 @@ class Backend: ObservableObject {
     init(host: String = AppConfig.buildEnvironment.grpc, port: Int = AppConfig.buildEnvironment.grpc_port) {
 //    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
 //    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
-//    init(host: String = "172.16.6.34", port: Int = 15000) { // dev server 2
+//    init(host: String = "172.16.6.34", port: Int = 25000) { // dev server 2
 //    init(host: String = "172.16.6.232", port: Int = 15000) { // dev server 3
 
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
