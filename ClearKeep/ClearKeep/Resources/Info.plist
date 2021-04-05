@@ -28,6 +28,14 @@
 				<string>com.googleusercontent.apps.1092685949059-gfkapttahq1tuagf85lk3osr3d5i0bsg</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msauth.com.telred.clearkeep3.ios.dev</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -37,6 +45,12 @@
 	<string>$(PRODUCT_NAME) uses camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses microphone</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>msauth</string>
+        <string>msauthv2</string>
+        <string>msauthv3</string>
+    </array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

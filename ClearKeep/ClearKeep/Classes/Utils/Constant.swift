@@ -40,12 +40,14 @@ extension Constants {
         case development
         case stagging
         case production
+        case debugServerLocal
         
         var grpc: String {
             switch self {
             case .development: return "54.235.68.160"
             case .stagging: return "54.235.68.160"
             case .production: return "54.235.68.160"
+            case .debugServerLocal: return "172.16.6.34"
             }
         }
         
@@ -54,6 +56,7 @@ extension Constants {
             case .development: return 25000
             case .stagging: return 15000
             case .production: return 5000
+            case .debugServerLocal: return 25000
             }
         }
 
@@ -62,6 +65,7 @@ extension Constants {
             case .development: return "ws://54.235.68.160:28188/janus"
             case .stagging: return "ws://54.235.68.160:18188/janus"
             case .production: return "ws://54.235.68.160:8188/janus"
+            case .debugServerLocal: return "ws://172.16.6.34:28188/janus"
             }
         }
     }
@@ -78,3 +82,7 @@ extension Constants {
 //production:
 //grpc: 54.235.68.160:5000
 //webrtc: ws://54.235.68.160:8188/janus
+//
+//debugServerLocal on Phuong's PC:
+//grpc: 172.16.6.34:25000
+//

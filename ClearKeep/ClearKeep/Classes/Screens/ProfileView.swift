@@ -87,6 +87,20 @@ struct ProfileView: View {
             self.viewRouter.current = .login
 
         }
+        
+        // Clean signin state
+        let currentSignInType = SocialLogin.shared.currentSignInType
+        SocialLogin.shared.saveSignInType(nil)
+        
+        switch currentSignInType {
+        case .email: break
+        case .google:
+            if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
+                GIDSignIn.sharedInstance().signOut()
+            }
+        case .microsoft:
+            SocialLogin.shared.signOutO365()
+        }
     }
     
     private var confirmationSheet: ActionSheet {
@@ -108,10 +122,6 @@ struct ProfileView: View {
 
     private func delete() {
         logout()
-        
-        if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
-            GIDSignIn.sharedInstance().signOut()
-        }
     }
 }
 

@@ -82,6 +82,11 @@ extension NSNotification {
         static let FinishedWithError = NSNotification.Name.init("GoogleSignIn.FinishedWithError")
         static let DisconnectedWithResponse = NSNotification.Name.init("GoogleSignIn.DisconnectedWithResponse")
     }
+    
+    enum MicrosoftSignIn {
+        static let FinishedWithResponse = NSNotification.Name.init("MicrosoftSignIn.FinishedWithResponse")
+        static let FinishedWithError = NSNotification.Name.init("MicrosoftSignIn.FinishedWithError")
+    }
 }
 
 extension UserDefaults: ObjectSavable {

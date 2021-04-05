@@ -7,6 +7,9 @@
 
 import UIKit
 import SwiftUI
+import Firebase
+import FirebaseAuth
+import MSAL
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -59,6 +62,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+      for urlContext in URLContexts {
+          let url = urlContext.url
+          Auth.auth().canHandle(url)
+      }
+        
+        guard let urlContext = URLContexts.first else {
+            return
+        }
 
+        let url = urlContext.url
+        let sourceApp = urlContext.options.sourceApplication
+
+        MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: sourceApp)
+    }
 }
 
