@@ -196,6 +196,19 @@ struct Auth_GoogleLoginReq {
   init() {}
 }
 
+///Login Office365 message struct
+struct Auth_OfficeLoginReq {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var accessToken: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "auth"
@@ -564,6 +577,35 @@ extension Auth_GoogleLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 
   static func ==(lhs: Auth_GoogleLoginReq, rhs: Auth_GoogleLoginReq) -> Bool {
     if lhs.idToken != rhs.idToken {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Auth_OfficeLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".OfficeLoginReq"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "access_token"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.accessToken)
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.accessToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Auth_OfficeLoginReq, rhs: Auth_OfficeLoginReq) -> Bool {
+    if lhs.accessToken != rhs.accessToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

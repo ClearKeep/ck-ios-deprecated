@@ -37,6 +37,11 @@ internal protocol Auth_AuthClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Auth_GoogleLoginReq, Auth_AuthRes>
 
+  func login_office(
+    _ request: Auth_OfficeLoginReq,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Auth_OfficeLoginReq, Auth_AuthRes>
+
   func register(
     _ request: Auth_RegisterReq,
     callOptions: CallOptions?
@@ -85,6 +90,23 @@ extension Auth_AuthClientProtocol {
   ) -> UnaryCall<Auth_GoogleLoginReq, Auth_AuthRes> {
     return self.makeUnaryCall(
       path: "/auth.Auth/login_google",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to login_office
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to login_office.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func login_office(
+    _ request: Auth_OfficeLoginReq,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Auth_OfficeLoginReq, Auth_AuthRes> {
+    return self.makeUnaryCall(
+      path: "/auth.Auth/login_office",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -161,6 +183,7 @@ internal final class Auth_AuthClient: Auth_AuthClientProtocol {
 internal protocol Auth_AuthProvider: CallHandlerProvider {
   func login(request: Auth_AuthReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
   func login_google(request: Auth_GoogleLoginReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
+  func login_office(request: Auth_OfficeLoginReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
   func register(request: Auth_RegisterReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_RegisterRes>
   func fogot_password(request: Auth_FogotPassWord, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_BaseResponse>
   func logout(request: Auth_LogoutReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_BaseResponse>
@@ -184,6 +207,13 @@ extension Auth_AuthProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.login_google(request: request, context: context)
+        }
+      }
+
+    case "login_office":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.login_office(request: request, context: context)
         }
       }
 
