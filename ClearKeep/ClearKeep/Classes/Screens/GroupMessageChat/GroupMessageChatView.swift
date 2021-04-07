@@ -30,6 +30,8 @@ struct GroupMessageChatView: View {
     @State var hudVisible = false
     @State var alertVisible = false
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
+    @Environment(\.presentationMode) var presentationMode
+    
     
     init(groupModel: GroupModel) {
         self.groupModel = groupModel
@@ -141,53 +143,44 @@ struct GroupMessageChatView: View {
                 .animation(.easeOut)
             }
             .navigationBarTitle("")
-            //            .navigationBarItems(trailing: HStack{
-            //                Button(action: {
-            //                    call(callType: .audio)
-            //                }, label: {
-            //                    Image(systemName: "phone.fill")
-            //                        .frame(width: 50, height: 50, alignment: .trailing)
-            //                })
-            //                Button(action: {
-            //                    call(callType: .video)
-            //                }, label: {
-            //                    Image(systemName: "video.fill")
-            //                        .frame(width: 50, height: 50, alignment: .trailing)
-            //                })
-            //            })
-            //            .navigationBarItems(leading: HStack {
-            //                NavigationLink(
-            //                    destination: GroupChatDetailView(groupModel: groupModel),
-            //                    label: {
-            //                        Text(groupModel.groupName)
-            //                            .font(.system(size: 16, weight: .bold, design: .default))
-            //                            .foregroundColor(.primary)
-            //                            .frame(width: UIScreen.main.bounds.width - 100, alignment: .center)
-            //                    })
-            //            })
+            .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: HStack {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20 , alignment: .leading)
+                    .padding(.leading, 10)
+                    .foregroundColor(.blue)
+                    .onTapGesture {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                Text("").frame(width: 40, height: 40)
+                
                 NavigationLink(
                     destination: GroupChatDetailView(groupModel: groupModel),
                     label: {
                         Text(groupModel.groupName)
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .foregroundColor(.primary)
+                    }).frame(maxWidth: .infinity , alignment: .center)
+                
+                HStack {
+                    Button(action: {
+                        call(callType: .audio)
+                    }, label: {
+                        Image(systemName: "phone.fill")
+                            .frame(width: 40, height: 40)
                     })
-            },
-            trailing: HStack{
-                Button(action: {
-                    call(callType: .audio)
-                }, label: {
-                    Image(systemName: "phone.fill")
-                        .frame(width: 50, height: 50, alignment: .trailing)
-                })
-                Button(action: {
-                    call(callType: .video)
-                }, label: {
-                    Image(systemName: "video.fill")
-                        .frame(width: 50, height: 50, alignment: .trailing)
-                })
-            })
+                    Button(action: {
+                        call(callType: .video)
+                    }, label: {
+                        Image(systemName: "video.fill")
+                            .frame(width: 40, height: 40)
+                    })
+                }
+                .padding(.trailing, 10)
+            }.frame(width: UIScreen.main.bounds.width, height: 50)
+            )
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 DispatchQueue.main.async {
@@ -535,8 +528,43 @@ extension GroupMessageChatView {
     }
 }
 
-//struct GroupMessageChatView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        GroupMessageChatView(GroupModel()).environmentObject(RealmGroup()).environmentObject(RealmMessages())
-//    }
-//}
+struct GroupMessageChatView_Previews: PreviewProvider {
+    static var previews: some View {
+        HStack {
+            Image(systemName: "chevron.left")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18 , alignment: .leading)
+                .padding(.leading, 10)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    //                    presentationMode.wrappedValue.dismiss()
+                }
+            
+            Text("AAAA")
+                .font(.system(size: 16, weight: .bold, design: .default))
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            
+            HStack {
+                Button(action: {
+                    //                    call(callType: .audio)
+                }, label: {
+                    Image(systemName: "phone.fill")
+                        .frame(width: 40, height: 40)
+                })
+                Button(action: {
+                    //                    call(callType: .video)
+                }, label: {
+                    Image(systemName: "video.fill")
+                        .frame(width: 40, height: 40)
+                })
+            }
+            .padding(.trailing, 10)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            
+        }.frame(width: UIScreen.main.bounds.width, height: 50)
+        
+    }
+}

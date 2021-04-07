@@ -24,41 +24,45 @@ struct RecentCreatedGroupChatView: View {
                 GroupMessageChatView(groupModel: self.viewRouter.recentCreatedGroupModel!).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             }
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: HStack {
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18, alignment: .leading)
-                        .foregroundColor(.blue)
-                }
-                .onTapGesture {
-                    self.viewRouter.current = .tabview
-                }
                 
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20 , alignment: .leading)
+                    .padding(.leading, 10)
+                    .foregroundColor(.blue)
+                    .onTapGesture {
+                        self.viewRouter.current = .tabview
+                    }
+                Text("").frame(width: 40, height: 40)
+                                                
                 NavigationLink(
                     destination: GroupChatDetailView(groupModel: self.viewRouter.recentCreatedGroupModel!),
                     label: {
                         Text(self.viewRouter.recentCreatedGroupModel!.groupName)
                             .font(.system(size: 16, weight: .bold, design: .default))
                             .foregroundColor(.primary)
+                    }).frame(maxWidth: .infinity , alignment: .center)
+                
+                HStack {
+                    Button(action: {
+                        call(callType: .audio)
+                    }, label: {
+                        Image(systemName: "phone.fill")
+                            .frame(width: 40, height: 40)
                     })
-            },
-            trailing: HStack{
-                Button(action: {
-                    call(callType: .audio)
-                }, label: {
-                    Image(systemName: "phone.fill")
-                        .frame(width: 50, height: 50, alignment: .trailing)
-                })
-                Button(action: {
-                    call(callType: .video)
-                }, label: {
-                    Image(systemName: "video.fill")
-                        .frame(width: 50, height: 50, alignment: .trailing)
-                })
-            })
-            
+                    Button(action: {
+                        call(callType: .video)
+                    }, label: {
+                        Image(systemName: "video.fill")
+                            .frame(width: 40, height: 40)
+                    })
+                }
+                .padding(.trailing, 10)
+            }.frame(width: UIScreen.main.bounds.width, height: 50)
+            )
         }
     }
 }

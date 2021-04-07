@@ -55,6 +55,7 @@ struct HistoryChatView: View {
                                 } else {
                                     VStack(alignment: .leading) {
                                         Text(viewModel.getPeerReceiveName(inGroup: group))
+                                            .lineLimit(2)
                                         Text(viewModel.getMessage(data: group.lastMessage))
                                             .lineLimit(1)
                                             .font(.subheadline)

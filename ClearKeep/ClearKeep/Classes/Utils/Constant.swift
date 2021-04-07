@@ -64,6 +64,14 @@ extension Constants {
             case .production: return "ws://54.235.68.160:8188/janus"
             }
         }
+        
+        var nameEnvironment: String {
+            switch self {
+            case .development: return "Development"
+            case .stagging: return "Stagging"
+            case .production: return "Production"
+            }
+        }
     }
 }
 

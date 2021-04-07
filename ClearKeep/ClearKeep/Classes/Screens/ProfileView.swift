@@ -40,8 +40,13 @@ struct ProfileView: View {
             // Logout button
             Button(action: confirmDelete) {
                 ButtonContent("LOGOUT")
-                    .padding(.trailing, 25)
+                    .padding(30)
             }
+            Spacer()
+            Text(self.getVersionApp())
+                .fontWeight(.light)
+                .font(.footnote)
+                .multilineTextAlignment(.center)
         }
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
@@ -112,6 +117,16 @@ struct ProfileView: View {
         if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
             GIDSignIn.sharedInstance().signOut()
         }
+    }
+}
+
+extension ProfileView {
+    func getVersionApp() -> String{
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        let buildVerSion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        let nameEnv = AppConfig.buildEnvironment.nameEnvironment
+        let version = "Version \(appVersion) \n Build Version: \(buildVerSion) \n Environment: \(nameEnv)"
+        return version
     }
 }
 
