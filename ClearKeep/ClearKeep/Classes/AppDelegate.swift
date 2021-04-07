@@ -10,6 +10,8 @@ import UserNotifications
 import PushKit
 import CallKit
 import GoogleSignIn
+import Firebase
+import MSAL
 
 //@main
 @UIApplicationMain
@@ -162,6 +164,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         GIDSignIn.sharedInstance().clientID = Constants.googleSignInClientId
         GIDSignIn.sharedInstance().delegate = self
         
+        FirebaseApp.configure()
+        
+        MSALGlobalConfig.loggerConfig.setLogCallback { (logLevel, message, containsPII) in
+            
+            // If PiiLoggingEnabled is set YES, this block will potentially contain sensitive information (Personally Identifiable Information), but not all messages will contain it.
+            // containsPII == YES indicates if a particular message contains PII.
+            // You might want to capture PII only in debug builds, or only if you take necessary actions to handle PII properly according to legal requirements of the region
+            if let displayableMessage = message {
+                if (!containsPII) {
+                    #if DEBUG
+                    // NB! This sample uses print just for testing purposes
+                    // You should only ever log to NSLog in debug mode to prevent leaking potentially sensitive information
+                    print(displayableMessage)
+                    #endif
+                }
+            }
+        }
+        
         return true
     }
     
@@ -208,7 +228,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
     
     @available(iOS 9.0, *)
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url)
+        return GIDSignIn.sharedInstance().handle(url) || MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String)
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,

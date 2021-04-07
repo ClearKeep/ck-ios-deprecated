@@ -198,6 +198,17 @@ class Backend: ObservableObject {
         }
     }
     
+    func loginWithMicrosoftAccount(_ request: Auth_OfficeLoginReq, _ completion: @escaping (Auth_AuthRes?, Error?) -> Void){
+        clientAuth.login_office(request).response.whenComplete { (result) in
+            switch result {
+            case .success(let response):
+                completion(response, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
     func register(_ request: Auth_RegisterReq, _ completion: @escaping (Auth_RegisterRes? , Error?) -> Void){
         clientAuth.register(request).response.whenComplete { (result) in
             switch result {

@@ -9,15 +9,18 @@
 /* Begin PBXBuildFile section */
 		1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C9362608754B0081C135 /* MultilineTextField.swift */; };
 		1013C95C2608A66B0081C135 /* GroupChatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C95B2608A66B0081C135 /* GroupChatDetailView.swift */; };
+		10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */; };
 		102770942615A7D00001BBC6 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */; };
 		103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */; };
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
+		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
-		1097155B261417880045FE63 /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155A261417880045FE63 /* GoogleSignInButton.swift */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
+		10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */; };
+		10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
 		160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
 		16208E62252D7906000A6CE7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16208E61252D7906000A6CE7 /* HomeView.swift */; };
@@ -204,15 +207,18 @@
 /* Begin PBXFileReference section */
 		1013C9362608754B0081C135 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		1013C95B2608A66B0081C135 /* GroupChatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatDetailView.swift; sourceTree = "<group>"; };
+		10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatMemberView.swift; sourceTree = "<group>"; };
 		106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatAddMember.swift; sourceTree = "<group>"; };
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
+		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
-		1097155A261417880045FE63 /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
+		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
+		10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+MSAL.swift"; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
@@ -452,6 +458,7 @@
 				1664F1BA252C6B4900FF37AD /* Assets.xcassets */,
 				1664F1BF252C6B4900FF37AD /* LaunchScreen.storyboard */,
 				1664F1C2252C6B4900FF37AD /* Info.plist */,
+				10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -589,8 +596,10 @@
 			isa = PBXGroup;
 			children = (
 				16BDC85025306BC400552C48 /* LoginView.swift */,
-				1097155A261417880045FE63 /* GoogleSignInButton.swift */,
 				1097155F261417B10045FE63 /* SocialLogin.swift */,
+				10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */,
+				10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */,
+				10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1146,6 +1155,7 @@
 				1664F1BE252C6B4900FF37AD /* Preview Assets.xcassets in Resources */,
 				56694AD125B53C8A008E8EC5 /* add_package.png in Resources */,
 				1664F1BB252C6B4900FF37AD /* Assets.xcassets in Resources */,
+				10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */,
 				56694AD525B53C8A008E8EC5 /* basetextalignment.png in Resources */,
 				56694AD625B53C8A008E8EC5 /* CircularIndicator_resizable_text.gif in Resources */,
 			);
@@ -1366,16 +1376,17 @@
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */,
 				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
+				10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */,
 				6880CF5C25F9C1C100F3DECE /* notify_push.grpc.swift in Sources */,
 				1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */,
 				68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */,
 				686F25CD255CE81400953C5E /* RegisterView.swift in Sources */,
+				10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */,
 				56205B0A25A2C36D00B39D07 /* CameraFilter.swift in Sources */,
 				56694AE225B53C8A008E8EC5 /* FailureIndicator.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
-				1097155B261417880045FE63 /* GoogleSignInButton.swift in Sources */,
 				56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				56694ADA25B53C8A008E8EC5 /* LinearProgressIndicator.swift in Sources */,
@@ -1433,6 +1444,7 @@
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
+				10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */,
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
 				68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,

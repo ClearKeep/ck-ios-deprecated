@@ -16,6 +16,10 @@ target 'ClearKeep' do
   pod 'GoogleWebRTC'
   pod 'GoogleSignIn'
   
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'MSAL'
+  
   target 'ClearKeepTests' do
     inherit! :search_paths
     # Pods for testing

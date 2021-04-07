@@ -1,6 +1,7 @@
 
 import SwiftUI
 import GoogleSignIn
+import MSAL
 
 struct LoginView: View {
 
@@ -19,9 +20,7 @@ struct LoginView: View {
     @State var messageAlert = ""
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
-    
-    let ggSignInBtn: GIDSignInButton = GIDSignInButton()
-    
+
     @State private var colorBorder = Color.gray
     
     var body: some View {
@@ -97,11 +96,9 @@ struct LoginView: View {
                             }
                             
                             VStack {
-                                GoogleSignInButton(signBtn: ggSignInBtn)
-                                    .frame(width: UIScreen.main.bounds.width - 40, height: 52, alignment: .center)
-                                    .onTapGesture {
-                                        SocialLogin().attemptLoginGoogle()
-                                    }
+                                SocialSignInButton(signInType: .google)
+                                
+                                SocialSignInButton(signInType: .office365)
                             }
                         }
                     })
@@ -127,7 +124,13 @@ struct LoginView: View {
                    let user = userInfo["user"] as? GIDGoogleUser {
                     print("Google signin success for user \(user.profile.email ?? "")")
                     self.loginWithGoogleSignInResponse(gooleUser: user)
-                    SocialLogin().signOutGoogleAccount()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.MicrosoftSignIn.FinishedWithResponse)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let accessToken = userInfo["accessToken"] as? String {
+                    print("Microsoft signin success with token \(accessToken)")
+                    self.loginWithMicrosoftAccessToken(accessToken)
                 }
             }
         }
@@ -190,10 +193,28 @@ extension LoginView {
         request.idToken = gooleUser.authentication.idToken
         
         Backend.shared.loginWithGoogleAccount(request) { (result, error) in
-            self.didReceiveLoginResponse(result: result, error: error)
+            self.didReceiveLoginResponse(result: result, error: error, signInType: .google)
         }
     }
 }
+
+
+// MARK: - Microsoft SignIn Button
+extension LoginView {
+    
+    private func loginWithMicrosoftAccessToken(_ accessToken: String) {
+        // TODO: complete this flow when backend is ready
+        print("MICROSIFT ACCESS TOKEN:\n\(accessToken)")
+        hudVisible = true
+        var request = Auth_OfficeLoginReq()
+        request.accessToken = accessToken
+
+        Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
+            self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
+        }
+    }
+}
+
 
 extension LoginView {
     
@@ -232,11 +253,11 @@ extension LoginView {
         request.authType = 1    // Which values could be set here?
         
         Backend.shared.login(request) { (result, error) in
-            self.didReceiveLoginResponse(result: result, error: error)
+            self.didReceiveLoginResponse(result: result, error: error, signInType: .email)
         }
     }
     
-    private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?) {
+    private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?, signInType: SocialLogin.SignInType) {
         if let result = result {
             if result.baseResponse.success{
                 do {
@@ -265,6 +286,7 @@ extension LoginView {
                             Backend.shared.authenticator.register(address: address) { (result, error) in
                                 if result {
                                     loginForUser(clientID: userID)
+                                    SocialLogin.shared.saveSignInType(signInType)
                                 } else {
                                     print("Register Key Error \(error?.localizedDescription ?? "")")
                                     UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
