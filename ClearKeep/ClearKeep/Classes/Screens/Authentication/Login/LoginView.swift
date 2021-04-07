@@ -205,13 +205,13 @@ extension LoginView {
     private func loginWithMicrosoftAccessToken(_ accessToken: String) {
         // TODO: complete this flow when backend is ready
         print("MICROSIFT ACCESS TOKEN:\n\(accessToken)")
-//        hudVisible = true
-//        var request = Auth_GoogleLoginReq()
-//        request.idToken = gooleUser.authentication.idToken
-//
-//        Backend.shared.loginWithGoogleAccount(request) { (result, error) in
-//            self.didReceiveLoginResponse(result: result, error: error, signInType: .google)
-//        }
+        hudVisible = true
+        var request = Auth_OfficeLoginReq()
+        request.accessToken = accessToken
+
+        Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
+            self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
+        }
     }
 }
 

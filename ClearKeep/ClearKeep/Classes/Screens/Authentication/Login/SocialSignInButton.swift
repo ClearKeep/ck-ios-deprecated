@@ -20,17 +20,22 @@ struct SocialSignInButton: View {
                         .scaledToFit()
                         .frame(width: 24, height: 24, alignment: .center)
                         .padding(.all, 12)
+                        .background(RoundedRectangle(cornerRadius: 5)
+                                        .fill(Color.white)
+                                        .frame(width: 44, height: 44, alignment: .center))
+                    
                     Text(signInType.title)
                         .font(.subheadline)
                         .fontWeight(.bold)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white)
+                        .padding(.leading, 8)
                     
                     Spacer()
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(Color.white)
-                        .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                        .fill(Color("Blue-2"))
+//                        .shadow(color: .primary, radius: 2, x: 0, y: 2)
                 )
                 .padding(.all, 8)
             }
