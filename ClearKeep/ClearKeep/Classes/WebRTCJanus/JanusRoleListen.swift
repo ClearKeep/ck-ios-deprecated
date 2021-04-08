@@ -15,7 +15,7 @@ protocol JanusRoleListenDelegate: JanusRoleDelegate {
 }
 
 class JanusRoleListen: JanusRole {
-    var _renderView: RTCMTLVideoView? = nil
+    var _renderView: RTCMTLEAGLVideoView? = nil
     var videoTrack: RTCVideoTrack?
     var renderSize: CGSize = .zero
     
@@ -134,11 +134,11 @@ class JanusRoleListen: JanusRole {
         _renderView = nil
     }
     
-    var videoRenderView: RTCMTLVideoView {
+    var videoRenderView: RTCMTLEAGLVideoView {
         if let renderView = _renderView {
             return renderView
         }
-        _renderView = RTCMTLVideoView()
+        _renderView = RTCMTLEAGLVideoView()
         _renderView?.isUserInteractionEnabled = false
         _renderView?.delegate = self
         if let videoTrack = self.videoTrack {

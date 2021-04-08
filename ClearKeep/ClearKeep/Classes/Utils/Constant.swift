@@ -74,6 +74,7 @@ extension Constants {
             case .development: return "Development"
             case .stagging: return "Stagging"
             case .production: return "Production"
+            case .debugServerLocal: return "LocalDebugServer"
             }
         }
     }

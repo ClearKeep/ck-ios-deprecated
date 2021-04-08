@@ -9,19 +9,28 @@ import Foundation
 import SwiftUI
 import WebRTC
 
+#if arch(arm64)
+typealias RTCMTLEAGLVideoView = RTCMTLVideoView
+#else
+typealias RTCMTLEAGLVideoView = RTCEAGLVideoView
+#endif
+
 //#if arch(arm64)
 struct VideoView: UIViewRepresentable {
-    let rtcVideoView: RTCMTLVideoView
-
-    func makeUIView(context: Context) -> RTCMTLVideoView {
+    let rtcVideoView: RTCMTLEAGLVideoView
+    
+    func makeUIView(context: Context) -> RTCMTLEAGLVideoView {
+        #if arch(arm64)
         rtcVideoView.videoContentMode = .scaleAspectFill
+        #else
+        #endif
         return rtcVideoView
     }
-
-    func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
+    
+    func updateUIView(_ uiView: RTCMTLEAGLVideoView, context: Context) {
     }
     
-    func getFrame(lstVideo: [RTCMTLVideoView]) -> CGSize{
+    func getFrame(lstVideo: [RTCMTLEAGLVideoView]) -> CGSize{
         let indexOfList = lstVideo.firstIndex(of: self.rtcVideoView) ?? 0
         let width = UIScreen.main.bounds.size.width
         let height = UIScreen.main.bounds.size.height

@@ -9,9 +9,9 @@ import Foundation
 import WebRTC
 
 class CallViewModel: NSObject, ObservableObject {
-    @Published var localVideoView: RTCMTLVideoView?
-    @Published var remoteVideoView: RTCMTLVideoView?
-    @Published var remotesVideoView = [RTCMTLVideoView]()
+    @Published var localVideoView: RTCMTLEAGLVideoView?
+    @Published var remoteVideoView: RTCMTLEAGLVideoView?
+    @Published var remotesVideoView = [RTCMTLEAGLVideoView]()
     
     @Published var cameraOn = true
     @Published var cameraFront = false

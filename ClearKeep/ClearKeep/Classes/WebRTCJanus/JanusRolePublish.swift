@@ -10,7 +10,7 @@ import UIKit
 import WebRTC
 
 class JanusRolePublish: JanusRole {
-    var videoRenderView: RTCMTLVideoView?
+    var videoRenderView: RTCMTLEAGLVideoView?
     private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (true, true, true)
     private var customFrameCapturer: Bool = false
     var localVideoTrack: RTCVideoTrack!
@@ -59,7 +59,7 @@ class JanusRolePublish: JanusRole {
             self.cameraFilter = CameraFilter()
         }
         
-        videoRenderView = RTCMTLVideoView()
+        videoRenderView = RTCMTLEAGLVideoView()
         videoRenderView?.delegate = self
         
         setupLocalTracks()
@@ -332,7 +332,7 @@ class JanusRolePublish: JanusRole {
 extension JanusRolePublish: RTCVideoViewDelegate {
     func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
         let isLandScape = size.width < size.height
-        var renderView: RTCMTLVideoView?
+        var renderView: RTCMTLEAGLVideoView?
         var parentView: UIView?
         if videoView.isEqual(videoRenderView){
             print("local video size changed")
