@@ -195,6 +195,7 @@ extension LoginView {
         Backend.shared.loginWithGoogleAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .google)
         }
+        SocialLogin.shared.signOutGoogleAccount()
     }
 }
 
@@ -212,6 +213,7 @@ extension LoginView {
         Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
         }
+        SocialLogin.shared.signOutO365()
     }
 }
 

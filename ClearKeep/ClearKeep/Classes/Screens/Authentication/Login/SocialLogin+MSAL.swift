@@ -113,8 +113,6 @@ extension SocialLogin {
                                             object: nil,
                                             userInfo: userInfo)
         }
-        
-        signOutO365()
     }
     
     func getGraphEndpoint() -> String {
