@@ -53,6 +53,11 @@ internal protocol Message_MessageClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Message_PublishRequest, Message_MessageObjectResponse>
 
+  func read_messages(
+    _ request: Message_ReadMessagesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Message_ReadMessagesRequest, Message_BaseResponse>
+
 }
 
 extension Message_MessageClientProtocol {
@@ -144,6 +149,23 @@ extension Message_MessageClientProtocol {
       callOptions: callOptions ?? self.defaultCallOptions
     )
   }
+
+  /// Unary call to read_messages
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to read_messages.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func read_messages(
+    _ request: Message_ReadMessagesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Message_ReadMessagesRequest, Message_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/message.Message/read_messages",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
 }
 
 internal final class Message_MessageClient: Message_MessageClientProtocol {
@@ -169,6 +191,7 @@ internal protocol Message_MessageProvider: CallHandlerProvider {
   func unSubscribe(request: Message_UnSubscribeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
   func listen(request: Message_ListenRequest, context: StreamingResponseCallContext<Message_MessageObjectResponse>) -> EventLoopFuture<GRPCStatus>
   func publish(request: Message_PublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_MessageObjectResponse>
+  func read_messages(request: Message_ReadMessagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Message_BaseResponse>
 }
 
 extension Message_MessageProvider {
@@ -210,6 +233,13 @@ extension Message_MessageProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.publish(request: request, context: context)
+        }
+      }
+
+    case "read_messages":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.read_messages(request: request, context: context)
         }
       }
 

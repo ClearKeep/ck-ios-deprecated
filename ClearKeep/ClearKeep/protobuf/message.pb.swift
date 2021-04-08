@@ -37,9 +37,29 @@ struct Message_MessageObjectResponse {
 
   var message: Data = SwiftProtobuf.Internal.emptyData
 
+  var lstClientRead: [Message_ClientReadObject] = []
+
   var createdAt: Int64 = 0
 
   var updatedAt: Int64 = 0
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Message_ClientReadObject {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var id: String = String()
+
+  var name: String = String()
+
+  var avatar: String = String()
+
+  var readAt: Int64 = 0
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -177,6 +197,19 @@ struct Message_ListenRequest {
   init() {}
 }
 
+/// Request: read message
+struct Message_ReadMessagesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var lstMessageID: [String] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "message"
@@ -190,8 +223,9 @@ extension Message_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._M
     4: .standard(proto: "from_client_id"),
     5: .standard(proto: "client_id"),
     6: .same(proto: "message"),
-    7: .standard(proto: "created_at"),
-    8: .standard(proto: "updated_at"),
+    7: .standard(proto: "lst_client_read"),
+    8: .standard(proto: "created_at"),
+    9: .standard(proto: "updated_at"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -203,8 +237,9 @@ extension Message_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._M
       case 4: try decoder.decodeSingularStringField(value: &self.fromClientID)
       case 5: try decoder.decodeSingularStringField(value: &self.clientID)
       case 6: try decoder.decodeSingularBytesField(value: &self.message)
-      case 7: try decoder.decodeSingularInt64Field(value: &self.createdAt)
-      case 8: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
+      case 7: try decoder.decodeRepeatedMessageField(value: &self.lstClientRead)
+      case 8: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 9: try decoder.decodeSingularInt64Field(value: &self.updatedAt)
       default: break
       }
     }
@@ -229,11 +264,14 @@ extension Message_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._M
     if !self.message.isEmpty {
       try visitor.visitSingularBytesField(value: self.message, fieldNumber: 6)
     }
+    if !self.lstClientRead.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.lstClientRead, fieldNumber: 7)
+    }
     if self.createdAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 7)
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 8)
     }
     if self.updatedAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 8)
+      try visitor.visitSingularInt64Field(value: self.updatedAt, fieldNumber: 9)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -245,8 +283,56 @@ extension Message_MessageObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.fromClientID != rhs.fromClientID {return false}
     if lhs.clientID != rhs.clientID {return false}
     if lhs.message != rhs.message {return false}
+    if lhs.lstClientRead != rhs.lstClientRead {return false}
     if lhs.createdAt != rhs.createdAt {return false}
     if lhs.updatedAt != rhs.updatedAt {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Message_ClientReadObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ClientReadObject"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .same(proto: "name"),
+    3: .same(proto: "avatar"),
+    4: .standard(proto: "read_at"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularStringField(value: &self.name)
+      case 3: try decoder.decodeSingularStringField(value: &self.avatar)
+      case 4: try decoder.decodeSingularInt64Field(value: &self.readAt)
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 2)
+    }
+    if !self.avatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 3)
+    }
+    if self.readAt != 0 {
+      try visitor.visitSingularInt64Field(value: self.readAt, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Message_ClientReadObject, rhs: Message_ClientReadObject) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.avatar != rhs.avatar {return false}
+    if lhs.readAt != rhs.readAt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -527,6 +613,35 @@ extension Message_ListenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 
   static func ==(lhs: Message_ListenRequest, rhs: Message_ListenRequest) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Message_ReadMessagesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ReadMessagesRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    4: .standard(proto: "lst_message_id"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 4: try decoder.decodeRepeatedStringField(value: &self.lstMessageID)
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.lstMessageID.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.lstMessageID, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Message_ReadMessagesRequest, rhs: Message_ReadMessagesRequest) -> Bool {
+    if lhs.lstMessageID != rhs.lstMessageID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
