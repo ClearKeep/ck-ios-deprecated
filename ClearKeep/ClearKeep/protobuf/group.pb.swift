@@ -55,11 +55,9 @@ struct Group_ClientReadObject {
 
   var id: String = String()
 
-  var name: String = String()
+  var displayName: String = String()
 
   var avatar: String = String()
-
-  var readAt: Int64 = 0
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -381,18 +379,16 @@ extension Group_ClientReadObject: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   static let protoMessageName: String = _protobuf_package + ".ClientReadObject"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
-    2: .same(proto: "name"),
+    2: .standard(proto: "display_name"),
     3: .same(proto: "avatar"),
-    4: .standard(proto: "read_at"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.id)
-      case 2: try decoder.decodeSingularStringField(value: &self.name)
+      case 2: try decoder.decodeSingularStringField(value: &self.displayName)
       case 3: try decoder.decodeSingularStringField(value: &self.avatar)
-      case 4: try decoder.decodeSingularInt64Field(value: &self.readAt)
       default: break
       }
     }
@@ -402,23 +398,19 @@ extension Group_ClientReadObject: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.id.isEmpty {
       try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
     }
-    if !self.name.isEmpty {
-      try visitor.visitSingularStringField(value: self.name, fieldNumber: 2)
+    if !self.displayName.isEmpty {
+      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 2)
     }
     if !self.avatar.isEmpty {
       try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 3)
-    }
-    if self.readAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.readAt, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Group_ClientReadObject, rhs: Group_ClientReadObject) -> Bool {
     if lhs.id != rhs.id {return false}
-    if lhs.name != rhs.name {return false}
+    if lhs.displayName != rhs.displayName {return false}
     if lhs.avatar != rhs.avatar {return false}
-    if lhs.readAt != rhs.readAt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
