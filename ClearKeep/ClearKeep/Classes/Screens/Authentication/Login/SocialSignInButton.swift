@@ -13,31 +13,29 @@ struct SocialSignInButton: View {
     var body: some View {
         VStack {
             Button(action: signInType.action) {
-                HStack(spacing: 0) {
+                HStack(alignment: .center, spacing: 4) {
+                    Spacer()
+                    
+                    Text(signInType.title)
+                        .font(.system(size: 14))
+                        .fontWeight(.bold)
+                        .foregroundColor(signInType.titleColor)
+                        .padding(.leading, 8)
+                    
                     Image(signInType.iconName)
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24, alignment: .center)
-                        .padding(.all, 12)
-                        .background(RoundedRectangle(cornerRadius: 5)
-                                        .fill(Color.white)
-                                        .frame(width: 44, height: 44, alignment: .center))
-                    
-                    Text(signInType.title)
-                        .font(.subheadline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.leading, 8)
+                        .padding(.all, 8)
                     
                     Spacer()
                 }
                 .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(Color("Blue-2"))
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.white)
 //                        .shadow(color: .primary, radius: 2, x: 0, y: 2)
                 )
-                .padding(.all, 8)
             }
         }
     }
@@ -57,8 +55,15 @@ extension SocialSignInButton {
         
         var title: String {
             switch self {
-            case .google: return "Sign in with Google"
-            case .office365: return "Sign in with Office365"
+            case .google: return "Sign In with Google"
+            case .office365: return "Sign In with Office 365"
+            }
+        }
+        
+        var titleColor: Color {
+            switch self {
+            case .google: return UIColor(hex: "#2F80ED").color
+            case .office365: return UIColor(hex: "#DC3E15").color
             }
         }
         
@@ -73,6 +78,6 @@ extension SocialSignInButton {
 
 struct SocialSignInButton_Previews: PreviewProvider {
     static var previews: some View {
-        SocialSignInButton(signInType: .google)
+        SocialSignInButton(signInType: .office365)
     }
 }

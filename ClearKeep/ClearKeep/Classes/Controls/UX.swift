@@ -99,6 +99,33 @@ struct TextFieldProfile: View {
     }
 }
 
+struct TextFieldWithLeftIcon: View {
+    @Binding private var text: String
+    
+    private var title: String
+    private var leftIconName: String
+    private var onEditingChanged: (Bool) -> Void
+    
+    init(_ title: String, leftIconName: String, text: Binding<String>, onEditingChanged: @escaping (Bool) -> Void) {
+        self.title = title
+        self._text = text
+        self.leftIconName = leftIconName
+        self.onEditingChanged = onEditingChanged
+    }
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Image(leftIconName)
+                .accentColor(.gray)
+                .padding()
+            
+            TextField(title, text: $text, onEditingChanged: onEditingChanged)
+        }
+        .frame(height: 50)
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
+    }
+}
+
 struct SecureInputView: View {
     
     @Binding private var text: String
