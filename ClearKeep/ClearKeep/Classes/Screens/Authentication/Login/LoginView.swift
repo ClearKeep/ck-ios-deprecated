@@ -49,11 +49,11 @@ struct LoginView: View {
                                         }
                                     })
                                     .keyboardType(.emailAddress)
-                                    .font(.system(size: 20))
                                     .autocapitalization(.none)
                                     .disableAutocorrection(true)
                                     .textFieldStyle(MyTextFieldStyle())
                                 }
+                                .font(.system(size: 20))
                                 .frame(height: 50)
                                 .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -61,15 +61,16 @@ struct LoginView: View {
                                 HStack(alignment: .center) {
                                     Image(systemName: "lock")
                                         .foregroundColor(.gray)
+                                        
                                         .padding()
                                     
                                     SecureInputView("Password", text: $password)
                                         .keyboardType(.emailAddress)
-                                        .font(.system(size: 20))
                                         .autocapitalization(.none)
                                         .disableAutocorrection(true)
                                         .textFieldStyle(MyTextFieldStyle())
                                 }
+                                .font(.system(size: 20))
                                 .frame(height: 50)
                                 .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))

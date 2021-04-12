@@ -21,6 +21,7 @@
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
+		10E83D4526243CFC002D7B10 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D4426243CFC002D7B10 /* AppTheme.swift */; };
 		10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */; };
 		10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
@@ -221,6 +222,7 @@
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
+		10E83D4426243CFC002D7B10 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
 		10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+MSAL.swift"; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
@@ -995,6 +997,7 @@
 			children = (
 				686F25F4255E774600953C5E /* Constant.swift */,
 				108C7EC62616AF01003B6936 /* AppConfig.swift */,
+				10E83D4426243CFC002D7B10 /* AppTheme.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1468,6 +1471,7 @@
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
 				56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */,
+				10E83D4526243CFC002D7B10 /* AppTheme.swift in Sources */,
 				56694AD725B53C8A008E8EC5 /* SuccessIndicator.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,

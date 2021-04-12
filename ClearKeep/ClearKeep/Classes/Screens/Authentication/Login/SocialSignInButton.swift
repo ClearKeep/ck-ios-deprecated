@@ -17,7 +17,7 @@ struct SocialSignInButton: View {
                     Spacer()
                     
                     Text(signInType.title)
-                        .font(.headline)
+                        .font(.system(size: 14))
                         .fontWeight(.bold)
                         .foregroundColor(signInType.titleColor)
                         .padding(.leading, 8)
