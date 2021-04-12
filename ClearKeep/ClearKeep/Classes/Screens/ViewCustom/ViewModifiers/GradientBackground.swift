@@ -11,8 +11,8 @@ struct GradientBackground: ViewModifier {
     
     func body(content: Content) -> some View {
         ZStack(alignment: .center) {
-            LinearGradient(gradient: Gradient(colors: [Color(Constants.Color.backgroundGradientLeading), Color(Constants.Color.backgroundGradientTrailing)]), startPoint: .leading, endPoint: .trailing)
-                .frame(width: .infinity, height: .infinity, alignment: .center)
+            LinearGradient(gradient: Gradient(colors: [AppTheme.Color.gradientPrimaryDark.color, AppTheme.Color.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height + 40, alignment: .center)
                 .edgesIgnoringSafeArea(.all)
             
             content

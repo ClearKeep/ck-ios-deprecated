@@ -38,7 +38,7 @@ struct LoginView: View {
                             VStack(alignment: .leading, spacing: 24) {
                                 
                                 HStack(alignment: .center) {
-                                    Image(systemName: "envelope")
+                                    Image("Mail")
                                         .foregroundColor(.gray)
                                         .padding()
                                     
@@ -59,7 +59,7 @@ struct LoginView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 
                                 HStack(alignment: .center) {
-                                    Image(systemName: "lock")
+                                    Image("Lock")
                                         .foregroundColor(.gray)
                                         
                                         .padding()
@@ -79,7 +79,7 @@ struct LoginView: View {
                                     Text("Login")
                                         .font(.system(size: 14))
                                         .fontWeight(.bold)
-                                        .foregroundColor(Constants.Color.primary.color   )
+                                        .foregroundColor(AppTheme.Color.primary.color)
                                         .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
                                         .background(Color.white)
                                     
