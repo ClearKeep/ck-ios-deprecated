@@ -19,6 +19,8 @@
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
+		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
+		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
 		10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */; };
 		10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
@@ -217,6 +219,8 @@
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
+		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
 		10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+MSAL.swift"; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
@@ -449,6 +453,14 @@
 				106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */,
 			);
 			path = GroupChatDetailView;
+			sourceTree = "<group>";
+		};
+		10E83D3326240531002D7B10 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				10E83D3F262405E7002D7B10 /* GradientBackground.swift */,
+			);
+			path = ViewModifiers;
 			sourceTree = "<group>";
 		};
 		16208E2E252D6351000A6CE7 /* Resources */ = {
@@ -766,6 +778,7 @@
 		56205B4225A2FB7400B39D07 /* ViewCustom */ = {
 			isa = PBXGroup;
 			children = (
+				10E83D3326240531002D7B10 /* ViewModifiers */,
 				56694A8325B537A2008E8EC5 /* HUD */,
 				56205B3D25A2F57F00B39D07 /* VideoView.swift */,
 				56205B4325A2FB9100B39D07 /* GridView.swift */,
@@ -972,6 +985,7 @@
 				68C4D56825F60E4800F31F77 /* NetworkMonitor.swift */,
 				328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */,
 				102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */,
+				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1387,6 +1401,7 @@
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
+				10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */,
 				56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				56694ADA25B53C8A008E8EC5 /* LinearProgressIndicator.swift in Sources */,
@@ -1413,6 +1428,7 @@
 				56694ADB25B53C8A008E8EC5 /* CircularProgressIndicator.swift in Sources */,
 				68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */,
 				6880CF5825F9C1C100F3DECE /* video_call.pb.swift in Sources */,
+				10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */,
 				56694AE125B53C8A008E8EC5 /* FailureShape.swift in Sources */,
 				56694AE525B53C8A008E8EC5 /* LinearWaitingIndicator.swift in Sources */,
 				56694AD825B53C8A008E8EC5 /* SuccessShape.swift in Sources */,

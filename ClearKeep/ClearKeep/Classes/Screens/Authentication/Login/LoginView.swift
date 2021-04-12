@@ -4,9 +4,9 @@ import GoogleSignIn
 import MSAL
 
 struct LoginView: View {
-
+    
     @EnvironmentObject var viewRouter: ViewRouter
-
+    
     @State var email: String = ""
     @State var password: String = ""
     @State var deviceID: String = ""
@@ -20,7 +20,7 @@ struct LoginView: View {
     @State var messageAlert = ""
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
-
+    
     @State private var colorBorder = Color.gray
     
     var body: some View {
@@ -28,77 +28,116 @@ struct LoginView: View {
             VStack {
                 GeometryReader { reader in
                     ScrollView(.vertical, showsIndicators: false, content: {
-                        VStack(alignment: .center) {
-                            TitleLabel("ClearKeep")
-                            Image("ic_app")
+                        VStack(alignment: .center, spacing: 24) {
+                            Image("Logo")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 100, alignment: .center)
-                                .padding(.bottom, 20)
-                            VStack(alignment: .leading , spacing: 10){
-                                TitleTextField("Email")
-                                TextField("", text: $email, onEditingChanged: { (isChanged) in
-                                    if !isChanged {
-                                        self.isEmailValid = self.email.textFieldValidatorEmail()
-                                        colorBorder = self.isEmailValid ? Color.gray : Color.red
-                                    }
-                                })
-                                .keyboardType(.emailAddress)
-                                .font(.system(size: 20))
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .frame(height: 50)
-                                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(colorBorder, lineWidth: 1))
-                                .textFieldStyle(MyTextFieldStyle())
-                                .padding([.leading , .trailing], 1)
-
-                                .onAppear {
-                                    self.isEmailValid = true
-                                }
-                                if !self.isEmailValid {
-                                    Text("Email is invalid")
-                                        .font(Font.system(size: 13))
-                                        .foregroundColor(Color.red)
-                                }
-                                TitleTextField("Password")
-                                    .padding(.top , 10)
-                                SecureInputView("", text: $password)
-                                    .frame(height: 50)
+                                .frame(width: 120, height: 120, alignment: .center)
+                                .padding(.all, 20)
+                            
+                            VStack(alignment: .leading, spacing: 24) {
+                                
+                                HStack(alignment: .center) {
+                                    Image(systemName: "envelope")
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                    
+                                    TextField("Email", text: $email, onEditingChanged: { (isChanged) in
+                                        if !isChanged {
+                                            self.isEmailValid = self.email.textFieldValidatorEmail()
+                                            colorBorder = self.isEmailValid ? Color.gray : Color.red
+                                        }
+                                    })
+                                    .keyboardType(.emailAddress)
+                                    .font(.system(size: 20))
+                                    .autocapitalization(.none)
+                                    .disableAutocorrection(true)
                                     .textFieldStyle(MyTextFieldStyle())
-                                    .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
-                                    .padding([.leading , .trailing], 1)
-                                    .padding(.bottom, 10)
+                                }
+                                .frame(height: 50)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                
+                                HStack(alignment: .center) {
+                                    Image(systemName: "lock")
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                    
+                                    SecureInputView("Password", text: $password)
+                                        .keyboardType(.emailAddress)
+                                        .font(.system(size: 20))
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
+                                        .textFieldStyle(MyTextFieldStyle())
+                                }
+                                .frame(height: 50)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 
                                 Button(action: login) {
                                     Text("Login")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.white)
-                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 50, idealHeight: 50)
-                                        .background(Color("Blue-2"))
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Constants.Color.primary.color   )
+                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                                        .background(Color.white)
+                                    
                                 }
-                                .cornerRadius(10)
-                                .padding(.top, 20)
-                                .padding(.bottom, 10)
-                            }
-                            
-                            NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
-                                Button(action: {
-                                    isRegister = true
-                                }) {
-                                    Text("Register")
-                                        .underline()
-                                        .foregroundColor(.blue)
-                                    //                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
-                                    //                                        .background(Color("Blue"))
+                                .cornerRadius(20)
+                                
+                                NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
+                                    Button(action: {
+                                        isForgotPassword = true
+                                    }) {
+                                        Text("Forgot password?")
+                                            .font(.system(size: 14))
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                                 }
-                                //                                .cornerRadius(10)
-                                .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
-                            }
-                            
-                            VStack {
+                                
+                                Divider()
+                                    .background(Color.white)
+                                
                                 SocialSignInButton(signInType: .google)
                                 
                                 SocialSignInButton(signInType: .office365)
+                                
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("Don't have an account?")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, 20)
+                                
+                                NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
+                                    Button(action: {
+                                        isRegister = true
+                                    }) {
+                                        HStack {
+                                            Spacer()
+                                            
+                                            Text("Sign up")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.white)
+                                                .frame(width: 254, height: 40, alignment: .center)
+                                                .background(Color.clear)
+                                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                                .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(Color.white, lineWidth: 2))
+                                            
+                                            Spacer()
+                                        }
+                                        
+                                    }
+                                    .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
+                                }
                             }
                         }
                     })
@@ -119,6 +158,7 @@ struct LoginView: View {
                         UIApplication.shared.endEditing()
                     })
             .padding()
+            .grandientBackground()
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithResponse)) { (obj) in
                 if let userInfo = obj.userInfo,
                    let user = userInfo["user"] as? GIDGoogleUser {
@@ -209,7 +249,7 @@ extension LoginView {
         hudVisible = true
         var request = Auth_OfficeLoginReq()
         request.accessToken = accessToken
-
+        
         Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
         }

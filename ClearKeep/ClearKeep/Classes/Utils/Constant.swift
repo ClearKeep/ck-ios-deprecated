@@ -80,6 +80,24 @@ extension Constants {
     }
 }
 
+extension Constants {
+    
+    enum Color {
+        static let backgroundGradientLeading = UIColor(hex: "#7773F3")
+        static let backgroundGradientTrailing = UIColor(hex: "#8ABFF3")
+        
+        static let primary = UIColor(hex: "#6267FB")
+        static let gray5 = UIColor(hex: "#EFF0F6")
+
+        static let errorLight = UIColor(hex: "#FFE8F1")
+        static let errorBorder = UIColor(red: 0.929, green: 0.179, blue: 0.494, alpha: 1)
+        
+        static let buttonBorderLight = UIColor(red: 0.988, green: 0.988, blue: 0.988, alpha: 1)
+    }
+}
+
+
+
 //development:
 //grpc: 54.235.68.160:25000
 //webrtc: ws://54.235.68.160:28188/janus
