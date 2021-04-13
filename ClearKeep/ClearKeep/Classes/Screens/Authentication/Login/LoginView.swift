@@ -34,6 +34,7 @@ struct LoginView: View {
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 120, height: 120, alignment: .center)
                                 .padding(.all, 20)
+                                .padding(.top, 40)
                             
                             VStack(alignment: .leading, spacing: 24) {
                                 
@@ -79,7 +80,7 @@ struct LoginView: View {
                                     Text("Login")
                                         .font(.system(size: 14))
                                         .fontWeight(.bold)
-                                        .foregroundColor(AppTheme.Color.primary.color)
+                                        .foregroundColor(AppTheme.colors.primary.color)
                                         .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
                                         .background(Color.white)
                                     

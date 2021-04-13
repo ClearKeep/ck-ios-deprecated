@@ -9,9 +9,19 @@
 /* Begin PBXBuildFile section */
 		1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C9362608754B0081C135 /* MultilineTextField.swift */; };
 		1013C95C2608A66B0081C135 /* GroupChatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C95B2608A66B0081C135 /* GroupChatDetailView.swift */; };
+		1015C43F262553F900407C35 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C43E262553F900407C35 /* AppFonts.swift */; };
+		1015C4472625540500407C35 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4462625540500407C35 /* AppColors.swift */; };
+		1015C44C2625542B00407C35 /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C44B2625542B00407C35 /* DefaultFonts.swift */; };
+		1015C4512625543700407C35 /* DefaultColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4502625543700407C35 /* DefaultColors.swift */; };
+		1015C4562625544C00407C35 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4552625544C00407C35 /* AppTheme.swift */; };
 		10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */; };
 		102770942615A7D00001BBC6 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */; };
 		103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */; };
+		103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
+		103B494C2625766800EDD89B /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */; };
+		103B494D2625766800EDD89B /* SF-Pro-Text-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */; };
+		103B494E2625766800EDD89B /* SF-Pro-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */; };
+		103B494F2625766800EDD89B /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */; };
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
@@ -21,7 +31,6 @@
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
-		10E83D4526243CFC002D7B10 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D4426243CFC002D7B10 /* AppTheme.swift */; };
 		10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */; };
 		10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
@@ -210,9 +219,19 @@
 /* Begin PBXFileReference section */
 		1013C9362608754B0081C135 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		1013C95B2608A66B0081C135 /* GroupChatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatDetailView.swift; sourceTree = "<group>"; };
+		1015C43E262553F900407C35 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
+		1015C4462625540500407C35 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		1015C44B2625542B00407C35 /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
+		1015C4502625543700407C35 /* DefaultColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultColors.swift; sourceTree = "<group>"; };
+		1015C4552625544C00407C35 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatMemberView.swift; sourceTree = "<group>"; };
+		103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
+		103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
+		103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Thin.otf"; sourceTree = "<group>"; };
+		103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Light.otf"; sourceTree = "<group>"; };
+		103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatAddMember.swift; sourceTree = "<group>"; };
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
@@ -222,7 +241,6 @@
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
-		10E83D4426243CFC002D7B10 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
 		10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+MSAL.swift"; sourceTree = "<group>"; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
@@ -457,6 +475,30 @@
 			path = GroupChatDetailView;
 			sourceTree = "<group>";
 		};
+		1015C43D262553E100407C35 /* AppTheme */ = {
+			isa = PBXGroup;
+			children = (
+				1015C43E262553F900407C35 /* AppFonts.swift */,
+				1015C4462625540500407C35 /* AppColors.swift */,
+				1015C44B2625542B00407C35 /* DefaultFonts.swift */,
+				1015C4502625543700407C35 /* DefaultColors.swift */,
+				1015C4552625544C00407C35 /* AppTheme.swift */,
+			);
+			path = AppTheme;
+			sourceTree = "<group>";
+		};
+		103B4942262575C900EDD89B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */,
+				103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */,
+				103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */,
+				103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */,
+				103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		10E83D3326240531002D7B10 /* ViewModifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,6 +510,7 @@
 		16208E2E252D6351000A6CE7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				103B4942262575C900EDD89B /* Fonts */,
 				1097154F2614146C0045FE63 /* credentials.plist */,
 				1664F1BA252C6B4900FF37AD /* Assets.xcassets */,
 				1664F1BF252C6B4900FF37AD /* LaunchScreen.storyboard */,
@@ -480,6 +523,7 @@
 		16208E2F252D63B6000A6CE7 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1015C43D262553E100407C35 /* AppTheme */,
 				56205ADC25A2B67E00B39D07 /* CallKitManager */,
 				56205ADA25A2B65400B39D07 /* WebRTCJanus */,
 				56C7F319254A709300737C5F /* Controllers */,
@@ -997,7 +1041,6 @@
 			children = (
 				686F25F4255E774600953C5E /* Constant.swift */,
 				108C7EC62616AF01003B6936 /* AppConfig.swift */,
-				10E83D4426243CFC002D7B10 /* AppTheme.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1164,17 +1207,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				103B494C2625766800EDD89B /* SF-Pro-Text-Medium.otf in Resources */,
 				1664F1C1252C6B4900FF37AD /* LaunchScreen.storyboard in Resources */,
+				103B494F2625766800EDD89B /* SF-Pro-Text-Bold.otf in Resources */,
 				56694AD225B53C8A008E8EC5 /* add_dependency.png in Resources */,
 				56694AD425B53C8A008E8EC5 /* navigator.png in Resources */,
 				109715502614146C0045FE63 /* credentials.plist in Resources */,
 				56694AD325B53C8A008E8EC5 /* Indicators.gif in Resources */,
 				1664F1BE252C6B4900FF37AD /* Preview Assets.xcassets in Resources */,
+				103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */,
 				56694AD125B53C8A008E8EC5 /* add_package.png in Resources */,
 				1664F1BB252C6B4900FF37AD /* Assets.xcassets in Resources */,
 				10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */,
 				56694AD525B53C8A008E8EC5 /* basetextalignment.png in Resources */,
+				103B494D2625766800EDD89B /* SF-Pro-Text-Thin.otf in Resources */,
 				56694AD625B53C8A008E8EC5 /* CircularIndicator_resizable_text.gif in Resources */,
+				103B494E2625766800EDD89B /* SF-Pro-Text-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1374,6 +1422,7 @@
 				6880CF5425F9C1C100F3DECE /* notify.grpc.swift in Sources */,
 				6880CF6225F9C1C100F3DECE /* message.pb.swift in Sources */,
 				6880CF6125F9C1C100F3DECE /* message.grpc.swift in Sources */,
+				1015C4512625543700407C35 /* DefaultColors.swift in Sources */,
 				102770942615A7D00001BBC6 /* UIViewControllerExtension.swift in Sources */,
 				5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
@@ -1384,6 +1433,7 @@
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
+				1015C4562625544C00407C35 /* AppTheme.swift in Sources */,
 				56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
 				6880CF5A25F9C1C100F3DECE /* auth.grpc.swift in Sources */,
 				56205B1525A2C36D00B39D07 /* JanusRolePublish.swift in Sources */,
@@ -1410,6 +1460,7 @@
 				56694ADA25B53C8A008E8EC5 /* LinearProgressIndicator.swift in Sources */,
 				56205B0F25A2C36D00B39D07 /* Janus.swift in Sources */,
 				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
+				1015C4472625540500407C35 /* AppColors.swift in Sources */,
 				6880CF5625F9C1C100F3DECE /* group.grpc.swift in Sources */,
 				10971560261417B10045FE63 /* SocialLogin.swift in Sources */,
 				56205B0C25A2C36D00B39D07 /* JanusWebsocket.swift in Sources */,
@@ -1441,6 +1492,7 @@
 				56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */,
 				5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */,
 				108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */,
+				1015C44C2625542B00407C35 /* DefaultFonts.swift in Sources */,
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
 				106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
@@ -1452,6 +1504,7 @@
 				569FFBBC254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */,
 				6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */,
+				1015C43F262553F900407C35 /* AppFonts.swift in Sources */,
 				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
@@ -1471,7 +1524,6 @@
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
 				56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */,
-				10E83D4526243CFC002D7B10 /* AppTheme.swift in Sources */,
 				56694AD725B53C8A008E8EC5 /* SuccessIndicator.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
