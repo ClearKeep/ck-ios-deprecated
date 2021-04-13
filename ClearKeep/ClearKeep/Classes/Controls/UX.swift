@@ -116,13 +116,42 @@ struct TextFieldWithLeftIcon: View {
     var body: some View {
         HStack(alignment: .center) {
             Image(leftIconName)
-                .accentColor(.gray)
-                .padding()
-            
+                .foregroundColor(Constants.Color.colorIcon.color)
+                .padding(.leading, 16)
             TextField(title, text: $text, onEditingChanged: onEditingChanged)
+                .autocapitalization(.none)
+                .font(.system(size: 16))
+                .foregroundColor(Color.black)
+                .disableAutocorrection(true)
+                .keyboardType(.emailAddress)
+                .textFieldStyle(MyTextFieldStyle())
         }
-        .frame(height: 50)
-        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1))
+        .frame(height: 52)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+struct ButtonAuth: View {
+    
+    private var title: String
+    private var action: () -> Void
+    
+    init(_ title: String, action: @escaping() -> Void) {
+        self.title = title
+        self.action = action
+    }
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 14))
+                .fontWeight(.bold)
+                .foregroundColor(Constants.Color.primary.color)
+                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                .background(Constants.Color.grayScale.color)
+        }
+        .cornerRadius(20)
     }
 }
 
