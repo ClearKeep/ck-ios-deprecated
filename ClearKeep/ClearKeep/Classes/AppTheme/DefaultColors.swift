@@ -51,6 +51,8 @@ struct DefaultColors: AppColors {
     var titleActive: UIColor
     var label: UIColor
     
+    var textFieldIconTint: UIColor
+    
     init(
         primary: UIColor = #colorLiteral(red: 0.3835987449, green: 0.4038437307, blue: 0.9832308888, alpha: 1),// UIColor(hex: "#6267FB"),
         primaryDark: UIColor = #colorLiteral(red: 0.2133642435, green: 0.2326667011, blue: 0.8172033429, alpha: 1),// UIColor(hex: "#363BD0"),
@@ -92,7 +94,8 @@ struct DefaultColors: AppColors {
         
         body: UIColor = #colorLiteral(red: 0.3056983948, green: 0.2958287597, blue: 0.399384588, alpha: 1),// UIColor(hex: "#4E4B66"),
         titleActive: UIColor = #colorLiteral(red: 0.0780204162, green: 0.07602141052, blue: 0.1672900021, alpha: 1),// UIColor(hex: "#14142B"),
-        label: UIColor = #colorLiteral(red: 0.4304504395, green: 0.4445848465, blue: 0.5689668655, alpha: 1) // UIColor(hex: "#6E7191")
+        label: UIColor = #colorLiteral(red: 0.4304504395, green: 0.4445848465, blue: 0.5689668655, alpha: 1), // UIColor(hex: "#6E7191")
+        textFieldIconTint: UIColor  = #colorLiteral(red: 0.1737822592, green: 0.245875895, blue: 0.3166037202, alpha: 1) // UIColor(hex: "#2C3E50")
     ) {
         self.primary = primary
         self.primaryDark = primaryDark
@@ -135,5 +138,7 @@ struct DefaultColors: AppColors {
         self.body = body
         self.titleActive = titleActive
         self.label = label
+        
+        self.textFieldIconTint = textFieldIconTint
     }
 }

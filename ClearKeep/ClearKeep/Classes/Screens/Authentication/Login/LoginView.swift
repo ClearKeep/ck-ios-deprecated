@@ -34,7 +34,7 @@ struct LoginView: View {
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 120, height: 120, alignment: .center)
                                 .padding(.all, 20)
-                                .padding(.top, 40)
+                                .padding(.top, 60)
                             
                             VStack(alignment: .leading, spacing: 24) {
                                 
@@ -282,6 +282,8 @@ extension LoginView {
             self.isShowAlert = true
             return
         } else if !self.isEmailValid {
+            self.messageAlert = "Email is incorrect"
+            self.isShowAlert = true
             return
         } else if self.password.isEmpty {
             self.isPasswordValid = false

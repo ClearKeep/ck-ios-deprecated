@@ -50,5 +50,7 @@ protocol AppColors {
     var body: UIColor { get }
     var titleActive: UIColor { get }
     var label: UIColor { get }
+    
+    var textFieldIconTint: UIColor { get }
 }
 

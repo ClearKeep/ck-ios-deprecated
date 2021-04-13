@@ -1,6 +1,10 @@
 
 import SwiftUI
 
+typealias VoidCompletion = () -> Void
+typealias BoolCompletion = (Bool) -> Void
+typealias ObjectCompletion = (Any?) -> Void
+
 struct TitleLabel : View {
     private let text: String
     
@@ -129,6 +133,52 @@ struct TextFieldWithLeftIcon: View {
         .frame(height: 52)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+
+/// Custom textfield with left icon, error message
+struct InputTextField: View {
+    @Binding private var text: String
+    @Binding private var errorMessage: String
+    @State private var isActive = false
+    
+    private var title: String
+    private var leftIconName: String
+    private var onEditingChanged: BoolCompletion
+    
+    init(_ title: String, leftIconName: String, text: Binding<String>, errorMessage: Binding<String>, onEditingChanged: @escaping BoolCompletion) {
+        self.title = title
+        self.leftIconName = leftIconName
+        self._text = text
+        self._errorMessage = errorMessage
+        self.onEditingChanged = onEditingChanged
+    }
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Image(leftIconName)
+                .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                .padding(.leading, 16)
+            TextField(title, text: $text, onEditingChanged: { (isChange) in
+                onEditingChanged(isChange)
+                self.isActive = isChange
+            })
+                .autocapitalization(.none)
+                .font(.system(size: 16))
+                .foregroundColor(AppTheme.colors.black.color)
+                .disableAutocorrection(true)
+                .keyboardType(.default)
+                .textFieldStyle(MyTextFieldStyle())
+        }
+        .frame(height: 52)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(AppTheme.colors.black.color, lineWidth: isActive ? 2 : 0)
+        )
+        .padding(.horizontal, isActive ? 2 : 0)
     }
 }
 
