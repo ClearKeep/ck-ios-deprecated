@@ -17,6 +17,12 @@ struct RegisterView: View {
     @State var passWordConfirm: String = ""
     @State var firstName: String = ""
     @State var lastName: String = ""
+    
+    @State var errorMsgEmail: String = ""
+    @State var errorMsgDisplayName: String = ""
+    @State var errorMsgPassword: String = ""
+    @State var errorMsgConfirmPwd: String = ""
+    
     @Binding var isPresentModel: Bool
     @State var hudVisible = false
     @State var isShowAlert = false
@@ -34,12 +40,47 @@ struct RegisterView: View {
             GeometryReader { reader in
                 ScrollView(.vertical, showsIndicators: false, content: {
                     VStack {
-                        Image("ic_app")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 100, height: 100, alignment: .center)
-                            .padding(.top , 15)
+                        LogoIconView()
+                            .padding(.top , 40)
                         
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Please fill in the information below to complete your sign up")
+                                .font(AppTheme.fonts.textMedium.font)
+                                .foregroundColor(AppTheme.colors.black.color)
+                            
+                            CustomTextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email, errorMessage: $errorMsgEmail) { (isChanged) in
+                                if !isChanged {
+                                    self.isEmailValid = self.email.textFieldValidatorEmail()
+                                    errorMsgEmail = self.isEmailValid ? "" : " "
+                                }
+                            }
+
+                            CustomTextFieldWithLeftIcon("Display Name", leftIconName: "User-check", text: $userName, errorMessage: $errorMsgDisplayName) { (isChanged) in
+                                if !isChanged {
+                                    self.isDisplayNameValid = !self.userName.trimmingCharacters(in: .whitespaces).isEmpty
+                                    errorMsgDisplayName = self.isDisplayNameValid ? "" : " "
+                                }
+                            }
+                            
+                            CustomSecureTextWithLeftIcon("Password",leftIconName: "Lock", text: $passWord, errorMessage: $errorMsgPassword)
+                            
+                            CustomSecureTextWithLeftIcon("Confirm Password",leftIconName: "Lock", text: $passWordConfirm, errorMessage: $errorMsgPassword)
+                            
+                            HStack {
+                                PlainButton("Sign in instead") {
+                                    self.isPresentModel = false
+                                }
+                                
+                                Spacer()
+                                
+                                RoundedGradientButton("Sign up", fixedWidth: 120, action: register)
+                            }
+                            .padding(.top, 10)
+                        }
+                        .padding(.vertical, 10)
+                        .embededInCardView()
+
+                        /*
                         VStack(alignment:.leading, spacing: 10) {
                             
                             TitleTextField("Email")
@@ -118,21 +159,14 @@ struct RegisterView: View {
                         .cornerRadius(10)
                         .padding(.top, 20)
                         .padding(.bottom, 10)
-
+                        */
                     }
                 })
+                
             }
         }
-        .navigationBarItems(leading:
-                                Image("ic_back_navigation")
-                                .scaledToFit()
-                                .foregroundColor(Color.blue)
-                                .frame(width: 50, height: 50)
-                                .onTapGesture {
-                                    self.isPresentModel = false
-                                })
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitle("Register ClearKeep Account", displayMode: .inline)
+        .navigationBarHidden(true)
+        //.navigationBarTitle("", displayMode: .inline)
         .gesture(
             TapGesture()
                 .onEnded { _ in
@@ -150,6 +184,7 @@ struct RegisterView: View {
                     }
                   }))
         })
+        .grandientBackground()
     }
 }
 
@@ -210,14 +245,15 @@ extension RegisterView {
 
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        Button(action: {}) {
-            Text("Button")
-                .foregroundColor(.white)
-                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 0)
-                .background(Color.blue)
-        }
-        .cornerRadius(10)
-        .padding()
+        RegisterView(isPresentModel: .constant(true))
+//        Button(action: {}) {
+//            Text("Button")
+//                .foregroundColor(.white)
+//                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 0)
+//                .background(Color.blue)
+//        }
+//        .cornerRadius(10)
+//        .padding()
     }
     
 }
