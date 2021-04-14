@@ -13,6 +13,8 @@ import GoogleSignIn
 import Firebase
 import MSAL
 
+import IQKeyboardManagerSwift
+
 //@main
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, GIDSignInDelegate {
@@ -181,6 +183,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
                 }
             }
         }
+        
+        IQKeyboardManager.shared.enable = true
         
         return true
     }

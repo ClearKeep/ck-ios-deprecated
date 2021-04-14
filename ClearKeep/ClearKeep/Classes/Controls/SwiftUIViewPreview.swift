@@ -25,18 +25,6 @@ struct SwiftUIViewPreview: View {
                 errorMessage1 = text1.isEmpty ? "This field should not be empty" : ""
             }
 
-            CustomTextFieldWithLeftIcon("Input", leftIconName: "Mail", text: $text2, errorMessage: $errorMessage2) { (changed) in
-                print("\(changed)")
-                errorMessage4 = text2.isEmpty ? "This field should not be empty" : ""
-            }
-            
-            WrappedSecureTextWithLeftIcon("Wrapped TF", leftIconName: "Lock", text: $text3, errorMessage: $errorMessage3)
-
-            CustomSecureTextWithLeftIcon("Input", leftIconName: "Lock", text: $text4, errorMessage: $errorMessage4)
-            
-            RoundedGradientButton("Sign up", fixedWidth: 120) {
-                
-            }
         }
         .embededInCardView()
         .padding()

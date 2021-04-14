@@ -23,6 +23,13 @@ struct LoginView: View {
     
     @State private var colorBorder = Color.gray
     
+    @State private var errorMsgEmail = ""
+    @State private var errorMsgPassword = ""
+    
+    @State private var emailIsFocused = false
+    @State private var passWordIsFocused = false
+    
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -30,23 +37,17 @@ struct LoginView: View {
                     ScrollView(.vertical, showsIndicators: false, content: {
                         VStack(alignment: .center, spacing: 24) {
                             LogoIconView()
-                                .padding(.top, 40)
+                                .padding(.top, 20)
                             
                             VStack(alignment: .leading, spacing: 24) {
-                                  
-                                TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { (isChanged) in
-                                    if !isChanged {
-                                        self.isEmailValid = self.email.textFieldValidatorEmail()
-                                        colorBorder = self.isEmailValid ? Color.gray : Color.red
-                                    }
-                                }
                                 
-                                SecureFieldWithLeftIcon("Password", leftIconName: "Lock", text: $password)
+                                WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", shouldShowBorderWhenFocused: false, text: $email, errorMessage: $errorMsgEmail, isFocused: $emailIsFocused)
+                                
+                                WrappedSecureTextWithLeftIcon("Password",leftIconName: "Lock", shouldShowBorderWhenFocused: false, text: $password, errorMessage: $errorMsgPassword, isFocused: $passWordIsFocused)
                                 
                                 ButtonAuth("Login") {
                                     login()
                                 }
-                                
                                 
                                 NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
                                     Button(action: {
@@ -60,6 +61,7 @@ struct LoginView: View {
                                 }
                                 
                                 Divider()
+                                    .frame(height: 0.5)
                                     .background(AppTheme.colors.offWhite.color)
                                 
                                 SocialSignInButton(signInType: .google)
@@ -100,12 +102,12 @@ struct LoginView: View {
                                 }
                             }
                         }
+                        .padding(.vertical, 20)
                     })
                 }
             }
             .navigationBarHidden(true)
             .navigationBarTitle("", displayMode: .inline)
-            .keyboardManagment()
             .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             .alert(isPresented: self.$isShowAlert, content: {
                 Alert(title: Text("Login Error"),
@@ -118,7 +120,6 @@ struct LoginView: View {
                         UIApplication.shared.endEditing()
                     })
             .padding()
-            .grandientBackground()
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithResponse)) { (obj) in
                 if let userInfo = obj.userInfo,
                    let user = userInfo["user"] as? GIDGoogleUser {
@@ -133,6 +134,9 @@ struct LoginView: View {
                     self.loginWithMicrosoftAccessToken(accessToken)
                 }
             }
+            //.keyboardAdaptive()
+            .grandientBackground()
+            .animation(.none)
         }
     }
     
@@ -317,7 +321,7 @@ extension LoginView {
                     self.messageAlert = "Something went wrong"
                     self.isShowAlert = true
                 }
-            }else {
+            } else {
                 hudVisible = false
                 self.isShowAlert = true
                 self.messageAlert = result.baseResponse.errors.message
