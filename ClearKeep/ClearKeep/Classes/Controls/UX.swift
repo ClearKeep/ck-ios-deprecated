@@ -43,6 +43,17 @@ struct MyTextFieldStyle: TextFieldStyle {
     }
 }
 
+struct LogoIconView : View {
+    
+    var body: some View {
+        Image("Logo")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 120, height: 120, alignment: .center)
+            .padding(.all, 40)
+    }
+}
+
 struct UserImage : View {
     let name: String
     
@@ -120,18 +131,18 @@ struct TextFieldWithLeftIcon: View {
     var body: some View {
         HStack(alignment: .center) {
             Image(leftIconName)
-                .foregroundColor(Constants.Color.colorIcon.color)
+                .foregroundColor(AppTheme.colors.textFieldIconTint.color)
                 .padding(.leading, 16)
             TextField(title, text: $text, onEditingChanged: onEditingChanged)
                 .autocapitalization(.none)
-                .font(.system(size: 16))
-                .foregroundColor(Color.black)
+                .font(AppTheme.fonts.textSmall.font)
+                .foregroundColor(AppTheme.colors.black.color)
                 .disableAutocorrection(true)
                 .keyboardType(.emailAddress)
                 .textFieldStyle(MyTextFieldStyle())
         }
         .frame(height: 52)
-        .background(Color.white)
+        .background(AppTheme.colors.gray5.color)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
@@ -197,9 +208,9 @@ struct ButtonAuth: View {
             Text(title)
                 .font(.system(size: 14))
                 .fontWeight(.bold)
-                .foregroundColor(Constants.Color.primary.color)
+                .foregroundColor(AppTheme.colors.primary.color)
                 .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
-                .background(Constants.Color.grayScale.color)
+                .background(AppTheme.colors.offWhite.color)
         }
         .cornerRadius(20)
     }
@@ -241,6 +252,53 @@ struct PasswordSecureField : View {
     
     var body: some View {
         return SecureField("", text: $password)
+    }
+}
+
+struct SecureFieldWithLeftIcon: View {
+    @Binding private var text: String
+    @State private var isSecured: Bool = true
+    
+    private var title: String
+    private var leftIconName: String
+    
+    init(_ title: String, leftIconName: String, text: Binding<String>) {
+        self.title = title
+        self._text = text
+        self.leftIconName = leftIconName
+    }
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Image(leftIconName)
+                .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                .padding(.leading, 16)
+            
+            Group {
+                if isSecured {
+                    SecureField(title, text: $text)
+                } else {
+                    TextField(title, text: $text)
+                }
+            }
+            .autocapitalization(.none)
+            .font(AppTheme.fonts.textSmall.font)
+            .foregroundColor(AppTheme.colors.black.color)
+            .disableAutocorrection(true)
+            .keyboardType(.emailAddress)
+            .textFieldStyle(MyTextFieldStyle())
+            
+            Button(action: {
+                self.isSecured.toggle()
+            }) {
+                Image(self.isSecured ? "eye" : "eye-cross")
+                    .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                    .padding(.trailing, 16)
+            }
+        }
+        .frame(height: 52)
+        .background(AppTheme.colors.gray5.color)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
 

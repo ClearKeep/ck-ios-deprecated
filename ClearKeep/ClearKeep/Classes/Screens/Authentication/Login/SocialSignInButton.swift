@@ -17,8 +17,7 @@ struct SocialSignInButton: View {
                     Spacer()
                     
                     Text(signInType.title)
-                        .font(.system(size: 14))
-                        .fontWeight(.bold)
+                        .font(AppTheme.fonts.linkSmall.font)
                         .foregroundColor(signInType.titleColor)
                         .padding(.leading, 8)
                     
@@ -78,6 +77,6 @@ extension SocialSignInButton {
 
 struct SocialSignInButton_Previews: PreviewProvider {
     static var previews: some View {
-        SocialSignInButton(signInType: .office365)
+        SocialSignInButton(signInType: .google)
     }
 }

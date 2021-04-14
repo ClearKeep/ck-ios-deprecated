@@ -25,7 +25,7 @@ struct ForgotPassWordView: View {
                 HStack(spacing: 16) {
                     Image("ic_back_white")
                         .frame(width: 40, height: 40)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
                         .fixedSize()
                         .scaledToFit()
                         .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
@@ -33,14 +33,14 @@ struct ForgotPassWordView: View {
                         })
                     Text("Forgot passwords")
                         .fontWeight(.bold)
-                        .font(.system(size: 16))
-                        .foregroundColor(Constants.Color.offWhite.color)
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
                 }.padding(.top, 59)
                 
                 Text("Please enter your email to reset your password")
                     .fontWeight(.medium)
-                    .font(.system(size: 16))
-                    .foregroundColor(Constants.Color.grayScale.color)
+                    .font(AppTheme.fonts.textMedium.font)
+                    .foregroundColor(AppTheme.colors.gray5.color)
                     .padding(.top, 26)
                 
                 TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { _ in  }

@@ -29,78 +29,38 @@ struct LoginView: View {
                 GeometryReader { reader in
                     ScrollView(.vertical, showsIndicators: false, content: {
                         VStack(alignment: .center, spacing: 24) {
-                            Image("Logo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 120, height: 120, alignment: .center)
-                                .padding(.all, 20)
-                                .padding(.top, 60)
+                            LogoIconView()
+                                .padding(.top, 40)
                             
                             VStack(alignment: .leading, spacing: 24) {
-                                
-                                HStack(alignment: .center) {
-                                    Image("Mail")
-                                        .foregroundColor(.gray)
-                                        .padding()
-                                    
-                                    TextField("Email", text: $email, onEditingChanged: { (isChanged) in
-                                        if !isChanged {
-                                            self.isEmailValid = self.email.textFieldValidatorEmail()
-                                            colorBorder = self.isEmailValid ? Color.gray : Color.red
-                                        }
-                                    })
-                                    .keyboardType(.emailAddress)
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                                    .textFieldStyle(MyTextFieldStyle())
+                                  
+                                TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { (isChanged) in
+                                    if !isChanged {
+                                        self.isEmailValid = self.email.textFieldValidatorEmail()
+                                        colorBorder = self.isEmailValid ? Color.gray : Color.red
+                                    }
                                 }
-                                .font(.system(size: 20))
-                                .frame(height: 50)
-                                .background(Color.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 
-                                HStack(alignment: .center) {
-                                    Image("Lock")
-                                        .foregroundColor(.gray)
-                                        
-                                        .padding()
-                                    
-                                    SecureInputView("Password", text: $password)
-                                        .keyboardType(.emailAddress)
-                                        .autocapitalization(.none)
-                                        .disableAutocorrection(true)
-                                        .textFieldStyle(MyTextFieldStyle())
-                                }
-                                .font(.system(size: 20))
-                                .frame(height: 50)
-                                .background(Color.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                SecureFieldWithLeftIcon("Password", leftIconName: "Lock", text: $password)
                                 
-                                Button(action: login) {
-                                    Text("Login")
-                                        .font(.system(size: 14))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(AppTheme.colors.primary.color)
-                                        .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
-                                        .background(Color.white)
-                                    
+                                ButtonAuth("Login") {
+                                    login()
                                 }
-                                .cornerRadius(20)
+                                
                                 
                                 NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
                                     Button(action: {
                                         isForgotPassword = true
                                     }) {
                                         Text("Forgot password?")
-                                            .font(.system(size: 14))
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.white)
+                                            .font(AppTheme.fonts.linkSmall.font)
+                                            .foregroundColor(AppTheme.colors.offWhite.color)
                                     }
                                     .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                                 }
                                 
                                 Divider()
-                                    .background(Color.white)
+                                    .background(AppTheme.colors.offWhite.color)
                                 
                                 SocialSignInButton(signInType: .google)
                                 
@@ -110,9 +70,8 @@ struct LoginView: View {
                                     Spacer()
                                     
                                     Text("Don't have an account?")
-                                        .font(.system(size: 14))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
+                                        .font(AppTheme.fonts.linkSmall.font)
+                                        .foregroundColor(AppTheme.colors.offWhite.color)
                                     
                                     Spacer()
                                 }
@@ -126,9 +85,8 @@ struct LoginView: View {
                                             Spacer()
                                             
                                             Text("Sign up")
-                                                .font(.system(size: 14))
-                                                .fontWeight(.bold)
-                                                .foregroundColor(.white)
+                                                .font(AppTheme.fonts.linkSmall.font)
+                                                .foregroundColor(AppTheme.colors.offWhite.color)
                                                 .frame(width: 254, height: 40, alignment: .center)
                                                 .background(Color.clear)
                                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))

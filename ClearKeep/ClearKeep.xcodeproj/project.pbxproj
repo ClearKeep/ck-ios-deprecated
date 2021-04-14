@@ -28,6 +28,7 @@
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
+		10D650BC262681300018528B /* UIFont+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650BB262681300018528B /* UIFont+Font.swift */; };
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
@@ -238,6 +239,7 @@
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
+		10D650BB262681300018528B /* UIFont+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Font.swift"; sourceTree = "<group>"; };
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
@@ -1032,6 +1034,7 @@
 				328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */,
 				102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */,
 				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
+				10D650BB262681300018528B /* UIFont+Font.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1531,6 +1534,7 @@
 				689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */,
 				68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */,
 				56694AA625B53C39008E8EC5 /* ViewExtension.swift in Sources */,
+				10D650BC262681300018528B /* UIFont+Font.swift in Sources */,
 				6880CF6425F9C1C100F3DECE /* notify_push.pb.swift in Sources */,
 				56694ADC25B53C8A008E8EC5 /* InnerIndicatorText.swift in Sources */,
 				56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */,
