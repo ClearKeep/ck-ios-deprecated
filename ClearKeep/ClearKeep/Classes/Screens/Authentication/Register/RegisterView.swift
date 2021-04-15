@@ -52,6 +52,7 @@ struct RegisterView: View {
                         .padding(.vertical, 10)
                         .embededInCardView()
                     }
+                    .padding()
                     .padding(.vertical, 20)
                 })
                 
@@ -63,7 +64,6 @@ struct RegisterView: View {
                 .onEnded { _ in
                     UIApplication.shared.endEditing()
                 })
-        .padding()
         .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
         .alert(isPresented: $viewModel.isShowAlert, content: {
             Alert(title: Text(self.viewModel.titleAlert),
@@ -74,9 +74,8 @@ struct RegisterView: View {
                     }
                   }))
         })
-        //.keyboardAdaptive()
+        .keyboardAdaptive()
         .grandientBackground()
-        .animation(.none)
     }
 }
 

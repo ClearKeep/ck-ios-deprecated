@@ -102,6 +102,7 @@ struct LoginView: View {
                                 }
                             }
                         }
+                        .padding()
                         .padding(.vertical, 20)
                     })
                 }
@@ -119,7 +120,6 @@ struct LoginView: View {
                     .onEnded { _ in
                         UIApplication.shared.endEditing()
                     })
-            .padding()
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithResponse)) { (obj) in
                 if let userInfo = obj.userInfo,
                    let user = userInfo["user"] as? GIDGoogleUser {
@@ -134,9 +134,8 @@ struct LoginView: View {
                     self.loginWithMicrosoftAccessToken(accessToken)
                 }
             }
-            //.keyboardAdaptive()
+            .keyboardAdaptive()
             .grandientBackground()
-            .animation(.none)
         }
     }
     

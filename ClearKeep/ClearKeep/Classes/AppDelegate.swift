@@ -184,7 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
             }
         }
         
-        IQKeyboardManager.shared.enable = true
+        //IQKeyboardManager.shared.enable = true
         
         return true
     }

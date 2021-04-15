@@ -10,14 +10,20 @@ import SwiftUI
 struct GradientBackground: ViewModifier {
     
     func body(content: Content) -> some View {
-        ZStack(alignment: .center) {
+        ZStack(alignment: .topLeading) {
             LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height + 20, alignment: .center)
-                .edgesIgnoringSafeArea(.all)
+                .frame(minWidth: 0,
+                       maxWidth: .infinity,
+                       minHeight: 0,
+                       maxHeight: .infinity,
+                       alignment: .topLeading
+                )
+                //.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
+                
             
             content
-                .padding(.bottom, 10)
-        }
+                .edgesIgnoringSafeArea(.all)
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
@@ -28,7 +34,7 @@ extension View {
     
     func gradientHeader() -> some View{
         ZStack(alignment: .center) {
-        self.background(LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing))
+            self.background(LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing))
         }
     }
 }
