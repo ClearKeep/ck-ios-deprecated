@@ -16,6 +16,7 @@
 		1015C4562625544C00407C35 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4552625544C00407C35 /* AppTheme.swift */; };
 		10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */; };
 		102770942615A7D00001BBC6 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */; };
+		1027ECCD2627F09A00731BFE /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */; };
 		103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */; };
 		103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
 		103B494C2625766800EDD89B /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */; };
@@ -29,6 +30,11 @@
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		10D650BC262681300018528B /* UIFont+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650BB262681300018528B /* UIFont+Font.swift */; };
+		10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */; };
+		10D650CC2626BEF60018528B /* CardViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650CB2626BEF60018528B /* CardViewContainer.swift */; };
+		10D650D12626C39B0018528B /* UX+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650D02626C39B0018528B /* UX+TextField.swift */; };
+		10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650D52626D2A60018528B /* UX+WrappedTextField.swift */; };
+		10D650DE2626F4F30018528B /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650DD2626F4F30018528B /* RegisterViewModel.swift */; };
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
@@ -227,6 +233,7 @@
 		1015C4552625544C00407C35 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
+		1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatMemberView.swift; sourceTree = "<group>"; };
 		103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
@@ -240,6 +247,11 @@
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		10D650BB262681300018528B /* UIFont+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Font.swift"; sourceTree = "<group>"; };
+		10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewPreview.swift; sourceTree = "<group>"; };
+		10D650CB2626BEF60018528B /* CardViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewContainer.swift; sourceTree = "<group>"; };
+		10D650D02626C39B0018528B /* UX+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+TextField.swift"; sourceTree = "<group>"; };
+		10D650D52626D2A60018528B /* UX+WrappedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+WrappedTextField.swift"; sourceTree = "<group>"; };
+		10D650DD2626F4F30018528B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
@@ -505,6 +517,8 @@
 			isa = PBXGroup;
 			children = (
 				10E83D3F262405E7002D7B10 /* GradientBackground.swift */,
+				10D650CB2626BEF60018528B /* CardViewContainer.swift */,
+				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -547,7 +561,10 @@
 			isa = PBXGroup;
 			children = (
 				16BDC85525306C1200552C48 /* UX.swift */,
+				10D650D02626C39B0018528B /* UX+TextField.swift */,
+				10D650D52626D2A60018528B /* UX+WrappedTextField.swift */,
 				566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */,
+				10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -1020,6 +1037,7 @@
 			isa = PBXGroup;
 			children = (
 				686F25CC255CE81400953C5E /* RegisterView.swift */,
+				10D650DD2626F4F30018528B /* RegisterViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1401,11 +1419,13 @@
 				1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */,
 				56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */,
 				6881DBE125E7AB32009EDA73 /* ViewExtensions.swift in Sources */,
+				10D650CC2626BEF60018528B /* CardViewContainer.swift in Sources */,
 				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				6880CF6025F9C1C100F3DECE /* video_call.grpc.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
+				1027ECCD2627F09A00731BFE /* KeyboardAdaptive.swift in Sources */,
 				689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */,
 				56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
@@ -1420,6 +1440,7 @@
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
+				10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
 				689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */,
 				6880CF5425F9C1C100F3DECE /* notify.grpc.swift in Sources */,
@@ -1474,6 +1495,7 @@
 				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
+				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
 				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
 				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
@@ -1512,6 +1534,7 @@
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */,
+				10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */,
 				6880CF5B25F9C1C100F3DECE /* notify.pb.swift in Sources */,
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
@@ -1534,6 +1557,7 @@
 				689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */,
 				68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */,
 				56694AA625B53C39008E8EC5 /* ViewExtension.swift in Sources */,
+				10D650DE2626F4F30018528B /* RegisterViewModel.swift in Sources */,
 				10D650BC262681300018528B /* UIFont+Font.swift in Sources */,
 				6880CF6425F9C1C100F3DECE /* notify_push.pb.swift in Sources */,
 				56694ADC25B53C8A008E8EC5 /* InnerIndicatorText.swift in Sources */,
