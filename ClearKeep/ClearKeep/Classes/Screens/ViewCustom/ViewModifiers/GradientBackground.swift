@@ -24,4 +24,10 @@ extension View {
     func grandientBackground() -> some View {
         self.modifier(GradientBackground())
     }
+    
+    func gradientHeader() -> some View{
+        ZStack(alignment: .center) {
+        self.background(LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing))
+        }
+    }
 }

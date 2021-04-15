@@ -206,7 +206,7 @@ struct ButtonAuth: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 14))
+                .font(AppTheme.fonts.textSmall.font)
                 .fontWeight(.bold)
                 .foregroundColor(AppTheme.colors.primary.color)
                 .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
