@@ -7,21 +7,28 @@
 
 import SwiftUI
 
-struct WrappedSecureTextWithLeftIcon: View {
+struct WrappedTextFieldWithLeftIcon: View {
     @Binding var text: String
     @Binding private var errorMessage: String
     @Binding private var isFocused: Bool
     
-    @State private var isRevealed = false
-    
     private var title: String
     private var leftIconName: String
     private var shouldShowBorderWhenFocused: Bool
+    private var keyboardType: UIKeyboardType
     
-    init(_ title: String, leftIconName: String, shouldShowBorderWhenFocused: Bool = true, text: Binding<String>, errorMessage: Binding<String>, isFocused: Binding<Bool>) {
+    init(_ title: String,
+         leftIconName: String = "",
+         shouldShowBorderWhenFocused: Bool = true,
+         keyboardType: UIKeyboardType = .default,
+         text: Binding<String>,
+         errorMessage: Binding<String>,
+         isFocused: Binding<Bool> = .constant(false))
+    {
         self.title = title
         self.leftIconName = leftIconName
         self.shouldShowBorderWhenFocused = shouldShowBorderWhenFocused
+        self.keyboardType = keyboardType
         
         self._text = text
         self._errorMessage = errorMessage
@@ -47,14 +54,20 @@ struct WrappedSecureTextWithLeftIcon: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack(alignment: .center) {
-                Image(leftIconName)
-                    .foregroundColor(AppTheme.colors.textFieldIconTint.color)
-                    .padding(.leading, 16)
+                if !leftIconName.isEmpty {
+                    Image(leftIconName)
+                        .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                        .padding(.leading, 16)
+                } else {
+                    Spacer()
+                        .frame(width: 14)
+                }
                 
                 WrappedTextField(text: $text,
-                                 isRevealed: $isRevealed,
-                                 isFocused: $isFocused, placeHolder: title)
-                    
+                                 isRevealed: .constant(true),
+                                 isFocused: $isFocused,
+                                 placeHolder: title,
+                                 keyboardType: keyboardType)
                     .autocapitalization(.none)
                     .font(AppTheme.fonts.textSmall.font)
                     .foregroundColor(AppTheme.colors.black.color)
@@ -63,13 +76,6 @@ struct WrappedSecureTextWithLeftIcon: View {
                     .textFieldStyle(MyTextFieldStyle())
                     .padding(.leading, 10)
                 
-                Button(action: {
-                    self.isRevealed.toggle()
-                }) {
-                    Image(self.isRevealed ? "eye" : "eye-cross")
-                        .foregroundColor(AppTheme.colors.textFieldIconTint.color)
-                        .padding(.trailing, 16)
-                }
             }
             .frame(height: 52)
             .background(shouldShowError ? AppTheme.colors.errorLight.color : AppTheme.colors.gray5.color)
@@ -94,20 +100,30 @@ struct WrappedSecureTextWithLeftIcon: View {
     }
 }
 
-struct WrappedTextFieldWithLeftIcon: View {
+struct WrappedSecureTextWithLeftIcon: View {
     @Binding var text: String
     @Binding private var errorMessage: String
     @Binding private var isFocused: Bool
     
+    @State private var isRevealed = false
     
     private var title: String
     private var leftIconName: String
     private var shouldShowBorderWhenFocused: Bool
+    private var keyboardType: UIKeyboardType
     
-    init(_ title: String, leftIconName: String, shouldShowBorderWhenFocused: Bool = true, text: Binding<String>, errorMessage: Binding<String>, isFocused: Binding<Bool>) {
+    init(_ title: String,
+         leftIconName: String,
+         shouldShowBorderWhenFocused: Bool = true,
+         keyboardType: UIKeyboardType = .default,
+         text: Binding<String>,
+         errorMessage: Binding<String>,
+         isFocused: Binding<Bool> = .constant(false))
+    {
         self.title = title
         self.leftIconName = leftIconName
         self.shouldShowBorderWhenFocused = shouldShowBorderWhenFocused
+        self.keyboardType = keyboardType
         
         self._text = text
         self._errorMessage = errorMessage
@@ -133,13 +149,19 @@ struct WrappedTextFieldWithLeftIcon: View {
     var body: some View {
         VStack(spacing: 8) {
             HStack(alignment: .center) {
-                Image(leftIconName)
-                    .foregroundColor(AppTheme.colors.textFieldIconTint.color)
-                    .padding(.leading, 16)
+                if !leftIconName.isEmpty {
+                    Image(leftIconName)
+                        .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                        .padding(.leading, 16)
+                } else {
+                    Spacer()
+                        .frame(width: 14)
+                }
                 
                 WrappedTextField(text: $text,
-                                 isRevealed: .constant(true),
+                                 isRevealed: $isRevealed,
                                  isFocused: $isFocused, placeHolder: title)
+                    
                     .autocapitalization(.none)
                     .font(AppTheme.fonts.textSmall.font)
                     .foregroundColor(AppTheme.colors.black.color)
@@ -148,6 +170,13 @@ struct WrappedTextFieldWithLeftIcon: View {
                     .textFieldStyle(MyTextFieldStyle())
                     .padding(.leading, 10)
                 
+                Button(action: {
+                    self.isRevealed.toggle()
+                }) {
+                    Image(self.isRevealed ? "eye-cross" : "eye")
+                        .foregroundColor(AppTheme.colors.textFieldIconTint.color)
+                        .padding(.trailing, 16)
+                }
             }
             .frame(height: 52)
             .background(shouldShowError ? AppTheme.colors.errorLight.color : AppTheme.colors.gray5.color)
@@ -180,6 +209,7 @@ fileprivate struct WrappedTextField: UIViewRepresentable {
     @Binding var isFocused: Bool
     
     var placeHolder: String
+    var keyboardType: UIKeyboardType = .default
     
     func makeUIView(context: UIViewRepresentableContext<WrappedTextField>) -> UITextField {
         let tf = UITextField(frame: .zero)
@@ -188,6 +218,7 @@ fileprivate struct WrappedTextField: UIViewRepresentable {
         tf.font = AppTheme.fonts.textSmall
         tf.textColor = AppTheme.colors.black
         tf.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: AppTheme.colors.gray3])
+        tf.keyboardType = keyboardType
         return tf
     }
     

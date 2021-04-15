@@ -27,7 +27,7 @@ struct RegisterView: View {
                                 .font(AppTheme.fonts.textMedium.font)
                                 .foregroundColor(AppTheme.colors.black.color)
                             
-                            WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $viewModel.email, errorMessage: $viewModel.errorMsgEmail, isFocused: $viewModel.emailIsFocused)
+                            WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", keyboardType: UIKeyboardType.emailAddress, text: $viewModel.email, errorMessage: $viewModel.errorMsgEmail, isFocused: $viewModel.emailIsFocused)
                             
                             WrappedTextFieldWithLeftIcon("Display Name", leftIconName: "User-check", text: $viewModel.userName, errorMessage: $viewModel.errorMsgDisplayName, isFocused: $viewModel.userNameIsFocused)
                             

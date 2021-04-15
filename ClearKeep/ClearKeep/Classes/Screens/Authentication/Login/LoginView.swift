@@ -26,10 +26,6 @@ struct LoginView: View {
     @State private var errorMsgEmail = ""
     @State private var errorMsgPassword = ""
     
-    @State private var emailIsFocused = false
-    @State private var passWordIsFocused = false
-    
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -41,9 +37,9 @@ struct LoginView: View {
                             
                             VStack(alignment: .leading, spacing: 24) {
                                 
-                                WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", shouldShowBorderWhenFocused: false, text: $email, errorMessage: $errorMsgEmail, isFocused: $emailIsFocused)
+                                WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.emailAddress, text: $email, errorMessage: $errorMsgEmail)
                                 
-                                WrappedSecureTextWithLeftIcon("Password",leftIconName: "Lock", shouldShowBorderWhenFocused: false, text: $password, errorMessage: $errorMsgPassword, isFocused: $passWordIsFocused)
+                                WrappedSecureTextWithLeftIcon("Password",leftIconName: "Lock", shouldShowBorderWhenFocused: false, text: $password, errorMessage: $errorMsgPassword)
                                 
                                 ButtonAuth("Login") {
                                     login()

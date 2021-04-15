@@ -79,7 +79,7 @@ class RegisterViewModel: ObservableObject {
         if email.isEmpty {
             errorMsgEmail = "This field cannot be empty"
         } else {
-            errorMsgEmail = isEmailValid ? "" : "Invalid email"
+            errorMsgEmail = isEmailValid ? "" : "Email is incorrect"
         }
     }
     

@@ -31,7 +31,7 @@ struct ForgotPassWordView: View {
                         .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
                             self.isPresentModel = false
                         })
-                    Text("Forgot passwords")
+                    Text("Forgot password")
                         .fontWeight(.bold)
                         .font(AppTheme.fonts.textMedium.font)
                         .foregroundColor(AppTheme.colors.offWhite.color)
