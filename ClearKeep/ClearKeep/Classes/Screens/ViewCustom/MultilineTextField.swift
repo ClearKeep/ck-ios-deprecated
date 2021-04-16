@@ -12,14 +12,24 @@ struct MultilineTextField: View {
     private var placeholder: String
     private var onCommit: (() -> Void)?
     
-    @State private var viewHeight: CGFloat = 40 //start with one line
+    @State private var viewHeight: CGFloat = 52 //start with one line
     @Binding private var text: String
 
     var body: some View {
+        
+        HStack {
+            UITextViewWrapper(text: $text, calculatedHeight: $viewHeight, onDone: onCommit)
+                .frame(minHeight: viewHeight, maxHeight: viewHeight)
+                .background(placeholderView, alignment: .topLeading)
+            
+            Button(action: {
                 
-        UITextViewWrapper(text: $text, calculatedHeight: $viewHeight, onDone: onCommit)
-            .frame(minHeight: viewHeight, maxHeight: viewHeight)
-            .background(placeholderView, alignment: .topLeading)
+            }, label: {
+                Image("ic_emoji")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            })
+        }
+
     }
 
     var placeholderView: some View {

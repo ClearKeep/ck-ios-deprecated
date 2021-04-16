@@ -66,6 +66,34 @@ class CKExtensions {
           }
      }
     
+    static func timeToDateStringHeader(timeStamp: Int64) -> String{
+        let date = NSDate(timeIntervalSince1970: TimeInterval(timeStamp/1000))
+        let formatDate = DateFormatter()
+        formatDate.dateFormat = "EEE MM/dd/yyyy"
+        let dateString = formatDate.string(from: date as Date)
+
+        if Calendar.current.isDateInToday(date as Date) {
+            return "Today"
+        }
+        return dateString
+    }
+    
+    static func getMessageAndSection(_ messagess: [MessageModel]) -> [SectionWithMessage]{
+        let msgs = messagess.sorted { (msg1, msg2) -> Bool in
+            return msg1.createdAt < msg2.createdAt
+        }
+        let dict = Dictionary(grouping: msgs){
+            CKExtensions.timeToDateStringHeader(timeStamp: $0.createdAt)
+        }
+        var lst : [SectionWithMessage] = []
+        dict.forEach { (key , value) in
+            lst.append(SectionWithMessage(title: key, messages: value))
+        }
+        
+        return lst
+        
+    }
+    
 }
 
 extension NSNotification {
