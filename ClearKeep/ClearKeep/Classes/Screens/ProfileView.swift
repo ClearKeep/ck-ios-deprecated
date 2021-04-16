@@ -59,7 +59,7 @@ struct ProfileView: View {
             Backend.shared.getMyProfile { (result, error) in
                 if let result = result {
                     self.id = result.id
-                    self.email = result.email
+                    self.email = result.email.lowercased()
                     self.userName = result.displayName
                     self.firstName = result.firstName
                     self.lastName = result.lastName
