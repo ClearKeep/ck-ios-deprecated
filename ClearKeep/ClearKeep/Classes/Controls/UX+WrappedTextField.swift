@@ -74,7 +74,7 @@ struct WrappedTextFieldWithLeftIcon: View {
                     .disableAutocorrection(true)
                     .keyboardType(.emailAddress)
                     .textFieldStyle(MyTextFieldStyle())
-                    .padding(.leading, 10)
+                    .padding(.horizontal, 10)
                 
             }
             .frame(height: 52)
@@ -219,6 +219,7 @@ fileprivate struct WrappedTextField: UIViewRepresentable {
         tf.textColor = AppTheme.colors.black
         tf.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: AppTheme.colors.gray3])
         tf.keyboardType = keyboardType
+        tf.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return tf
     }
     
