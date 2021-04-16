@@ -45,11 +45,12 @@ struct ChannelUserAvatar: View {
     let textColor: UIColor = .white
     var gradientBackgroundType: GradientBackgroundType = .primary
     
-    let avatarSize: CGFloat = 64
+    var avatarSize: CGFloat = 64
     let statusSize: CGFloat = 16
     let font: Font = AppTheme.fonts.displaySmallBold.font
     
-    init(text: Binding<String?>, image: Binding<Image?> = .constant(nil), status: Binding<UserOnlineStatus> = .constant(UserOnlineStatus.none), gradientBackgroundType: GradientBackgroundType = .accent) {
+    init(avatarSize: CGFloat = 64, text: Binding<String?>, image: Binding<Image?> = .constant(nil), status: Binding<UserOnlineStatus> = .constant(UserOnlineStatus.none), gradientBackgroundType: GradientBackgroundType = .accent) {
+        self.avatarSize = avatarSize
         self._text = text
         self._image = image
         self._status = status

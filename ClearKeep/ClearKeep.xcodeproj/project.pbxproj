@@ -19,6 +19,7 @@
 		1027ECCD2627F09A00731BFE /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */; };
 		1027ED0D2628463A00731BFE /* ChannelUserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED0C2628463A00731BFE /* ChannelUserAvatar.swift */; };
 		1027ED1B26294B1000731BFE /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED1A26294B1000731BFE /* RoundedButton.swift */; };
+		1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED372629955F00731BFE /* MessageNotificationView.swift */; };
 		103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */; };
 		103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
 		103B494C2625766800EDD89B /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */; };
@@ -238,6 +239,7 @@
 		1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		1027ED0C2628463A00731BFE /* ChannelUserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelUserAvatar.swift; sourceTree = "<group>"; };
 		1027ED1A26294B1000731BFE /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		1027ED372629955F00731BFE /* MessageNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageNotificationView.swift; sourceTree = "<group>"; };
 		103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatMemberView.swift; sourceTree = "<group>"; };
 		103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
@@ -858,6 +860,7 @@
 				1013C9362608754B0081C135 /* MultilineTextField.swift */,
 				106AD549260B366D005F9691 /* LetterAvatarView.swift */,
 				1027ED0C2628463A00731BFE /* ChannelUserAvatar.swift */,
+				1027ED372629955F00731BFE /* MessageNotificationView.swift */,
 			);
 			path = ViewCustom;
 			sourceTree = "<group>";
@@ -1462,6 +1465,7 @@
 				56694AE625B53C8A008E8EC5 /* LinearWaitingShape.swift in Sources */,
 				6880CF5F25F9C1C100F3DECE /* user.pb.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
+				1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */,
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
