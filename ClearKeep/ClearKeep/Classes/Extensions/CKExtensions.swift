@@ -61,6 +61,9 @@ class CKExtensions {
         if Calendar.current.isDateInToday(date as Date) {
             return "Today"
         }
+        if Calendar.current.isDateInYesterday(date as Date) {
+            return "Yesterday"
+        }
         return dateString
     }
     
