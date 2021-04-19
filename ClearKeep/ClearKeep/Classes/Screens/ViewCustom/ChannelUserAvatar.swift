@@ -92,8 +92,6 @@ struct ChannelUserAvatar: View {
             .frame(width: statusSize, height: statusSize)
             .clipShape(Circle())
         }
-        
-        .background(Color.white)
     }
 }
 
@@ -106,5 +104,6 @@ struct ChannelUserAvatar_Previews: PreviewProvider {
             ChannelUserAvatar(text: .constant("Mum"), image: .constant(Image("ic_app")), status: .constant(.none))
             ChannelUserAvatar(text: .constant("Only"), status: .constant(.none), gradientBackgroundType: .primary)
         }
+        .background(Color.white)
     }
 }

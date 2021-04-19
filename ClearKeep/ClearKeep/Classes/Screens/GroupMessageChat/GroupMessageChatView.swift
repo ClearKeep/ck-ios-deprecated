@@ -42,70 +42,75 @@ struct GroupMessageChatView: View {
     var body: some View {
         VStack {
             VStack{
-                if #available(iOS 14.0, *) {
-                    GeometryReader { reader in
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            HStack { Spacer() }
-                            ScrollViewReader{reader in
+                customeNavigationBarView()
+                
+                Group {
+                    if #available(iOS 14.0, *) {
+                        GeometryReader { reader in
+                            ScrollView(.vertical, showsIndicators: false, content: {
+                                HStack { Spacer() }
+                                ScrollViewReader{reader in
+                                    VStack(spacing: 20){
+                                        ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
+                                            // Chat Bubbles...
+                                            MessageBubble(msg: msg , isGroup: true, rectCorner: [.topLeft])
+                                                .id(msg.id)
+                                        }
+                                    }
+                                    .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
+                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                    }
+                                    .onAppear(perform: {
+                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                    })
+                                    .padding([.horizontal,.bottom])
+                                    .padding(.top, 25)
+                                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                        }
+                                    }
+                                }
+                            })
+                        }.gesture(
+                            TapGesture()
+                                .onEnded { _ in
+                                    UIApplication.shared.endEditing()
+                                })
+                    } else {
+                        GeometryReader { reader in
+                            ScrollView(.vertical, showsIndicators: false, content: {
+                                HStack { Spacer() }
                                 VStack(spacing: 20){
                                     ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                         // Chat Bubbles...
-                                        MessageBubble(msg: msg , isGroup: true, rectCorner: [.topLeft])
+                                        MessageBubble(msg: msg, isGroup: true, rectCorner: [.topLeft])
                                             .id(msg.id)
+                                            .background (
+                                                ListScrollingHelper(proxy: self.scrollingProxy)
+                                            )
+                                    }
+                                    .onAppear {
+                                        self.scrollingProxy = ListScrollingProxy()
+                                        self.reloadData()
                                     }
                                 }
-                                .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
-                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                }
-                                .onAppear(perform: {
-                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                })
                                 .padding([.horizontal,.bottom])
                                 .padding(.top, 25)
-                                .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                    }
-                                }
-                            }
-                        })
-                    }.gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                                UIApplication.shared.endEditing()
                             })
-                }else {
-                    GeometryReader { reader in
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            HStack { Spacer() }
-                            VStack(spacing: 20){
-                                ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
-                                    // Chat Bubbles...
-                                    MessageBubble(msg: msg, isGroup: true, rectCorner: [.topLeft])
-                                        .id(msg.id)
-                                        .background (
-                                            ListScrollingHelper(proxy: self.scrollingProxy)
-                                        )
-                                }
-                                .onAppear {
-                                    self.scrollingProxy = ListScrollingProxy()
-                                    self.reloadData()
+                            .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    self.scrollingProxy.scrollTo(.end)
                                 }
                             }
-                            .padding([.horizontal,.bottom])
-                            .padding(.top, 25)
-                        })
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                self.scrollingProxy.scrollTo(.end)
-                            }
-                        }
-                    }.gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                                UIApplication.shared.endEditing()
-                            })
+                        }.gesture(
+                            TapGesture()
+                                .onEnded { _ in
+                                    UIApplication.shared.endEditing()
+                                })
+                    }
                 }
+                
                 
                 HStack(spacing: 15){
                     HStack(spacing: 15){
@@ -143,44 +148,7 @@ struct GroupMessageChatView: View {
                 .animation(.easeOut)
             }
             .navigationBarTitle("")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: HStack {
-                Image(systemName: "chevron.left")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20 , alignment: .leading)
-                    .padding(.leading, 10)
-                    .foregroundColor(.blue)
-                    .onTapGesture {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                Text("").frame(width: 40, height: 40)
-                
-                NavigationLink(
-                    destination: GroupChatDetailView(groupModel: groupModel),
-                    label: {
-                        Text(groupModel.groupName)
-                            .font(.system(size: 16, weight: .bold, design: .default))
-                            .foregroundColor(.primary)
-                    }).frame(maxWidth: .infinity , alignment: .center)
-                
-                HStack {
-                    Button(action: {
-                        call(callType: .audio)
-                    }, label: {
-                        Image(systemName: "phone.fill")
-                            .frame(width: 40, height: 40)
-                    })
-                    Button(action: {
-                        call(callType: .video)
-                    }, label: {
-                        Image(systemName: "video.fill")
-                            .frame(width: 40, height: 40)
-                    })
-                }
-                .padding(.trailing, 10)
-            }.frame(width: UIScreen.main.bounds.width, height: 50)
-            )
+            .navigationBarHidden(true)
             .onAppear() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 DispatchQueue.main.async {
@@ -221,6 +189,55 @@ struct GroupMessageChatView: View {
                    }),
                    secondaryButton: .default(Text("Cancel")))
         })
+    }
+}
+
+extension GroupMessageChatView {
+    
+    func customeNavigationBarView() -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                HStack(spacing: 16) {
+                    Image("ic_back")
+                        .frame(width: 24, height: 24, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .onTapGesture {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                    
+                    NavigationLink(
+                        destination: GroupChatDetailView(groupModel: groupModel),
+                        label: {
+                            Text(groupModel.groupName)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .font(AppTheme.fonts.textLarge.font)
+                                .fontWeight(.medium)
+                        })
+                }
+                Spacer()
+                
+                HStack {
+                    Button(action: {
+                        call(callType: .audio)
+                    }, label: {
+                        Image("ic_call")
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .padding(.trailing, 20)
+                    })
+                    Button(action: {
+                        call(callType: .video)
+                    }, label: {
+                        Image("ic_video_call")
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                    })
+                }
+            }
+        }
+        .padding()
+        .applyNavigationBarStyle()
     }
 }
 

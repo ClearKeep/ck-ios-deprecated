@@ -12,6 +12,7 @@ struct HistoryChatView: View {
     @ObservedObject var viewModel = HistoryChatViewModel()
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var ourEncryptionManager: CKAccountSignalEncryptionManager?
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
@@ -25,61 +26,65 @@ struct HistoryChatView: View {
     var body: some View {
         
         NavigationView {
-            Group {
-                if self.groupRealms.all.isEmpty {
-                    Text("Start a conversation by clicking Chat or Create Room")
-                        .font(.title)
-                        .foregroundColor(.gray)
-                        .lineLimit(nil)
-                        .frame(width: 300, alignment: .center)
-                        .multilineTextAlignment(.center)
-                } else {
-                    List(self.groupRealms.all , id: \.groupID){ group in
-                        let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
-                                                       groupID : group.groupID,
-                                                       userName: viewModel.getPeerReceiveName(inGroup: group),
-                                                       groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                        
-                        let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                        
-                        if group.groupType == "peer" {
-                            NavigationLink(destination:  viewPeer) {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30, height: 30)
-                                if group.lastMessage.isEmpty {
-                                    VStack(alignment: .leading) {
-                                        Text(viewModel.getGroupName(group: group))
-                                    }
-                                } else {
-                                    VStack(alignment: .leading) {
-                                        Text(viewModel.getPeerReceiveName(inGroup: group))
-                                            .lineLimit(2)
-                                        Text(viewModel.getMessage(data: group.lastMessage))
-                                            .lineLimit(1)
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
+            VStack(spacing: 0) {
+                customeNavigationBarView()
+                
+                Group {
+                    if self.groupRealms.all.isEmpty {
+                        Text("Start a conversation by clicking Chat or Create Room")
+                            .font(.title)
+                            .foregroundColor(.gray)
+                            .lineLimit(nil)
+                            .frame(width: 300, alignment: .center)
+                            .multilineTextAlignment(.center)
+                    } else {
+                        List(self.groupRealms.all , id: \.groupID){ group in
+                            let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
+                                                           groupID : group.groupID,
+                                                           userName: viewModel.getPeerReceiveName(inGroup: group),
+                                                           groupType: group.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                            
+                            let viewGroup = GroupMessageChatView(groupModel: group).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                            
+                            if group.groupType == "peer" {
+                                NavigationLink(destination:  viewPeer) {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 30, height: 30)
+                                    if group.lastMessage.isEmpty {
+                                        VStack(alignment: .leading) {
+                                            Text(viewModel.getGroupName(group: group))
+                                        }
+                                    } else {
+                                        VStack(alignment: .leading) {
+                                            Text(viewModel.getPeerReceiveName(inGroup: group))
+                                                .lineLimit(2)
+                                            Text(viewModel.getMessage(data: group.lastMessage))
+                                                .lineLimit(1)
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
                                     }
                                 }
-                            }
-                        } else {
-                            NavigationLink(destination:  viewGroup) {
-                                Image(systemName: "person.2.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30, height: 30)
-                                if group.lastMessage.isEmpty {
-                                    VStack(alignment: .leading) {
-                                        Text(viewModel.getGroupName(group: group))
-                                    }
-                                } else {
-                                    VStack(alignment: .leading) {
-                                        Text(viewModel.getGroupName(group: group))
-                                        Text(viewModel.getMessage(data: group.lastMessage))
-                                            .lineLimit(1)
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
+                            } else {
+                                NavigationLink(destination:  viewGroup) {
+                                    Image(systemName: "person.2.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 30, height: 30)
+                                    if group.lastMessage.isEmpty {
+                                        VStack(alignment: .leading) {
+                                            Text(viewModel.getGroupName(group: group))
+                                        }
+                                    } else {
+                                        VStack(alignment: .leading) {
+                                            Text(viewModel.getGroupName(group: group))
+                                            Text(viewModel.getMessage(data: group.lastMessage))
+                                                .lineLimit(1)
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
                                     }
                                 }
                             }
@@ -96,9 +101,7 @@ struct HistoryChatView: View {
                 self.getJoinedGroup()
             }
             .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarItems(leading: Text("Chat"), trailing:  Button("Create Group"){
-                viewRouter.current = .inviteMember
-            })
+            .navigationBarHidden(true)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
             self.didReceiveMessageGroup(userInfo: obj.userInfo)
@@ -130,6 +133,31 @@ struct HistoryChatView: View {
         })
     }
     
+}
+
+extension HistoryChatView {
+
+    func customeNavigationBarView() -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                Text("Chat")
+                    .foregroundColor(AppTheme.colors.offWhite.color)
+                    .font(AppTheme.fonts.textLarge.font)
+                    .fontWeight(.medium)
+                    .padding(.leading, 20)
+                
+                Spacer()
+                
+                Button("Create Group"){
+                    viewRouter.current = .inviteMember
+                }
+                
+            }
+        }
+        .padding()
+        .applyNavigationBarStyle()
+    }
 }
 
 extension HistoryChatView {

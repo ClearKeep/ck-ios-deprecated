@@ -28,10 +28,10 @@ struct MessageChatView: View {
     @State var messageStr = ""
     @State var hudVisible = false
     @State var alertVisible = false
-        
+    
     @State private var scrollingProxy = ListScrollingProxy()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
+    
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
         self.clientId = clientId
@@ -43,190 +43,12 @@ struct MessageChatView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                Spacer()
-                HStack {
-                    HStack(spacing: 0) {
-                        Image("ic_back")
-                            .frame(width: 24, height: 24, alignment: .leading)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .onTapGesture {
-                                self.presentationMode.wrappedValue.dismiss()
-                            }
-                            
-                        Image("user")
-                            .frame(width: 36, height: 36)
-                            .background(Color.yellow)
-                            .clipShape(Circle())
-                            .padding(.leading, 12)
-                        
-                        Text(self.userName)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .font(AppTheme.fonts.textLarge.font)
-                            .fontWeight(.medium)
-                            .padding(.leading, 20)
-                    }
-                    Spacer()
-                    HStack{
-                        Button(action: {
-                            call(callType: .audio)
-                        }, label: {
-                            Image("ic_call")
-                                .frame(width: 36, height: 36)
-                                .foregroundColor(AppTheme.colors.offWhite.color)
-                                .padding(.trailing, 20)
-                        })
-                        Button(action: {
-                            call(callType: .video)
-                        }, label: {
-                            Image("ic_video_call")
-                                .frame(width: 36, height: 36)
-                                .foregroundColor(AppTheme.colors.offWhite.color)
-                        })
-                    }
-                    
-                }.padding()
-            }
-            .gradientHeader()
-            .edgesIgnoringSafeArea(.top)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.14)
-
-            
-            VStack {
-                if #available(iOS 14.0, *) {
-                    GeometryReader { geoReader in
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            HStack { Spacer() }
-                            ScrollViewReader{reader in
-                                LazyVStack(spacing: 20){
-                                    let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
-                                    let lst = CKExtensions.getMessageAndSection(messages)
-                                    ForEach(lst , id: \.title) { gr in
-                                        Section(header: Text(gr.title)
-                                                    .font(AppTheme.fonts.textSmall.font)
-                                                    .foregroundColor(AppTheme.colors.gray3.color)) {
-                                            let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
-                                            ForEach(listDisplayMessage , id: \.message.id) { msg in
-                                                // Chat Bubbles...
-                                                MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
-                                                    .id(msg.message.id)
-                                            }
-                                        }
-                                    }
-
-                                }
-                                .onChange(of: realmMessages.allMessageInGroup(groupId: self.myGroupID).count) { _ in
-                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                }
-                                .onAppear(perform: {
-                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                })
-                                .padding([.horizontal,.bottom])
-                                .padding(.top, 25)
-                                .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                    }
-                                }
-                            }
-                        })
-
-                    }.gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                                UIApplication.shared.endEditing()
-                            })
-                }else {
-                    GeometryReader { reader in
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            HStack { Spacer() }
-                            VStack(spacing: 20){
-                                let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
-                                let lst = CKExtensions.getMessageAndSection(messages)
-                                ForEach(lst , id: \.title) { gr in
-                                    Section(header: Text(gr.title)
-                                                .font(AppTheme.fonts.textSmall.font)
-                                                .foregroundColor(AppTheme.colors.gray3.color)) {
-                                        let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
-                                        ForEach(listDisplayMessage , id: \.message.id) { msg in
-                                            // Chat Bubbles...
-                                            MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
-                                                .id(msg.message.id)
-                                        }
-                                    }
-                                }
-                            }
-                            .onAppear(perform: {
-                                self.scrollingProxy = ListScrollingProxy()
-                                self.reloadData()
-                            })
-                            .padding([.horizontal,.bottom])
-                            .padding(.top, 25)
-                        })
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    self.scrollingProxy.scrollTo(.end)
-                                }
-                        }
-                    }.gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                                UIApplication.shared.endEditing()
-                            })
-                }
-                
-                HStack(spacing: 15){
-                    
-                    Button {
-                        
-                    } label: {
-                        Image("ic_photo")
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                    }
-                    
-                    Button {
-                        
-                    } label: {
-                        Image("ic_tag")
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                    }
-
-                    
-                    HStack(spacing: 15){
-                        MultilineTextField("Type Something Here", text: $messageStr)
-                    }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal)
-                    .background(AppTheme.colors.gray5.color)
-                    .cornerRadius(16)
-                    .clipped()
-                
-                    
-                    // Send Button...
-                    // hiding view...
-    //                if messageStr != ""{
-                        Button(action: {
-                            // appeding message...
-                            // adding animation...
-                            withAnimation(.easeIn){
-                                self.send()
-                            }
-                            messageStr = ""
-                        }, label: {
-                            Image("ic_sent")
-                                .foregroundColor(AppTheme.colors.primary.color)
-                        })
-    //                }
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 8)
-                .animation(.easeOut)
-            }
+            customeNavigationBarView()
+            messageListView()
+            sendMessageBarView()
         }
-        .edgesIgnoringSafeArea(.top)
         .navigationBarTitle("")
         .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .alert(isPresented: $alertVisible, content: {
@@ -237,9 +59,6 @@ struct MessageChatView: View {
                    }),
                    secondaryButton: .default(Text("Cancel")))
         })
-        // since bottom edge is ignored....
-        //        .padding(.bottom,UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-        //        .background(Color.white)
         .onAppear() {
             UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
             if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
@@ -287,6 +106,183 @@ struct MessageChatView: View {
                 }
             }
         })
+    }
+}
+
+extension MessageChatView {
+    
+    func customeNavigationBarView() -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                HStack(spacing: 8) {
+                    Image("ic_back")
+                        .frame(width: 24, height: 24, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .onTapGesture {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                    
+                    ChannelUserAvatar(avatarSize: 36, text: .constant(userName))
+                    
+                    Text(self.userName)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .font(AppTheme.fonts.textLarge.font)
+                        .fontWeight(.medium)
+                }
+                Spacer()
+                HStack{
+                    Button(action: {
+                        call(callType: .audio)
+                    }, label: {
+                        Image("ic_call")
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .padding(.trailing, 20)
+                    })
+                    Button(action: {
+                        call(callType: .video)
+                    }, label: {
+                        Image("ic_video_call")
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                    })
+                }
+            }
+        }
+        .padding()
+        .applyNavigationBarStyle()
+    }
+    
+    func sendMessageBarView() -> some View {
+        HStack(spacing: 15) {
+            
+            Button {} label: {
+                Image("ic_photo")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            Button {} label: {
+                Image("ic_tag")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            
+            HStack(spacing: 15){
+                MultilineTextField("Type Something Here", text: $messageStr)
+            }
+            .padding(.vertical, 4)
+            .padding(.horizontal)
+            .background(AppTheme.colors.gray5.color)
+            .cornerRadius(16)
+            .clipped()
+            
+            
+            // Send Button...
+            // hiding view...
+            //                if messageStr != ""{
+            Button(action: {
+                // appeding message...
+                // adding animation...
+                withAnimation(.easeIn){
+                    self.send()
+                }
+                messageStr = ""
+            }, label: {
+                Image("ic_sent")
+                    .foregroundColor(AppTheme.colors.primary.color)
+            })
+            //                }
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+        .animation(.easeOut)
+    }
+    
+    func messageListView() -> some View {
+        Group {
+            if #available(iOS 14.0, *) {
+                GeometryReader { geoReader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        HStack { Spacer() }
+                        ScrollViewReader{reader in
+                            LazyVStack(spacing: 20){
+                                let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
+                                let lst = CKExtensions.getMessageAndSection(messages)
+                                ForEach(lst , id: \.title) { gr in
+                                    Section(header: Text(gr.title)
+                                                .font(AppTheme.fonts.textSmall.font)
+                                                .foregroundColor(AppTheme.colors.gray3.color)) {
+                                        let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                        ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                            // Chat Bubbles...
+                                            MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                                .id(msg.message.id)
+                                        }
+                                    }
+                                }
+                                
+                            }
+                            .onChange(of: realmMessages.allMessageInGroup(groupId: self.myGroupID).count) { _ in
+                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            }
+                            .onAppear(perform: {
+                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            })
+                            .padding([.horizontal,.bottom])
+                            .padding(.top, 25)
+                            .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
+                            }
+                        }
+                    })
+                    
+                }.gesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            UIApplication.shared.endEditing()
+                        })
+            } else {
+                GeometryReader { reader in
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        HStack { Spacer() }
+                        VStack(spacing: 20){
+                            let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
+                            let lst = CKExtensions.getMessageAndSection(messages)
+                            ForEach(lst , id: \.title) { gr in
+                                Section(header: Text(gr.title)
+                                            .font(AppTheme.fonts.textSmall.font)
+                                            .foregroundColor(AppTheme.colors.gray3.color)) {
+                                    let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                    ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                        // Chat Bubbles...
+                                        MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                            .id(msg.message.id)
+                                    }
+                                }
+                            }
+                        }
+                        .onAppear(perform: {
+                            self.scrollingProxy = ListScrollingProxy()
+                            self.reloadData()
+                        })
+                        .padding([.horizontal,.bottom])
+                        .padding(.top, 25)
+                    })
+                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.scrollingProxy.scrollTo(.end)
+                        }
+                    }
+                }.gesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            UIApplication.shared.endEditing()
+                        })
+            }
+        }
     }
 }
 
@@ -453,42 +449,21 @@ extension MessageChatView {
             return
         }
         
-//        self.viewModel.requestBundleRecipient(byClientId: clientId) {
-            if let myAccount = CKSignalCoordinate.shared.myAccount {
-                do {
-                    guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
-                                                                                         name: clientId,
-                                                                                         deviceId: self.viewModel.recipientDeviceId) else { return }
-                    if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                        viewModel.groupId = group.groupID
+        //        self.viewModel.requestBundleRecipient(byClientId: clientId) {
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            do {
+                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                                                                                     name: clientId,
+                                                                                     deviceId: self.viewModel.recipientDeviceId) else { return }
+                if viewModel.groupId == 0, let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
+                    viewModel.groupId = group.groupID
+                    self.myGroupID = group.groupID
+                }
+                if viewModel.groupId == 0 {
+                    viewModel.createGroup(username: self.userName, clientId: clientId) { (group) in
+                        self.groupRealms.add(group: group)
                         self.myGroupID = group.groupID
-                    }
-                    if viewModel.groupId == 0 {
-                        viewModel.createGroup(username: self.userName, clientId: clientId) { (group) in
-                            self.groupRealms.add(group: group)
-                            self.myGroupID = group.groupID
-                            
-                            Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
-                                if let result = result {
-                                    DispatchQueue.main.async {
-                                        let post = MessageModel(id: result.id,
-                                                                groupID: result.groupID,
-                                                                groupType: result.groupType,
-                                                                fromClientID: result.fromClientID,
-                                                                fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
-                                                                clientID: result.clientID,
-                                                                message: payload,
-                                                                createdAt: result.createdAt,
-                                                                updatedAt: result.updatedAt)
-                                        self.realmMessages.add(message: post)
-                                        self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
-                                        self.reloadData()
-                                        self.scrollingProxy.scrollTo(.end)
-                                    }
-                                }
-                            }
-                        }
-                    } else {
+                        
                         Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
                             if let result = result {
                                 DispatchQueue.main.async {
@@ -502,88 +477,111 @@ extension MessageChatView {
                                                             createdAt: result.createdAt,
                                                             updatedAt: result.updatedAt)
                                     self.realmMessages.add(message: post)
-                                    self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
+                                    self.groupRealms.updateLastMessage(groupID: group.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
                                     self.reloadData()
                                     self.scrollingProxy.scrollTo(.end)
                                 }
                             }
                         }
                     }
-                    
-                } catch {
-                    print("Send message error: \(error)")
+                } else {
+                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: viewModel.groupId , groupType: groupType) { (result) in
+                        if let result = result {
+                            DispatchQueue.main.async {
+                                let post = MessageModel(id: result.id,
+                                                        groupID: result.groupID,
+                                                        groupType: result.groupType,
+                                                        fromClientID: result.fromClientID,
+                                                        fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
+                                                        clientID: result.clientID,
+                                                        message: payload,
+                                                        createdAt: result.createdAt,
+                                                        updatedAt: result.updatedAt)
+                                self.realmMessages.add(message: post)
+                                self.groupRealms.updateLastMessage(groupID: viewModel.groupId, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
+                                self.reloadData()
+                                self.scrollingProxy.scrollTo(.end)
+                            }
+                        }
+                    }
                 }
+                
+            } catch {
+                print("Send message error: \(error)")
             }
-//        }
+        }
+        //        }
         self.reloadData()
     }
 }
 
-struct MessageView: View {
-    
-    var mesgModel: MessageModel
-    
-    var chatWithUserID: String
-    
-    var chatWithUserName: String
-    
-    var isGroup = false
-    
-    var body: some View {
-        
-        let checkSender = mesgModel.fromClientID == CKSignalCoordinate.shared.myAccount?.username
-        
-        if checkSender {
-            //
-            //            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
-            //                Text(sender()).bold().foregroundColor(Color.red)
-            //                Text(stringValue()).alignmentGuide(.trailing) { d in
-            //                    d[.leading]
-            //                }
-            //            }
-            
-            return ChatBubble(direction: .left) {
-                Text(stringValue())
-                    .padding(.all, 5)
-                    .foregroundColor(Color.white)
-                    .background(Color.blue)
-            }
-            
-        } else {
-            
-            //            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
-            //                Text(sender()).bold().foregroundColor(Color.green)
-            //                Text(stringValue()).alignmentGuide(.trailing) { d in
-            //                    d[.trailing]
-            //                }
-            //            }
-            
-            return ChatBubble(direction: .right) {
-                Text(stringValue())
-                    .padding(.all, 5)
-                    .foregroundColor(Color.white)
-                    .background(Color.blue)
-            }
-        }
-    }
-    
-    private func stringValue() -> String {
-        return String(data: mesgModel.message, encoding: .utf8) ?? "x"
-    }
-    
-    private func sender() -> String {
-        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
-        let myAccount = CKSignalCoordinate.shared.myAccount?.username ?? ""
-        
-        if isGroup {
-            return mesgModel.fromClientID == myAccount ? userNameLogin : mesgModel.fromClientID
-        }
-        return mesgModel.fromClientID == self.chatWithUserID ? self.chatWithUserName : userNameLogin
-    }
-}
-
-struct MessageChat_Previews: PreviewProvider {
-    static var previews: some View {
-        MessageChatView(clientId: "" , groupID: 0, userName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
-    }
-}
+/*
+ struct MessageView: View {
+ 
+ var mesgModel: MessageModel
+ 
+ var chatWithUserID: String
+ 
+ var chatWithUserName: String
+ 
+ var isGroup = false
+ 
+ var body: some View {
+ 
+ let checkSender = mesgModel.fromClientID == CKSignalCoordinate.shared.myAccount?.username
+ 
+ if checkSender {
+ //
+ //            let senderView: HStack = HStack(alignment: .top, spacing: 8) {
+ //                Text(sender()).bold().foregroundColor(Color.red)
+ //                Text(stringValue()).alignmentGuide(.trailing) { d in
+ //                    d[.leading]
+ //                }
+ //            }
+ 
+ return ChatBubble(direction: .left) {
+ Text(stringValue())
+ .padding(.all, 5)
+ .foregroundColor(Color.white)
+ .background(Color.blue)
+ }
+ 
+ } else {
+ 
+ //            let receiveView: HStack = HStack(alignment: .top, spacing: 8) {
+ //                Text(sender()).bold().foregroundColor(Color.green)
+ //                Text(stringValue()).alignmentGuide(.trailing) { d in
+ //                    d[.trailing]
+ //                }
+ //            }
+ 
+ return ChatBubble(direction: .right) {
+ Text(stringValue())
+ .padding(.all, 5)
+ .foregroundColor(Color.white)
+ .background(Color.blue)
+ }
+ }
+ }
+ 
+ private func stringValue() -> String {
+ return String(data: mesgModel.message, encoding: .utf8) ?? "x"
+ }
+ 
+ private func sender() -> String {
+ let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
+ let myAccount = CKSignalCoordinate.shared.myAccount?.username ?? ""
+ 
+ if isGroup {
+ return mesgModel.fromClientID == myAccount ? userNameLogin : mesgModel.fromClientID
+ }
+ return mesgModel.fromClientID == self.chatWithUserID ? self.chatWithUserName : userNameLogin
+ }
+ }
+ 
+ struct MessageChat_Previews: PreviewProvider {
+ static var previews: some View {
+ MessageChatView(clientId: "" , groupID: 0, userName: "").environmentObject(RealmGroups()).environmentObject(RealmMessages())
+ }
+ }
+ */

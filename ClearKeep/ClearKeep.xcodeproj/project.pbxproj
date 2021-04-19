@@ -26,6 +26,7 @@
 		103B494D2625766800EDD89B /* SF-Pro-Text-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */; };
 		103B494E2625766800EDD89B /* SF-Pro-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */; };
 		103B494F2625766800EDD89B /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */; };
+		1059C49F262D7BFC00ED4878 /* NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */; };
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
@@ -247,6 +248,7 @@
 		103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Thin.otf"; sourceTree = "<group>"; };
 		103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Light.otf"; sourceTree = "<group>"; };
 		103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
+		1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarStyle.swift; sourceTree = "<group>"; };
 		106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatAddMember.swift; sourceTree = "<group>"; };
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				10E83D3F262405E7002D7B10 /* GradientBackground.swift */,
 				10D650CB2626BEF60018528B /* CardViewContainer.swift */,
 				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
+				1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -1547,6 +1550,7 @@
 				6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */,
 				1015C43F262553F900407C35 /* AppFonts.swift in Sources */,
 				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
+				1059C49F262D7BFC00ED4878 /* NavigationBarStyle.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */,

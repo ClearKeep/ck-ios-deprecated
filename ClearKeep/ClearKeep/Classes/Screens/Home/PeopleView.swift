@@ -21,40 +21,70 @@ struct PeopleView: View {
     
     var body: some View {
         NavigationView {
-            Group {
-                if users.isEmpty {
-                    Text("No contact found")
-                        .font(.title)
-                        .foregroundColor(.gray)
-                        .lineLimit(nil)
-                        .frame(width: 300, alignment: .center)
-                        .multilineTextAlignment(.center)
-                } else {
-                    List(users){ user in
-                        
-                        NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                        .environmentObject(groupRealms)
-                                        .environmentObject(messsagesRealms))
-                        {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                            VStack(alignment: .leading) {
-                                Text(user.userName)
+            VStack(spacing: 0) {
+                customeNavigationBarView()
+                
+                Group {
+                    if users.isEmpty {
+                        Text("No contact found")
+                            .font(.title)
+                            .foregroundColor(.gray)
+                            .lineLimit(nil)
+                            .frame(width: 300, alignment: .center)
+                            .multilineTextAlignment(.center)
+                    } else {
+                        List(users){ user in
+                            
+                            NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                            .environmentObject(groupRealms)
+                                            .environmentObject(messsagesRealms))
+                            {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                VStack(alignment: .leading) {
+                                    Text(user.userName)
+                                }
                             }
                         }
                     }
                 }
             }
+//            .navigationBarTitle(Text(""), displayMode: .inline)
+//            .navigationBarItems(leading: Text("People"),
+//                                trailing: NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
+//                                    Text("Search")
+//                                }))
             .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarItems(leading: Text("People"),
-                                trailing: NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
-                                    Text("Search")
-                                }))
+            .navigationBarHidden(true)
             .onAppear(){
                 self.getUser()
             }
         }
+    }
+}
+
+extension PeopleView {
+
+    func customeNavigationBarView() -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                Text("People")
+                    .foregroundColor(AppTheme.colors.offWhite.color)
+                    .font(AppTheme.fonts.textLarge.font)
+                    .fontWeight(.medium)
+                    .padding(.leading, 20)
+                
+                Spacer()
+                
+                NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
+                    Text("Search")
+                })
+            }
+        }
+        .padding()
+        .applyNavigationBarStyle()
     }
 }
 
