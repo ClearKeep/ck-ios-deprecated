@@ -43,12 +43,13 @@ struct SocialSignInButton: View {
 extension SocialSignInButton {
     
     enum SignInType {
-        case google, office365
+        case google, office365, facebook
         
         var iconName: String {
             switch self {
             case .google: return "google"
             case .office365: return "office365"
+            case .facebook: return "facebook"
             }
         }
         
@@ -56,6 +57,7 @@ extension SocialSignInButton {
             switch self {
             case .google: return "Sign In with Google"
             case .office365: return "Sign In with Office 365"
+            case .facebook: return "Sign In with Facebook"
             }
         }
         
@@ -63,6 +65,7 @@ extension SocialSignInButton {
             switch self {
             case .google: return UIColor(hex: "#2F80ED").color
             case .office365: return UIColor(hex: "#DC3E15").color
+            case .facebook: return UIColor(red: 60/255, green: 70/255, blue: 146/255, alpha: 1).color
             }
         }
         
@@ -70,7 +73,8 @@ extension SocialSignInButton {
             switch self {
             case .google: return { SocialLogin.shared.attemptLoginGoogle() }
             case .office365: return { SocialLogin.shared.attemptLoginOffice365() }
-            }
+            case .facebook: return { SocialLogin.shared.attemptLoginFacebook() }
+             }
         }
     }
 }

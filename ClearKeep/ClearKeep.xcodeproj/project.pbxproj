@@ -26,7 +26,8 @@
 		103B494D2625766800EDD89B /* SF-Pro-Text-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49492625766800EDD89B /* SF-Pro-Text-Thin.otf */; };
 		103B494E2625766800EDD89B /* SF-Pro-Text-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */; };
 		103B494F2625766800EDD89B /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */; };
-		1059C49F262D7BFC00ED4878 /* NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */; };
+1059C49F262D7BFC00ED4878 /* NavigationBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */; };
+		1059C46A262D3F4000ED4878 /* SocialLogin+Facebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1059C469262D3F4000ED4878 /* SocialLogin+Facebook.swift */; };
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
@@ -249,6 +250,7 @@
 		103B494A2625766800EDD89B /* SF-Pro-Text-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Light.otf"; sourceTree = "<group>"; };
 		103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarStyle.swift; sourceTree = "<group>"; };
+		1059C469262D3F4000ED4878 /* SocialLogin+Facebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Facebook.swift"; sourceTree = "<group>"; };
 		106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatAddMember.swift; sourceTree = "<group>"; };
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
@@ -689,6 +691,7 @@
 				10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */,
 				10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */,
 				10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */,
+				1059C469262D3F4000ED4878 /* SocialLogin+Facebook.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1440,6 +1443,7 @@
 				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				6880CF6025F9C1C100F3DECE /* video_call.grpc.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
+				1059C46A262D3F4000ED4878 /* SocialLogin+Facebook.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
 				1027ECCD2627F09A00731BFE /* KeyboardAdaptive.swift in Sources */,

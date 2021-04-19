@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import MSAL
+import FBSDKCoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -76,6 +77,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sourceApp = urlContext.options.sourceApplication
 
         MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: sourceApp)
+        
+        // Facebook
+        ApplicationDelegate.shared.application( UIApplication.shared, open: url, sourceApplication: nil, annotation: [UIApplication.OpenURLOptionsKey.annotation] )
     }
 }
 

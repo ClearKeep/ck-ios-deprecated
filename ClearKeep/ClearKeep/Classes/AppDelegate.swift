@@ -14,6 +14,7 @@ import Firebase
 import MSAL
 
 import IQKeyboardManagerSwift
+import FBSDKCoreKit
 
 //@main
 @UIApplicationMain
@@ -186,8 +187,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         
         //IQKeyboardManager.shared.enable = true
         
+        
+//        FlagFetcher.fetchFlags {
+//            result in if case let .success(flags) = result, flags.contains("use_facebook") {
+//            // Initialize the SDK ApplicationDelegate.shared.application( application, didFinishLaunchingWithOptions: launchOptions )
+//            }
+//        }
+            
+        
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         return true
     }
+
+        
     
     @objc func applicationDidBecomeActive() {
         print("------------ become app")
@@ -232,7 +245,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
     
     @available(iOS 9.0, *)
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url) || MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String)
+        return GIDSignIn.sharedInstance().handle(url) || MSALPublicClientApplication.handleMSALResponse(url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String) ||
+            ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[.sourceApplication] as? String, annotation: options[.annotation])
+        
+        
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,

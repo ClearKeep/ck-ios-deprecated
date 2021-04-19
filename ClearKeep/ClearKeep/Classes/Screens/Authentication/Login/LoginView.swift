@@ -63,6 +63,8 @@ struct LoginView: View {
                                 SocialSignInButton(signInType: .google)
                                 
                                 SocialSignInButton(signInType: .office365)
+  
+                                SocialSignInButton(signInType: .facebook)
                                 
                                 HStack {
                                     Spacer()
