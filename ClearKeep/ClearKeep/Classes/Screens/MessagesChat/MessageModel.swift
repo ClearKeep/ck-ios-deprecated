@@ -77,3 +77,8 @@ struct SectionWithMessage {
     var title: String = String()
     var messages: [MessageModel] = []
 }
+
+struct MessageDisplayInfo {    
+    var message : MessageModel
+    var rectCorner: UIRectCorner
+}

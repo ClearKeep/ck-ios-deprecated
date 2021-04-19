@@ -11,6 +11,7 @@ struct MessageBubble: View {
     var msg : MessageModel
     var userName: String? = nil
     var isGroup: Bool = false
+    var rectCorner: UIRectCorner
     var body: some View {
         // Automatic scroll To Bottom...
         // First Assigning Id To Each Row...
@@ -26,28 +27,31 @@ struct MessageBubble: View {
                     Spacer()
                     if msg.photo == nil{
                         Text(stringValue())
-                            .padding(.all, 8)
-                            .background(AppTheme.colors.primary.color)
+                            .padding([.top , .bottom], 8)
+                            .padding([.leading , .trailing] , 24)
+                            .background(AppTheme.colors.gray2.color)
                             .font(AppTheme.fonts.textMedium.font)
                             .foregroundColor(AppTheme.colors.offWhite.color)
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+                            .cornerRadius(32, corners: rectCorner)
                     }
                     else{
-                        Image(uiImage: UIImage(data: msg.photo!)!)
-                            .resizable()
-                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+//                        Image(uiImage: UIImage(data: msg.photo!)!)
+//                            .resizable()
+//                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
                     }
                 }
             }
             else {
                 HStack(alignment: .firstTextBaseline){
                     Text(stringValue())
-                        .padding(.all, 8)
-                        .background(AppTheme.colors.gray2.color)
+                        .padding([.top , .bottom], 8)
+                        .padding([.leading , .trailing] , 24)
+                        .background(AppTheme.colors.primary.color)
                         .font(AppTheme.fonts.textMedium.font)
                         .foregroundColor(AppTheme.colors.offWhite.color)
-                        .clipShape(BubbleArrow(myMsg: msg.myMsg))
+                        .cornerRadius(32, corners: rectCorner)
                     Spacer()
                     Text(dateTime())
                         .font(AppTheme.fonts.textXSmall.font)
