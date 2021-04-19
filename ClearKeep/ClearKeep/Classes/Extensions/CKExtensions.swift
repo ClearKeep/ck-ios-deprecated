@@ -44,20 +44,6 @@ class CKExtensions {
         keychain[Constants.keyChainUUID] = UUID
         return UUID
       }
-    
-//    static var getAllGroup: [GroupModel] {
-//          let defaultObject = GroupModel(id: 0, groupID: "", groupName: "", groupAvatar: "", groupType: "", createdByClientID: "", createdAt: 1, updatedByClientID: "", lstClientID: [""], updatedAt: 1)
-//          if let objects = UserDefaults.standard.value(forKey: "user_groups") as? Data {
-//             let decoder = JSONDecoder()
-//             if let objectsDecoded = try? decoder.decode(Array.self, from: objects) as [GroupModel] {
-//                return objectsDecoded
-//             } else {
-//                return [defaultObject]
-//             }
-//          } else {
-//             return [defaultObject]
-//          }
-//       }
 
      static func saveAllGroup(allGroup: [GroupModel]) {
           let encoder = JSONEncoder()
@@ -65,6 +51,34 @@ class CKExtensions {
              UserDefaults.standard.set(encoded, forKey: "user_groups")
           }
      }
+    
+    static func timeToDateStringHeader(timeStamp: Int64) -> String{
+        let date = NSDate(timeIntervalSince1970: TimeInterval(timeStamp/1000))
+        let formatDate = DateFormatter()
+        formatDate.dateFormat = "EEE MM/dd/yyyy"
+        let dateString = formatDate.string(from: date as Date)
+
+        if Calendar.current.isDateInToday(date as Date) {
+            return "Today"
+        }
+        return dateString
+    }
+    
+    static func getMessageAndSection(_ messagess: [MessageModel]) -> [SectionWithMessage]{
+        let msgs = messagess.sorted { (msg1, msg2) -> Bool in
+            return msg1.createdAt < msg2.createdAt
+        }
+        let dict = Dictionary(grouping: msgs){
+            CKExtensions.timeToDateStringHeader(timeStamp: $0.createdAt)
+        }
+        var lst : [SectionWithMessage] = []
+        dict.forEach { (key , value) in
+            lst.append(SectionWithMessage(title: key, messages: value))
+        }
+        
+        return lst
+        
+    }
     
 }
 

@@ -11,82 +11,94 @@ struct MessageBubble: View {
     var msg : MessageModel
     var userName: String? = nil
     var isGroup: Bool = false
+    var rectCorner: UIRectCorner
     var body: some View {
         // Automatic scroll To Bottom...
         // First Assigning Id To Each Row...
         HStack(alignment: .top,spacing: 10){
             
             if msg.myMsg{
-                Spacer(minLength: 25)
-                VStack(alignment: .trailing) {
-                    if msg.photo == nil{
-                        Text(stringValue())
-                            .padding(.all, 8)
-                            .background(Color.blue)
-                            .foregroundColor(Color.white)
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-                    }
-                    else{
-                        Image(uiImage: UIImage(data: msg.photo!)!)
-                            .resizable()
-                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-                    }
-                    
+                HStack(alignment: .firstTextBaseline) {
                     // Show Time
                     Text(dateTime())
-                        .font(.caption)
+                        .font(AppTheme.fonts.textXSmall.font)
                         .padding(.top, 5)
-//                        .foregroundColor(Color.gray.opacity(0.4))
+                        .foregroundColor(AppTheme.colors.gray3.color)
+                    Spacer()
+                    if msg.photo == nil{
+                        Text(stringValue())
+                            .padding([.top , .bottom], 8)
+                            .padding([.leading , .trailing] , 24)
+                            .background(AppTheme.colors.gray2.color)
+                            .font(AppTheme.fonts.textMedium.font)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+                            .cornerRadius(32, corners: rectCorner)
+                    }
+                    else{
+//                        Image(uiImage: UIImage(data: msg.photo!)!)
+//                            .resizable()
+//                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+                    }
                 }
-                
+            }
+            else {
+                HStack(alignment: .firstTextBaseline){
+                    Text(stringValue())
+                        .padding([.top , .bottom], 8)
+                        .padding([.leading , .trailing] , 24)
+                        .background(AppTheme.colors.primary.color)
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .cornerRadius(32, corners: rectCorner)
+                    Spacer()
+                    Text(dateTime())
+                        .font(AppTheme.fonts.textXSmall.font)
+                        .padding(.top, 5)
+                        .foregroundColor(AppTheme.colors.gray3.color)
+                }
+
                 // profile Image...
 //                Image(systemName: "person.circle.fill")
 //                    .resizable()
 //                    .frame(width: 30, height: 30)
 //                    .clipShape(Circle())
-            }
-            else {
-                // profile Image...
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .clipShape(Circle())
                 
-                VStack(alignment: .leading) {
-                    if let username = self.userName {
-                        // Show Time
-                        Text(username)
-                            .font(.body)
-                            .padding(.top, 5)
-//                            .foregroundColor(Color.black)
-                    }
-                    if msg.photo == nil{
-                        if isGroup {
-                            Text(msg.fromDisplayName)
-                                .fontWeight(.regular)
-                                .font(Font.system(size: 10))
-                                .foregroundColor(Color.gray.opacity(0.4))
-                        }
-                        Text(stringValue())
-                            .padding(.all, 8)
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-                    }
-                    else {
-                        Image(uiImage: UIImage(data: msg.photo!)!)
-                            .resizable()
-                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
-                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-                    }
-                    
-                    // Show Time
-                    Text(dateTime())
-                        .font(.caption)
-                        .padding(.top, 5)
-                        .foregroundColor(Color.gray.opacity(0.4))
-                }
-                Spacer(minLength: 25)
+//                VStack(alignment: .leading) {
+//                    if let username = self.userName {
+//                        // Show Time
+//                        Text(username)
+//                            .font(.body)
+//                            .padding(.top, 5)
+////                            .foregroundColor(Color.black)
+//                    }
+//                    if msg.photo == nil{
+//                        if isGroup {
+//                            Text(msg.fromDisplayName)
+//                                .fontWeight(.regular)
+//                                .font(Font.system(size: 10))
+//                                .foregroundColor(Color.gray.opacity(0.4))
+//                        }
+//                        Text(stringValue())
+//                            .padding(.all, 8)
+//                            .background(Color(UIColor.secondarySystemBackground))
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+//                    }
+//                    else {
+//                        Image(uiImage: UIImage(data: msg.photo!)!)
+//                            .resizable()
+//                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
+//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+//                    }
+//
+//                    // Show Time
+//                    Text(dateTime())
+//                        .font(.caption)
+//                        .padding(.top, 5)
+//                        .foregroundColor(Color.gray.opacity(0.4))
+//                }
+//                Spacer(minLength: 25)
             }
         }
         .id(msg.id)

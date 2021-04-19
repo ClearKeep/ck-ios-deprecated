@@ -30,6 +30,7 @@ struct MessageChatView: View {
     @State var alertVisible = false
         
     @State private var scrollingProxy = ListScrollingProxy()
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     init(clientId: String, groupID: Int64, userName: String, groupType: String = "peer") {
         self.userName = userName
@@ -42,127 +43,192 @@ struct MessageChatView: View {
     
     var body: some View {
         VStack {
-            if #available(iOS 14.0, *) {
-                GeometryReader { geoReader in
-                    ScrollView(.vertical, showsIndicators: false, content: {
-                        HStack { Spacer() }
-                        ScrollViewReader{reader in
-                            LazyVStack(spacing: 20){
-                                ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
-                                    // Chat Bubbles...
-                                    MessageBubble(msg: msg)
-                                        .id(msg.id)
+            VStack {
+                Spacer()
+                HStack {
+                    HStack(spacing: 0) {
+                        Image("ic_back")
+                            .frame(width: 24, height: 24, alignment: .leading)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .onTapGesture {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                            
+                        Image("user")
+                            .frame(width: 36, height: 36)
+                            .background(Color.yellow)
+                            .clipShape(Circle())
+                            .padding(.leading, 12)
+                        
+                        Text(self.userName)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .font(AppTheme.fonts.textLarge.font)
+                            .fontWeight(.medium)
+                            .padding(.leading, 20)
+                    }
+                    Spacer()
+                    HStack{
+                        Button(action: {
+                            call(callType: .audio)
+                        }, label: {
+                            Image("ic_call")
+                                .frame(width: 36, height: 36)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .padding(.trailing, 20)
+                        })
+                        Button(action: {
+                            call(callType: .video)
+                        }, label: {
+                            Image("ic_video_call")
+                                .frame(width: 36, height: 36)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                        })
+                    }
+                    
+                }.padding()
+            }
+            .gradientHeader()
+            .edgesIgnoringSafeArea(.top)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.14)
+
+            
+            VStack {
+                if #available(iOS 14.0, *) {
+                    GeometryReader { geoReader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            ScrollViewReader{reader in
+                                LazyVStack(spacing: 20){
+                                    let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
+                                    let lst = CKExtensions.getMessageAndSection(messages)
+                                    ForEach(lst , id: \.title) { gr in
+                                        Section(header: Text(gr.title)
+                                                    .font(AppTheme.fonts.textSmall.font)
+                                                    .foregroundColor(AppTheme.colors.gray3.color)) {
+                                            let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                            ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                                // Chat Bubbles...
+                                                MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                                    .id(msg.message.id)
+                                            }
+                                        }
+                                    }
+
+                                }
+                                .onChange(of: realmMessages.allMessageInGroup(groupId: self.myGroupID).count) { _ in
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
+                                .onAppear(perform: {
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                })
+                                .padding([.horizontal,.bottom])
+                                .padding(.top, 25)
+                                .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                    }
                                 }
                             }
-                            .onChange(of: realmMessages.allMessageInGroup(groupId: self.myGroupID).count) { _ in
-                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                        })
+
+                    }.gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                UIApplication.shared.endEditing()
+                            })
+                }else {
+                    GeometryReader { reader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            VStack(spacing: 20){
+                                let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
+                                let lst = CKExtensions.getMessageAndSection(messages)
+                                ForEach(lst , id: \.title) { gr in
+                                    Section(header: Text(gr.title)
+                                                .font(AppTheme.fonts.textSmall.font)
+                                                .foregroundColor(AppTheme.colors.gray3.color)) {
+                                        let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                        ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                            // Chat Bubbles...
+                                            MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                                .id(msg.message.id)
+                                        }
+                                    }
+                                }
                             }
                             .onAppear(perform: {
-                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                self.scrollingProxy = ListScrollingProxy()
+                                self.reloadData()
                             })
                             .padding([.horizontal,.bottom])
                             .padding(.top, 25)
-                            .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                        })
+                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                    self.scrollingProxy.scrollTo(.end)
                                 }
-                            }
                         }
-                    })
-
-                }.gesture(
-                    TapGesture()
-                        .onEnded { _ in
-                            UIApplication.shared.endEditing()
-                        })
-            }else {
-                GeometryReader { reader in
-                    ScrollView(.vertical, showsIndicators: false, content: {
-                        HStack { Spacer() }
-                        VStack(spacing: 20){
-                            ForEach(realmMessages.allMessageInGroup(groupId: self.myGroupID)) { msg in
-                                // Chat Bubbles...
-                                MessageBubble(msg: msg)
-                                    .id(msg.id)
-                                    .background (
-                                        ListScrollingHelper(proxy: self.scrollingProxy)
-                                    )
-                            }
-                        }
-                        .onAppear(perform: {
-                            self.scrollingProxy = ListScrollingProxy()
-                            self.reloadData()
-                        })
-                        .padding([.horizontal,.bottom])
-                        .padding(.top, 25)
-                    })
-                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                self.scrollingProxy.scrollTo(.end)
-                            }
-                    }
-                }.gesture(
-                    TapGesture()
-                        .onEnded { _ in
-                            UIApplication.shared.endEditing()
-                        })
-            }
-            
-            HStack(spacing: 15){
-                HStack(spacing: 15){
-                    MultilineTextField("Message", text: $messageStr)
+                    }.gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                UIApplication.shared.endEditing()
+                            })
                 }
-                .padding(.vertical, 4)
-                .padding(.horizontal)
-                .background(Color(UIColor.secondarySystemBackground))
-                .cornerRadius(30)
-                .clipped()
-            
                 
-                // Send Button...
-                // hiding view...
-                if messageStr != ""{
-                    Button(action: {
-                        // appeding message...
-                        // adding animation...
-                        withAnimation(.easeIn){
-                            self.send()
-                        }
-                        messageStr = ""
-                    }, label: {
-                        Image(systemName: "paperplane.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(Color.blue)
-                            // adjusting padding shape...
-                            .padding(.vertical,12)
-                            .padding(.leading,12)
-                            .padding(.trailing,17)
-                            .background(Color.black.opacity(0.07))
-                            .clipShape(Circle())
-                    })
+                HStack(spacing: 15){
+                    
+                    Button {
+                        
+                    } label: {
+                        Image("ic_photo")
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                    }
+                    
+                    Button {
+                        
+                    } label: {
+                        Image("ic_tag")
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                    }
+
+                    
+                    HStack(spacing: 15){
+                        MultilineTextField("Type Something Here", text: $messageStr)
+                    }
+                    .padding(.vertical, 4)
+                    .padding(.horizontal)
+                    .background(AppTheme.colors.gray5.color)
+                    .cornerRadius(16)
+                    .clipped()
+                
+                    
+                    // Send Button...
+                    // hiding view...
+    //                if messageStr != ""{
+                        Button(action: {
+                            // appeding message...
+                            // adding animation...
+                            withAnimation(.easeIn){
+                                self.send()
+                            }
+                            messageStr = ""
+                        }, label: {
+                            Image("ic_sent")
+                                .foregroundColor(AppTheme.colors.primary.color)
+                        })
+    //                }
                 }
+                .padding(.horizontal)
+                .padding(.bottom, 8)
+                .animation(.easeOut)
             }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-            .animation(.easeOut)
         }
+        .edgesIgnoringSafeArea(.top)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
-        .navigationBarTitle(Text(self.userName))
-        .navigationBarItems(trailing: HStack{
-            Button(action: {
-                call(callType: .audio)
-            }, label: {
-                Image(systemName: "phone.fill")
-                    .frame(width: 50, height: 50, alignment: .trailing)
-            })
-            Button(action: {
-                call(callType: .video)
-            }, label: {
-                Image(systemName: "video.fill")
-                    .frame(width: 50, height: 50, alignment: .trailing)
-            })
-        })
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),
@@ -372,6 +438,7 @@ extension MessageChatView {
     
     
     private func send() {
+        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {return}
         self.sendMessage(messageStr: $messageStr.wrappedValue)
     }
     

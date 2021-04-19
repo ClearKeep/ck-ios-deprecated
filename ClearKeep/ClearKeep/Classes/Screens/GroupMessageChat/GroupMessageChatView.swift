@@ -50,7 +50,7 @@ struct GroupMessageChatView: View {
                                 VStack(spacing: 20){
                                     ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                         // Chat Bubbles...
-                                        MessageBubble(msg: msg , isGroup: true)
+                                        MessageBubble(msg: msg , isGroup: true, rectCorner: [.topLeft])
                                             .id(msg.id)
                                     }
                                 }
@@ -81,7 +81,7 @@ struct GroupMessageChatView: View {
                             VStack(spacing: 20){
                                 ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
                                     // Chat Bubbles...
-                                    MessageBubble(msg: msg, isGroup: true)
+                                    MessageBubble(msg: msg, isGroup: true, rectCorner: [.topLeft])
                                         .id(msg.id)
                                         .background (
                                             ListScrollingHelper(proxy: self.scrollingProxy)

@@ -192,6 +192,7 @@
 		689248012566123A00EAD2B7 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689248002566123A00EAD2B7 /* Group.swift */; };
 		68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */; };
 		68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */; };
+		68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68AE9CAE262D2DEB000B61AB /* MessageUtils.swift */; };
 		68C036F7256DF54E00B9D49A /* EventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C036F6256DF54E00B9D49A /* EventHub.swift */; };
 		68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */; };
 		68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */; };
@@ -431,6 +432,7 @@
 		689248002566123A00EAD2B7 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassWordView.swift; sourceTree = "<group>"; };
 		68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		68AE9CAE262D2DEB000B61AB /* MessageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtils.swift; sourceTree = "<group>"; };
 		68C036F6256DF54E00B9D49A /* EventHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHub.swift; sourceTree = "<group>"; };
 		68C036FB256DF58B00B9D49A /* SelectPeopleEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPeopleEvent.swift; sourceTree = "<group>"; };
 		68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessage.swift; sourceTree = "<group>"; };
@@ -1071,6 +1073,7 @@
 			children = (
 				686F25F4255E774600953C5E /* Constant.swift */,
 				108C7EC62616AF01003B6936 /* AppConfig.swift */,
+				68AE9CAE262D2DEB000B61AB /* MessageUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1510,6 +1513,7 @@
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
 				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
 				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
+				68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,

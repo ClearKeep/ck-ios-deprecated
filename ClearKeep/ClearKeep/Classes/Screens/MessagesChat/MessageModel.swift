@@ -72,3 +72,13 @@ protocol MessageChats: ObservableObject{
     func allMessageInGroup(groupId: Int64) -> [MessageModel]
     
 }
+
+struct SectionWithMessage {
+    var title: String = String()
+    var messages: [MessageModel] = []
+}
+
+struct MessageDisplayInfo {    
+    var message : MessageModel
+    var rectCorner: UIRectCorner
+}
