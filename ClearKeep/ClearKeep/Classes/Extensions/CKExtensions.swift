@@ -52,18 +52,21 @@ class CKExtensions {
           }
      }
     
-    static func timeToDateStringHeader(timeStamp: Int64) -> String{
+    static func timeToDateStringHeader(timeStamp: Int64, dateFormatter: String = "EEE MM/dd/yyyy", useTodayFormat: Bool = true) -> String{
         let date = NSDate(timeIntervalSince1970: TimeInterval(timeStamp/1000))
         let formatDate = DateFormatter()
-        formatDate.dateFormat = "EEE MM/dd/yyyy"
+        formatDate.dateFormat = dateFormatter
         let dateString = formatDate.string(from: date as Date)
 
-        if Calendar.current.isDateInToday(date as Date) {
-            return "Today"
+        if useTodayFormat {
+            if Calendar.current.isDateInToday(date as Date) {
+                return "Today"
+            }
+            if Calendar.current.isDateInYesterday(date as Date) {
+                return "Yesterday"
+            }
         }
-        if Calendar.current.isDateInYesterday(date as Date) {
-            return "Yesterday"
-        }
+        
         return dateString
     }
     
@@ -72,13 +75,20 @@ class CKExtensions {
             return msg1.createdAt < msg2.createdAt
         }
         let dict = Dictionary(grouping: msgs){
-            CKExtensions.timeToDateStringHeader(timeStamp: $0.createdAt)
+            CKExtensions.timeToDateStringHeader(timeStamp: $0.createdAt, dateFormatter: "yyyy/MM/dd", useTodayFormat: false)
         }
         var lst : [SectionWithMessage] = []
-        dict.forEach { (key , value) in
-            lst.append(SectionWithMessage(title: key, messages: value))
+        let allKeys = dict.keys.sorted { (left, right) -> Bool in
+            left < right
         }
         
+        for key in allKeys {
+            if let item = dict[key], let firstDate = item.first?.createdAt {
+                let nextTitle = CKExtensions.timeToDateStringHeader(timeStamp: firstDate)
+                lst.append(SectionWithMessage(title: nextTitle, messages: item))
+            }
+        }
+
         return lst
         
     }
