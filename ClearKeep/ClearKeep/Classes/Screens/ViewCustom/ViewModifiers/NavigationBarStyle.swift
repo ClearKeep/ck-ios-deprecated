@@ -12,8 +12,8 @@ struct NavigationBarStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .gradientHeader()
-            .edgesIgnoringSafeArea(.all)
-            .frame(width: UIScreen.main.bounds.width, height: 64)//UIScreen.main.bounds.height * 0.14)
+            .edgesIgnoringSafeArea(.top)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.14)
     }
 }
 

@@ -57,6 +57,7 @@ struct PeopleView: View {
 //                                trailing: NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
 //                                    Text("Search")
 //                                }))
+            .edgesIgnoringSafeArea(.top)
             .navigationBarTitle(Text(""), displayMode: .inline)
             .navigationBarHidden(true)
             .onAppear(){

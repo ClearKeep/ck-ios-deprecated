@@ -147,6 +147,7 @@ struct GroupMessageChatView: View {
                 .padding(.bottom, 8)
                 .animation(.easeOut)
             }
+            .edgesIgnoringSafeArea(.top)
             .navigationBarTitle("")
             .navigationBarHidden(true)
             .onAppear() {

@@ -92,6 +92,7 @@ struct HistoryChatView: View {
                     }
                 }
             }
+            .edgesIgnoringSafeArea(.top)
             .onAppear(){
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
@@ -154,8 +155,8 @@ extension HistoryChatView {
                 }
                 
             }
+            .padding()
         }
-        .padding()
         .applyNavigationBarStyle()
     }
 }
