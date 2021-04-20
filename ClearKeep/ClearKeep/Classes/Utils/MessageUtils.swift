@@ -34,15 +34,16 @@ class MessageUtils {
         separateMessageList.forEach { (subList) in
             let groupedSize = subList.count
             let list = subList.enumerated().map { (index , message) in
-                MessageDisplayInfo(message: message, rectCorner: message.myMsg ? self.getOwnerRectCorner(index: index, size: groupedSize) : self.getOtherRectCorner(index: index, size: groupedSize))
+                MessageDisplayInfo(message: message, rectCorner: message.myMsg ? self.getOwnerRectCorner(index: index, size: groupedSize) : self.getOtherRectCorner(index: index, size: groupedSize), showAvatarAndUserName: self.isShowAvatarAndUserName(index: index, size: groupedSize))
             }
             listMessageDisplay.append(contentsOf: list)
         }
         return listMessageDisplay
     }
     
-    
-    
+    static func isShowAvatarAndUserName(index: Int, size: Int) -> Bool {
+        return size == 1 ? true : index == 0 ? true : false
+    }
     
     static func getOwnerRectCorner(index: Int, size: Int) -> UIRectCorner {
         if size == 1 {

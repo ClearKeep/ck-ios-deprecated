@@ -41,7 +41,7 @@ struct GroupMessageChatView: View {
     
     var body: some View {
         VStack {
-            VStack{
+            VStack(spacing: 0){
                 customeNavigationBarView()
                 
                 Group {
@@ -50,11 +50,20 @@ struct GroupMessageChatView: View {
                             ScrollView(.vertical, showsIndicators: false, content: {
                                 HStack { Spacer() }
                                 ScrollViewReader{reader in
-                                    VStack(spacing: 20){
-                                        ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
-                                            // Chat Bubbles...
-                                            MessageBubble(msg: msg , isGroup: true, rectCorner: [.topLeft])
-                                                .id(msg.id)
+                                    VStack(spacing: 16){
+                                        let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+                                        let lst = CKExtensions.getMessageAndSection(messages)
+                                        ForEach(lst , id: \.title) { gr in
+                                            Section(header: Text(gr.title)
+                                                        .font(AppTheme.fonts.textSmall.font)
+                                                        .foregroundColor(AppTheme.colors.gray3.color)) {
+                                                let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                                ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                                    // Chat Bubbles...
+                                                    MessageBubble(msg: msg.message, isGroup: true, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
+                                                        .id(msg.message.id)
+                                                }
+                                            }
                                         }
                                     }
                                     .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
@@ -81,18 +90,20 @@ struct GroupMessageChatView: View {
                         GeometryReader { reader in
                             ScrollView(.vertical, showsIndicators: false, content: {
                                 HStack { Spacer() }
-                                VStack(spacing: 20){
-                                    ForEach(realmMessages.allMessageInGroup(groupId: groupModel.groupID)) { msg in
-                                        // Chat Bubbles...
-                                        MessageBubble(msg: msg, isGroup: true, rectCorner: [.topLeft])
-                                            .id(msg.id)
-                                            .background (
-                                                ListScrollingHelper(proxy: self.scrollingProxy)
-                                            )
-                                    }
-                                    .onAppear {
-                                        self.scrollingProxy = ListScrollingProxy()
-                                        self.reloadData()
+                                VStack(spacing: 16){
+                                    let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+                                    let lst = CKExtensions.getMessageAndSection(messages)
+                                    ForEach(lst , id: \.title) { gr in
+                                        Section(header: Text(gr.title)
+                                                    .font(AppTheme.fonts.textSmall.font)
+                                                    .foregroundColor(AppTheme.colors.gray3.color)) {
+                                            let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                            ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                                // Chat Bubbles...
+                                                MessageBubble(msg: msg.message, isGroup: true, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
+                                                    .id(msg.message.id)
+                                            }
+                                        }
                                     }
                                 }
                                 .padding([.horizontal,.bottom])
@@ -111,41 +122,8 @@ struct GroupMessageChatView: View {
                     }
                 }
                 
+                self.sendMessageBarView()
                 
-                HStack(spacing: 15){
-                    HStack(spacing: 15){
-                        MultilineTextField("Message", text: $messageStr)
-                    }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(30)
-                    .clipped()
-                    
-                    // Send Button...
-                    // hiding view...
-                    if messageStr != ""{
-                        Button(action: {
-                            // appeding message...
-                            // adding animation...
-                            withAnimation(.easeIn){
-                                self.send()
-                            }
-                            messageStr = ""
-                        }, label: {
-                            Image(systemName: "paperplane.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(Color.blue)
-                                .padding(.vertical,12)
-                                .padding(.leading,12)
-                                .padding(.trailing,17)
-                                .clipShape(Circle())
-                        })
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 8)
-                .animation(.easeOut)
             }
             .edgesIgnoringSafeArea(.top)
             .navigationBarTitle("")
@@ -239,6 +217,51 @@ extension GroupMessageChatView {
         }
         .padding()
         .applyNavigationBarStyle()
+    }
+    
+    func sendMessageBarView() -> some View {
+        HStack(spacing: 15) {
+            
+            Button {} label: {
+                Image("ic_photo")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            Button {} label: {
+                Image("ic_tag")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            
+            HStack(spacing: 15){
+                MultilineTextField("Type Something Here", text: $messageStr)
+            }
+            .padding(.vertical, 4)
+            .padding(.horizontal)
+            .background(AppTheme.colors.gray5.color)
+            .cornerRadius(16)
+            .clipped()
+            
+            
+            // Send Button...
+            // hiding view...
+            //                if messageStr != ""{
+            Button(action: {
+                // appeding message...
+                // adding animation...
+                withAnimation(.easeIn){
+                    self.send()
+                }
+                messageStr = ""
+            }, label: {
+                Image("ic_sent")
+                    .foregroundColor(AppTheme.colors.primary.color)
+            })
+            //                }
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+        .animation(.easeOut)
     }
 }
 
@@ -351,6 +374,7 @@ extension GroupMessageChatView {
     }
     
     private func send() {
+        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {return}
         self.sendMessage(messageStr: $messageStr.wrappedValue)
     }
     

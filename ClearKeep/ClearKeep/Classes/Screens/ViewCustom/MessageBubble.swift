@@ -11,6 +11,7 @@ struct MessageBubble: View {
     var msg : MessageModel
     var userName: String? = nil
     var isGroup: Bool = false
+    var isShowAvatarAndUserName: Bool = false
     var rectCorner: UIRectCorner
     var body: some View {
         // Automatic scroll To Bottom...
@@ -27,37 +28,80 @@ struct MessageBubble: View {
                     Spacer()
                     if msg.photo == nil{
                         Text(stringValue())
-                            .padding([.top , .bottom], 8)
+                            .padding([.top , .bottom], 12)
                             .padding([.leading , .trailing] , 24)
                             .background(AppTheme.colors.gray2.color)
                             .font(AppTheme.fonts.textMedium.font)
                             .foregroundColor(AppTheme.colors.offWhite.color)
-//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-                            .cornerRadius(32, corners: rectCorner)
-                    }
-                    else{
-//                        Image(uiImage: UIImage(data: msg.photo!)!)
-//                            .resizable()
-//                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
-//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
+                            .clipShape(BubbleArrow(rectCorner: rectCorner))
+                            .lineSpacing(10)
                     }
                 }
             }
             else {
-                HStack(alignment: .firstTextBaseline){
-                    Text(stringValue())
-                        .padding([.top , .bottom], 8)
-                        .padding([.leading , .trailing] , 24)
-                        .background(AppTheme.colors.primary.color)
-                        .font(AppTheme.fonts.textMedium.font)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .cornerRadius(32, corners: rectCorner)
-                    Spacer()
-                    Text(dateTime())
-                        .font(AppTheme.fonts.textXSmall.font)
-                        .padding(.top, 5)
-                        .foregroundColor(AppTheme.colors.gray3.color)
+                if isGroup {
+                    VStack(alignment: .leading, spacing: 0){
+                        HStack(spacing: 0) {
+                            if isShowAvatarAndUserName {
+                                ChannelUserAvatar(avatarSize: 16, text: .constant(msg.fromDisplayName))
+                                Text(msg.fromDisplayName)
+                                    .font(AppTheme.fonts.linkSmall.font)
+                                    .foregroundColor(AppTheme.colors.warning.color)
+                                    .padding(.leading, 8)
+                                Spacer()
+                                Text(dateTime())
+                                    .font(AppTheme.fonts.textXSmall.font)
+                                    .padding(.top, 5)
+                                    .foregroundColor(AppTheme.colors.gray3.color)
+                            }
+                        }
+                        
+                        if isShowAvatarAndUserName {
+                            Text(stringValue())
+                                .padding([.top , .bottom], 12)
+                                .padding([.leading , .trailing] , 24)
+                                .background(AppTheme.colors.primary.color)
+                                .font(AppTheme.fonts.textMedium.font)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .clipShape(BubbleArrow(rectCorner: rectCorner))
+                                .lineSpacing(10)
+                        } else {
+                            HStack(alignment: .firstTextBaseline){
+                                Text(stringValue())
+                                    .padding([.top , .bottom], 12)
+                                    .padding([.leading , .trailing] , 24)
+                                    .background(AppTheme.colors.primary.color)
+                                    .font(AppTheme.fonts.textMedium.font)
+                                    .foregroundColor(AppTheme.colors.offWhite.color)
+                                    .clipShape(BubbleArrow(rectCorner: rectCorner))
+                                    .lineSpacing(10)
+                                Spacer()
+//                                Text(dateTime())
+//                                    .font(AppTheme.fonts.textXSmall.font)
+//                                    .padding(.top, 5)
+//                                    .foregroundColor(AppTheme.colors.gray3.color)
+                            }
+                        }
+                        
+                    }
+                } else {
+                    HStack(alignment: .firstTextBaseline){
+                        Text(stringValue())
+                            .padding([.top , .bottom], 12)
+                            .padding([.leading , .trailing] , 24)
+                            .background(AppTheme.colors.primary.color)
+                            .font(AppTheme.fonts.textMedium.font)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .clipShape(BubbleArrow(rectCorner: rectCorner))
+                            .lineSpacing(10)
+                        Spacer()
+                        Text(dateTime())
+                            .font(AppTheme.fonts.textXSmall.font)
+                            .padding(.top, 5)
+                            .foregroundColor(AppTheme.colors.gray3.color)
+                    }
                 }
+
 
                 // profile Image...
 //                Image(systemName: "person.circle.fill")
@@ -118,10 +162,9 @@ struct MessageBubble: View {
 }
 
 struct BubbleArrow : Shape {
-    var myMsg : Bool
+    var rectCorner: UIRectCorner
     func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: myMsg ?  [.topLeft,.bottomLeft,.bottomRight] : [.topRight,.bottomLeft,.bottomRight], cornerRadii: CGSize(width: 10, height: 10))
-        
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: rectCorner, cornerRadii: CGSize(width: 32, height: 32))
         return Path(path.cgPath)
     }
 }

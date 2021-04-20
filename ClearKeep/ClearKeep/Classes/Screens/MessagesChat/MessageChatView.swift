@@ -42,7 +42,7 @@ struct MessageChatView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             customeNavigationBarView()
             messageListView()
             sendMessageBarView()

@@ -81,4 +81,5 @@ struct SectionWithMessage {
 struct MessageDisplayInfo {    
     var message : MessageModel
     var rectCorner: UIRectCorner
+    var showAvatarAndUserName: Bool
 }
