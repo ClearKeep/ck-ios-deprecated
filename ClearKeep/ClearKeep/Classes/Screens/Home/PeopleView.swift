@@ -26,12 +26,14 @@ struct PeopleView: View {
                 
                 Group {
                     if users.isEmpty {
+                        Spacer()
                         Text("No contact found")
                             .font(.title)
                             .foregroundColor(.gray)
                             .lineLimit(nil)
                             .frame(width: 300, alignment: .center)
                             .multilineTextAlignment(.center)
+                        Spacer()
                     } else {
                         List(users){ user in
                             
