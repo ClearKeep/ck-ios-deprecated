@@ -81,6 +81,7 @@ struct LeftMainMenuView: View {
             .frame(width: 84, alignment: .leading)
             .cornerRadius(24)
         }
+        //.edgesIgnoringSafeArea(.all)
     }
 }
 

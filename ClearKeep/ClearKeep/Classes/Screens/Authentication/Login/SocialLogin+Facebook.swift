@@ -16,8 +16,7 @@ extension SocialLogin {
     
     func attemptLoginFacebook() {
         let loginManager = LoginManager()
-        loginManager.logIn(permissions: [.publicProfile, .email, .userFriends], viewController: nil) { (loginResult) in
-            let a: LoginResult
+        loginManager.logIn(permissions: [.publicProfile, .email], viewController: nil) { (loginResult) in
             switch loginResult {
             case .cancelled:
                 print("User canceled")

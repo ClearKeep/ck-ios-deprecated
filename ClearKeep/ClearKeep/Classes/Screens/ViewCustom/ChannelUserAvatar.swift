@@ -38,22 +38,24 @@ enum GradientBackgroundType: Int {
 }
 
 struct ChannelUserAvatar: View {
-    @Binding var status: UserOnlineStatus
-    @Binding var text: String?
-    @Binding var image: Image?
+    let status: UserOnlineStatus
+    let text: String?
+    let image: Image?
     
     let textColor: UIColor = .white
     var gradientBackgroundType: GradientBackgroundType = .primary
     
     var avatarSize: CGFloat = 64
-    let statusSize: CGFloat = 16
-    let font: Font = AppTheme.fonts.displaySmallBold.font
+    var statusSize: CGFloat = 16
+    var font: Font = AppTheme.fonts.displaySmallBold.font
     
-    init(avatarSize: CGFloat = 64, text: Binding<String?>, image: Binding<Image?> = .constant(nil), status: Binding<UserOnlineStatus> = .constant(UserOnlineStatus.none), gradientBackgroundType: GradientBackgroundType = .accent) {
+    init(avatarSize: CGFloat = 64, statusSize: CGFloat = 16, text: String?, font: Font = AppTheme.fonts.displaySmallBold.font, image: Image? = nil, status: UserOnlineStatus = .none, gradientBackgroundType: GradientBackgroundType = .accent) {
         self.avatarSize = avatarSize
-        self._text = text
-        self._image = image
-        self._status = status
+        self.statusSize = statusSize
+        self.text = text
+        self.font = font
+        self.image = image
+        self.status = status
         self.gradientBackgroundType = gradientBackgroundType
     }
     
@@ -98,11 +100,11 @@ struct ChannelUserAvatar: View {
 struct ChannelUserAvatar_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ChannelUserAvatar(text: .constant("Tommy"), image: .constant(Image("ic_app")), status: .constant(.active))
-            ChannelUserAvatar(text: .constant("Vika"), status: .constant(.away))
-            ChannelUserAvatar(text: .constant("Mum"), status: .constant(.doNotDisturb))
-            ChannelUserAvatar(text: .constant("Mum"), image: .constant(Image("ic_app")), status: .constant(.none))
-            ChannelUserAvatar(text: .constant("Only"), status: .constant(.none), gradientBackgroundType: .primary)
+            ChannelUserAvatar(text: "Tommy", image: Image("ic_app"), status: .active)
+            ChannelUserAvatar(text: "Vika", status: .away)
+            ChannelUserAvatar(text: "Mum", status: .doNotDisturb)
+            ChannelUserAvatar(text: "Mum", image: Image("ic_app"), status: .none)
+            ChannelUserAvatar(text: "Only", status: .none, gradientBackgroundType: .primary)
         }
         .background(Color.white)
     }

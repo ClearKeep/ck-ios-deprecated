@@ -124,7 +124,7 @@ extension MessageChatView {
                             self.presentationMode.wrappedValue.dismiss()
                         }
                     
-                    ChannelUserAvatar(avatarSize: 36, text: .constant(userName))
+                    ChannelUserAvatar(avatarSize: 36, text: userName)
                     
                     Text(self.userName)
                         .foregroundColor(AppTheme.colors.offWhite.color)

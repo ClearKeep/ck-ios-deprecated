@@ -19,7 +19,7 @@ struct MessageNotificationView: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
-                ChannelUserAvatar(avatarSize: 56, text: .constant(userName), image: .constant(userIcon), status: .constant(.none), gradientBackgroundType: .primary)
+                ChannelUserAvatar(avatarSize: 56, text: userName, image: userIcon, status: .none, gradientBackgroundType: .primary)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(title)
