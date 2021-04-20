@@ -25,7 +25,7 @@ extension SocialLogin {
                 print("Failed to login: \(error.localizedDescription)")
                 return
             case .success(let grantedPermissions, let deniedPermissions, let token):
-                print("AccessToken: \(token.tokenString ?? "")")
+                print("AccessToken: \(token?.tokenString ?? "")")
             }
         }
     }

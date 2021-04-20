@@ -43,7 +43,7 @@ struct MessageBubble: View {
                     VStack(alignment: .leading, spacing: 0){
                         HStack(spacing: 0) {
                             if isShowAvatarAndUserName {
-                                ChannelUserAvatar(avatarSize: 16, text: .constant(msg.fromDisplayName))
+                                ChannelUserAvatar(avatarSize: 16, text: msg.fromDisplayName)
                                 Text(msg.fromDisplayName)
                                     .font(AppTheme.fonts.linkSmall.font)
                                     .foregroundColor(AppTheme.colors.warning.color)
