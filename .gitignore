@@ -7230,3 +7230,29 @@ ClearKeep/Pods/Target Support Files/FBSDKLoginKit/FBSDKLoginKit-umbrella.h
 ClearKeep/Pods/Target Support Files/FBSDKLoginKit/FBSDKLoginKit.debug.xcconfig
 ClearKeep/Pods/Target Support Files/FBSDKLoginKit/FBSDKLoginKit.modulemap
 ClearKeep/Pods/Target Support Files/FBSDKLoginKit/FBSDKLoginKit.release.xcconfig
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/FBSDKAudioResourceLoader.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/FBSDKAudioResourceLoader.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMethodUsageMonitor.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMethodUsageMonitor.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMethodUsageMonitorEntry.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMethodUsageMonitorEntry.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitor.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitor.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorEntry.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorHeaders.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitoringConfiguration.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitoringConfiguration.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorNetworker.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorNetworker.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorStore.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKMonitorStore.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKPerformanceMonitor.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKPerformanceMonitor.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKPerformanceMonitorEntry.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/Monitoring/FBSDKPerformanceMonitorEntry.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/TokenCaching/FBSDKAccessTokenCache.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/TokenCaching/FBSDKAccessTokenCache.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/TokenCaching/FBSDKAccessTokenCaching.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/UI/FBSDKMaleSilhouetteIcon.h
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal/UI/FBSDKMaleSilhouetteIcon.m
+ClearKeep/Pods/FBSDKCoreKit/FBSDKCoreKit/FBSDKCoreKit/Internal_NoARC/FBSDKDynamicFrameworkLoader.m
