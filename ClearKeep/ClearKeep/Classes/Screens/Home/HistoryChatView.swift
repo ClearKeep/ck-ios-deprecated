@@ -31,12 +31,14 @@ struct HistoryChatView: View {
                 
                 Group {
                     if self.groupRealms.all.isEmpty {
+                        Spacer()
                         Text("Start a conversation by clicking Chat or Create Room")
                             .font(.title)
                             .foregroundColor(.gray)
                             .lineLimit(nil)
                             .frame(width: 300, alignment: .center)
                             .multilineTextAlignment(.center)
+                        Spacer()
                     } else {
                         List(self.groupRealms.all , id: \.groupID){ group in
                             let viewPeer = MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}),
