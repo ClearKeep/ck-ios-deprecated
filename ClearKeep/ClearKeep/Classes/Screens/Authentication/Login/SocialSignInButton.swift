@@ -65,7 +65,7 @@ extension SocialSignInButton {
             switch self {
             case .google: return UIColor(hex: "#2F80ED").color
             case .office365: return UIColor(hex: "#DC3E15").color
-            case .facebook: return UIColor(red: 60/255, green: 70/255, blue: 146/255, alpha: 1).color
+            case .facebook: return UIColor(hex: "#3F65EC").color
             }
         }
         
