@@ -209,6 +209,17 @@ class Backend: ObservableObject {
         }
     }
     
+    func loginWithFacebookAccount(_ request: Auth_FacebookLoginReq, _ completion: @escaping (Auth_AuthRes?, Error?) -> Void){
+        clientAuth.login_facebook(request).response.whenComplete { (result) in
+            switch result {
+            case .success(let response):
+                completion(response, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
     func register(_ request: Auth_RegisterReq, _ completion: @escaping (Auth_RegisterRes? , Error?) -> Void){
         clientAuth.register(request).response.whenComplete { (result) in
             switch result {

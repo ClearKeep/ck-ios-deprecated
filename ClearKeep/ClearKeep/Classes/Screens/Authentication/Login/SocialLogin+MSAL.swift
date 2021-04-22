@@ -90,6 +90,10 @@ extension SocialLogin {
                 }
                 
                 print("Could not acquire token silently: \(error)")
+                let userInfo: [String : Any] = ["error": error]
+                NotificationCenter.default.post(name: NSNotification.MicrosoftSignIn.FinishedWithError,
+                                                object: nil,
+                                                userInfo: userInfo)
                 return
             }
             

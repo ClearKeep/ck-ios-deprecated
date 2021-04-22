@@ -114,6 +114,11 @@ extension NSNotification {
         static let FinishedWithResponse = NSNotification.Name.init("MicrosoftSignIn.FinishedWithResponse")
         static let FinishedWithError = NSNotification.Name.init("MicrosoftSignIn.FinishedWithError")
     }
+    
+    enum FacebookSignIn {
+        static let FinishedWithResponse = NSNotification.Name.init("FacebookSignIn.FinishedWithResponse")
+        static let FinishedWithError = NSNotification.Name.init("FacebookSignIn.FinishedWithError")
+    }
 }
 
 extension UserDefaults: ObjectSavable {

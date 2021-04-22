@@ -42,6 +42,11 @@ internal protocol Auth_AuthClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Auth_OfficeLoginReq, Auth_AuthRes>
 
+  func login_facebook(
+    _ request: Auth_FacebookLoginReq,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Auth_FacebookLoginReq, Auth_AuthRes>
+
   func register(
     _ request: Auth_RegisterReq,
     callOptions: CallOptions?
@@ -107,6 +112,23 @@ extension Auth_AuthClientProtocol {
   ) -> UnaryCall<Auth_OfficeLoginReq, Auth_AuthRes> {
     return self.makeUnaryCall(
       path: "/auth.Auth/login_office",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to login_facebook
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to login_facebook.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func login_facebook(
+    _ request: Auth_FacebookLoginReq,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Auth_FacebookLoginReq, Auth_AuthRes> {
+    return self.makeUnaryCall(
+      path: "/auth.Auth/login_facebook",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -184,6 +206,7 @@ internal protocol Auth_AuthProvider: CallHandlerProvider {
   func login(request: Auth_AuthReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
   func login_google(request: Auth_GoogleLoginReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
   func login_office(request: Auth_OfficeLoginReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
+  func login_facebook(request: Auth_FacebookLoginReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_AuthRes>
   func register(request: Auth_RegisterReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_RegisterRes>
   func fogot_password(request: Auth_FogotPassWord, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_BaseResponse>
   func logout(request: Auth_LogoutReq, context: StatusOnlyCallContext) -> EventLoopFuture<Auth_BaseResponse>
@@ -214,6 +237,13 @@ extension Auth_AuthProvider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.login_office(request: request, context: context)
+        }
+      }
+
+    case "login_facebook":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.login_facebook(request: request, context: context)
         }
       }
 

@@ -105,6 +105,8 @@ struct ProfileView: View {
             }
         case .microsoft:
             SocialLogin.shared.signOutO365()
+        case .facebook:
+            SocialLogin.shared.signOutFacebookAccount()
         }
     }
     

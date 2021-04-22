@@ -132,6 +132,37 @@ struct LoginView: View {
                     self.loginWithMicrosoftAccessToken(accessToken)
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.FacebookSignIn.FinishedWithResponse)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let accessToken = userInfo["accessToken"] as? String {
+                    print("Facebook signin success with token \(accessToken)")
+                    self.loginWithFacebookAccessToken(accessToken)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithError)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let error = userInfo["error"] as? Error {
+                    print("Signin google error: \(error.localizedDescription)")
+                    self.messageAlert = "Something went wrong"
+                    self.isShowAlert = true
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.MicrosoftSignIn.FinishedWithError)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let error = userInfo["error"] as? Error {
+                    print("Signin microsoft error: \(error.localizedDescription)")
+                    self.messageAlert = "Something went wrong"
+                    self.isShowAlert = true
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.FacebookSignIn.FinishedWithError)) { (obj) in
+                if let userInfo = obj.userInfo,
+                   let error = userInfo["error"] as? Error {
+                    print("Signin facebook error: \(error.localizedDescription)")
+                    self.messageAlert = "Something went wrong"
+                    self.isShowAlert = true
+                }
+            }
             .keyboardAdaptive()
             .grandientBackground()
         }
@@ -205,7 +236,6 @@ extension LoginView {
 extension LoginView {
     
     private func loginWithMicrosoftAccessToken(_ accessToken: String) {
-        // TODO: complete this flow when backend is ready
         print("MICROSIFT ACCESS TOKEN:\n\(accessToken)")
         hudVisible = true
         var request = Auth_OfficeLoginReq()
@@ -218,6 +248,21 @@ extension LoginView {
     }
 }
 
+// MARK: - Facebook SignIn Button
+extension LoginView {
+    
+    private func loginWithFacebookAccessToken(_ accessToken: String) {
+        print("Facebook ACCESS TOKEN:\n\(accessToken)")
+        hudVisible = true
+        var request = Auth_FacebookLoginReq()
+        request.accessToken = accessToken
+        
+        Backend.shared.loginWithFacebookAccount(request) { (result, error) in
+            self.didReceiveLoginResponse(result: result, error: error, signInType: .facebook)
+        }
+        SocialLogin.shared.signOutFacebookAccount()
+    }
+}
 
 extension LoginView {
     

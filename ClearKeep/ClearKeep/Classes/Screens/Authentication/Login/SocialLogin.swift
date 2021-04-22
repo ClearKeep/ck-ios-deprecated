@@ -39,7 +39,7 @@ class SocialLogin {
 extension SocialLogin {
     
     enum SignInType: Int {
-        case email, google, microsoft
+        case email, google, microsoft, facebook
     }
     
     var currentSignInType: SignInType {
