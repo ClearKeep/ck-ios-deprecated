@@ -30,7 +30,7 @@ struct HomeMainView: View {
     }
     
     func mainContainerView() -> some View {
-        Text("Main view")
+        ServerMainView()
     }
 }
 

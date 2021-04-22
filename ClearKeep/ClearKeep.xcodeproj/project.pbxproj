@@ -44,6 +44,7 @@
 		10D650D12626C39B0018528B /* UX+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650D02626C39B0018528B /* UX+TextField.swift */; };
 		10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650D52626D2A60018528B /* UX+WrappedTextField.swift */; };
 		10D650DE2626F4F30018528B /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650DD2626F4F30018528B /* RegisterViewModel.swift */; };
+		10D7E32026316EB700478957 /* ServerMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D7E31F26316EB600478957 /* ServerMainView.swift */; };
 		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
@@ -271,6 +272,7 @@
 		10D650D02626C39B0018528B /* UX+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+TextField.swift"; sourceTree = "<group>"; };
 		10D650D52626D2A60018528B /* UX+WrappedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+WrappedTextField.swift"; sourceTree = "<group>"; };
 		10D650DD2626F4F30018528B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		10D7E31F26316EB600478957 /* ServerMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMainView.swift; sourceTree = "<group>"; };
 		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
@@ -689,6 +691,7 @@
 				68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */,
 				68CFA521256CF04600109725 /* InviteMemberViewModel.swift */,
 				10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */,
+				10D7E31F26316EB600478957 /* ServerMainView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1513,6 +1516,7 @@
 				56694AE225B53C8A008E8EC5 /* FailureIndicator.swift in Sources */,
 				56C7F33F254ABE4100737C5F /* CKSignalStorageManager.swift in Sources */,
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
+				10D7E32026316EB700478957 /* ServerMainView.swift in Sources */,
 				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
 				10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */,
 				56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */,
