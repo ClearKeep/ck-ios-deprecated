@@ -21,7 +21,7 @@ struct RecentCreatedGroupChatView: View {
     var body: some View {
         NavigationView {
             VStack {
-                GroupMessageChatView(groupModel: self.viewRouter.recentCreatedGroupModel!).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                GroupMessageChatView(groupModel: self.viewRouter.recentCreatedGroupModel!, isNewCreatedGroup: true).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             }
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarBackButtonHidden(true)

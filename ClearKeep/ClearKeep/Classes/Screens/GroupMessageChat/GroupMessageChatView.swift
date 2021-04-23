@@ -13,12 +13,14 @@ struct GroupMessageChatView: View {
     
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var realmMessages : RealmMessages
+    @EnvironmentObject var viewRouter: ViewRouter
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var recipientDeviceId: UInt32 = 0
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
     let groupModel: GroupModel
+    let isNewCreatedGroup: Bool
     
     @State var messages = [MessageModel]()
     @State var messageStr = ""
@@ -32,9 +34,9 @@ struct GroupMessageChatView: View {
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     @Environment(\.presentationMode) var presentationMode
     
-    
-    init(groupModel: GroupModel) {
+    init(groupModel: GroupModel, isNewCreatedGroup: Bool = false) {
         self.groupModel = groupModel
+        self.isNewCreatedGroup = isNewCreatedGroup
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
         
     }
@@ -182,7 +184,11 @@ extension GroupMessageChatView {
                         .frame(width: 24, height: 24, alignment: .leading)
                         .foregroundColor(AppTheme.colors.offWhite.color)
                         .onTapGesture {
-                            self.presentationMode.wrappedValue.dismiss()
+                            if self.isNewCreatedGroup {
+                                self.viewRouter.current = .tabview
+                            } else {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
                         }
                     
                     NavigationLink(
