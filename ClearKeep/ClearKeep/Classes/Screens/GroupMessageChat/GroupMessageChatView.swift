@@ -52,7 +52,7 @@ struct GroupMessageChatView: View {
                             ScrollView(.vertical, showsIndicators: false, content: {
                                 HStack { Spacer() }
                                 ScrollViewReader{reader in
-                                    VStack(spacing: 16){
+                                    VStack(spacing: 8){
                                         let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
                                         let lst = CKExtensions.getMessageAndSection(messages)
                                         ForEach(lst , id: \.title) { gr in
@@ -92,7 +92,7 @@ struct GroupMessageChatView: View {
                         GeometryReader { reader in
                             ScrollView(.vertical, showsIndicators: false, content: {
                                 HStack { Spacer() }
-                                VStack(spacing: 16){
+                                VStack(spacing: 8){
                                     let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
                                     let lst = CKExtensions.getMessageAndSection(messages)
                                     ForEach(lst , id: \.title) { gr in

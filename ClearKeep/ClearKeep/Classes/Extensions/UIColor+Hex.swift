@@ -42,3 +42,20 @@ extension UIColor {
         return Color(self)
     }
 }
+
+
+
+extension UIColor {
+    static func random() -> UIColor {
+        let listColor = [AppTheme.colors.successDark ,
+                         AppTheme.colors.primaryDark ,
+                         AppTheme.colors.secondaryDark ,
+                         AppTheme.colors.errorDark ,
+                         AppTheme.colors.warningDark ,
+                         AppTheme.colors.gradientPrimaryDark ,
+                         AppTheme.colors.gradientAccentDark]
+        
+        return listColor.randomElement()!
+    }
+}
+

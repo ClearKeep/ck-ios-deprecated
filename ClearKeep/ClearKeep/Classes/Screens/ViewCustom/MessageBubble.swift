@@ -13,20 +13,24 @@ struct MessageBubble: View {
     var isGroup: Bool = false
     var isShowAvatarAndUserName: Bool = false
     var rectCorner: UIRectCorner
+    let maxWidthBuble = UIScreen.main.bounds.width * 0.67
+    
     var body: some View {
         // Automatic scroll To Bottom...
         // First Assigning Id To Each Row...
         HStack(alignment: .top,spacing: 10){
-            
-            if msg.myMsg{
-                HStack(alignment: .firstTextBaseline) {
-                    // Show Time
-                    Text(dateTime())
-                        .font(AppTheme.fonts.textXSmall.font)
-                        .padding(.top, 5)
-                        .foregroundColor(AppTheme.colors.gray3.color)
-                    Spacer()
-                    if msg.photo == nil{
+            if msg.myMsg {
+                VStack(spacing: 5) {
+                    if isShowAvatarAndUserName {
+                        HStack {
+                            Spacer()
+                            Text(dateTime())
+                                .font(AppTheme.fonts.textXSmall.font)
+                                .foregroundColor(AppTheme.colors.gray3.color)
+                        }.padding(.top, 10)
+                    }
+                    HStack {
+                        Spacer()
                         Text(stringValue())
                             .padding([.top , .bottom], 12)
                             .padding([.leading , .trailing] , 24)
@@ -46,17 +50,16 @@ struct MessageBubble: View {
                                 ChannelUserAvatar(avatarSize: 16, text: msg.fromDisplayName)
                                 Text(msg.fromDisplayName)
                                     .font(AppTheme.fonts.linkSmall.font)
-                                    .foregroundColor(AppTheme.colors.warning.color)
+                                    .foregroundColor(UIColor.random().color)
                                     .padding(.leading, 8)
-                                Spacer()
                                 Text(dateTime())
                                     .font(AppTheme.fonts.textXSmall.font)
-                                    .padding(.top, 5)
+                                    .padding(.leading, 4)
                                     .foregroundColor(AppTheme.colors.gray3.color)
+                                Spacer()
                             }
                         }
-                        
-                        if isShowAvatarAndUserName {
+                        HStack(alignment: .firstTextBaseline){
                             Text(stringValue())
                                 .padding([.top , .bottom], 12)
                                 .padding([.leading , .trailing] , 24)
@@ -65,84 +68,47 @@ struct MessageBubble: View {
                                 .foregroundColor(AppTheme.colors.offWhite.color)
                                 .clipShape(BubbleArrow(rectCorner: rectCorner))
                                 .lineSpacing(10)
-                        } else {
-                            HStack(alignment: .firstTextBaseline){
-                                Text(stringValue())
-                                    .padding([.top , .bottom], 12)
-                                    .padding([.leading , .trailing] , 24)
-                                    .background(AppTheme.colors.primary.color)
-                                    .font(AppTheme.fonts.textMedium.font)
-                                    .foregroundColor(AppTheme.colors.offWhite.color)
-                                    .clipShape(BubbleArrow(rectCorner: rectCorner))
-                                    .lineSpacing(10)
+                            Button(action: {
+                                
+                            }, label: {
+                                Image("ic_emoji")
+                                    .foregroundColor(AppTheme.colors.gray1.color)
+                            })
+                            
+                            Spacer()
+                        }
+                    }
+                } else {
+                    VStack(spacing: 5){
+                        if isShowAvatarAndUserName {
+                            HStack {
+                                Text(dateTime())
+                                    .font(AppTheme.fonts.textXSmall.font)
+                                    .foregroundColor(AppTheme.colors.gray3.color)
                                 Spacer()
-//                                Text(dateTime())
-//                                    .font(AppTheme.fonts.textXSmall.font)
-//                                    .padding(.top, 5)
-//                                    .foregroundColor(AppTheme.colors.gray3.color)
-                            }
+                            }.padding(.top, 10)
+                        }
+                        
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(stringValue())
+                                .padding([.top , .bottom], 12)
+                                .padding([.leading , .trailing] , 24)
+                                .background(AppTheme.colors.primary.color)
+                                .font(AppTheme.fonts.textMedium.font)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .clipShape(BubbleArrow(rectCorner: rectCorner))
+                                .lineSpacing(10)
+                            Button(action: {
+                                
+                            }, label: {
+                                Image("ic_emoji")
+                                    .foregroundColor(AppTheme.colors.gray1.color)
+                            })                            
+                            Spacer()
                         }
                         
                     }
-                } else {
-                    HStack(alignment: .firstTextBaseline){
-                        Text(stringValue())
-                            .padding([.top , .bottom], 12)
-                            .padding([.leading , .trailing] , 24)
-                            .background(AppTheme.colors.primary.color)
-                            .font(AppTheme.fonts.textMedium.font)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .clipShape(BubbleArrow(rectCorner: rectCorner))
-                            .lineSpacing(10)
-                        Spacer()
-                        Text(dateTime())
-                            .font(AppTheme.fonts.textXSmall.font)
-                            .padding(.top, 5)
-                            .foregroundColor(AppTheme.colors.gray3.color)
-                    }
                 }
-
-
-                // profile Image...
-//                Image(systemName: "person.circle.fill")
-//                    .resizable()
-//                    .frame(width: 30, height: 30)
-//                    .clipShape(Circle())
-                
-//                VStack(alignment: .leading) {
-//                    if let username = self.userName {
-//                        // Show Time
-//                        Text(username)
-//                            .font(.body)
-//                            .padding(.top, 5)
-////                            .foregroundColor(Color.black)
-//                    }
-//                    if msg.photo == nil{
-//                        if isGroup {
-//                            Text(msg.fromDisplayName)
-//                                .fontWeight(.regular)
-//                                .font(Font.system(size: 10))
-//                                .foregroundColor(Color.gray.opacity(0.4))
-//                        }
-//                        Text(stringValue())
-//                            .padding(.all, 8)
-//                            .background(Color(UIColor.secondarySystemBackground))
-//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-//                    }
-//                    else {
-//                        Image(uiImage: UIImage(data: msg.photo!)!)
-//                            .resizable()
-//                            .frame(width: UIScreen.main.bounds.width - 150, height: 150)
-//                            .clipShape(BubbleArrow(myMsg: msg.myMsg))
-//                    }
-//
-//                    // Show Time
-//                    Text(dateTime())
-//                        .font(.caption)
-//                        .padding(.top, 5)
-//                        .foregroundColor(Color.gray.opacity(0.4))
-//                }
-//                Spacer(minLength: 25)
             }
         }
         .id(msg.id)
@@ -151,7 +117,7 @@ struct MessageBubble: View {
     private func dateTime() -> String {
         let date = NSDate(timeIntervalSince1970: TimeInterval(msg.createdAt/1000))
         let formatDate = DateFormatter()
-        formatDate.dateFormat = "EEE HH:mm"
+        formatDate.dateFormat = "HH:mm"
         return formatDate.string(from: date as Date)
     }
     

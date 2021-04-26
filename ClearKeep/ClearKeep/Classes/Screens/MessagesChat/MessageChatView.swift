@@ -207,7 +207,7 @@ extension MessageChatView {
                     ScrollView(.vertical, showsIndicators: false, content: {
                         HStack { Spacer() }
                         ScrollViewReader{reader in
-                            LazyVStack(spacing: 16){
+                            LazyVStack(spacing: 8){
                                 let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
                                 let lst = CKExtensions.getMessageAndSection(messages)
                                 ForEach(lst , id: \.title) { gr in
@@ -217,7 +217,7 @@ extension MessageChatView {
                                         let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
                                         ForEach(listDisplayMessage , id: \.message.id) { msg in
                                             // Chat Bubbles...
-                                            MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                            MessageBubble(msg: msg.message, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                                                 .id(msg.message.id)
                                         }
                                     }
@@ -249,7 +249,7 @@ extension MessageChatView {
                 GeometryReader { reader in
                     ScrollView(.vertical, showsIndicators: false, content: {
                         HStack { Spacer() }
-                        VStack(spacing: 16){
+                        VStack(spacing: 8){
                             let messages = realmMessages.allMessageInGroup(groupId: self.myGroupID)
                             let lst = CKExtensions.getMessageAndSection(messages)
                             ForEach(lst , id: \.title) { gr in
@@ -259,7 +259,7 @@ extension MessageChatView {
                                     let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
                                     ForEach(listDisplayMessage , id: \.message.id) { msg in
                                         // Chat Bubbles...
-                                        MessageBubble(msg: msg.message, rectCorner: msg.rectCorner)
+                                        MessageBubble(msg: msg.message, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                                             .id(msg.message.id)
                                     }
                                 }
