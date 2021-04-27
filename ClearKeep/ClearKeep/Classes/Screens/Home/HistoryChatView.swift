@@ -21,6 +21,7 @@ struct HistoryChatView: View {
     @State var isForceProcessKeyInGroup = true
     @State var allGroup = [GroupModel]()
     @EnvironmentObject var viewRouter: ViewRouter
+    
 
     
     var body: some View {
@@ -152,10 +153,9 @@ extension HistoryChatView {
                 
                 Spacer()
                 
-                Button("Create Group"){
-                    viewRouter.current = .inviteMember
+                NavigationLink(destination: InviteMemberGroup()) {
+                    Text("Create Group")
                 }
-                
             }
             .padding()
         }

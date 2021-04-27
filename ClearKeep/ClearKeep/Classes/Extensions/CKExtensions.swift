@@ -7,6 +7,7 @@
 
 import Foundation
 import KeychainAccess
+import SwiftUI
 
 class CKExtensions {
     static func getUserToken() -> String{
@@ -91,6 +92,18 @@ class CKExtensions {
 
         return lst
         
+    }
+    
+    static func getColorStatus(status: Status) -> Color {
+        switch status {
+        case .Online:
+            return AppTheme.colors.success.color
+        case .Offline:
+            return AppTheme.colors.gray3.color
+        case .Busy:
+            return AppTheme.colors.error.color
+            
+        }
     }
     
 }

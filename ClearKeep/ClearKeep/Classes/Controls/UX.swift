@@ -171,24 +171,21 @@ struct MultipleSelectionRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "person.circle.fill")
-                .resizable()
-                .frame(width: 30, height: 30)
-                .padding(.top, 6)
-                .padding(.bottom, 6)
-                .padding(.horizontal)
-            Text(self.people.userName)
-                .font(.body)
-                
-                .fontWeight(.bold)
+            ChannelUserAvatar(avatarSize: 64, text: people.userName , status: .active)
+            VStack(alignment: .leading , spacing: 8) {
+                Text(people.userName)
+                    .font(AppTheme.fonts.linkMedium.font)
+                    .foregroundColor(AppTheme.colors.gray2.color)
+                Text(people.userStatus.rawValue)
+                    .font(AppTheme.fonts.textSmall.font)
+                    .foregroundColor(CKExtensions.getColorStatus(status: people.userStatus))
+            }.padding(.leading, 16)
+            
             Spacer()
-            if self.isSelected {
-                Spacer()
-                Image(systemName: "checkmark.circle.fill")
-                    .resizable()
-                    .frame(width: 16, height: 16)
-                    .foregroundColor(.blue)
-            }
+            
+            Image(self.isSelected ? "ic_selected" : "ic_unselect")
+                .frame(width: 32, height: 32)
+            
         }.onTapGesture(count: 1, perform: {
             if self.isSelected {
                 self.selectedItems.remove(self.people)
@@ -212,21 +209,82 @@ struct ContactView : View {
                     .foregroundColor(AppTheme.colors.gray2.color)
                 Text(people.userStatus.rawValue)
                     .font(AppTheme.fonts.textSmall.font)
-                    .foregroundColor(getColorStatus(status: people.userStatus))
+                    .foregroundColor(CKExtensions.getColorStatus(status: people.userStatus))
             }.padding(.leading, 16)
         }
     }
-    
-    private func getColorStatus(status: Status) -> Color {
-        switch status {
-        case .Online:
-            return AppTheme.colors.success.color
-        case .Offline:
-            return AppTheme.colors.gray3.color
-        case .Busy:
-            return AppTheme.colors.error.color
-            
+}
+
+
+struct _FlexibleView<Data: Collection, Content: View>: View where Data.Element: Hashable {
+  let availableWidth: CGFloat
+  let data: Data
+  let spacing: CGFloat
+  let alignment: HorizontalAlignment
+  let content: (Data.Element) -> Content
+  @State var elementsSize: [Data.Element: CGSize] = [:]
+
+  var body : some View {
+    VStack(alignment: alignment, spacing: spacing) {
+      ForEach(computeRows(), id: \.self) { rowElements in
+        HStack(spacing: spacing) {
+          ForEach(rowElements, id: \.self) { element in
+            content(element)
+              .fixedSize()
+              .readSize { size in
+                elementsSize[element] = size
+              }
+          }
         }
+      }
+    }
+  }
+
+  func computeRows() -> [[Data.Element]] {
+    var rows: [[Data.Element]] = [[]]
+    var currentRow = 0
+    var remainingWidth = availableWidth
+
+    for element in data {
+      let elementSize = elementsSize[element, default: CGSize(width: availableWidth, height: 1)]
+
+      if remainingWidth - (elementSize.width + spacing) >= 0 {
+        rows[currentRow].append(element)
+      } else {
+        currentRow = currentRow + 1
+        rows.append([element])
+        remainingWidth = availableWidth
+      }
+
+      remainingWidth = remainingWidth - (elementSize.width + spacing)
     }
 
+    return rows
+  }
+}
+
+struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: Hashable {
+  let data: Data
+  let spacing: CGFloat
+  let alignment: HorizontalAlignment
+  let content: (Data.Element) -> Content
+  @State private var availableWidth: CGFloat = 0
+
+  var body: some View {
+    ZStack(alignment: Alignment(horizontal: alignment, vertical: .center)) {
+      Color.clear
+        .frame(height: 1)
+        .readSize { size in
+          availableWidth = size.width
+        }
+
+      _FlexibleView(
+        availableWidth: availableWidth,
+        data: data,
+        spacing: spacing,
+        alignment: alignment,
+        content: content
+      )
+    }
+  }
 }
