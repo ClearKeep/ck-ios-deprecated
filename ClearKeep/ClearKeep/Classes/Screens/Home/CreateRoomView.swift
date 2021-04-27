@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreateRoomView: View {
-        
+    
     @State var groupName: String = ""
     @State var userName: String = ""
     @State var isDisable = true
@@ -16,30 +16,103 @@ struct CreateRoomView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var realmGroups : RealmGroups
-
+    
     @State var hudVisible = false
     @State var isShowAlert = false
     @State private var titleAlert = ""
     @State private var messageAlert = ""
     @State private var createGroupSuccess = false
-
+    
     private let listMembers : [People]
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     init(listMembers: [People]) {
         self.listMembers = listMembers
     }
-
+    
     var body: some View {
-        VStack {
-            TitleLabel("Create Room Chat")
-            TextFieldContent(key: "Group Name", value: $groupName)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            Button(action: createRoom){
-                ButtonContent("Create")
+        NavigationView {
+            VStack(alignment: .leading , spacing: 0){
+                Spacer()
+                    .grandientBackground()
+                    .frame(width: UIScreen.main.bounds.width, height: 60)
+                
+                VStack(alignment: .leading , spacing: 0) {
+                    HStack {
+                        Button {
+                            self.presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image("arrow-left")
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(AppTheme.colors.gray1.color)
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            createRoom()
+                        } label: {
+                            Text("Create")
+                                .font(AppTheme.fonts.linkMedium.font)
+                                .foregroundColor(AppTheme.colors.primary.color)
+                        }
+                    }
+                    .padding(.top, 29)
+                    
+                    Text("New Group Message")
+                        .font(AppTheme.fonts.linkLarge.font)
+                        .foregroundColor(AppTheme.colors.black.color)
+                        .padding(.top, 23)
+                    
+                    Text("Group Name")
+                        .font(AppTheme.fonts.textSmall.font)
+                        .foregroundColor(AppTheme.colors.gray1.color)
+                        .padding(.top, 23)
+                        .padding(.bottom, 5)
+                    
+                    HStack {
+                        TextField("Name this group", text: $groupName)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .font(AppTheme.fonts.textSmall.font)
+                            .padding(4)
+                            .frame(height: 52)
+
+                    }
+                    .padding(.horizontal)
+                    .background(AppTheme.colors.gray5.color)
+                    .cornerRadius(16)
+                    .clipped()
+
+                    
+                    
+                    
+                    Text("User in this Group")
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.gray2.color)
+                        .padding([.top , .bottom] , 16)
+                    
+                    Group {
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            VStack(alignment:.leading , spacing: 16) {
+                                ForEach(listMembers , id: \.id) { user in
+                                    ContactView(people: user)
+                                }
+                            }
+                        })
+                    }
+
+ 
+                }.padding([.trailing , .leading , .bottom] , 16)
             }
+            .navigationBarTitle(Text(""), displayMode: .inline)
+            .navigationBarHidden(true)
+            .edgesIgnoringSafeArea(.top)
         }
         .navigationBarTitle("", displayMode: .inline)
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
                   message: Text(self.messageAlert),
@@ -50,8 +123,6 @@ struct CreateRoomView: View {
                     }
                   }))
         })
-        .keyboardManagment()
-        .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .gesture(
             TapGesture()
@@ -62,7 +133,6 @@ struct CreateRoomView: View {
 }
 
 extension CreateRoomView {
-
     
     private func createRoom(){
         

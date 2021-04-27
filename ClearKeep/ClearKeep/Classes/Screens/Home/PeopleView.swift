@@ -45,6 +45,7 @@ struct PeopleView: View {
                     Text("New Message")
                         .font(AppTheme.fonts.linkLarge.font)
                         .foregroundColor(AppTheme.colors.black.color)
+                        .padding(.top, 23)
                     
                     SearchBar(text: $searchText) { (changed) in
                         if changed {

@@ -282,7 +282,6 @@ struct SearchBar: View {
                 .padding()
             
             TextField("Search", text: $text, onEditingChanged: onEditingChanged) {
-                print("donee")
             }
                 .font(AppTheme.fonts.textSmall.font)
                 
