@@ -16,12 +16,15 @@ struct MotherView: View {
                 if CKExtensions.getUserToken().isEmpty {
                     LoginView()
                 } else {
-                    TabViewContainer().transition(.move(edge: .trailing))
+//                    TabViewContainer().transition(.move(edge: .trailing))
+                    HomeMainView().transition(.move(edge: .trailing))
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
             case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             case .register: RegisterView(isPresentModel: .constant(true))
-            case .tabview: TabViewContainer().transition(.move(edge: .trailing))
+            case .tabview:
+                //TabViewContainer().transition(.move(edge: .trailing))
+                HomeMainView().transition(.move(edge: .trailing))
             case .search: SearchPeopleView()
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())

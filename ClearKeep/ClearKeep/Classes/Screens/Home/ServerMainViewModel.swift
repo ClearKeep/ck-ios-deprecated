@@ -1,26 +1,23 @@
 //
-//  HistoryChatViewModel.swift
+//  ServerMainViewModel.swift
 //  ClearKeep
 //
-//  Created by Seoul on 11/19/20.
+//  Created by Luong Minh Hiep on 4/26/21.
 //
 
 import SwiftUI
 
 
-class HistoryChatViewModel: ObservableObject, Identifiable {
+class ServerMainViewModel: ObservableObject {
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
-        
-//    init() {
-//        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-//    }
+    
     func start(ourEncryptionManager: CKAccountSignalEncryptionManager?){
         self.ourEncryptionManager = ourEncryptionManager
     }
     
     func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-
+        
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
@@ -125,13 +122,26 @@ class HistoryChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    
-    
     func getGroupName(group: GroupModel) -> String {
         var userNameLogin = UserDefaults.standard.string(forKey: Constants.keySaveUser) ?? ""
         userNameLogin = group.groupName.replacingOccurrences(of: userNameLogin, with: "")
         userNameLogin = userNameLogin.replacingOccurrences(of: "-", with: "")
         return group.groupType == "peer" ? getPeerReceiveName(inGroup: group) : group.groupName
+    }
+    
+    func getGroupUnreadMessageNumber(group: GroupModel) -> Int {
+        // TODOP: to implement this later
+        return 0//Int.random(in: 0...20)
+    }
+    
+    func getGroupAvatarImage(group: GroupModel) -> Image? {
+        // TODOP: to implement this later
+        return nil
+    }
+    
+    func getGroupOnlineStatus(group: GroupModel) -> UserOnlineStatus {
+        // TODOP: to implement this later
+        return .none
     }
     
     func getPeerReceiveName(inGroup group: GroupModel) -> String {
@@ -154,3 +164,4 @@ class HistoryChatViewModel: ObservableObject, Identifiable {
         return String(data: data, encoding: .utf8) ?? "x"
     }
 }
+

@@ -8,31 +8,43 @@
 import SwiftUI
 
 class LeftMenuItemStatus: Identifiable {
-    var id: UUID = UUID()
+    var serverID: String
     var imageName: String
     var hasNewMessage: Bool
     var onSelectCompletion: VoidCompletion?
     
-    init(imageName: String, hasNewMessage: Bool = false, onSelectCompletion: VoidCompletion?) {
+    init(serverID: String, imageName: String, hasNewMessage: Bool = false, onSelectCompletion: VoidCompletion?) {
+        self.serverID = serverID
         self.imageName = imageName
         self.hasNewMessage = hasNewMessage
+        self.onSelectCompletion = onSelectCompletion
     }
 }
 
 class LeftMenuStatus: ObservableObject {
-    @Published var selectedItemId: UUID = UUID()
+    @Published var selectedServerID: String = "" {
+        didSet {
+            print("Selected item: " + selectedServerID)
+        }
+    }
     @Published var items: [LeftMenuItemStatus] = []
     
     init(items: [LeftMenuItemStatus]) {
         self.items = items
-        if let defaultSelectedId = items.first?.id {
-            self.selectedItemId = defaultSelectedId
+        if let defaultSelectedId = items.first?.serverID, self.selectedServerID.isEmpty {
+            self.selectedServerID = defaultSelectedId
         }
     }
 }
 
 struct LeftMainMenuView: View {
     @ObservedObject var leftMenuStatus: LeftMenuStatus
+    
+    var joinServerHandler: VoidCompletion
+    var manageContactHandler: VoidCompletion
+    
+    static let joinServerItemID = "joinServerItemID#270421"
+    static let manageContactItemID = "manageContactItemID#270421"
     
     var body: some View {
         ZStack {
@@ -50,16 +62,34 @@ struct LeftMainMenuView: View {
             
             VStack(spacing: 16) {
                 Spacer()
-                    .frame(height: 20)
+                    .frame(height: 16)
                 
-                ForEach(leftMenuStatus.items) { item in
+                ForEach(leftMenuStatus.items, id:\.serverID) { item in
                     Button(action: {
-                        self.leftMenuStatus.selectedItemId = item.id
+                        self.leftMenuStatus.selectedServerID = item.serverID
                         item.onSelectCompletion?()
                     }, label: {
-                        MainMenuItemView(isSelected: item.id == leftMenuStatus.selectedItemId, hasNewMessage: item.hasNewMessage)
+                        MainMenuItemView(isSelected: item.serverID == leftMenuStatus.selectedServerID, hasNewMessage: item.hasNewMessage)
                     })
                 }
+                
+                Button(action: {
+                    self.leftMenuStatus.selectedServerID = LeftMainMenuView.joinServerItemID
+                    self.joinServerHandler()
+                }, label: {
+                    Image("Plus_white")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 28, height: 28, alignment: .center)
+                        .padding(.all, 2)
+                        .gradientHeader()
+                        .clipShape(Circle())
+                        .padding(.all, 8)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle().stroke(self.leftMenuStatus.selectedServerID == LeftMainMenuView.joinServerItemID ? AppTheme.colors.primary.color : Color.clear, lineWidth: 1.5)
+                        )
+                })
                 
                 Spacer()
                  
@@ -67,7 +97,8 @@ struct LeftMainMenuView: View {
                     .frame(height: 0.5)
                 
                 Button(action: {
-                    
+                    self.leftMenuStatus.selectedServerID = LeftMainMenuView.manageContactItemID
+                    self.manageContactHandler()
                 }, label: {
                     Image("user")
                         .renderingMode(.template)
@@ -81,18 +112,20 @@ struct LeftMainMenuView: View {
             .frame(width: 84, alignment: .leading)
             .cornerRadius(24)
         }
-        //.edgesIgnoringSafeArea(.all)
     }
+
 }
 
 struct LeftMainMenuView_Previews: PreviewProvider {
     static var previews: some View {
         HStack {
             LeftMainMenuView(leftMenuStatus: LeftMenuStatus(items: [
-                                                                LeftMenuItemStatus(imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: nil),
-                LeftMenuItemStatus(imageName: "ic_app_new", hasNewMessage: false, onSelectCompletion: nil),
-                LeftMenuItemStatus(imageName: "ic_app_new", hasNewMessage: false, onSelectCompletion: nil),
-                LeftMenuItemStatus(imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: nil)]))
+                                                                LeftMenuItemStatus(serverID: "ck_default", imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: nil),
+                LeftMenuItemStatus(serverID: "ck_default_2", imageName: "ic_app_new", hasNewMessage: false, onSelectCompletion: nil),
+                LeftMenuItemStatus(serverID: "ck_default_3", imageName: "ic_app_new", hasNewMessage: false, onSelectCompletion: nil),
+                LeftMenuItemStatus(serverID: "ck_default_4", imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: nil)]),
+                             joinServerHandler: {},
+                             manageContactHandler: {})
             Spacer()
         }
     }

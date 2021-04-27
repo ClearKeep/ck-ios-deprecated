@@ -152,9 +152,8 @@ extension CreateRoomView {
             return
         }
         
-        self.hudVisible = true
-        
         if let account = CKSignalCoordinate.shared.myAccount {
+            
             let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
             lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
             var req = Group_CreateGroupRequest()
@@ -162,6 +161,8 @@ extension CreateRoomView {
             req.groupType = "group"
             req.createdByClientID = account.username
             req.lstClientID = lstClientID.map{$0.id}
+            
+            self.hudVisible = true
             
             Backend.shared.createRoom(req) { (result , error)  in
                 self.hudVisible = false

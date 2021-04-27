@@ -13,6 +13,8 @@ struct TabViewContainer: View {
     @EnvironmentObject var messsagesRealms : RealmMessages
     @ObservedObject var viewModel = MotherViewModel()
     
+    @State var isShowingPeopleView = false
+    
     var body: some View {
         TabView {
             HistoryChatView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
