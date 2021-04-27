@@ -77,6 +77,8 @@ struct PeopleView: View {
                 
             }
             .edgesIgnoringSafeArea(.top)
+            .navigationBarTitle(Text(""), displayMode: .inline)
+            .navigationBarHidden(true)
         }
         
         .navigationBarTitle(Text(""), displayMode: .inline)
