@@ -119,7 +119,7 @@ struct NavigationBarModifier: ViewModifier {
     }
 }
 
-struct NavigationBarChatModifier: ViewModifier {
+struct NavigationBarNormalModifier: ViewModifier {
             
     init() {
         let coloredAppearance = UINavigationBarAppearance()
@@ -143,7 +143,7 @@ struct NavigationBarChatModifier: ViewModifier {
                     ZStack(alignment: .center) {
                     LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
                     }
-                        .frame(height: 100)
+                        .frame(height: 60)
                         .edgesIgnoringSafeArea(.top)
                     Spacer()
                 }
@@ -158,8 +158,8 @@ extension View {
         self.modifier(NavigationBarModifier(backgroundColor: backgroundColor))
     }
     
-    func navigationBarChat() -> some View {
-        self.modifier(NavigationBarChatModifier())
+    func navigationBarNormal() -> some View {
+        self.modifier(NavigationBarNormalModifier())
     }
 
 }

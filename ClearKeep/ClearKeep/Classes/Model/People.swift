@@ -10,6 +10,13 @@ import SwiftUI
 struct People: Identifiable , Hashable {
     var id : String
     var userName : String
+    var userStatus : Status
+}
+
+enum Status : String {
+    case Online
+    case Offline
+    case Busy
 }
 
 class MemberSelected: ObservableObject{

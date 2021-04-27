@@ -264,3 +264,31 @@ fileprivate struct WrappedTextField: UIViewRepresentable {
         }
     }
 }
+
+struct SearchBar: View {
+    
+    @Binding var text: String
+    private var onEditingChanged: (Bool) -> Void
+
+    init(text: Binding<String>, onEditingChanged: @escaping (Bool) -> Void) {
+        self._text = text
+        self.onEditingChanged = onEditingChanged
+    }
+    
+    var body: some View {
+        HStack {
+            Image("ic_search")
+                .frame(width: 24, height: 24)
+                .padding()
+            
+            TextField("Search", text: $text, onEditingChanged: onEditingChanged) {
+                print("donee")
+            }
+                .font(AppTheme.fonts.textSmall.font)
+                
+        }
+        .frame(height: 52)
+        .background(AppTheme.colors.gray5.color)
+        .cornerRadius(16)
+    }
+}

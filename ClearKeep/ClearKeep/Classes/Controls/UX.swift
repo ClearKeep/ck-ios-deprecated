@@ -198,3 +198,35 @@ struct MultipleSelectionRow: View {
         })
     }
 }
+
+struct ContactView : View {
+    var people: People
+
+    var body: some View {
+                        
+        return HStack {
+            ChannelUserAvatar(avatarSize: 64, text: people.userName , status: .active)
+            VStack(alignment: .leading , spacing: 8) {
+                Text(people.userName)
+                    .font(AppTheme.fonts.linkMedium.font)
+                    .foregroundColor(AppTheme.colors.gray2.color)
+                Text(people.userStatus.rawValue)
+                    .font(AppTheme.fonts.textSmall.font)
+                    .foregroundColor(getColorStatus(status: people.userStatus))
+            }.padding(.leading, 16)
+        }
+    }
+    
+    private func getColorStatus(status: Status) -> Color {
+        switch status {
+        case .Online:
+            return AppTheme.colors.success.color
+        case .Offline:
+            return AppTheme.colors.gray3.color
+        case .Busy:
+            return AppTheme.colors.error.color
+            
+        }
+    }
+
+}

@@ -22,7 +22,7 @@ class PeopleViewModel : ObservableObject, Identifiable {
                 DispatchQueue.main.async {
                     self.users.removeAll()
                     result.lstUser.forEach { (user) in
-                        self.users.append(People(id: user.id, userName: user.displayName))
+                        self.users.append(People(id: user.id, userName: user.displayName, userStatus: .Online))
                     }
                 }
                 

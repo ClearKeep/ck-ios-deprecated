@@ -30,9 +30,9 @@ extension SocialLogin {
                                                 userInfo: userInfo)
                 return
             case .success(let grantedPermissions, let deniedPermissions, let token):
-                print("AccessToken: \(token?.tokenString ?? "")")
-                if let accessToken = token?.tokenString {
-                    self.getFetchedFacebookAccessToken(accessToken)
+                print("AccessToken: \(token.tokenString ?? "")")
+                if !token.tokenString.isEmpty {
+                    self.getFetchedFacebookAccessToken(token.tokenString)
                 }
             }
         }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PeopleView: View {
     
-    @ObservedObject var viewModel = PeopleViewModel()
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
@@ -17,77 +16,81 @@ struct PeopleView: View {
     @State var userSelected: People?
     @State var isSearchMember : Bool = false
     
+    @State private var searchText: String = ""
+    @ObservedObject var viewModel = SearchPeopleViewModel()
+    
     @State var users: [People] = []
+    
+    init() {
+        UITableView.appearance().showsVerticalScrollIndicator = false
+    }
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                customeNavigationBarView()
+            VStack(alignment: .leading , spacing: 0){
+                Spacer()
+                    .grandientBackground()
+                    .frame(width: UIScreen.main.bounds.width, height: 60)
                 
-                Group {
-                    if users.isEmpty {
-                        Spacer()
-                        Text("No contact found")
-                            .font(.title)
-                            .foregroundColor(.gray)
-                            .lineLimit(nil)
-                            .frame(width: 300, alignment: .center)
-                            .multilineTextAlignment(.center)
-                        Spacer()
-                    } else {
-                        List(users){ user in
-                            
-                            NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                            .environmentObject(groupRealms)
-                                            .environmentObject(messsagesRealms))
-                            {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                VStack(alignment: .leading) {
-                                    Text(user.userName)
-                                }
-                            }
+                VStack(alignment: .leading) {
+                    Button {
+                        // TODO: back screen
+                    } label: {
+                        Image("ic_close")
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                    }
+                    .padding(.top, 29)
+                    
+                    Text("New Message")
+                        .font(AppTheme.fonts.linkLarge.font)
+                        .foregroundColor(AppTheme.colors.black.color)
+                    
+                    SearchBar(text: $searchText) { (changed) in
+                        if changed {
+                        } else {
+                            viewModel.searchUser(searchText)
                         }
                     }
-                }
+                    
+                    Text("User in this Channel")
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.gray2.color)
+                        .padding([.top , .bottom] , 16)
+                    
+                    Group {
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            VStack(alignment:.leading , spacing: 16) {
+                                ForEach(viewModel.users , id: \.id) { user in
+                                    NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                                    .environmentObject(groupRealms)
+                                                    .environmentObject(messsagesRealms)){
+                                        ContactView(people: user)
+                                    }
+                                }
+                            }
+                        })
+                    }
+
+                    
+                }.padding([.trailing , .leading , .bottom] , 16)
+                
             }
-//            .navigationBarTitle(Text(""), displayMode: .inline)
-//            .navigationBarItems(leading: Text("People"),
-//                                trailing: NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
-//                                    Text("Search")
-//                                }))
             .edgesIgnoringSafeArea(.top)
-            .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarHidden(true)
-            .onAppear(){
-                self.getUser()
-            }
         }
-    }
-}
-
-extension PeopleView {
-
-    func customeNavigationBarView() -> some View {
-        VStack {
-            Spacer()
-            HStack {
-                Text("People")
-                    .foregroundColor(AppTheme.colors.offWhite.color)
-                    .font(AppTheme.fonts.textLarge.font)
-                    .fontWeight(.medium)
-                    .padding(.leading, 20)
-                
-                Spacer()
-                
-                NavigationLink(destination: SearchPeopleView(), isActive: $isSearchMember, label: {
-                    Text("Search")
+        
+        .navigationBarTitle(Text(""), displayMode: .inline)
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
+        .onAppear(){
+            viewModel.searchUser("")
+        }
+        .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
+        .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    UIApplication.shared.endEditing()
                 })
-            }
-        }
-        .padding()
-        .applyNavigationBarStyle()
     }
 }
 
@@ -95,7 +98,7 @@ extension PeopleView {
     func getUser(){
         Backend.shared.getListUser { (result, error) in
             if let result = result {
-                self.users = result.lstUser.map{People(id: $0.id, userName: $0.displayName)}
+                self.users = result.lstUser.map{People(id: $0.id, userName: $0.displayName , userStatus: .Online)}
             } else {
                 print("getListUser Error: \(error?.localizedDescription ?? "")")
             }
