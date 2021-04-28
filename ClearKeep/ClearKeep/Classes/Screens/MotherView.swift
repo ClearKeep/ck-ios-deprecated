@@ -29,7 +29,7 @@ struct MotherView: View {
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .history: HistoryChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             case .callVideo: CallView()
-            case .inviteMember: InviteMemberGroup()
+//            case .inviteMember: InviteMemberGroup()
             case .recentCreatedGroupChat: RecentCreatedGroupChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
             }
         }
@@ -54,7 +54,7 @@ class ViewRouter: ObservableObject {
 //        case createRoom
         case history
         case callVideo
-        case inviteMember
+//        case inviteMember
         case recentCreatedGroupChat
     }
     

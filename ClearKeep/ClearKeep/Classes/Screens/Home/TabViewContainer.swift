@@ -29,7 +29,7 @@ struct TabViewContainer: View {
                     }
                 }
             
-            PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+            PeopleView(isPresentModel: $isShowingPeopleView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 .tabItem {
                     VStack {
                         Image(systemName: "person.3.fill")

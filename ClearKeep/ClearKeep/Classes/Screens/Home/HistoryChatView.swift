@@ -21,7 +21,7 @@ struct HistoryChatView: View {
     @State var isForceProcessKeyInGroup = true
     @State var allGroup = [GroupModel]()
     @EnvironmentObject var viewRouter: ViewRouter
-    
+    @State private var isShowingInviteMemberGroupView = false
 
     
     var body: some View {
@@ -153,8 +153,8 @@ extension HistoryChatView {
                 
                 Spacer()
                 
-                NavigationLink(destination: InviteMemberGroup()) {
-                    Text("Create Group")
+                NavigationLink(destination: InviteMemberGroup(isPresentModel:$isShowingInviteMemberGroupView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingInviteMemberGroupView) {
+                    Image("Plus")
                 }
             }
             .padding()

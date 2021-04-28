@@ -29,6 +29,7 @@ struct ServerMainView: View {
     @State private var isDirectMessageExpanded: Bool = true
     
     @State private var isShowingPeopleView = false
+    @State private var isShowingInviteMemberGroupView = false
     
     @Binding var isShouldShowBlurBackground: Bool
     
@@ -160,11 +161,9 @@ extension ServerMainView {
                 
                 Spacer()
                 
-                Button(action: {
-                    self.viewRouter.current = .inviteMember
-                }, label: {
+                NavigationLink(destination: InviteMemberGroup(isPresentModel:$isShowingInviteMemberGroupView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingInviteMemberGroupView) {
                     Image("Plus")
-                })
+                }
             }
             
             if isGroupChatExpanded && !filteredGroupRealm(isForPeer: false).isEmpty {
@@ -216,7 +215,7 @@ extension ServerMainView {
                 
                 Spacer()
                 
-                NavigationLink(destination: PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingPeopleView) {
+                NavigationLink(destination: PeopleView(isPresentModel:$isShowingPeopleView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingPeopleView) {
                     Image("Plus")
                 }
             }

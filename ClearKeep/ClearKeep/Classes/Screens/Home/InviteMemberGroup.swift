@@ -14,10 +14,7 @@ struct InviteMemberGroup: View {
     
     @State var selectedRows = Set<People>()
     @State private var searchText: String = ""
-
-    init() {
-        UITableView.appearance().showsVerticalScrollIndicator = false
-    }
+    @Binding var isPresentModel: Bool
 
     var body: some View {
         NavigationView {
@@ -29,7 +26,7 @@ struct InviteMemberGroup: View {
                 VStack(alignment: .leading) {
                     HStack {
                         Button {
-                            self.presentationMode.wrappedValue.dismiss()
+                            isPresentModel = false
                         } label: {
                             Image("ic_close")
                                 .frame(width: 24, height: 24)

@@ -12,18 +12,13 @@ struct PeopleView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
-    @State var presentingModal = false
-    @State var userSelected: People?
-    @State var isSearchMember : Bool = false
     
     @State private var searchText: String = ""
-    @ObservedObject var viewModel = SearchPeopleViewModel()
+    @ObservedObject var viewModel = PeopleViewModel()
     
     @State var users: [People] = []
     
-    init() {
-        UITableView.appearance().showsVerticalScrollIndicator = false
-    }
+    @Binding var isPresentModel: Bool
     
     var body: some View {
         NavigationView {
@@ -34,7 +29,8 @@ struct PeopleView: View {
                 
                 VStack(alignment: .leading) {
                     Button {
-                        // TODO: back screen
+                        isPresentModel = false
+                        
                     } label: {
                         Image("ic_close")
                             .frame(width: 24, height: 24)
@@ -62,7 +58,7 @@ struct PeopleView: View {
                     Group {
                         ScrollView(.vertical, showsIndicators: false, content: {
                             VStack(alignment:.leading , spacing: 16) {
-                                ForEach(viewModel.users , id: \.id) { user in
+                                List(viewModel.users , id: \.id) { user in
                                     NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
                                                     .environmentObject(groupRealms)
                                                     .environmentObject(messsagesRealms)){
@@ -86,7 +82,7 @@ struct PeopleView: View {
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
         .onAppear(){
-            viewModel.searchUser("")
+            viewModel.getListUser()
         }
         .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
         .gesture(
@@ -94,24 +90,5 @@ struct PeopleView: View {
                 .onEnded { _ in
                     UIApplication.shared.endEditing()
                 })
-    }
-}
-
-extension PeopleView {
-    func getUser(){
-        Backend.shared.getListUser { (result, error) in
-            if let result = result {
-                self.users = result.lstUser.map{People(id: $0.id, userName: $0.displayName , userStatus: .Online)}
-            } else {
-                print("getListUser Error: \(error?.localizedDescription ?? "")")
-            }
-        }
-    }
-}
-
-struct PeopleView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        PeopleView()
     }
 }
