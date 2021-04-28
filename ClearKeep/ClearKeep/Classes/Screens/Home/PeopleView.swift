@@ -9,75 +9,67 @@ import SwiftUI
 
 struct PeopleView: View {
     
-    @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var messsagesRealms : RealmMessages
     
     @State private var searchText: String = ""
     @ObservedObject var viewModel = PeopleViewModel()
-    
-    @State var users: [People] = []
-    
-    @Binding var isPresentModel: Bool
+        
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .leading , spacing: 0){
-                Spacer()
-                    .grandientBackground()
-                    .frame(width: UIScreen.main.bounds.width, height: 60)
+        VStack(alignment: .leading , spacing: 0){
+            Spacer()
+                .grandientBackground()
+                .frame(width: UIScreen.main.bounds.width, height: 60)
+            
+            VStack(alignment: .leading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                    
+                } label: {
+                    Image("ic_close")
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(AppTheme.colors.gray1.color)
+                }
+                .padding(.top, 29)
                 
-                VStack(alignment: .leading) {
-                    Button {
-                        isPresentModel = false
-                        
-                    } label: {
-                        Image("ic_close")
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(AppTheme.colors.gray1.color)
+                Text("New Message")
+                    .font(AppTheme.fonts.linkLarge.font)
+                    .foregroundColor(AppTheme.colors.black.color)
+                    .padding(.top, 23)
+                
+                SearchBar(text: $searchText) { (changed) in
+                    if changed {
+                    } else {
+                        viewModel.searchUser(searchText)
                     }
-                    .padding(.top, 29)
-                    
-                    Text("New Message")
-                        .font(AppTheme.fonts.linkLarge.font)
-                        .foregroundColor(AppTheme.colors.black.color)
-                        .padding(.top, 23)
-                    
-                    SearchBar(text: $searchText) { (changed) in
-                        if changed {
-                        } else {
-                            viewModel.searchUser(searchText)
-                        }
-                    }
-                    
-                    Text("User in this Channel")
-                        .font(AppTheme.fonts.textMedium.font)
-                        .foregroundColor(AppTheme.colors.gray2.color)
-                        .padding([.top , .bottom] , 16)
-                    
-                    Group {
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            VStack(alignment:.leading , spacing: 16) {
-                                ForEach(viewModel.peoples , id: \.id) { user in
-                                    NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                                    .environmentObject(groupRealms)
-                                                    .environmentObject(messsagesRealms)){
-                                        ContactView(people: user)
-                                    }
+                }
+                
+                Text("User in this Channel")
+                    .font(AppTheme.fonts.textMedium.font)
+                    .foregroundColor(AppTheme.colors.gray2.color)
+                    .padding([.top , .bottom] , 16)
+                
+                Group {
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        VStack(alignment:.leading , spacing: 16) {
+                            ForEach(viewModel.peoples , id: \.id) { user in
+                                NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                                .environmentObject(groupRealms)
+                                                .environmentObject(messsagesRealms)){
+                                    ContactView(people: user)
                                 }
                             }
-                        })
-                    }
-
-                    
-                }.padding([.trailing , .leading , .bottom] , 16)
+                        }
+                    })
+                }
+                
                 
             }
-            .edgesIgnoringSafeArea(.top)
-            .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarHidden(true)
+            .padding([.trailing , .leading , .bottom] , 16)
         }
-        
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)

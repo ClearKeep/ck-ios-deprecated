@@ -215,7 +215,7 @@ extension ServerMainView {
                 
                 Spacer()
                 
-                NavigationLink(destination: PeopleView(isPresentModel:$isShowingPeopleView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingPeopleView) {
+                NavigationLink(destination: PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingPeopleView) {
                     Image("Plus")
                 }
             }

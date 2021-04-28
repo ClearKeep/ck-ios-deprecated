@@ -20,7 +20,6 @@ class PeopleViewModel : ObservableObject, Identifiable {
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {
-                    
                     self.peoples = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
                 }
             }
