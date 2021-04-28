@@ -198,10 +198,10 @@ struct MultipleSelectionRow: View {
 
 struct ContactView : View {
     var people: People
-
+    
     var body: some View {
-                        
-        return HStack {
+        
+        HStack {
             ChannelUserAvatar(avatarSize: 64, text: people.userName , status: .active)
             VStack(alignment: .leading , spacing: 8) {
                 Text(people.userName)

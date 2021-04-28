@@ -11,7 +11,7 @@ import SwiftUI
 
 class PeopleViewModel : ObservableObject, Identifiable {
     
-    @Published var users : [People] = []
+    @Published var peoples : [People] = []
     @Published var hudVisible : Bool = false
     
     func getListUser(){
@@ -20,11 +20,8 @@ class PeopleViewModel : ObservableObject, Identifiable {
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {
-                    self.users.removeAll()
-                    result.lstUser.forEach { (user) in
-                        self.users.append(People(id: user.id, userName: user.displayName, userStatus: .Online))
-                    }
-                    self.users = self.users.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
+                    
+                    self.peoples = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
                 }
             }
         }
@@ -36,11 +33,7 @@ class PeopleViewModel : ObservableObject, Identifiable {
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {
-                    self.users.removeAll()
-                    result.lstUser.forEach { (user) in
-                        self.users.append(People(id: user.id, userName: user.displayName, userStatus: .Online))
-                    }
-                    self.users = self.users.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
+                    self.peoples = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
                 }
             }
         }

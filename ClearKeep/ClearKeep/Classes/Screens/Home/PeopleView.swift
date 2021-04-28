@@ -58,7 +58,7 @@ struct PeopleView: View {
                     Group {
                         ScrollView(.vertical, showsIndicators: false, content: {
                             VStack(alignment:.leading , spacing: 16) {
-                                List(viewModel.users , id: \.id) { user in
+                                ForEach(viewModel.peoples , id: \.id) { user in
                                     NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
                                                     .environmentObject(groupRealms)
                                                     .environmentObject(messsagesRealms)){
