@@ -15,11 +15,11 @@ enum HomeMainContentType: String {
 struct HomeMainView: View {
     
     @ObservedObject var mainViewModel: HomeMainViewModel = HomeMainViewModel()
-    @State private var isShouldShowBlurBackground = false
+    @State private var isShowingServerDetailView = false
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .top), content: {
+            ZStack(alignment: .topLeading) {
                 GeometryReader { geometry in
                     HStack(alignment: .top) {
                         LeftMainMenuView(leftMenuStatus: mainViewModel.menuItems,
@@ -29,7 +29,7 @@ struct HomeMainView: View {
                                          manageContactHandler: {})
                         
                         switch self.mainViewModel.homeMainContentType {
-                        case .currentServerInfo: ServerMainView(isShouldShowBlurBackground: $isShouldShowBlurBackground)
+                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView)
                         case .joinNewServer: JoinServerView()
                         }
                     }
@@ -38,8 +38,12 @@ struct HomeMainView: View {
                 }
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
-                .blur(radius: isShouldShowBlurBackground ? 10 : 0.0)
-            })
+                .blur(radius: isShowingServerDetailView ? 10 : 0.0)
+                
+                if isShowingServerDetailView {
+                    ServerDetailView(isShowingServerDetailView: $isShowingServerDetailView)
+                }
+            }
         }
         .onAppear(){
             do {

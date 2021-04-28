@@ -31,7 +31,7 @@ struct ServerMainView: View {
     @State private var isShowingPeopleView = false
     @State private var isShowingInviteMemberGroupView = false
     
-    @Binding var isShouldShowBlurBackground: Bool
+    @Binding var isShowingServerDetailView: Bool
     
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
@@ -47,7 +47,7 @@ struct ServerMainView: View {
                         .foregroundColor(AppTheme.colors.black.color)
                     Spacer()
                     Button(action: {
-                        self.isShouldShowBlurBackground.toggle()
+                        self.isShowingServerDetailView.toggle()
                     }, label: {
                         Image("Hamburger")
                             .resizable()
@@ -566,6 +566,6 @@ extension ServerMainView {
 
 struct ServerMainView_Previews: PreviewProvider {
     static var previews: some View {
-        ServerMainView(isShouldShowBlurBackground: .constant(true))
+        ServerMainView(isShowingServerDetailView: .constant(true))
     }
 }
