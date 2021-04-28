@@ -15,6 +15,9 @@ struct InviteMemberGroup: View {
     @State var selectedRows = Set<People>()
     @State private var searchText: String = ""
     @Binding var isPresentModel: Bool
+    
+    @State var users : [People] = []
+    @State var hudVisible : Bool = false
 
     var body: some View {
         NavigationView {
@@ -51,7 +54,7 @@ struct InviteMemberGroup: View {
                     SearchBar(text: $searchText) { (changed) in
                         if changed {
                         } else {
-                            viewModel.searchUser(searchText)
+                            self.searchUser(searchText)
                         }
                     }
 
@@ -87,7 +90,7 @@ struct InviteMemberGroup: View {
                     Group {
                         ScrollView(.vertical, showsIndicators: false, content: {
                             VStack(alignment:.leading , spacing: 16) {
-                                ForEach(viewModel.users , id: \.id) { user in
+                                ForEach(self.users , id: \.id) { user in
                                    MultipleSelectionRow(people: user, selectedItems: $selectedRows)
                                 }
                             }
@@ -106,9 +109,9 @@ struct InviteMemberGroup: View {
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
         .onAppear(){
-            viewModel.getListUser()
+            self.getListUser()
         }
-        .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
+        .hud(.waiting(.circular, "Waiting..."), show: self.hudVisible)
         .gesture(
             TapGesture()
                 .onEnded { _ in
@@ -117,4 +120,30 @@ struct InviteMemberGroup: View {
     }
     
     
+}
+
+extension InviteMemberGroup {
+    func getListUser(){
+        self.hudVisible = true
+        Backend.shared.getListUser { (result, error) in
+            DispatchQueue.main.async {
+                self.hudVisible = false
+                if let result = result {
+                    self.users = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
+                }
+            }
+        }
+    }
+    
+    func searchUser(_ keySearch: String){
+        self.hudVisible = true
+        Backend.shared.searchUser(keySearch.trimmingCharacters(in: .whitespaces).lowercased()) { (result, error) in
+            DispatchQueue.main.async {
+                self.hudVisible = false
+                if let result = result {
+                    self.users = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
+                }
+            }
+        }
+    }
 }
