@@ -82,6 +82,7 @@ struct LeftMainMenuView: View {
                         .scaledToFill()
                         .frame(width: 28, height: 28, alignment: .center)
                         .padding(.all, 2)
+                        .foregroundColor(.white)
                         .gradientHeader()
                         .clipShape(Circle())
                         .padding(.all, 8)

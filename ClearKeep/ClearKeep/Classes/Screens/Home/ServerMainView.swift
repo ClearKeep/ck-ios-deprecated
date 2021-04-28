@@ -52,7 +52,8 @@ struct ServerMainView: View {
                         Image("Hamburger")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 36, height: 36, alignment: .center)
+                            .frame(width: 24, height: 24, alignment: .center)
+                            .foregroundColor(AppTheme.colors.gray1.color)
                     })
                 }
                 
@@ -61,6 +62,9 @@ struct ServerMainView: View {
                 Button(action: {}, label: {
                     HStack {
                         Image("Notes")
+                            .resizable()
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                            .frame(width: 18, height: 18, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                         Text("Notes")
                             .font(AppTheme.fonts.linkMedium.font)
                             .foregroundColor(AppTheme.colors.gray1.color)
@@ -156,6 +160,7 @@ extension ServerMainView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18, height: 18, alignment: .center)
+                        .foregroundColor(AppTheme.colors.gray1.color)
                         .padding(.all, 6)
                 })
                 
@@ -163,6 +168,9 @@ extension ServerMainView {
                 
                 NavigationLink(destination: InviteMemberGroup(isPresentModel:$isShowingInviteMemberGroupView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingInviteMemberGroupView) {
                     Image("Plus")
+                        .resizable()
+                        .frame(width: 20, height: 20, alignment: .center)
+                        .foregroundColor(AppTheme.colors.gray1.color)
                 }
             }
             
@@ -210,6 +218,7 @@ extension ServerMainView {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 18, height: 18, alignment: .center)
+                        .foregroundColor(AppTheme.colors.gray1.color)
                         .padding(.all, 6)
                 })
                 
@@ -217,6 +226,9 @@ extension ServerMainView {
                 
                 NavigationLink(destination: PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingPeopleView) {
                     Image("Plus")
+                        .resizable()
+                        .frame(width: 20, height: 20, alignment: .center)
+                        .foregroundColor(AppTheme.colors.gray1.color)
                 }
             }
             
