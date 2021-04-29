@@ -75,19 +75,20 @@ struct GroupChatDetailView: View {
         }
         .padding()
         .navigationBarTitle(Text((groupModel?.groupName ?? "Group") + " details"), displayMode: .inline)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: Button(action: {
-//            self.presentationMode.wrappedValue.dismiss()
-//        }, label: {
-//            HStack {
-//                Image(systemName: "chevron.left")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 18, height: 18, alignment: .leading)
-//                    .foregroundColor(.blue)
-//            }
-//            .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
-//        }))
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }, label: {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18, alignment: .leading)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+                    .foregroundColor(.blue)
+            }
+            .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
+        }))
     }
 }
 
