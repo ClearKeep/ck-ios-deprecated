@@ -23,7 +23,6 @@ struct PlainColorBackground: ViewModifier {
                 
             
             content
-                .edgesIgnoringSafeArea(.all)
         }.edgesIgnoringSafeArea(.all)
     }
 }

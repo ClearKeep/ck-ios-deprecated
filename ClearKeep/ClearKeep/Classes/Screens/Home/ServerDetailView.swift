@@ -16,6 +16,7 @@ struct ServerDetailView: View {
     
     @Binding var isShowingServerDetailView: Bool
     @State var hudVisible = false
+    @State var userName: String = ""
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -74,6 +75,13 @@ struct ServerDetailView: View {
             }
         }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .onAppear(){
+            Backend.shared.getMyProfile { (result, error) in
+                if let result = result {
+                    self.userName = result.displayName
+                }
+            }
+        }
         
     }
     
@@ -97,12 +105,12 @@ struct ServerDetailView: View {
     
     private func userInfoStatus() -> some View {
         HStack(spacing: 10) {
-            ChannelUserAvatar(avatarSize: 56, text: "Luong Minh Hiep", image: Image("ic_app"), status: .active, gradientBackgroundType: .primary)
+            ChannelUserAvatar(avatarSize: 56, statusSize: 8, text: userName.capitalized, image: nil, status: .active, gradientBackgroundType: .primary)
             
             VStack(alignment: .leading, spacing: 8) {
                 Spacer()
                 
-                Text("Luong Minh Hiep")
+                Text(userName.capitalized)
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.primary.color)
                 

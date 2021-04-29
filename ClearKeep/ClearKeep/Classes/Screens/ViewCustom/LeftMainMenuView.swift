@@ -108,7 +108,7 @@ struct LeftMainMenuView: View {
                         .background(AppTheme.colors.primary.color)
                         .clipShape(Circle())
                 })
-                .padding(.bottom, 16)
+                .padding(.bottom, 40)
             }
             .frame(width: 84, alignment: .leading)
             .cornerRadius(24)
