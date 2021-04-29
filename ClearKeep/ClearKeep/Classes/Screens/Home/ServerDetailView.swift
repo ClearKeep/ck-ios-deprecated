@@ -124,6 +124,7 @@ struct ServerDetailView: View {
                         Image("Chev-down")
                             .resizable()
                             .scaledToFill()
+                            .foregroundColor(AppTheme.colors.gray1.color)
                             .frame(width: 12, height: 12, alignment: .center)
                         Spacer()
                     }

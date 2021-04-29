@@ -80,7 +80,7 @@ struct LeftMainMenuView: View {
                     Image("Plus_white")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 28, height: 28, alignment: .center)
+                        .frame(width: 24, height: 24, alignment: .center)
                         .padding(.all, 2)
                         .foregroundColor(.white)
                         .gradientHeader()

@@ -18,83 +18,120 @@ struct GroupChatDetailView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .center, spacing: 0) {
                 Spacer()
-                    .frame(height: 30)
+                    .frame(height: UIScreen.main.bounds.height * 0.11)
                 
                 HStack {
-                    Spacer()
-                    
-                    VStack(alignment: .center, spacing: 16) {
-                        LetterAvatarView(text: groupModel?.groupName ?? "Group")
+                    HStack(spacing: 16){
+                        Image("Chev-left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24, alignment: .leading)
+                            .foregroundColor(AppTheme.colors.black.color)
+                            .onTapGesture(count: 1, perform: {
+                                presentationMode.wrappedValue.dismiss()
+                            })
                         
                         Text(groupModel?.groupName ?? "Group")
-                            .font(.headline)
+                            .font(AppTheme.fonts.linkLarge.font)
+                            .foregroundColor(AppTheme.colors.black.color)
                     }
                     
                     Spacer()
+                    
+                    Image("pencil")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.black.color)
                 }
                 
-                Spacer()
-                    .frame(height: 16)
-                
-                Text("Other features")
-                
-                NavigationLink(
-                    destination: GroupChatAddMember(),
-                    label: {
-                        HStack {
-                            Image(systemName: "person.badge.plus.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40, height: 40, alignment: .center)
+                HStack(spacing : -8) {
+                    if let lstUser = self.groupModel?.lstClientID {
+                        if lstUser.count < 5 {
+                            ForEach(lstUser){ user in
+                                ChannelUserAvatar(avatarSize: 36, statusSize: 8, text: user.username, image: nil, status: .none, gradientBackgroundType: .primary)
+                            }
+                        } else {
+                            let lst = lstUser[0..<3]
+                            ForEach(lst){ user in
+                                ChannelUserAvatar(avatarSize: 36, statusSize: 8, text: user.username, image: nil, status: .none, gradientBackgroundType: .primary)
+                            }
                             
-                            VStack(alignment: .leading) {
-                                Text("Add members")
+                            let count = lstUser.count - lst.count
+                            
+                            ZStack(alignment: .center){
+                                LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
+                                    .frame(width: 36, height: 36, alignment: .center)
+                                    .clipShape(Circle())
+                                
+                                Text("+\(count)")
+                                    .font(AppTheme.fonts.linkSmall.font)
+                                    .frame(alignment: .center)
+                                    .foregroundColor(AppTheme.colors.offWhite.color)
                             }
                         }
-                        .foregroundColor(.primary)
-                    })
+                    }
+                }.padding(.top, 31)
                 
-                NavigationLink(
-                    destination: GroupChatMemberView(groupModel: groupModel),
-                    label: {
-                        HStack {
-                            Image(systemName: "person.3.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 40, height: 40, alignment: .center)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Show members")
-                            }
-                        }
-                        .foregroundColor(.primary)
-                    })
+                HStack {
+                    ButtonWithTitleAction("ic_action_call", "Audio")
+                    Spacer()
+                    ButtonWithTitleAction("ic_action_video_call", "Video")
+                    Spacer()
+                    ButtonWithTitleAction("ic_action_notify", "Mute")
+                }
+                .padding(.horizontal, 52)
+                .padding(.vertical, 24)
+                
+                VStack(spacing: 16) {
+                    ButtonSettingApp("user", "See Members", false) {
+                        
+                    }
+                    ButtonSettingApp("user-plus", "Add Members", false){
+                        
+                    }
+                    
+                    ButtonSettingApp("user-off", "Remove Members", false){
+                        
+                    }
+                    
+                    ButtonSettingApp("ic_photo", "View Photos/Video", false){
+                        
+                    }
+                    
+                    ButtonSettingApp("Search", "Search in Conversation", false){
+                        
+                    }
+                    
+                    ButtonSettingApp("ic_alert", "Report", true){
+                        
+                    }
+                    
+                    ButtonSettingApp("Logout", "Leave Group", true){
+                        
+                    }
+                    
+                }
                 
                 Spacer()
             }
-            .padding()
-            .navigationBarTitle(Text((groupModel?.groupName ?? "Group") + " details"), displayMode: .inline)
+            .navigationBarTitle("", displayMode: .inline)
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
-            }, label: {
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18, alignment: .leading)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                        .foregroundColor(.blue)
-                }
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
-            }))
+            .navigationBarHidden(true)
+            .padding(.horizontal)
+            .edgesIgnoringSafeArea(.top)
         }
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
 struct GroupChatDetailView_Previews: PreviewProvider {
+    
     static var previews: some View {
         GroupChatDetailView(groupModel: nil)
     }

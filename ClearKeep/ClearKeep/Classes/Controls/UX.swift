@@ -87,6 +87,27 @@ struct ButtonContent : View {
     }
 }
 
+struct ButtonWithTitleAction: View {
+    private let image: String
+    private let title: String
+    
+    init(_ image: String, _ title: String) {
+        self.image = image
+        self.title = title
+    }
+    
+    var body: some View {
+        VStack(alignment: .center , spacing: 8) {
+            Image(image)
+                .frame(width: 36, height: 36, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            Text(title)
+                .font(AppTheme.fonts.linkMedium.font)
+                .foregroundColor(AppTheme.colors.primary.color)
+                .frame(height: 28)
+        }
+    }
+}
+
 struct ButtonAuth: View {
     
     private var title: String
@@ -108,6 +129,57 @@ struct ButtonAuth: View {
         .cornerRadius(20)
     }
 }
+
+struct ButtonSettingApp: View {
+    private var imageName: String
+    private var title: String
+    private var action: () -> Void
+    private var isError: Bool = false
+    
+    init(_ imageName: String,_ title: String,_ isError: Bool = false, action: @escaping() -> Void) {
+        self.imageName = imageName
+        self.title = title
+        self.action = action
+        self.isError = isError
+    }
+    
+    var body: some View {
+        Button(action: action, label: {
+            HStack {
+                Image(imageName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 24, height: 24, alignment: .center)
+                    .foregroundColor(isError ? AppTheme.colors.error.color : AppTheme.colors.gray1.color)
+                
+                Text(title)
+                    .font(AppTheme.fonts.linkSmall.font)
+                    .foregroundColor(isError ? AppTheme.colors.error.color : AppTheme.colors.gray1.color)
+                Spacer()
+            }
+        })
+    }
+}
+
+private func settingItemView(imageName: String, title: String, action: @escaping VoidCompletion, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
+    Button(action: action, label: {
+        HStack {
+            Image(imageName)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 24, height: 24, alignment: .center)
+                .foregroundColor(foregroundColor)
+            
+            Text(title)
+                .font(AppTheme.fonts.linkSmall.font)
+                .foregroundColor(foregroundColor)
+            Spacer()
+        }
+    })
+}
+
 
 struct RoundedGradientButton: View {
     
