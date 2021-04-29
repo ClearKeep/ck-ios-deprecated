@@ -22,56 +22,63 @@ struct PeopleView: View {
 
     
     var body: some View {
-        VStack(alignment: .leading , spacing: 0){
-            Spacer()
-                .grandientBackground()
-                .frame(width: UIScreen.main.bounds.width, height: 60)
-            
-            VStack(alignment: .leading) {
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                    
-                } label: {
-                    Image("ic_close")
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                }
-                .padding(.top, 29)
+        GeometryReader { geometry in
+            VStack(alignment: .leading , spacing: 0) {
+                Spacer()
+                    .grandientBackground()
+                    .frame(width: UIScreen.main.bounds.width, height: 60)
                 
-                Text("New Message")
-                    .font(AppTheme.fonts.linkLarge.font)
-                    .foregroundColor(AppTheme.colors.black.color)
-                    .padding(.top, 23)
-                
-                SearchBar(text: $searchText) { (changed) in
-                    if changed {
-                    } else {
-                        self.searchUser(searchText)
+                VStack(alignment: .leading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                        
+                    } label: {
+                        Image("ic_close")
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(AppTheme.colors.gray1.color)
                     }
-                }
-                
-                Text("User in this Channel")
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.gray2.color)
-                    .padding([.top , .bottom] , 16)
-                
-                Group {
-                    ScrollView(.vertical, showsIndicators: false, content: {
-                        VStack(alignment:.leading , spacing: 16) {
-                            ForEach(self.peoples , id: \.id) { user in
-                                NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
-                                                .environmentObject(groupRealms)
-                                                .environmentObject(messsagesRealms)){
-                                    ContactView(people: user)
-                                }
-                            }
+                    .padding(.top, 29)
+                    
+                    Text("New Message")
+                        .font(AppTheme.fonts.linkLarge.font)
+                        .foregroundColor(AppTheme.colors.black.color)
+                        .padding(.top, 23)
+                    
+                    SearchBar(text: $searchText) { (changed) in
+                        if changed {
+                        } else {
+                            self.searchUser(searchText)
                         }
-                    })
+                    }
+                    
+                    Text("User in this Channel")
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.gray2.color)
+                        .padding([.top , .bottom] , 16)
+                    
+                    Group {
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack {
+                                VStack(alignment:.leading , spacing: 16) {
+                                    ForEach(self.peoples , id: \.id) { user in
+                                        NavigationLink(destination:  MessageChatView(clientId: user.id, groupID: 0, userName: user.userName)
+                                                        .environmentObject(groupRealms)
+                                                        .environmentObject(messsagesRealms)){
+                                            ContactView(people: user)
+                                        }
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                            .frame(width: geometry.size.width - 32)
+                        })
+                    }
+                    
+                    
                 }
-                
-                
+                .padding([.trailing , .leading , .bottom] , 16)
             }
-            .padding([.trailing , .leading , .bottom] , 16)
         }
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarHidden(true)
