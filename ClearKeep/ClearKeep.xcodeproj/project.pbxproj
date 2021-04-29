@@ -1807,7 +1807,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1839,7 +1839,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
