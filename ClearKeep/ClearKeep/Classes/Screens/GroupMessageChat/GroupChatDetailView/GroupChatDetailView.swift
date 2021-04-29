@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroupChatDetailView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-        
+    
     var groupModel: GroupModel? = nil
     
     init(groupModel: GroupModel?) {
@@ -17,78 +17,80 @@ struct GroupChatDetailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Spacer()
-                .frame(height: 30)
-
-            HStack {
+        NavigationView {
+            VStack(alignment: .leading, spacing: 16) {
                 Spacer()
-                                
-                VStack(alignment: .center, spacing: 16) {
-                    LetterAvatarView(text: groupModel?.groupName ?? "Group")
+                    .frame(height: 30)
+                
+                HStack {
+                    Spacer()
                     
-                    Text(groupModel?.groupName ?? "Group")
-                        .font(.headline)
+                    VStack(alignment: .center, spacing: 16) {
+                        LetterAvatarView(text: groupModel?.groupName ?? "Group")
+                        
+                        Text(groupModel?.groupName ?? "Group")
+                            .font(.headline)
+                    }
+                    
+                    Spacer()
                 }
                 
                 Spacer()
+                    .frame(height: 16)
+                
+                Text("Other features")
+                
+                NavigationLink(
+                    destination: GroupChatAddMember(),
+                    label: {
+                        HStack {
+                            Image(systemName: "person.badge.plus.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40, alignment: .center)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Add members")
+                            }
+                        }
+                        .foregroundColor(.primary)
+                    })
+                
+                NavigationLink(
+                    destination: GroupChatMemberView(groupModel: groupModel),
+                    label: {
+                        HStack {
+                            Image(systemName: "person.3.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40, alignment: .center)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Show members")
+                            }
+                        }
+                        .foregroundColor(.primary)
+                    })
+                
+                Spacer()
             }
-            
-            Spacer()
-                .frame(height: 16)
-            
-            Text("Other features")
-            
-            NavigationLink(
-                destination: GroupChatAddMember(),
-                label: {
-                    HStack {
-                        Image(systemName: "person.badge.plus.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40, alignment: .center)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Add members")
-                        }
-                    }
-                    .foregroundColor(.primary)
-                })
-
-            NavigationLink(
-                destination: GroupChatMemberView(groupModel: groupModel),
-                label: {
-                    HStack {
-                        Image(systemName: "person.3.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40, alignment: .center)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Show members")
-                        }
-                    }
-                    .foregroundColor(.primary)
-                })
-
-            Spacer()
+            .padding()
+            .navigationBarTitle(Text((groupModel?.groupName ?? "Group") + " details"), displayMode: .inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                HStack {
+                    Image(systemName: "chevron.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.gray1.color)
+                        .foregroundColor(.blue)
+                }
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
+            }))
         }
-        .padding()
-        .navigationBarTitle(Text((groupModel?.groupName ?? "Group") + " details"), displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-        }, label: {
-            HStack {
-                Image(systemName: "chevron.left")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 18, alignment: .leading)
-                    .foregroundColor(AppTheme.colors.gray1.color)
-                    .foregroundColor(.blue)
-            }
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
-        }))
     }
 }
 
