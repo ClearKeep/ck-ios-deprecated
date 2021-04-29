@@ -15,6 +15,7 @@ struct MainMenuItemView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Image(imageName)
+                .renderingMode(.original)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 32, height: 32, alignment: .center)

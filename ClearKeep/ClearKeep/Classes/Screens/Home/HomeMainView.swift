@@ -22,6 +22,7 @@ struct HomeMainView: View {
             ZStack(alignment: .topLeading) {
                 GeometryReader { geometry in
                     HStack(alignment: .top) {
+                       
                         LeftMainMenuView(leftMenuStatus: mainViewModel.menuItems,
                                          joinServerHandler: {
                                             self.mainViewModel.homeMainContentType = .joinNewServer

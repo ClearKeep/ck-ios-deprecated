@@ -23,7 +23,8 @@ struct JoinServerView: View {
                         Image("Hamburger")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 36, height: 36, alignment: .center)
+                            .frame(width: 24, height: 24, alignment: .center)
+                            .foregroundColor(AppTheme.colors.gray1.color)
                     })
                 }
                 
