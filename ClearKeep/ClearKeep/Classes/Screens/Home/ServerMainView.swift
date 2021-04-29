@@ -57,7 +57,14 @@ struct ServerMainView: View {
                     })
                 }
                 
-                WrappedTextFieldWithLeftIcon("Search", leftIconName: "Search", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.default, text: $searchText, errorMessage: .constant(""))
+                //WrappedTextFieldWithLeftIcon("Search", leftIconName: "Search", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.default, text: $searchText, errorMessage: .constant(""))
+                
+                SearchBar(text: $searchText) { (changed) in
+                    if changed {
+                    } else {
+                        //self.searchUser(searchText)
+                    }
+                }
                 
                 Button(action: {}, label: {
                     HStack {
@@ -80,6 +87,9 @@ struct ServerMainView: View {
             }
             .padding()
         })
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .onAppear(){
             UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
             UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)

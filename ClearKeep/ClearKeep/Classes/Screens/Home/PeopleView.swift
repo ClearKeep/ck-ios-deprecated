@@ -87,11 +87,9 @@ struct PeopleView: View {
             self.getListUser()
         }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
+        .onTapGesture {
+            self.hideKeyboard()
+        }
     }
 }
 

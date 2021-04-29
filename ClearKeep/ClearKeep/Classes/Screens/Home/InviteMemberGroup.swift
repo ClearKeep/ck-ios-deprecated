@@ -89,10 +89,7 @@ struct InviteMemberGroup: View {
                         .background(AppTheme.colors.gray5.color)
                         .cornerRadius(16)
                         .clipped()
-
                     }
-                    
-                    
                     
                     Text("User in this Channel")
                         .font(AppTheme.fonts.textMedium.font)
@@ -124,11 +121,9 @@ struct InviteMemberGroup: View {
             self.getListUser()
         }
         .hud(.waiting(.circular, "Waiting..."), show: self.hudVisible)
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
+        .onTapGesture {
+            self.hideKeyboard()
+        }
     }
     
     
