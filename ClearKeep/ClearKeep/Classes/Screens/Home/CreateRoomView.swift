@@ -57,6 +57,8 @@ struct CreateRoomView: View {
                                 .font(AppTheme.fonts.linkMedium.font)
                                 .foregroundColor(AppTheme.colors.primary.color)
                         }
+                        .opacity(self.groupName.isEmpty ? 0.3 : 1.0)
+                        .disabled(self.groupName.isEmpty)
                     }
                     .padding(.top, 29)
                     

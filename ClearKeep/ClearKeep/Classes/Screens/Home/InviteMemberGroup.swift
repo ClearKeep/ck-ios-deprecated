@@ -43,6 +43,8 @@ struct InviteMemberGroup: View {
                                 .font(AppTheme.fonts.linkMedium.font)
                                 .foregroundColor(AppTheme.colors.primary.color)
                         }
+                        .opacity(self.selectedRows.isEmpty ? 0.3 : 1.0)
+                        .disabled(self.selectedRows.isEmpty)
                     }
                     .padding(.top, 29)
                     
@@ -59,21 +61,31 @@ struct InviteMemberGroup: View {
                     }
 
                     FlexibleView(data: self.selectedRows.map{$0}, spacing: 8, alignment: .leading) { user in
-                        HStack {
-                            Text(user.userName)
-                                .font(AppTheme.fonts.textSmall.font)
-                                .foregroundColor(AppTheme.colors.black.color)
-                                .padding(8)
+                        VStack {
+                            Spacer()
                             
-                            Button {
-                                selectedRows.remove(user)
-                            } label: {
-                                Image("ic_close")
-                                    .frame(width: 9, height: 9)
-                                    .foregroundColor(AppTheme.colors.gray1.color)
-                                    .padding(.trailing, 11)
+                            HStack {
+                                Text(user.userName)
+                                    .font(AppTheme.fonts.textXSmall.font)
+                                    .foregroundColor(AppTheme.colors.black.color)
+                                    .padding(.leading, 8)
+                                
+                                Button {
+                                    selectedRows.remove(user)
+                                } label: {
+                                    Image("ic_close")
+                                        .renderingMode(.template)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 15, height: 15)
+                                        .foregroundColor(AppTheme.colors.gray1.color)
+                                        .padding(.trailing, 11)
+                                }
                             }
+                            
+                            Spacer()
                         }
+                        .frame(height: 30)
                         .background(AppTheme.colors.gray5.color)
                         .cornerRadius(16)
                         .clipped()
