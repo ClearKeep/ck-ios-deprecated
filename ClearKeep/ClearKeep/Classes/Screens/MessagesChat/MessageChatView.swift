@@ -130,6 +130,7 @@ extension MessageChatView {
                         .foregroundColor(AppTheme.colors.offWhite.color)
                         .font(AppTheme.fonts.textLarge.font)
                         .fontWeight(.medium)
+                        .lineLimit(2)
                 }
                 Spacer()
                 HStack{

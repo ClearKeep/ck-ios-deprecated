@@ -16,7 +16,7 @@ struct ServerDetailView: View {
     
     @Binding var isShowingServerDetailView: Bool
     @State var hudVisible = false
-    @State var userName: String = ""
+    @Binding var currentUserName: String
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -78,7 +78,7 @@ struct ServerDetailView: View {
         .onAppear(){
             Backend.shared.getMyProfile { (result, error) in
                 if let result = result {
-                    self.userName = result.displayName
+                    self.currentUserName = result.displayName
                 }
             }
         }
@@ -105,14 +105,15 @@ struct ServerDetailView: View {
     
     private func userInfoStatus() -> some View {
         HStack(spacing: 10) {
-            ChannelUserAvatar(avatarSize: 56, statusSize: 8, text: userName.capitalized, image: nil, status: .active, gradientBackgroundType: .primary)
+            ChannelUserAvatar(avatarSize: 56, statusSize: 8, text: currentUserName.capitalized, image: nil, status: .active, gradientBackgroundType: .primary)
             
             VStack(alignment: .leading, spacing: 8) {
                 Spacer()
                 
-                Text(userName.capitalized)
+                Text(currentUserName.capitalized)
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.primary.color)
+                    .lineLimit(2)
                 
                 Button(action: {}, label: {
                     HStack {
@@ -217,6 +218,6 @@ struct ServerDetailView: View {
 
 struct ServerDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ServerDetailView(isShowingServerDetailView: .constant(true))
+        ServerDetailView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
     }
 }

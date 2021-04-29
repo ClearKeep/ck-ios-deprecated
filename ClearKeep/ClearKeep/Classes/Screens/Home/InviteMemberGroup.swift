@@ -113,7 +113,6 @@ struct InviteMemberGroup: View {
             .navigationBarHidden(true)
             .edgesIgnoringSafeArea(.top)
         }
-        
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)

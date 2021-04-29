@@ -16,6 +16,7 @@ struct HomeMainView: View {
     
     @ObservedObject var mainViewModel: HomeMainViewModel = HomeMainViewModel()
     @State private var isShowingServerDetailView = false
+    @State var currentUserName: String = ""
     
     var body: some View {
         NavigationView {
@@ -30,7 +31,7 @@ struct HomeMainView: View {
                                          manageContactHandler: {})
                         
                         switch self.mainViewModel.homeMainContentType {
-                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView)
+                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName)
                         case .joinNewServer: JoinServerView()
                         }
                     }
@@ -42,7 +43,7 @@ struct HomeMainView: View {
                 .blur(radius: isShowingServerDetailView ? 10 : 0.0)
                 
                 if isShowingServerDetailView {
-                    ServerDetailView(isShowingServerDetailView: $isShowingServerDetailView)
+                    ServerDetailView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName)
                 }
             }
         }

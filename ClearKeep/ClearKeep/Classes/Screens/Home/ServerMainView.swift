@@ -32,6 +32,7 @@ struct ServerMainView: View {
     @State private var isShowingInviteMemberGroupView = false
     
     @Binding var isShowingServerDetailView: Bool
+    @Binding var currentUserName: String
     
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
@@ -97,6 +98,7 @@ struct ServerMainView: View {
             self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
             self.reloadData()
             self.getJoinedGroup()
+            self.getProfileInfo()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
             self.didReceiveMessageGroup(userInfo: obj.userInfo)
@@ -283,6 +285,14 @@ extension ServerMainView {
         DispatchQueue.main.async {
             self.groupRealms.loadSavedData()
             self.messsagesRealms.loadSavedData()
+        }
+    }
+    
+    func getProfileInfo() {
+        Backend.shared.getMyProfile { (result, error) in
+            if let result = result {
+                self.currentUserName = result.displayName
+            }
         }
     }
     
@@ -588,6 +598,6 @@ extension ServerMainView {
 
 struct ServerMainView_Previews: PreviewProvider {
     static var previews: some View {
-        ServerMainView(isShowingServerDetailView: .constant(true))
+        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
     }
 }
