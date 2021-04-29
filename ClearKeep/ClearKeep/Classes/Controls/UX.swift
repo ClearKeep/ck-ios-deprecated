@@ -186,7 +186,9 @@ struct MultipleSelectionRow: View {
             Image(self.isSelected ? "ic_selected" : "ic_unselect")
                 .frame(width: 32, height: 32)
             
-        }.onTapGesture(count: 1, perform: {
+        }
+        .contentShape(Rectangle())
+        .onTapGesture(count: 1, perform: {
             if self.isSelected {
                 self.selectedItems.remove(self.people)
             } else {
