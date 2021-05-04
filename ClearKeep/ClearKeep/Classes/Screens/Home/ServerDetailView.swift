@@ -76,10 +76,9 @@ struct ServerDetailView: View {
         }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onAppear(){
-            Backend.shared.getMyProfile { (result, error) in
-                if let result = result {
-                    self.currentUserName = result.displayName
-                }
+            let userLogin = Backend.shared.getUserLogin()
+            if let userName = userLogin?.displayName {
+                self.currentUserName = userName
             }
         }
         
