@@ -12,6 +12,9 @@ struct GroupChatDetailView: View {
     
     var groupModel: GroupModel? = nil
     
+    @State private var isShowingGroupChatMemberView = false
+
+    
     init(groupModel: GroupModel?) {
         self.groupModel = groupModel
     }
@@ -21,7 +24,7 @@ struct GroupChatDetailView: View {
             VStack(alignment: .center, spacing: 0) {
                 Spacer()
                     .frame(height: UIScreen.main.bounds.height * 0.11)
-                
+                NavigationLink(destination: GroupChatMemberView(groupModel: self.groupModel), isActive: $isShowingGroupChatMemberView) {}
                 HStack {
                     HStack(spacing: 16){
                         Image("Chev-left")
@@ -87,7 +90,7 @@ struct GroupChatDetailView: View {
                 
                 VStack(spacing: 16) {
                     ButtonSettingApp("user", "See Members", false) {
-                        
+                        isShowingGroupChatMemberView = true
                     }
                     ButtonSettingApp("user-plus", "Add Members", false){
                         

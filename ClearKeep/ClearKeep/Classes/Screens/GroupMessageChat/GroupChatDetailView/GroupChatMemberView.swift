@@ -17,44 +17,52 @@ struct GroupChatMemberView: View {
     }
     
     var body: some View {
-        let currentUserId = Backend.shared.getUserLogin()?.id ?? ""
-        
-        VStack {
-            if let groupMembers = groupModel?.lstClientID {
-                List(groupMembers) { groupMember in
-                    HStack {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        
-                        VStack(alignment: .leading) {
-                            
-                            if groupMember.id == currentUserId {
-                                Text(Backend.shared.getUserLogin()?.displayName ?? "me")
-                            } else {
-                                Text(groupMember.username)
-                            }
-                        }
-                    }
+        NavigationView {
+            VStack(alignment: .leading , spacing: 0) {
+                Spacer().frame(width: UIScreen.main.bounds.width, height: 68)
+                
+                HStack(spacing: 16){
+                    Image("Chev-left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.black.color)
+                        .onTapGesture(count: 1, perform: {
+                            presentationMode.wrappedValue.dismiss()
+                        })
+                    
+                    Text("Member")
+                        .font(AppTheme.fonts.linkLarge.font)
+                        .foregroundColor(AppTheme.colors.black.color)
                 }
+                .padding(.horizontal)
+                .padding(.bottom, 24)
+                
+                
+                Group {
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        VStack(alignment:.leading , spacing: 16) {
+                            if let groupMembers = groupModel?.lstClientID {
+                                let peoples = groupMembers.map {People(id: $0.id, userName: $0.username, userStatus: .Online)}
+                                ForEach(peoples , id: \.id) { user in
+                                    ContactView(people: user)
+                                }
+                            }
+                            
+                        }
+                    })
+                }.padding(.horizontal)
+                
             }
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
+            .edgesIgnoringSafeArea(.top)
         }
-//        .navigationBarTitle("Group members")
-        .navigationBarTitle(Text("Group members"), displayMode: .inline)
+        .navigationBarTitle("", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-        }, label: {
-            HStack {
-                Image(systemName: "chevron.left")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 18, alignment: .leading)
-                    .offset(x: -10)
-                    .foregroundColor(.blue)
-            }
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
-        }))
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
