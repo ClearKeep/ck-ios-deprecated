@@ -17,13 +17,12 @@ class ServerMainViewModel: ObservableObject {
     }
     
     func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-        
+
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
                 guard let recipientResponse = response else {
                     print("Request prekey \(clientId) fail")
-                    completion()
                     return
                 }
                 // check exist session recipient in database
@@ -43,7 +42,7 @@ class ServerMainViewModel: ObservableObject {
                                         buddy.username = recipientResponse.clientID
                                         buddy.save(with:transaction)
                                         
-                                        let device = CKDevice(deviceId: NSNumber(value: recipientResponse.deviceID),
+                                        let device = CKDevice(deviceId: NSNumber(value:555),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: buddy.uniqueId,
                                                               parentCollection: CKBuddy.collection,
