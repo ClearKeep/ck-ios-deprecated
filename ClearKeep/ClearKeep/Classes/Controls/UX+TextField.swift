@@ -81,20 +81,64 @@ struct TextFieldContent : View {
     }
 }
 
+//struct TextFieldProfile: View {
+//    var key: String
+//    @Binding var value: String
+//    @Binding var disable: Bool
+//
+//    var body: some View {
+//        return TextField(key, text: $value)
+//            .padding()
+//            .textFieldStyle(RoundedBorderTextFieldStyle())
+//            .autocapitalization(.none)
+//            .disableAutocorrection(true)
+//            .disabled(disable)
+//    }
+//}
+
 struct TextFieldProfile: View {
-    var key: String
-    @Binding var value: String
+    @Binding private var text: String
     @Binding var disable: Bool
     
+    private var header: String?
+    private var title: String
+    private var onEditingChanged: (Bool) -> Void
+    
+    init(_ title: String, header: String? = nil, text: Binding<String>, disable: Binding<Bool>, onEditingChanged: @escaping (Bool) -> Void) {
+        self.title = title
+        self.header = header
+        self._text = text
+        self._disable = disable
+        self.onEditingChanged = onEditingChanged
+    }
+    
     var body: some View {
-        return TextField(key, text: $value)
-            .padding()
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
-            .disabled(disable)
+        VStack(alignment: .leading, spacing: 8) {
+            
+            if let headerText = header, !headerText.isEmpty {
+                Text(headerText)
+                    .font(AppTheme.fonts.textSmall.font)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            HStack(alignment: .center) {
+                TextField(title, text: $text, onEditingChanged: onEditingChanged)
+                    .autocapitalization(.none)
+                    .font(AppTheme.fonts.textSmall.font)
+                    .foregroundColor(AppTheme.colors.black.color)
+                    .disableAutocorrection(true)
+                    .keyboardType(.emailAddress)
+                    .textFieldStyle(MyTextFieldStyle())
+                    .padding(.horizontal, 16)
+                    .disabled(disable)
+            }
+            .frame(height: 52)
+            .background(AppTheme.colors.gray5.color)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        }
     }
 }
+
 
 struct TextFieldWithLeftIcon: View {
     @Binding private var text: String

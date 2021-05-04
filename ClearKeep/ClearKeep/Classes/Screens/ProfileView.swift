@@ -13,7 +13,6 @@ struct ProfileView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var realmMessages : RealmMessages
-    @State private var showActionSheet = false
     
     @State var id: String = ""
     @State var email: String = ""
@@ -26,6 +25,9 @@ struct ProfileView: View {
     @State var messageAlert = ""
     @State private var titleAlert = ""
 
+    @State var emailDisable = false
+    @State var userNameDisable = false
+    
     var body: some View {
         VStack {
             Image(systemName: "person.crop.circle.fill")
@@ -35,18 +37,11 @@ struct ProfileView: View {
                 .frame(width: 200, height: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .overlay(Circle().stroke(Color.gray , lineWidth: 2))
                 .padding(.bottom, 20)
-            TextFieldProfile(key: "Email", value: $email, disable: $isDisable)
-            TextFieldProfile(key: "UserName", value: $userName, disable: $isDisable)
-            // Logout button
-            Button(action: confirmDelete) {
-                ButtonContent("LOGOUT")
-                    .padding(30)
-            }
-            Spacer()
-            Text(self.getVersionApp())
-                .fontWeight(.light)
-                .font(.footnote)
-                .multilineTextAlignment(.center)
+            
+            TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
+            
+            TextFieldProfile("Email", header: "Email", text: $email, disable: $emailDisable) { (_) in }
+            
         }
         .padding()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
@@ -66,81 +61,9 @@ struct ProfileView: View {
                 }
             }
         }
-        .actionSheet(isPresented: $showActionSheet) {
-            self.confirmationSheet
-        }
-    }
-
-    private func logout() {
-        hudVisible = true
-        Backend.shared.logout { (result) in
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            hudVisible = false
-            // clear data user default
-            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-            UserDefaults.standard.removeObject(forKey: Constants.keySaveUserID)
-            
-            // clear data user in database
-            guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
-            connectionDb.readWrite { (transaction) in
-                CKAccount.removeAllAccounts(in: transaction)
-            }
-            CKSignalCoordinate.shared.myAccount = nil
-            self.realmMessages.removeAll()
-            self.groupRealms.removeAll()
-            self.viewRouter.current = .login
-
-        }
-        
-        // Clean signin state
-        let currentSignInType = SocialLogin.shared.currentSignInType
-        SocialLogin.shared.saveSignInType(nil)
-        
-        switch currentSignInType {
-        case .email: break
-        case .google:
-            if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
-                GIDSignIn.sharedInstance().signOut()
-            }
-        case .microsoft:
-            SocialLogin.shared.signOutO365()
-        case .facebook:
-            SocialLogin.shared.signOutFacebookAccount()
-        }
-    }
-    
-    private var confirmationSheet: ActionSheet {
-        ActionSheet(
-            title: Text("Logout Account"),
-            message: Text("Are you sure?"),
-            buttons: [
-                .cancel {},
-                .destructive(Text("Logout")) {
-                    self.delete()
-                }
-            ]
-        )
-    }
-
-    private func confirmDelete() {
-        showActionSheet = true
-    }
-
-    private func delete() {
-        logout()
     }
 }
 
-extension ProfileView {
-    func getVersionApp() -> String{
-        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        let buildVerSion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-        let nameEnv = AppConfig.buildEnvironment.nameEnvironment
-        let version = "Version \(appVersion) \n Build Version: \(buildVerSion) \n Environment: \(nameEnv)"
-        return version
-    }
-}
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {

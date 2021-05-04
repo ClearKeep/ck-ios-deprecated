@@ -14,8 +14,10 @@ struct ServerDetailView: View {
     @EnvironmentObject var groupRealms : RealmGroups
     @EnvironmentObject var realmMessages : RealmMessages
     
-    @Binding var isShowingServerDetailView: Bool
     @State var hudVisible = false
+    @State private var showActionSheet = false
+    
+    @Binding var isShowingServerDetailView: Bool
     @Binding var currentUserName: String
     
     var body: some View {
@@ -63,6 +65,10 @@ struct ServerDetailView: View {
                             Divider()
                             generalInfoSection()
                             Spacer()
+                            Text(self.getVersionApp())
+                                .fontWeight(.light)
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
                         }
                     })
                     .padding(.horizontal, 16)
@@ -81,25 +87,44 @@ struct ServerDetailView: View {
                 self.currentUserName = userName
             }
         }
+        .actionSheet(isPresented: $showActionSheet) {
+            self.confirmationSheet
+        }
         
     }
     
-    private func settingItemView(imageName: String, title: String, action: @escaping VoidCompletion, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
-        Button(action: action, label: {
-            HStack {
-                Image(imageName)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 24, height: 24, alignment: .center)
-                    .foregroundColor(foregroundColor)
-                
-                Text(title)
-                    .font(AppTheme.fonts.linkSmall.font)
-                    .foregroundColor(foregroundColor)
-                Spacer()
-            }
-        })
+//    private func settingItemView(imageName: String, title: String, action: @escaping VoidCompletion, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
+//        Button(action: action, label: {
+//            HStack {
+//                Image(imageName)
+//                    .renderingMode(.template)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 24, height: 24, alignment: .center)
+//                    .foregroundColor(foregroundColor)
+//
+//                Text(title)
+//                    .font(AppTheme.fonts.linkSmall.font)
+//                    .foregroundColor(foregroundColor)
+//                Spacer()
+//            }
+//        })
+//    }
+    
+    private func settingItemView(imageName: String, title: String, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
+        HStack {
+            Image(imageName)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 24, height: 24, alignment: .center)
+                .foregroundColor(foregroundColor)
+            
+            Text(title)
+                .font(AppTheme.fonts.linkSmall.font)
+                .foregroundColor(foregroundColor)
+            Spacer()
+        }
     }
     
     private func userInfoStatus() -> some View {
@@ -145,13 +170,21 @@ struct ServerDetailView: View {
                 Spacer()
             }
             
-            settingItemView(imageName: "Adjustment", title: "Server Settings", action: {})
+            NavigationLink(destination: Text("Server Settings")) {
+                settingItemView(imageName: "Adjustment", title: "Server Settings")
+            }
             
-            settingItemView(imageName: "user-plus", title: "Invite other", action: {})
+            NavigationLink(destination: Text("Invite other")) {
+                settingItemView(imageName: "user-plus", title: "Invite other")
+            }
             
-            settingItemView(imageName: "user-off", title: "Banned users", action: {})
+            NavigationLink(destination: Text("Banned users")) {
+                settingItemView(imageName: "user-off", title: "Banned users")
+            }
             
-            settingItemView(imageName: "Logout", title: "Leave CK Development", action: {}, foregroundColor: AppTheme.colors.error.color)
+            Button(action: {}) {
+                settingItemView(imageName: "Logout", title: "Leave CK Development", foregroundColor: AppTheme.colors.error.color)
+            }
         }
     }
     
@@ -164,14 +197,35 @@ struct ServerDetailView: View {
                 Spacer()
             }
             
-            settingItemView(imageName: "user", title: "Account Settings", action: {})
+            NavigationLink(destination: ProfileView()) {
+                settingItemView(imageName: "user", title: "Account Settings")
+            }
             
-            settingItemView(imageName: "Gear", title: "Application Settings", action: {})
+            NavigationLink(destination: Text("Application Settings")) {
+                settingItemView(imageName: "Gear", title: "Application Settings")
+            }
             
-            settingItemView(imageName: "Logout", title: "Logout", action: {
-                self.logout()
-            }, foregroundColor: AppTheme.colors.error.color)
+            Button(action: { self.confirmLogout() }) {
+                settingItemView(imageName: "Logout", title: "Logout", foregroundColor: AppTheme.colors.error.color)
+            }
         }
+    }
+    
+    private func confirmLogout() {
+        showActionSheet = true
+    }
+    
+    private var confirmationSheet: ActionSheet {
+        ActionSheet(
+            title: Text("Logout Account"),
+            message: Text("Are you sure?"),
+            buttons: [
+                .cancel {},
+                .destructive(Text("Logout")) {
+                    self.logout()
+                }
+            ]
+        )
     }
     
     private func logout() {
@@ -215,6 +269,17 @@ struct ServerDetailView: View {
         }
     }
 }
+
+extension ServerDetailView {
+    func getVersionApp() -> String {
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        let buildVerSion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        let nameEnv = AppConfig.buildEnvironment.nameEnvironment
+        let version = "Version \(appVersion) \n Build Version: \(buildVerSion) \n Environment: \(nameEnv)"
+        return version
+    }
+}
+
 
 struct ServerDetailView_Previews: PreviewProvider {
     static var previews: some View {
