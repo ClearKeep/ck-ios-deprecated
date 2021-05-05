@@ -37,13 +37,14 @@ struct ChangePasswordView: View {
                     .foregroundColor(AppTheme.colors.background.color)
                     .padding(.top, 20)
                 
-                WrappedSecureTextWithLeftIcon("Current Password",leftIconName: "Lock", text: $viewModel.passWord, errorMessage: $viewModel.errorMsgPassword, isFocused: $viewModel.passWordIsFocused)
- 
-                WrappedSecureTextWithLeftIcon("New Password",leftIconName: "Lock", text: $viewModel.newPassWord, errorMessage: $viewModel.errorMsgNewPassword, isFocused: $viewModel.newPassWordIsFocused)
-
-                WrappedSecureTextWithLeftIcon("Confirm Password",leftIconName: "Lock", text: $viewModel.passWordConfirm, errorMessage: $viewModel.errorMsgConfirmPwd, isFocused: $viewModel.passWordConfirmIsFocused)
+                CustomSecureTextWithLeftIcon("Current Password", leftIconName: "Lock", text: $viewModel.passWord, errorMessage: $viewModel.errorMsgPassword)
+                
+                CustomSecureTextWithLeftIcon("New Password", leftIconName: "Lock", text: $viewModel.newPassWord, errorMessage: $viewModel.errorMsgNewPassword)
+                
+                CustomSecureTextWithLeftIcon("Confirm Password", leftIconName: "Lock", text: $viewModel.passWordConfirm, errorMessage: $viewModel.errorMsgConfirmPwd)
                 
                 ButtonAuth("Save") {
+                    self.hideKeyboard()
                     viewModel.updatePassword()
                 }.padding(.top, 8)
                 

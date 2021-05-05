@@ -17,9 +17,23 @@ class ChangePasswordViewModel: ObservableObject {
     @Published var messageAlert = ""
     @Published var titleAlert = ""
     
-    @Published var passWord: String = ""
-    @Published var newPassWord: String = ""
-    @Published var passWordConfirm: String = ""
+    @Published var passWord: String = "" {
+        didSet {
+            errorMsgPassword = ""
+        }
+    }
+    
+    @Published var newPassWord: String = "" {
+        didSet {
+            errorMsgNewPassword = ""
+        }
+    }
+    
+    @Published var passWordConfirm: String = "" {
+        didSet {
+            errorMsgConfirmPwd = ""
+        }
+    }
     
     @Published var errorMsgPassword: String = ""
     @Published var errorMsgNewPassword: String = ""
@@ -28,37 +42,6 @@ class ChangePasswordViewModel: ObservableObject {
     @Published var isPasswordValid : Bool = true
     @Published var isNewPasswordValid : Bool = true
     @Published var isConfirmPasswordValid : Bool = true
-    
-    @Published var passWordIsFocused: Bool = false {
-        didSet {
-            if passWordIsFocused {
-                errorMsgPassword = ""
-            } else {
-                verifyPassword()
-            }
-        }
-    }
-    
-    @Published var newPassWordIsFocused: Bool = false {
-        didSet {
-            if newPassWordIsFocused {
-                errorMsgNewPassword = ""
-            } else {
-                verifyNewPassword()
-            }
-        }
-    }
-    
-    @Published var passWordConfirmIsFocused: Bool = false {
-        didSet {
-            if passWordConfirmIsFocused {
-                errorMsgConfirmPwd = ""
-            } else {
-                verifyConfirmPassword()
-            }
-        }
-    }
-    
     
     fileprivate func verifyPassword() {
         let pwd = passWord.trimmingCharacters(in: .whitespacesAndNewlines)
