@@ -42,6 +42,7 @@
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
+		10AA457A26423C6A000EB6E1 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457926423C6A000EB6E1 /* Binding+Extension.swift */; };
 		10D650BC262681300018528B /* UIFont+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650BB262681300018528B /* UIFont+Font.swift */; };
 		10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */; };
 		10D650CC2626BEF60018528B /* CardViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650CB2626BEF60018528B /* CardViewContainer.swift */; };
@@ -274,6 +275,7 @@
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
+		10AA457926423C6A000EB6E1 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
 		10D650BB262681300018528B /* UIFont+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Font.swift"; sourceTree = "<group>"; };
 		10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewPreview.swift; sourceTree = "<group>"; };
 		10D650CB2626BEF60018528B /* CardViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewContainer.swift; sourceTree = "<group>"; };
@@ -1097,6 +1099,7 @@
 				102770932615A7D00001BBC6 /* UIViewControllerExtension.swift */,
 				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
 				10D650BB262681300018528B /* UIFont+Font.swift */,
+				10AA457926423C6A000EB6E1 /* Binding+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1481,6 +1484,7 @@
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
 				10237DAB262EBB7E005183C4 /* HomeMainView.swift in Sources */,
 				68C4D56925F60E4800F31F77 /* NetworkMonitor.swift in Sources */,
+				10AA457A26423C6A000EB6E1 /* Binding+Extension.swift in Sources */,
 				56694AE025B53C8A008E8EC5 /* InfoIndicator.swift in Sources */,
 				1664F1B7252C6B4700FF37AD /* SceneDelegate.swift in Sources */,
 				56694AA825B53C39008E8EC5 /* HUD.swift in Sources */,

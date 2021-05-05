@@ -289,11 +289,8 @@ extension ServerMainView {
     }
     
     func getProfileInfo() {
-        Backend.shared.getMyProfile { (result, error) in
-            if let result = result {
-                self.currentUserName = result.displayName
-            }
-        }
+        let userLogin = Backend.shared.getUserLogin()
+        self.currentUserName = userLogin?.displayName ?? ""
     }
     
     func getJoinedGroup(){
