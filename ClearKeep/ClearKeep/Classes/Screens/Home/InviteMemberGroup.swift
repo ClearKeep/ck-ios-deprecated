@@ -18,70 +18,52 @@ struct InviteMemberGroup: View {
     
     @State var users : [People] = []
     @State var hudVisible : Bool = false
-
+    
     var body: some View {
-        VStack(alignment: .leading , spacing: 0){
-            Spacer()
-                .grandientBackground()
-                .frame(width: UIScreen.main.bounds.width, height: 60)
+        VStack(alignment: .leading) {
+            SearchBar(text: $searchText) { (changed) in
+                if changed {
+                } else {
+                    self.searchUser(searchText)
+                }
+            }
             
-            VStack(alignment: .leading) {
-                HStack {
-                    Button {
-                        isPresentModel = false
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image("ic_close")
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                    }
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0}).environmentObject(RealmGroups())) {
-                        Text("Next")
-                            .font(AppTheme.fonts.linkMedium.font)
-                            .foregroundColor(AppTheme.colors.primary.color)
-                    }
-                    .opacity(self.selectedRows.isEmpty ? 0.3 : 1.0)
-                    .disabled(self.selectedRows.isEmpty)
-                }
-                .padding(.top, 29)
-                
-                Text("New Message")
-                    .font(AppTheme.fonts.linkLarge.font)
-                    .foregroundColor(AppTheme.colors.black.color)
-                    .padding(.top, 23)
-                
-                SearchBar(text: $searchText) { (changed) in
-                    if changed {
-                    } else {
-                        self.searchUser(searchText)
-                    }
-                }
-                
-                listSelectedUserView()
-                
-                Text("User in this Channel")
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.gray2.color)
-                    .padding([.top , .bottom] , 16)
-                
-                Group {
-                    ScrollView(.vertical, showsIndicators: false, content: {
-                        VStack(alignment:.leading , spacing: 16) {
-                            ForEach(self.users , id: \.id) { user in
-                                MultipleSelectionRow(people: user, selectedItems: $selectedRows)
-                            }
+            listSelectedUserView()
+            
+            Text("User in this Channel")
+                .font(AppTheme.fonts.textMedium.font)
+                .foregroundColor(AppTheme.colors.gray2.color)
+                .padding([.top , .bottom] , 16)
+            
+            Group {
+                ScrollView(.vertical, showsIndicators: false, content: {
+                    VStack(alignment:.leading , spacing: 16) {
+                        ForEach(self.users , id: \.id) { user in
+                            MultipleSelectionRow(people: user, selectedItems: $selectedRows)
                         }
-                    })
-                }
-                
-            }.padding([.trailing , .leading , .bottom] , 16)
+                    }
+                })
+            }
         }
-        .navigationBarTitle(Text(""), displayMode: .inline)
-        .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.top)
+        .padding([.trailing , .leading , .bottom] , 16)
+        .applyNavigationBarStyle(title: "test", leftBarItems: {
+            Button {
+                isPresentModel = false
+                presentationMode.wrappedValue.dismiss()
+            } label: {
+                Image("ic_close")
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+        }, rightBarItems: {
+            NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0}).environmentObject(RealmGroups())) {
+                Text("Next")
+                    .font(AppTheme.fonts.linkMedium.font)
+                    .foregroundColor(AppTheme.colors.primary.color)
+            }
+            .opacity(self.selectedRows.isEmpty ? 0.3 : 1.0)
+            .disabled(self.selectedRows.isEmpty)
+        })
         .onAppear(){
             self.getListUser()
         }

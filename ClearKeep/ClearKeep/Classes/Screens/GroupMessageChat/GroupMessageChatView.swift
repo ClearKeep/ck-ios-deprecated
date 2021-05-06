@@ -218,7 +218,7 @@ extension GroupMessageChatView {
             }
         }
         .padding()
-        .applyNavigationBarStyle()
+        .applyNavigationBarChatStyle()
     }
     
     func sendMessageBarView() -> some View {

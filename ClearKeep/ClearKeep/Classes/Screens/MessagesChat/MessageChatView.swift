@@ -156,7 +156,7 @@ extension MessageChatView {
             }
             .padding()
         }
-        .applyNavigationBarStyle()
+        .applyNavigationBarChatStyle()
     }
     
     func sendMessageBarView() -> some View {
