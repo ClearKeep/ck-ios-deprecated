@@ -69,7 +69,7 @@ struct LoginView: View {
                                 SocialSignInButton(signInType: .google)
                                 
                                 SocialSignInButton(signInType: .office365)
-  
+                                
                                 SocialSignInButton(signInType: .facebook)
                                 
                                 HStack {
@@ -338,7 +338,7 @@ extension LoginView {
                 try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                 
                 hudVisible = true
-                Backend.shared.getLoginUserID { (userID, displayName) in
+                Backend.shared.getLoginUserID { (userID, displayName, email) in
                     do {
                         if userID.isEmpty {
                             print("getLoginUserID Empty")
@@ -351,6 +351,7 @@ extension LoginView {
                         }
                         user.id = userID
                         user.displayName = displayName
+                        user.email = email
                         UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
                         try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                         // let randomID = Int32.random(in: 1...Int32.max)

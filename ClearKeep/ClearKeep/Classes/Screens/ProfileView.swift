@@ -112,16 +112,10 @@ struct ProfileView: View {
                   dismissButton: .default(Text("OK")))
         })
         .onAppear() {
-            Backend.shared.getMyProfile { (result, error) in
-                if let result = result {
-                    self.email = result.email.lowercased()
-                    self.userName = result.displayName
-                    self.phoneNumber = ""
-                } else if let userLogin = Backend.shared.getUserLogin() {
-                    self.email = userLogin.email
-                    self.userName = userLogin.displayName
-                    self.phoneNumber = ""
-                }
+            if let userLogin = Backend.shared.getUserLogin() {
+                self.email = userLogin.email
+                self.userName = userLogin.displayName
+                self.phoneNumber = ""
             }
         }
     }

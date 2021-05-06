@@ -307,15 +307,15 @@ class Backend: ObservableObject {
         }
     }
     
-    func getLoginUserID(_ completion: @escaping (String, String) -> Void) {
+    func getLoginUserID(_ completion: @escaping (String, String, String) -> Void) {
         let header = self.getHeaderApi()
         if let header = header {
             clientUser.get_profile(User_Empty(), callOptions: header).response.whenComplete { (result) in
                 switch result {
                 case .success(let response):
-                    completion(response.id, response.displayName)
+                    completion(response.id, response.displayName, response.email)
                 case .failure(_):
-                    completion("", "")
+                    completion("", "", "")
                 }
             }
         }
