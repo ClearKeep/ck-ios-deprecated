@@ -381,8 +381,9 @@ extension GroupMessageChatView {
     }
     
     private func send() {
-        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {return}
-        self.sendMessage(messageStr: $messageStr.wrappedValue)
+        let trimmedText = messageStr.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedText.isEmpty { return }
+        self.sendMessage(messageStr: trimmedText)
     }
     
     
