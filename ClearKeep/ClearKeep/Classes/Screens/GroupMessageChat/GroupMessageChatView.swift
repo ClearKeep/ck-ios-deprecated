@@ -43,51 +43,14 @@ struct GroupMessageChatView: View {
     
     var body: some View {
         VStack {
-            VStack(spacing: 0){
-                customeNavigationBarView()
-                
-                Group {
-                    if #available(iOS 14.0, *) {
-                        GeometryReader { reader in
-                            ScrollView(.vertical, showsIndicators: false, content: {
-                                HStack { Spacer() }
-                                ScrollViewReader{reader in
-                                    VStack(spacing: 8){
-                                        let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
-                                        let lst = CKExtensions.getMessageAndSection(messages)
-                                        ForEach(lst , id: \.title) { gr in
-                                            Section(header: Text(gr.title)
-                                                        .font(AppTheme.fonts.textSmall.font)
-                                                        .foregroundColor(AppTheme.colors.gray3.color)) {
-                                                let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
-                                                ForEach(listDisplayMessage , id: \.message.id) { msg in
-                                                    // Chat Bubbles...
-                                                    MessageBubble(msg: msg.message, isGroup: true, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
-                                                        .id(msg.message.id)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
-                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                    }
-                                    .onAppear(perform: {
-                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                    })
-                                    .padding([.horizontal,.bottom])
-                                    .padding(.top, 25)
-                                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                            reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                    } else {
-                        GeometryReader { reader in
-                            ScrollView(.vertical, showsIndicators: false, content: {
-                                HStack { Spacer() }
+            //                customeNavigationBarView()
+            
+            Group {
+                if #available(iOS 14.0, *) {
+                    GeometryReader { reader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            ScrollViewReader{reader in
                                 VStack(spacing: 8){
                                     let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
                                     let lst = CKExtensions.getMessageAndSection(messages)
@@ -104,54 +67,104 @@ struct GroupMessageChatView: View {
                                         }
                                     }
                                 }
+                                .onChange(of: realmMessages.allMessageInGroup(groupId: groupModel.groupID).count) { _ in
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                }
+                                .onAppear(perform: {
+                                    reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                })
                                 .padding([.horizontal,.bottom])
                                 .padding(.top, 25)
-                            })
-                            .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    self.scrollingProxy.scrollTo(.end)
+                                .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                    }
                                 }
+                            }
+                        })
+                    }
+                } else {
+                    GeometryReader { reader in
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack { Spacer() }
+                            VStack(spacing: 8){
+                                let messages = realmMessages.allMessageInGroup(groupId: groupModel.groupID)
+                                let lst = CKExtensions.getMessageAndSection(messages)
+                                ForEach(lst , id: \.title) { gr in
+                                    Section(header: Text(gr.title)
+                                                .font(AppTheme.fonts.textSmall.font)
+                                                .foregroundColor(AppTheme.colors.gray3.color)) {
+                                        let listDisplayMessage = MessageUtils.getListRectCorner(messages: gr.messages)
+                                        ForEach(listDisplayMessage , id: \.message.id) { msg in
+                                            // Chat Bubbles...
+                                            MessageBubble(msg: msg.message, isGroup: true, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
+                                                .id(msg.message.id)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding([.horizontal,.bottom])
+                            .padding(.top, 25)
+                        })
+                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.scrollingProxy.scrollTo(.end)
                             }
                         }
                     }
                 }
-                
-                self.sendMessageBarView()
-                
             }
-            .edgesIgnoringSafeArea(.top)
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
-            .onAppear() {
-                UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                DispatchQueue.main.async {
-                    self.realmMessages.loadSavedData()
-                    self.groupRealms.loadSavedData()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.registerWithGroup(groupModel.groupID)
-                        self.getMessageInRoom()
-                    }
-                }
-            }
-            .onDisappear(){
-                UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
-                if let userInfo = obj.userInfo,
-                   let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                    if publication.groupType == "group"{
-                        if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-                            self.isForceProcessKey = true
-                            self.decryptionMessage(publication: publication)
-                        }
-                    }
-                }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
-                self.getMessageInRoom()
-            })
+            
+            self.sendMessageBarView()
         }
+        .applyNavigationBarChatStyle(titleView: {
+            NavigationLink(
+                destination: GroupChatDetailView(groupModel: groupModel),
+                label: {
+                    Text(groupModel.groupName)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .font(AppTheme.fonts.textLarge.font)
+                        .fontWeight(.medium)
+                        .lineLimit(2)
+                })
+        }, invokeBackButton: {
+            if self.isNewCreatedGroup {
+                self.viewRouter.current = .tabview
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        }, invokeCallButton: { callType in
+            call(callType: callType)
+        })
+        .onAppear() {
+            UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
+            DispatchQueue.main.async {
+                self.realmMessages.loadSavedData()
+                self.groupRealms.loadSavedData()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.registerWithGroup(groupModel.groupID)
+                    self.getMessageInRoom()
+                }
+            }
+        }
+        .onDisappear(){
+            UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
+            if let userInfo = obj.userInfo,
+               let publication = userInfo["publication"] as? Message_MessageObjectResponse {
+                if publication.groupType == "group"{
+                    if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
+                        self.isForceProcessKey = true
+                        self.decryptionMessage(publication: publication)
+                    }
+                }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
+            self.getMessageInRoom()
+        })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {
@@ -218,7 +231,6 @@ extension GroupMessageChatView {
             }
         }
         .padding()
-        .applyNavigationBarChatStyle()
     }
     
     func sendMessageBarView() -> some View {

@@ -42,14 +42,25 @@ struct MessageChatView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            customeNavigationBarView()
+        VStack {
             messageListView()
             sendMessageBarView()
         }
-        .edgesIgnoringSafeArea(.top)
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
+        .applyNavigationBarChatStyle(titleView: {
+            HStack {
+                ChannelUserAvatar(avatarSize: 36, text: userName)
+                
+                Text(self.userName)
+                    .foregroundColor(AppTheme.colors.offWhite.color)
+                    .font(AppTheme.fonts.textLarge.font)
+                    .fontWeight(.medium)
+                    .lineLimit(2)
+            }
+        }, invokeBackButton: {
+            self.presentationMode.wrappedValue.dismiss()
+        }, invokeCallButton: { (callType) in
+            call(callType: callType)
+        })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {

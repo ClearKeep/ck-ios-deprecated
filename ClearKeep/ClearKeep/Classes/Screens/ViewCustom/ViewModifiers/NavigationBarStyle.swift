@@ -42,7 +42,55 @@ struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
     }
 }
 
-struct NavigationBarChatStyle: ViewModifier {
+struct NavigationBarChatStyle<T>: ViewModifier where T: View {
+    var titleView: (() -> T)
+    var invokeBackButton: () -> ()
+    var invokeCallButton: (Constants.CallType) -> ()
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Button(action: {
+                    invokeBackButton()
+                }, label: {
+                    Image("ic_back")
+                        .frame(width: 24, height: 24, alignment: .leading)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                })
+                .padding(.trailing, 16)
+                titleView()
+                Spacer()
+                Button(action: {
+                    invokeCallButton(.audio)
+                }, label: {
+                    Image("ic_call")
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                })
+                .padding(.trailing, 20)
+                Button(action: {
+                    invokeCallButton(.video)
+                }, label: {
+                    Image("ic_video_call")
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                })
+            }
+            .padding(.top, 46)
+            .padding(16)
+            .gradientHeader()
+            .frame(width: UIScreen.main.bounds.width, height: 114)
+            content
+        }
+        .navigationBarHidden(true)
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .edgesIgnoringSafeArea(.top)
+
+    }
+}
+
+struct OldNavigationBarChatStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .gradientHeader()
@@ -56,7 +104,11 @@ extension View {
         self.modifier(NavigationBarStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     
+    func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping (() -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {
+        self.modifier(NavigationBarChatStyle(titleView: titleView, invokeBackButton: invokeBackButton, invokeCallButton: invokeCallButton))
+    }
+    
     func applyNavigationBarChatStyle() -> some View {
-        self.modifier(NavigationBarChatStyle())
+        self.modifier(OldNavigationBarChatStyle())
     }
 }

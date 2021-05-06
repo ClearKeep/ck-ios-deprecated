@@ -46,7 +46,7 @@ struct InviteMemberGroup: View {
             }
         }
         .padding([.trailing , .leading , .bottom] , 16)
-        .applyNavigationBarStyle(title: "test", leftBarItems: {
+        .applyNavigationBarStyle(title: "New Message", leftBarItems: {
             Button {
                 isPresentModel = false
                 presentationMode.wrappedValue.dismiss()
