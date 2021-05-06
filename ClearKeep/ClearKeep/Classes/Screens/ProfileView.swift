@@ -73,7 +73,9 @@ struct ProfileView: View {
 
                         TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
                         
-                        NavigationLink(destination: ChangePasswordView(viewModel: ChangePasswordViewModel())) {
+                        NavigationLink(destination:
+                            ChangePasswordView(viewModel: ChangePasswordViewModel())
+                        ) {
                             HStack {
                                 Text("Change Password")
                                     .font(AppTheme.fonts.linkSmall.font)
@@ -170,6 +172,10 @@ struct ProfileView: View {
         if isToggleOn && phoneNumber.isEmpty {
             showPhoneNumberAlert()
         } else {
+            // TODO: Save toggle value for test
+            UserDefaults.standard.setValue(isToggleOn, forKey: "EnableTwoFactorsAuthenticationKey")
+            UserDefaults.standard.synchronize()
+            
             // TODO: update info to server
             titleAlert = "Action failed"
             messageAlert = "Server is not ready at the moment."

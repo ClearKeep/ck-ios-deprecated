@@ -49,7 +49,6 @@ struct ChangePasswordView: View {
                 }.padding(.top, 8)
                 
                 Spacer()
-                
             }
         }
         .padding(16)
@@ -67,10 +66,6 @@ struct ChangePasswordView: View {
                   message: Text(viewModel.messageAlert),
                   dismissButton: .default(Text("Close")))
         })
-    }
-    
-    private func updatePassword() {
-        
     }
 }
 
