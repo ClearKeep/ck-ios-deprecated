@@ -155,18 +155,22 @@ struct ServerDetailView: View {
             NavigationLink(destination: Text("Server Settings")) {
                 settingItemView(imageName: "Adjustment", title: "Server Settings")
             }
+            .disabled(true)
             
             NavigationLink(destination: Text("Invite other")) {
                 settingItemView(imageName: "user-plus", title: "Invite other")
             }
+            .disabled(true)
             
             NavigationLink(destination: Text("Banned users")) {
                 settingItemView(imageName: "user-off", title: "Banned users")
             }
+            .disabled(true)
             
             Button(action: {}) {
                 settingItemView(imageName: "Logout", title: "Leave CK Development", foregroundColor: AppTheme.colors.error.color)
             }
+            .disabled(true)
         }
     }
     
@@ -186,6 +190,7 @@ struct ServerDetailView: View {
             NavigationLink(destination: Text("Application Settings")) {
                 settingItemView(imageName: "Gear", title: "Application Settings")
             }
+            .disabled(true)
             
             Button(action: { self.confirmLogout() }) {
                 settingItemView(imageName: "Logout", title: "Logout", foregroundColor: AppTheme.colors.error.color)
