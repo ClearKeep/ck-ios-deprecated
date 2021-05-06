@@ -104,6 +104,7 @@ struct ProfileView: View {
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
+        .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
@@ -111,10 +112,16 @@ struct ProfileView: View {
                   dismissButton: .default(Text("OK")))
         })
         .onAppear() {
-            if let userLogin = Backend.shared.getUserLogin() {
-                self.email = userLogin.email
-                self.userName = userLogin.displayName
-                self.phoneNumber = ""
+            Backend.shared.getMyProfile { (result, error) in
+                if let result = result {
+                    self.email = result.email.lowercased()
+                    self.userName = result.displayName
+                    self.phoneNumber = ""
+                } else if let userLogin = Backend.shared.getUserLogin() {
+                    self.email = userLogin.email
+                    self.userName = userLogin.displayName
+                    self.phoneNumber = ""
+                }
             }
         }
     }
@@ -172,10 +179,6 @@ struct ProfileView: View {
         if isToggleOn && phoneNumber.isEmpty {
             showPhoneNumberAlert()
         } else {
-            // TODO: Save toggle value for test
-            UserDefaults.standard.setValue(isToggleOn, forKey: "EnableTwoFactorsAuthenticationKey")
-            UserDefaults.standard.synchronize()
-            
             // TODO: update info to server
             titleAlert = "Action failed"
             messageAlert = "Server is not ready at the moment."

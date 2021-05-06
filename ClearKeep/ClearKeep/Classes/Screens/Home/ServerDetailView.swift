@@ -92,25 +92,7 @@ struct ServerDetailView: View {
         }
         
     }
-    
-//    private func settingItemView(imageName: String, title: String, action: @escaping VoidCompletion, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
-//        Button(action: action, label: {
-//            HStack {
-//                Image(imageName)
-//                    .renderingMode(.template)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(width: 24, height: 24, alignment: .center)
-//                    .foregroundColor(foregroundColor)
-//
-//                Text(title)
-//                    .font(AppTheme.fonts.linkSmall.font)
-//                    .foregroundColor(foregroundColor)
-//                Spacer()
-//            }
-//        })
-//    }
-    
+
     private func settingItemView(imageName: String, title: String, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
         HStack {
             Image(imageName)

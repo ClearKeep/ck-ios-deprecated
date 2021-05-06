@@ -119,8 +119,8 @@ struct LoginView: View {
                     })
                 }
             }
-            .navigationBarHidden(true)
             .navigationBarTitle("", displayMode: .inline)
+            .navigationBarHidden(true)
             .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
             .alert(isPresented: self.$isShowAlert, content: {
                 Alert(title: Text("Login Error"),
@@ -313,7 +313,8 @@ extension LoginView {
     private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?, signInType: SocialLogin.SignInType) {
         if let result = result {
             hudVisible = false
-            let enable2Factor = UserDefaults.standard.bool(forKey: "EnableTwoFactorsAuthenticationKey")
+            // TODO: enable2Factor should be fetch from server for account setting
+            let enable2Factor = false
             if enable2Factor {
                 loginViewModel.loginResponseResult = result
                 loginViewModel.signInType = signInType
