@@ -127,11 +127,9 @@ struct LoginView: View {
                       message: Text(self.messageAlert),
                       dismissButton: .default(Text("OK")))
             })
-            .gesture(
-                TapGesture()
-                    .onEnded { _ in
-                        UIApplication.shared.endEditing()
-                    })
+            .onTapGesture {
+                self.hideKeyboard()
+            }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.GoogleSignIn.FinishedWithResponse)) { (obj) in
                 if let userInfo = obj.userInfo,
                    let user = userInfo["user"] as? GIDGoogleUser {

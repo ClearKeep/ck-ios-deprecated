@@ -58,11 +58,9 @@ struct ForgotPassWordView: View {
         .navigationBarHidden(true)
         .navigationBarTitle("", displayMode: .inline)
         .grandientBackground()
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(titleAlert),

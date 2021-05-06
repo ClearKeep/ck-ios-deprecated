@@ -55,12 +55,10 @@ struct ChangePasswordView: View {
         .navigationBarHidden(true)
         .navigationBarTitle("", displayMode: .inline)
         .grandientBackground()
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
         .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .alert(isPresented: $viewModel.isShowAlert, content: {
             Alert(title: Text(viewModel.titleAlert),
                   message: Text(viewModel.messageAlert),

@@ -85,12 +85,9 @@ struct PasscodeView: View {
         .navigationBarHidden(true)
         .navigationBarTitle("", displayMode: .inline)
         .grandientBackground()
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    self.hideKeyboard()
-                }
-        )
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .alert(isPresented: $isShowAlert, content: {
             Alert(title: Text(titleAlert),
