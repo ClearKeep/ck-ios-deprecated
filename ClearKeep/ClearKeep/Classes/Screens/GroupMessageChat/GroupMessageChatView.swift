@@ -83,11 +83,7 @@ struct GroupMessageChatView: View {
                                     }
                                 }
                             })
-                        }.gesture(
-                            TapGesture()
-                                .onEnded { _ in
-                                    UIApplication.shared.endEditing()
-                                })
+                        }
                     } else {
                         GeometryReader { reader in
                             ScrollView(.vertical, showsIndicators: false, content: {
@@ -116,11 +112,7 @@ struct GroupMessageChatView: View {
                                     self.scrollingProxy.scrollTo(.end)
                                 }
                             }
-                        }.gesture(
-                            TapGesture()
-                                .onEnded { _ in
-                                    UIApplication.shared.endEditing()
-                                })
+                        }
                     }
                 }
                 
@@ -162,6 +154,9 @@ struct GroupMessageChatView: View {
         }
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),

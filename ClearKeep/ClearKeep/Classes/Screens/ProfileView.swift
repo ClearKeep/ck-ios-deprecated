@@ -106,6 +106,9 @@ struct ProfileView: View {
         .edgesIgnoringSafeArea(.top)
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
                   message: Text(self.messageAlert),

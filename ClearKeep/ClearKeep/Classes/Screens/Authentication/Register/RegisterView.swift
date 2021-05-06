@@ -59,11 +59,9 @@ struct RegisterView: View {
             }
         }
         .navigationBarHidden(true)
-        .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    UIApplication.shared.endEditing()
-                })
+        .onTapGesture {
+            self.hideKeyboard()
+        }
         .hud(.waiting(.circular, "Waiting..."), show: viewModel.hudVisible)
         .alert(isPresented: $viewModel.isShowAlert, content: {
             Alert(title: Text(self.viewModel.titleAlert),
