@@ -23,9 +23,10 @@ struct ProfileView: View {
 
     @State var isDisable: Bool = true
     @State var hudVisible = false
-    @State var emailDisable = true
+    @State var emailDisable = false
     @State var userNameDisable = false
     @State var phoneNumberDisable = false
+    @State var isToggleOn = false
 
     @State var isShowAlert = false
     @State var messageAlert = ""
@@ -40,12 +41,22 @@ struct ProfileView: View {
                         .frame(width: UIScreen.main.bounds.width, height: 60)
                     
                     VStack(alignment: .leading, spacing: 16) {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image("ic_close")
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(AppTheme.colors.gray1.color)
+                        HStack {
+                            Button {
+                                presentationMode.wrappedValue.dismiss()
+                            } label: {
+                                Image("ic_close")
+                                    .frame(width: 24, height: 24)
+                                    .foregroundColor(AppTheme.colors.gray1.color)
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: saveInfo) {
+                                Text("Save")
+                                    .font(AppTheme.fonts.linkMedium.font)
+                                    .foregroundColor(AppTheme.colors.primary.color)
+                            }
                         }
                         .padding(.top, 29)
                         
@@ -58,11 +69,13 @@ struct ProfileView: View {
                         
                         TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
                         
-                        TextFieldProfile("Email", header: "Email", text: $email, disable: $emailDisable) { (_) in }
+                        TextFieldProfile("Email", header: "Email", keyboardType: .emailAddress, text: $email, disable: $emailDisable) { (_) in }
 
-                        TextFieldProfile("Phone Number", header: "Phone Number", text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
+                        TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
                         
-                        NavigationLink(destination: ChangePasswordView(viewModel: ChangePasswordViewModel())) {
+                        NavigationLink(destination:
+                            ChangePasswordView(viewModel: ChangePasswordViewModel())
+                        ) {
                             HStack {
                                 Text("Change Password")
                                     .font(AppTheme.fonts.linkSmall.font)
@@ -147,10 +160,27 @@ struct ProfileView: View {
             
             Spacer()
             
-            Toggle("", isOn: $phoneNumberDisable.inversed())
+            Toggle("", isOn: $isToggleOn)
                 .frame(maxWidth: 60)
         }
         .padding(.vertical, 4)
+    }
+    
+    private func saveInfo() {
+        self.hideKeyboard()
+        
+        if isToggleOn && phoneNumber.isEmpty {
+            showPhoneNumberAlert()
+        } else {
+            // TODO: Save toggle value for test
+            UserDefaults.standard.setValue(isToggleOn, forKey: "EnableTwoFactorsAuthenticationKey")
+            UserDefaults.standard.synchronize()
+            
+            // TODO: update info to server
+            titleAlert = "Action failed"
+            messageAlert = "Server is not ready at the moment."
+            isShowAlert = true
+        }
     }
 }
 

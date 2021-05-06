@@ -94,6 +94,10 @@ extension ChangePasswordViewModel {
             return
         }
         
+        callAPIToUpdatePassword()
+    }
+    
+    func callAPIToUpdatePassword() {
         // TODO: call API
         
         self.messageAlert = "The server is not ready now"

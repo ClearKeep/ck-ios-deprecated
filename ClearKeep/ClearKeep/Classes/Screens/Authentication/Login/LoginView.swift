@@ -18,6 +18,7 @@ struct LoginView: View {
     @State var hudVisible = false
     @State var isShowAlert = false
     @State var messageAlert = ""
+    
     @State private var isEmailValid : Bool = true
     @State private var isPasswordValid: Bool = true
     
@@ -25,6 +26,11 @@ struct LoginView: View {
     
     @State private var errorMsgEmail = ""
     @State private var errorMsgPassword = ""
+    
+    @State var isShowOTPVerification: Bool = false
+    @ObservedObject var passCodeModel = PassCodeInputModel(passCodeLength: 4)
+    
+    @ObservedObject var loginViewModel = LoginViewModel()
     
     var body: some View {
         NavigationView {
@@ -42,7 +48,7 @@ struct LoginView: View {
                                 WrappedSecureTextWithLeftIcon("Password",leftIconName: "Lock", shouldShowBorderWhenFocused: false, text: $password, errorMessage: $errorMsgPassword)
                                 
                                 ButtonAuth("Login") {
-                                    login()
+                                    loginWithEmailAndPassword()
                                 }
                                 
                                 NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
@@ -99,6 +105,14 @@ struct LoginView: View {
                                     .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                                 }
                             }
+                            
+                            NavigationLink(
+                                destination: PasscodeView(passCodeModel: self.passCodeModel, successCompletion: {
+                                    guard let result = loginViewModel.loginResponseResult, let signInType = loginViewModel.signInType else { return }
+                                    self.didSuccessReceiveLoginResponse(result: result, signInType: signInType)
+                                }),
+                                isActive: $isShowOTPVerification,
+                                label: { EmptyView() })
                         }
                         .padding()
                         .padding(.vertical, 20)
@@ -266,18 +280,7 @@ extension LoginView {
 
 extension LoginView {
     
-    private func login() {
-        //        CallManager.shared.startCall(clientId: "049fbb62-6666-493c-9628-db1149cca079",
-        //                                     clientName: "Luan Nguyen",
-        //                                     avatar: "",
-        //                                     groupId: 1234,
-        //                                     groupToken: "a1b2c3d4") //269a7a3fd8bc2e75785f
-        //        hudVisible = true
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-        //            self.hudVisible = false
-        //        }
-        //        return
-        
+    private func loginWithEmailAndPassword() {
         self.isEmailValid = self.email.textFieldValidatorEmail()
         colorBorder = self.isEmailValid ? Color.gray : Color.red
         
@@ -309,70 +312,81 @@ extension LoginView {
     
     private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?, signInType: SocialLogin.SignInType) {
         if let result = result {
-            if result.baseResponse.success{
-                do {
-                    var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
-                    UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
-                    try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                    
-                    Backend.shared.getLoginUserID { (userID, displayName) in
-                        do {
-                            if userID.isEmpty {
-                                print("getLoginUserID Empty")
-                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                                hudVisible = false
-                                self.messageAlert = "Something went wrong"
-                                self.isShowAlert = true
-                                return
-                            }
-                            user.id = userID
-                            user.displayName = displayName
-                            UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
-                            try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                            //                            let randomID = Int32.random(in: 1...Int32.max)
-                            //TODO: hashcode device id
-                            let address = SignalAddress(name: userID, deviceId: Int32(555))
-                            Backend.shared.authenticator.register(address: address) { (result, error) in
-                                if result {
-                                    loginForUser(clientID: userID)
-                                    SocialLogin.shared.saveSignInType(signInType)
-                                } else {
-                                    print("Register Key Error \(error?.localizedDescription ?? "")")
-                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                                    hudVisible = false
-                                    self.messageAlert = "Something went wrong"
-                                    self.isShowAlert = true
-                                }
-                            }
-                        } catch {
-                            print("save user error")
-                            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                            UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                            hudVisible = false
-                            self.messageAlert = "Something went wrong"
-                            self.isShowAlert = true
-                        }
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                    hudVisible = false
-                    self.messageAlert = "Something went wrong"
-                    self.isShowAlert = true
-                }
+            hudVisible = false
+            let enable2Factor = UserDefaults.standard.bool(forKey: "EnableTwoFactorsAuthenticationKey")
+            if enable2Factor {
+                loginViewModel.loginResponseResult = result
+                loginViewModel.signInType = signInType
+                isShowOTPVerification = true
             } else {
-                hudVisible = false
-                self.isShowAlert = true
-                self.messageAlert = result.baseResponse.errors.message
+                didSuccessReceiveLoginResponse(result: result, signInType: signInType)
             }
         } else if let error = error {
             print(error)
             self.messageAlert = "Something went wrong"
             self.isShowAlert = true
             hudVisible = false
+        }
+    }
+    
+    private func didSuccessReceiveLoginResponse(result: Auth_AuthRes, signInType: SocialLogin.SignInType) {
+        if result.baseResponse.success {
+            do {
+                var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
+                try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                
+                hudVisible = true
+                Backend.shared.getLoginUserID { (userID, displayName) in
+                    do {
+                        if userID.isEmpty {
+                            print("getLoginUserID Empty")
+                            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                            UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                            hudVisible = false
+                            self.messageAlert = "Something went wrong"
+                            self.isShowAlert = true
+                            return
+                        }
+                        user.id = userID
+                        user.displayName = displayName
+                        UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
+                        try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                        // let randomID = Int32.random(in: 1...Int32.max)
+                        //TODO: hashcode device id
+                        let address = SignalAddress(name: userID, deviceId: Int32(555))
+                        Backend.shared.authenticator.register(address: address) { (result, error) in
+                            if result {
+                                loginForUser(clientID: userID)
+                                SocialLogin.shared.saveSignInType(signInType)
+                            } else {
+                                print("Register Key Error \(error?.localizedDescription ?? "")")
+                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                                hudVisible = false
+                                self.messageAlert = "Something went wrong"
+                                self.isShowAlert = true
+                            }
+                        }
+                    } catch {
+                        print("save user error")
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                        hudVisible = false
+                        self.messageAlert = "Something went wrong"
+                        self.isShowAlert = true
+                    }
+                }
+            } catch {
+                print(error.localizedDescription)
+                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                self.messageAlert = "Something went wrong"
+                self.isShowAlert = true
+            }
+        } else {
+            self.isShowAlert = true
+            self.messageAlert = result.baseResponse.errors.message
         }
     }
     

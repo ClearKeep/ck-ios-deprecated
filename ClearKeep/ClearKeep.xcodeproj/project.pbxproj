@@ -16,6 +16,7 @@
 		1015C44C2625542B00407C35 /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C44B2625542B00407C35 /* DefaultFonts.swift */; };
 		1015C4512625543700407C35 /* DefaultColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4502625543700407C35 /* DefaultColors.swift */; };
 		1015C4562625544C00407C35 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4552625544C00407C35 /* AppTheme.swift */; };
+		101751172643AEB000BC2328 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101751162643AEB000BC2328 /* LoginViewModel.swift */; };
 		10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */; };
 		10237D9B262E86E3005183C4 /* MainMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10237D9A262E86E3005183C4 /* MainMenuButton.swift */; };
 		10237DA0262E915C005183C4 /* LeftMainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10237D9F262E915C005183C4 /* LeftMainMenuView.swift */; };
@@ -45,6 +46,11 @@
 		10AA457A26423C6A000EB6E1 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457926423C6A000EB6E1 /* Binding+Extension.swift */; };
 		10AA4580264254E1000EB6E1 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457F264254E1000EB6E1 /* ChangePasswordView.swift */; };
 		10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA4587264257B2000EB6E1 /* ChangePasswordViewModel.swift */; };
+		10AA459D264287CC000EB6E1 /* PassCodeInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA459A264287CC000EB6E1 /* PassCodeInputCell.swift */; };
+		10AA459E264287CC000EB6E1 /* PassCodeInputModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA459B264287CC000EB6E1 /* PassCodeInputModel.swift */; };
+		10AA459F264287CC000EB6E1 /* PassCodeInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA459C264287CC000EB6E1 /* PassCodeInputField.swift */; };
+		10AA45A62642885B000EB6E1 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA45A52642885B000EB6E1 /* PasscodeView.swift */; };
+		10AA45B726429DBC000EB6E1 /* View+Shake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA45B626429DBC000EB6E1 /* View+Shake.swift */; };
 		10D650BC262681300018528B /* UIFont+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650BB262681300018528B /* UIFont+Font.swift */; };
 		10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */; };
 		10D650CC2626BEF60018528B /* CardViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650CB2626BEF60018528B /* CardViewContainer.swift */; };
@@ -251,6 +257,7 @@
 		1015C44B2625542B00407C35 /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
 		1015C4502625543700407C35 /* DefaultColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultColors.swift; sourceTree = "<group>"; };
 		1015C4552625544C00407C35 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		101751162643AEB000BC2328 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		10237D9A262E86E3005183C4 /* MainMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuButton.swift; sourceTree = "<group>"; };
 		10237D9F262E915C005183C4 /* LeftMainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMainMenuView.swift; sourceTree = "<group>"; };
@@ -280,6 +287,11 @@
 		10AA457926423C6A000EB6E1 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
 		10AA457F264254E1000EB6E1 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		10AA4587264257B2000EB6E1 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		10AA459A264287CC000EB6E1 /* PassCodeInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassCodeInputCell.swift; sourceTree = "<group>"; };
+		10AA459B264287CC000EB6E1 /* PassCodeInputModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassCodeInputModel.swift; sourceTree = "<group>"; };
+		10AA459C264287CC000EB6E1 /* PassCodeInputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassCodeInputField.swift; sourceTree = "<group>"; };
+		10AA45A52642885B000EB6E1 /* PasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
+		10AA45B626429DBC000EB6E1 /* View+Shake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Shake.swift"; sourceTree = "<group>"; };
 		10D650BB262681300018528B /* UIFont+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Font.swift"; sourceTree = "<group>"; };
 		10D650C62626A47D0018528B /* SwiftUIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewPreview.swift; sourceTree = "<group>"; };
 		10D650CB2626BEF60018528B /* CardViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewContainer.swift; sourceTree = "<group>"; };
@@ -558,6 +570,24 @@
 			path = UserProfile;
 			sourceTree = "<group>";
 		};
+		10AA4599264287CB000EB6E1 /* PassCodeInput */ = {
+			isa = PBXGroup;
+			children = (
+				10AA459A264287CC000EB6E1 /* PassCodeInputCell.swift */,
+				10AA459B264287CC000EB6E1 /* PassCodeInputModel.swift */,
+				10AA459C264287CC000EB6E1 /* PassCodeInputField.swift */,
+			);
+			path = PassCodeInput;
+			sourceTree = "<group>";
+		};
+		10AA45A426428844000EB6E1 /* PasscodeView */ = {
+			isa = PBXGroup;
+			children = (
+				10AA45A52642885B000EB6E1 /* PasscodeView.swift */,
+			);
+			path = PasscodeView;
+			sourceTree = "<group>";
+		};
 		10E83D3326240531002D7B10 /* ViewModifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,6 +596,7 @@
 				10D650CB2626BEF60018528B /* CardViewContainer.swift */,
 				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
 				1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */,
+				10AA45B626429DBC000EB6E1 /* View+Shake.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -692,6 +723,7 @@
 		16208E41252D72EB000A6CE7 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				10AA45A426428844000EB6E1 /* PasscodeView */,
 				68A2ACB525C3E636002873E5 /* ForgotPassword */,
 				686F25CB255CE7F900953C5E /* Register */,
 				16208E43252D7339000A6CE7 /* Login */,
@@ -728,6 +760,7 @@
 			isa = PBXGroup;
 			children = (
 				16BDC85025306BC400552C48 /* LoginView.swift */,
+				101751162643AEB000BC2328 /* LoginViewModel.swift */,
 				1097155F261417B10045FE63 /* SocialLogin.swift */,
 				10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */,
 				10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */,
@@ -899,6 +932,7 @@
 		56205B4225A2FB7400B39D07 /* ViewCustom */ = {
 			isa = PBXGroup;
 			children = (
+				10AA4599264287CB000EB6E1 /* PassCodeInput */,
 				10E83D3326240531002D7B10 /* ViewModifiers */,
 				56694A8325B537A2008E8EC5 /* HUD */,
 				56205B3D25A2F57F00B39D07 /* VideoView.swift */,
@@ -1489,6 +1523,7 @@
 				6880CF6025F9C1C100F3DECE /* video_call.grpc.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				1059C46A262D3F4000ED4878 /* SocialLogin+Facebook.swift in Sources */,
+				101751172643AEB000BC2328 /* LoginViewModel.swift in Sources */,
 				16C83CC525303F20002E3115 /* SignalService.swift in Sources */,
 				56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */,
 				1027ECCD2627F09A00731BFE /* KeyboardAdaptive.swift in Sources */,
@@ -1537,6 +1572,7 @@
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */,
 				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
+				10AA459D264287CC000EB6E1 /* PassCodeInputCell.swift in Sources */,
 				10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */,
 				6880CF5C25F9C1C100F3DECE /* notify_push.grpc.swift in Sources */,
 				1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */,
@@ -1564,6 +1600,7 @@
 				10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */,
 				6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */,
 				6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */,
+				10AA459E264287CC000EB6E1 /* PassCodeInputModel.swift in Sources */,
 				1063815B2636BB16000ED2D1 /* ServerMainViewModel.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
@@ -1625,6 +1662,7 @@
 				68CFA518256CA23300109725 /* CreateRoomViewModel.swift in Sources */,
 				68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */,
 				689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */,
+				10AA45B726429DBC000EB6E1 /* View+Shake.swift in Sources */,
 				56694AF625B56A52008E8EC5 /* Tools.m in Sources */,
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
@@ -1633,6 +1671,7 @@
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
 				16BDC85625306C1200552C48 /* UX.swift in Sources */,
 				68CFA522256CF04600109725 /* InviteMemberViewModel.swift in Sources */,
+				10AA459F264287CC000EB6E1 /* PassCodeInputField.swift in Sources */,
 				689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */,
 				68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */,
 				56694AA625B53C39008E8EC5 /* ViewExtension.swift in Sources */,
@@ -1650,6 +1689,7 @@
 				688B67DC2570F7ED00B95235 /* RealmGroup.swift in Sources */,
 				56205B0E25A2C36D00B39D07 /* JanusPlugin.swift in Sources */,
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
+				10AA45A62642885B000EB6E1 /* PasscodeView.swift in Sources */,
 				68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */,
 				56694ADF25B53C8A008E8EC5 /* InfoShape.swift in Sources */,
 				56205B1425A2C36D00B39D07 /* Janus+Utilities.swift in Sources */,
@@ -1827,7 +1867,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
@@ -1859,7 +1899,7 @@
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
 				ENABLE_BITCODE = NO;
