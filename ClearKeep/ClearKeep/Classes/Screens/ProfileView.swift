@@ -23,7 +23,7 @@ struct ProfileView: View {
 
     @State var isDisable: Bool = true
     @State var hudVisible = false
-    @State var emailDisable = false
+    @State var emailDisable = true
     @State var userNameDisable = false
     @State var phoneNumberDisable = false
     @State var isToggleOn = false
