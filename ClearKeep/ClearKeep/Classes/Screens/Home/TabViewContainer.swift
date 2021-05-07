@@ -17,18 +17,6 @@ struct TabViewContainer: View {
     
     var body: some View {
         TabView {
-            HistoryChatView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "message")
-                            .renderingMode(.template)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 15, height: 15)
-                        Text("Chat")
-                    }
-                }
-            
             PeopleView().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
                 .tabItem {
                     VStack {

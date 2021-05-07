@@ -92,15 +92,6 @@ struct NavigationBarChatStyle<T>: ViewModifier where T: View {
     }
 }
 
-struct OldNavigationBarChatStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .gradientHeader()
-            .edgesIgnoringSafeArea(.top)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.14)
-    }
-}
-
 extension View {
     func applyNavigationBarStyle<L, R>(title: String? = nil, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
         self.modifier(NavigationBarStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
@@ -108,9 +99,5 @@ extension View {
     
     func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping (() -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {
         self.modifier(NavigationBarChatStyle(titleView: titleView, invokeBackButton: invokeBackButton, invokeCallButton: invokeCallButton))
-    }
-    
-    func applyNavigationBarChatStyle() -> some View {
-        self.modifier(OldNavigationBarChatStyle())
     }
 }

@@ -125,51 +125,6 @@ struct MessageChatView: View {
 }
 
 extension MessageChatView {
-    
-    func customeNavigationBarView() -> some View {
-        VStack {
-            Spacer()
-            HStack {
-                HStack(spacing: 8) {
-                    Image("ic_back")
-                        .frame(width: 24, height: 24, alignment: .leading)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .onTapGesture {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }
-                    
-                    ChannelUserAvatar(avatarSize: 36, text: userName)
-                    
-                    Text(self.userName)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .font(AppTheme.fonts.textLarge.font)
-                        .fontWeight(.medium)
-                        .lineLimit(2)
-                }
-                Spacer()
-                HStack{
-                    Button(action: {
-                        call(callType: .audio)
-                    }, label: {
-                        Image("ic_call")
-                            .frame(width: 36, height: 36)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .padding(.trailing, 20)
-                    })
-                    Button(action: {
-                        call(callType: .video)
-                    }, label: {
-                        Image("ic_video_call")
-                            .frame(width: 36, height: 36)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                    })
-                }
-            }
-            .padding()
-        }
-        .applyNavigationBarChatStyle()
-    }
-    
     func sendMessageBarView() -> some View {
         HStack(spacing: 15) {
             
