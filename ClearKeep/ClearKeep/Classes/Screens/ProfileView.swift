@@ -20,90 +20,72 @@ struct ProfileView: View {
     @State var email: String = ""
     @State var phoneNumber: String = ""
     
-
+    
     @State var isDisable: Bool = true
     @State var hudVisible = false
     @State var emailDisable = false
     @State var userNameDisable = false
     @State var phoneNumberDisable = false
     @State var isToggleOn = false
-
+    
     @State var isShowAlert = false
     @State var messageAlert = ""
     @State var titleAlert = ""
-
+    
     var body: some View {
         GeometryReader { geometry in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Spacer()
-                        .grandientBackground()
-                        .frame(width: UIScreen.main.bounds.width, height: 60)
+            VStack(alignment: .leading, spacing: 16) {
+                ScrollView(.vertical, showsIndicators: false) {
+                    userProfilePicture()
                     
-                    VStack(alignment: .leading, spacing: 16) {
+                    TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
+                    
+                    TextFieldProfile("Email", header: "Email", keyboardType: .emailAddress, text: $email, disable: $emailDisable) { (_) in }
+                    
+                    TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
+                    
+                    NavigationLink(destination:
+                                    ChangePasswordView(viewModel: ChangePasswordViewModel())
+                    ) {
                         HStack {
-                            Button {
-                                presentationMode.wrappedValue.dismiss()
-                            } label: {
-                                Image("ic_close")
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(AppTheme.colors.gray1.color)
-                            }
+                            Text("Change Password")
+                                .font(AppTheme.fonts.linkSmall.font)
+                                .foregroundColor(AppTheme.colors.primary.color)
+                                .lineLimit(2)
                             
                             Spacer()
                             
-                            Button(action: saveInfo) {
-                                Text("Save")
-                                    .font(AppTheme.fonts.linkMedium.font)
-                                    .foregroundColor(AppTheme.colors.primary.color)
-                            }
+                            Image("arrow-right")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 16, height: 16, alignment: .center)
+                                .foregroundColor(AppTheme.colors.primary.color)
                         }
-                        .padding(.top, 29)
-                        
-                        Text("Profile Settings")
-                            .font(AppTheme.fonts.linkLarge.font)
-                            .foregroundColor(AppTheme.colors.black.color)
-                            .padding(.top, 10)
-                        
-                        userProfilePicture()
-                        
-                        TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
-                        
-                        TextFieldProfile("Email", header: "Email", keyboardType: .emailAddress, text: $email, disable: $emailDisable) { (_) in }
-
-                        TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
-                        
-                        NavigationLink(destination:
-                            ChangePasswordView(viewModel: ChangePasswordViewModel())
-                        ) {
-                            HStack {
-                                Text("Change Password")
-                                    .font(AppTheme.fonts.linkSmall.font)
-                                    .foregroundColor(AppTheme.colors.primary.color)
-                                    .lineLimit(2)
-                                
-                                Spacer()
-                                
-                                Image("arrow-right")
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 16, height: 16, alignment: .center)
-                                    .foregroundColor(AppTheme.colors.primary.color)
-                            }
-                        }
-                        
-                        twoFactorAuthView()
                     }
-                    .padding([.trailing , .leading , .bottom] , 16)
                     
-                    Spacer()
+                    twoFactorAuthView()
                 }
             }
+            .padding([.trailing , .leading , .bottom] , 16)
+            .applyNavigationBarStyle(title: "Profile Settings", leftBarItems: {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image("ic_close")
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(AppTheme.colors.gray1.color)
+                }
+            }, rightBarItems: {
+                Button(action: saveInfo) {
+                    Text("Save")
+                        .font(AppTheme.fonts.linkMedium.font)
+                        .foregroundColor(AppTheme.colors.primary.color)
+                }
+            })
+            
+            Spacer()
         }
-        .navigationBarTitle(Text(""), displayMode: .inline)
-        .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.top)
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {
@@ -152,7 +134,7 @@ struct ProfileView: View {
     
     private func twoFactorAuthView() -> some View {
         HStack(alignment: .top, spacing: 8) {
-           VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Two Factors Authentication")
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.black.color)
