@@ -125,7 +125,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     return
                 }
                 // check exist session recipient in database
-                if let ourAccountEncryptMng = self?.ourEncryptionManager {
+//                if let ourAccountEncryptMng = self?.ourEncryptionManager {
                     self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
 //                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
                         if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
@@ -149,6 +149,15 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                               publicIdentityKeyData: nil,
                                                               lastSeenDate:nil)
                                         device.save(with:transaction)
+                                    } else {
+                                        myBuddy?.save(with: transaction)
+                                        let device = CKDevice(deviceId: NSNumber(value:555),
+                                                              trustLevel: .trustedTofu,
+                                                              parentKey: myBuddy!.uniqueId,
+                                                              parentCollection: CKBuddy.collection,
+                                                              publicIdentityKeyData: nil,
+                                                              lastSeenDate:nil)
+                                        device.save(with:transaction)
                                     }
                                 }
                             })
@@ -158,9 +167,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                         
                         // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
                         //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-                    }
-                    print("processPreKeyBundle recipient finished")
-                    completion()
+//                    }
+//                    print("processPreKeyBundle recipient finished")
+//                    completion()
 //                } else {
 //                    completion()
 //                }

@@ -17,7 +17,7 @@ class ServerMainViewModel: ObservableObject {
     }
     
     func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-
+        
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
@@ -25,47 +25,41 @@ class ServerMainViewModel: ObservableObject {
                     print("Request prekey \(clientId) fail")
                     return
                 }
-                // check exist session recipient in database
-                if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: recipientResponse.deviceID) {
-                        if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                           let myAccount = CKSignalCoordinate.shared.myAccount {
-                            // save devcice by recipient account
-                            connectionDb.readWrite ({ (transaction) in
-                                if let _ = myAccount.refetch(with: transaction) {
-                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
-                                                                     accountUniqueId: myAccount.uniqueId,
-                                                                     transaction: transaction)
-                                    if myBuddy == nil {
-                                        let buddy = CKBuddy()!
-                                        buddy.accountUniqueId = myAccount.uniqueId
-                                        buddy.username = recipientResponse.clientID
-                                        buddy.save(with:transaction)
-                                        
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
-                                                              trustLevel: .trustedTofu,
-                                                              parentKey: buddy.uniqueId,
-                                                              parentCollection: CKBuddy.collection,
-                                                              publicIdentityKeyData: nil,
-                                                              lastSeenDate:nil)
-                                        device.save(with:transaction)
-                                    }
-                                }
-                            })
+                if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+                   let myAccount = CKSignalCoordinate.shared.myAccount {
+                    // save devcice by recipient account
+                    connectionDb.readWrite ({ (transaction) in
+                        if let _ = myAccount.refetch(with: transaction) {
+                            let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
+                                                             accountUniqueId: myAccount.uniqueId,
+                                                             transaction: transaction)
+                            if myBuddy == nil {
+                                let buddy = CKBuddy()!
+                                buddy.accountUniqueId = myAccount.uniqueId
+                                buddy.username = recipientResponse.clientID
+                                buddy.save(with:transaction)
+                                
+                                let device = CKDevice(deviceId: NSNumber(value:555),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: buddy.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            } else {
+                                myBuddy?.save(with: transaction)
+                                let device = CKDevice(deviceId: NSNumber(value:555),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: myBuddy!.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            }
                         }
-                        // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
-                        self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-                        
-                        // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-                        //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-                    }
-                    print("processPreKeyBundle recipient finished")
-                    completion()
-                    
-                    //                }
-                } else {
-                    completion()
+                    })
                 }
+                self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
             }
     }
     
