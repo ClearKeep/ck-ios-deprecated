@@ -119,7 +119,7 @@ struct ProfileView: View {
             ChannelUserAvatar(avatarSize: 64, statusSize: 8, text: userName.capitalized, image: nil, status: .none, gradientBackgroundType: .primary)
             
             VStack(alignment: .leading, spacing: 8) {
-                Text(userName.capitalized)
+                Text("Change profile picture")
                     .font(AppTheme.fonts.linkSmall.font)
                     .foregroundColor(AppTheme.colors.primary.color)
                     .lineLimit(2)

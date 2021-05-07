@@ -47,7 +47,8 @@ extension Constants {
             case .development: return "54.235.68.160"
             case .stagging: return "54.235.68.160"
             case .production: return "54.235.68.160"
-            case .debugServerLocal: return "172.16.6.34"
+//            case .debugServerLocal: return "172.16.6.34"
+            case .debugServerLocal: return "172.18.1.57"
             }
         }
         
@@ -56,7 +57,8 @@ extension Constants {
             case .development: return 25000
             case .stagging: return 15000
             case .production: return 5000
-            case .debugServerLocal: return 25000
+//            case .debugServerLocal: return 25000
+            case .debugServerLocal: return 15000
             }
         }
 

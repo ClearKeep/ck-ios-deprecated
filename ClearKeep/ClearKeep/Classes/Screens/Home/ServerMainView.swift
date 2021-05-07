@@ -37,57 +37,60 @@ struct ServerMainView: View {
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false, content: {
-            VStack(spacing: 20) {
+        VStack (spacing: 20) {
+            Spacer()
+                .frame(height: 4)
+            
+            HStack {
+                Text("CK Development")
+                    .font(AppTheme.fonts.displaySmallBold.font)
+                    .foregroundColor(AppTheme.colors.black.color)
                 Spacer()
-                    .frame(height: 4)
-                
-                HStack {
-                    Text("CK Development")
-                        .font(AppTheme.fonts.displaySmallBold.font)
-                        .foregroundColor(AppTheme.colors.black.color)
-                    Spacer()
-                    Button(action: {
-                        self.isShowingServerDetailView.toggle()
-                    }, label: {
-                        Image("Hamburger")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24, alignment: .center)
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                    })
-                }
-                
-                //WrappedTextFieldWithLeftIcon("Search", leftIconName: "Search", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.default, text: $searchText, errorMessage: .constant(""))
-                
-                SearchBar(text: $searchText) { (changed) in
-                    if changed {
-                    } else {
-                        //self.searchUser(searchText)
-                    }
-                }
-                
-                Button(action: {}, label: {
-                    HStack {
-                        Image("Notes")
-                            .resizable()
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                            .frame(width: 18, height: 18, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                        Text("Notes")
-                            .font(AppTheme.fonts.linkMedium.font)
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                        Spacer()
-                    }
+                Button(action: {
+                    self.isShowingServerDetailView.toggle()
+                }, label: {
+                    Image("Hamburger")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24, alignment: .center)
+                        .foregroundColor(AppTheme.colors.gray1.color)
                 })
-                
-                groupChatSection()
-                
-                directMessageSection()
-                
-                Spacer()
             }
-            .padding()
-        })
+            
+            //WrappedTextFieldWithLeftIcon("Search", leftIconName: "Search", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.default, text: $searchText, errorMessage: .constant(""))
+            
+            SearchBar(text: $searchText) { (changed) in
+                if changed {
+                } else {
+                    //self.searchUser(searchText)
+                }
+            }
+            
+            ScrollView(.vertical, showsIndicators: false, content: {
+                VStack(spacing: 20) {
+                    Button(action: {}, label: {
+                        HStack {
+                            Image("Notes")
+                                .resizable()
+                                .foregroundColor(AppTheme.colors.gray1.color)
+                                .frame(width: 18, height: 18, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            Text("Notes")
+                                .font(AppTheme.fonts.linkMedium.font)
+                                .foregroundColor(AppTheme.colors.gray1.color)
+                            Spacer()
+                        }
+                    })
+                    
+                    groupChatSection()
+                    
+                    directMessageSection()
+                    
+                    Spacer()
+                }
+            })
+        }
+        .padding()
+        .padding(.bottom, 20)
         .onTapGesture {
             self.hideKeyboard()
         }
