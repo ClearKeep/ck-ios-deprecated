@@ -68,7 +68,7 @@ struct ProfileView: View {
                 }
             }
             .padding([.trailing , .leading , .bottom] , 16)
-            .applyNavigationBarStyle(title: "Profile Settings", leftBarItems: {
+            .applyNavigationBarGradidentStyle(title: "Profile Settings", leftBarItems: {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
