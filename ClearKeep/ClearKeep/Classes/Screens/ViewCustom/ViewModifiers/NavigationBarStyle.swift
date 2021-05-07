@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
+struct NavigationBarGradidentStyle<L,R>: ViewModifier where L: View, R: View {
     var title: String?
     var leftBarItems: (() -> L)?
     var rightBarItems: (() -> R)?
@@ -34,6 +34,35 @@ struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
                 }
             }
             .padding([.trailing , .leading , .bottom] , 16)
+            
+            content
+        }
+        .navigationBarHidden(true)
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .edgesIgnoringSafeArea(.top)
+    }
+}
+
+struct NavigationBarPlainStyle<L,R>: ViewModifier where L: View, R: View {
+    var title: String
+    var leftBarItems: (() -> L)?
+    var rightBarItems: (() -> R)?
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                leftBarItems?()
+                    .padding(.trailing, 16)
+                Text(title)
+                    .font(AppTheme.fonts.linkLarge.font)
+                    .foregroundColor(AppTheme.colors.black.color)
+                Spacer()
+                rightBarItems?()
+            }
+            .padding(.top, 46)
+            .padding(16)
+            .frame(width: UIScreen.main.bounds.width, height: 60 + (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
             
             content
         }
@@ -93,8 +122,12 @@ struct NavigationBarChatStyle<T>: ViewModifier where T: View {
 }
 
 extension View {
-    func applyNavigationBarStyle<L, R>(title: String? = nil, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
-        self.modifier(NavigationBarStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
+    func applyNavigationBarGradidentStyle<L, R>(title: String? = nil, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
+        self.modifier(NavigationBarGradidentStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
+    }
+    
+    func applyNavigationBarPlainStyle<L, R>(title: String, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
+        self.modifier(NavigationBarPlainStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     
     func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping (() -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {

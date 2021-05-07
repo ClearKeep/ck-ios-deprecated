@@ -69,7 +69,7 @@ struct CreateRoomView: View {
             }
         }
         .padding([.trailing , .leading , .bottom] , 16)
-        .applyNavigationBarStyle(title: "New Group Message", leftBarItems: {
+        .applyNavigationBarGradidentStyle(title: "New Group Message", leftBarItems: {
             Button {
                 self.presentationMode.wrappedValue.dismiss()
             } label: {

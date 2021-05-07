@@ -51,7 +51,7 @@ struct PeopleView: View {
                 
             }
             .padding([.trailing , .leading , .bottom] , 16)
-            .applyNavigationBarStyle(title: "New Message", leftBarItems: {
+            .applyNavigationBarGradidentStyle(title: "New Message", leftBarItems: {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
