@@ -108,8 +108,8 @@ struct LoginView: View {
                             
                             NavigationLink(
                                 destination: PasscodeView(passCodeModel: self.passCodeModel, successCompletion: {
-                                    guard let result = loginViewModel.loginResponseResult, let signInType = loginViewModel.signInType else { return }
-                                    self.didSuccessReceiveLoginResponse(result: result, signInType: signInType)
+                                    let userInfo = loginViewModel.userLoginResponseInfo
+                                    self.saveLoginInfoAndRegisterAddress(userID: userInfo.userId, displayName: userInfo.userDisplayName, email: userInfo.userEmail, signInType: userInfo.signInType)
                                 }),
                                 isActive: $isShowOTPVerification,
                                 label: { EmptyView() })
@@ -232,10 +232,10 @@ extension LoginView {
 extension LoginView {
     
     private func loginWithGoogleSignInResponse(gooleUser: GIDGoogleUser) {
-        hudVisible = true
         var request = Auth_GoogleLoginReq()
         request.idToken = gooleUser.authentication.idToken
         
+        hudVisible = true
         Backend.shared.loginWithGoogleAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .google)
         }
@@ -249,10 +249,10 @@ extension LoginView {
     
     private func loginWithMicrosoftAccessToken(_ accessToken: String) {
         print("MICROSIFT ACCESS TOKEN:\n\(accessToken)")
-        hudVisible = true
         var request = Auth_OfficeLoginReq()
         request.accessToken = accessToken
         
+        hudVisible = true
         Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
         }
@@ -265,10 +265,10 @@ extension LoginView {
     
     private func loginWithFacebookAccessToken(_ accessToken: String) {
         print("Facebook ACCESS TOKEN:\n\(accessToken)")
-        hudVisible = true
         var request = Auth_FacebookLoginReq()
         request.accessToken = accessToken
         
+        hudVisible = true
         Backend.shared.loginWithFacebookAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .facebook)
         }
@@ -297,47 +297,26 @@ extension LoginView {
             return
         }
         
-        hudVisible = true
         var request = Auth_AuthReq()
         request.email = self.email
         request.password = self.password
         request.authType = 1    // Which values could be set here?
         
+        hudVisible = true
         Backend.shared.login(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .email)
         }
     }
     
     private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?, signInType: SocialLogin.SignInType) {
-        if let result = result {
-            hudVisible = false
-            // TODO: enable2Factor should be fetch from server for account setting
-            let enable2Factor = false
-            if enable2Factor {
-                loginViewModel.loginResponseResult = result
-                loginViewModel.signInType = signInType
-                isShowOTPVerification = true
-            } else {
-                didSuccessReceiveLoginResponse(result: result, signInType: signInType)
-            }
-        } else if let error = error {
-            print(error)
-            self.messageAlert = "Something went wrong"
-            self.isShowAlert = true
-            hudVisible = false
-        }
-    }
-    
-    private func didSuccessReceiveLoginResponse(result: Auth_AuthRes, signInType: SocialLogin.SignInType) {
-        if result.baseResponse.success {
-            do {
-                var user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
-                UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
-                try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                
-                hudVisible = true
-                Backend.shared.getLoginUserID { (userID, displayName, email) in
-                    do {
+         if let result = result {
+            if result.baseResponse.success {
+                do {
+                    let user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                    UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
+                    try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+                    
+                    Backend.shared.getLoginUserID { (userID, displayName, email) in
                         if userID.isEmpty {
                             print("getLoginUserID Empty")
                             UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
@@ -347,51 +326,73 @@ extension LoginView {
                             self.isShowAlert = true
                             return
                         }
-                        user.id = userID
-                        user.displayName = displayName
-                        user.email = email
-                        UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
-                        try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
-                        // let randomID = Int32.random(in: 1...Int32.max)
-                        //TODO: hashcode device id
-                        let address = SignalAddress(name: userID, deviceId: Int32(555))
-                        Backend.shared.authenticator.register(address: address) { (result, error) in
-                            if result {
-                                loginForUser(clientID: userID)
-                                SocialLogin.shared.saveSignInType(signInType)
-                            } else {
-                                print("Register Key Error \(error?.localizedDescription ?? "")")
-                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                                hudVisible = false
-                                self.messageAlert = "Something went wrong"
-                                self.isShowAlert = true
-                            }
+                        
+                        let dictOTP = UserDefaults.standard.dictionary(forKey: "OTPEnableInfoKey") as? [String:Bool] ?? [:]
+                        let enable2Factor = dictOTP[userID] ?? false
+                        
+                        if enable2Factor {
+                            hudVisible = false
+                            loginViewModel.userLoginResponseInfo = UserLoginResponseInfo(userId: userID, userDisplayName: displayName, userEmail: email, signInType: signInType)
+                            isShowOTPVerification = true
+                        } else {
+                            saveLoginInfoAndRegisterAddress(userID: userID, displayName: displayName, email: email, signInType: signInType)
                         }
-                    } catch {
-                        print("save user error")
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                        UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                        hudVisible = false
-                        self.messageAlert = "Something went wrong"
-                        self.isShowAlert = true
                     }
+                } catch {
+                    hudVisible = false
+                    print(error.localizedDescription)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+                    self.messageAlert = "Something went wrong"
+                    self.isShowAlert = true
                 }
-            } catch {
-                print(error.localizedDescription)
-                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
-                self.messageAlert = "Something went wrong"
+            } else {
+                hudVisible = false
                 self.isShowAlert = true
+                self.messageAlert = result.baseResponse.errors.message
             }
-        } else {
-            self.isShowAlert = true
-            self.messageAlert = result.baseResponse.errors.message
+        } else if let error = error {
+            hudVisible = false
+            print(error)
+            self.messageAlert = "Something went wrong"
+        }
+    }
+    
+    private func saveLoginInfoAndRegisterAddress(userID: String, displayName: String, email: String, signInType: SocialLogin.SignInType) {
+        do {
+            var user = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
+            user.id = userID
+            user.displayName = displayName
+            user.email = email
+            UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
+            try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+           
+            let address = SignalAddress(name: userID, deviceId: Int32(555))
+            hudVisible = true
+            Backend.shared.authenticator.register(address: address) { (result, error) in
+                hudVisible = false
+                if result {
+                    loginForUser(clientID: userID)
+                    SocialLogin.shared.saveSignInType(signInType)
+                } else {
+                    print("Register Key Error \(error?.localizedDescription ?? "")")
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveRefreshToken)
+        
+                    self.messageAlert = "Something went wrong"
+                    self.isShowAlert = true
+                }
+            }
+        } catch let error as NSError {
+            print(error)
+            hudVisible = false
         }
     }
     
     private func loginForUser(clientID : String) {
+        hudVisible = true
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
+            hudVisible = false
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
                 if let _ = response {
@@ -419,23 +420,19 @@ extension LoginView {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
-                                hudVisible = false
                                 self.viewRouter.current = .tabview
                             }else {
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                hudVisible = false
                                 self.messageAlert = "Something went wrong"
                                 self.isShowAlert = true
                             }
                         }
                     }else {
                         print("requestKey Error: \(error?.localizedDescription ?? "")")
-                        hudVisible = false
                     }
                 }
             } catch {
                 print("Login with error: \(error)")
-                hudVisible = false
             }
         }
     }
