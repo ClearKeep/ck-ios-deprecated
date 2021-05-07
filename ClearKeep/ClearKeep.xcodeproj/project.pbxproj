@@ -207,8 +207,6 @@
 		689247AD2563B67A00EAD2B7 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247AC2563B67A00EAD2B7 /* People.swift */; };
 		689247B22564CD6800EAD2B7 /* SearchPeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */; };
 		689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247B6256510A900EAD2B7 /* SearchPeopleViewModel.swift */; };
-		689247BC2565144800EAD2B7 /* HistoryChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247BB2565144800EAD2B7 /* HistoryChatView.swift */; };
-		689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247FB256611C700EAD2B7 /* HistoryChatViewModel.swift */; };
 		689248012566123A00EAD2B7 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689248002566123A00EAD2B7 /* Group.swift */; };
 		68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */; };
 		68A2AC8B25C3BA9A002873E5 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */; };
@@ -467,8 +465,6 @@
 		689247AC2563B67A00EAD2B7 /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
 		689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPeopleView.swift; sourceTree = "<group>"; };
 		689247B6256510A900EAD2B7 /* SearchPeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPeopleViewModel.swift; sourceTree = "<group>"; };
-		689247BB2565144800EAD2B7 /* HistoryChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryChatView.swift; sourceTree = "<group>"; tabWidth = 4; };
-		689247FB256611C700EAD2B7 /* HistoryChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryChatViewModel.swift; sourceTree = "<group>"; };
 		689248002566123A00EAD2B7 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		68A2AC8525C3ABF0002873E5 /* ForgotPassWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassWordView.swift; sourceTree = "<group>"; };
 		68A2AC8A25C3BA9A002873E5 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -741,8 +737,6 @@
 				689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */,
 				689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */,
 				689247B6256510A900EAD2B7 /* SearchPeopleViewModel.swift */,
-				689247BB2565144800EAD2B7 /* HistoryChatView.swift */,
-				689247FB256611C700EAD2B7 /* HistoryChatViewModel.swift */,
 				68CFA512256C9F3600109725 /* CreateRoomView.swift */,
 				68CFA517256CA23300109725 /* CreateRoomViewModel.swift */,
 				68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */,
@@ -1501,7 +1495,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				689247BC2565144800EAD2B7 /* HistoryChatView.swift in Sources */,
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				6880CF5525F9C1C100F3DECE /* user.grpc.swift in Sources */,
@@ -1643,7 +1636,6 @@
 				68CFA4B925677E0B00109725 /* MotherViewModel.swift in Sources */,
 				6873AA8D259B1D4D009FD141 /* CallView.swift in Sources */,
 				1015C43F262553F900407C35 /* AppFonts.swift in Sources */,
-				689247FC256611C700EAD2B7 /* HistoryChatViewModel.swift in Sources */,
 				1059C49F262D7BFC00ED4878 /* NavigationBarStyle.swift in Sources */,
 				569FFB90254BCB1D00C487F5 /* CKSignalSignedPreKey.m in Sources */,
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
