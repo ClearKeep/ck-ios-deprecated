@@ -24,6 +24,13 @@ struct PeopleView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading) {
+                SearchBar(text: $searchText) { (changed) in
+                    if changed {
+                    } else {
+                        self.searchUser(searchText)
+                    }
+                }
+
                 Text("User in this Channel")
                     .font(AppTheme.fonts.textMedium.font)
                     .foregroundColor(AppTheme.colors.gray2.color)
