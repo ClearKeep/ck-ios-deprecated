@@ -92,8 +92,8 @@ struct ServerMainView: View {
             self.hideKeyboard()
         }
         .onAppear(){
-            UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
-            UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
+//            UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+//            UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
             self.ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
             self.viewModel.start(ourEncryptionManager: self.ourEncryptionManager)
             self.reloadData()

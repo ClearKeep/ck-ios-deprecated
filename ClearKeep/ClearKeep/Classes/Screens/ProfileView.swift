@@ -23,7 +23,7 @@ struct ProfileView: View {
     
     @State var isDisable: Bool = true
     @State var hudVisible = false
-    @State var emailDisable = false
+    @State var emailDisable = true
     @State var userNameDisable = false
     @State var phoneNumberDisable = false
     @State var isToggleOn = false
@@ -101,6 +101,9 @@ struct ProfileView: View {
                 self.email = userLogin.email
                 self.userName = userLogin.displayName
                 self.phoneNumber = ""
+                
+                let dictOTP = UserDefaults.standard.dictionary(forKey: "OTPEnableInfoKey") as? [String:Bool] ?? [:]
+                self.isToggleOn = dictOTP[userLogin.id] ?? false
             }
         }
     }
@@ -142,14 +145,18 @@ struct ProfileView: View {
                 Text("Give your account more protection over scam and account hacking")
                     .font(AppTheme.fonts.textSmall.font)
                     .foregroundColor(AppTheme.colors.gray2.color)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             
             Spacer()
             
             Toggle("", isOn: $isToggleOn)
                 .frame(maxWidth: 60)
+                .padding(.trailing, 2)
         }
         .padding(.vertical, 4)
+        
     }
     
     private func saveInfo() {
@@ -159,7 +166,14 @@ struct ProfileView: View {
             showPhoneNumberAlert()
         } else {
             // TODO: update info to server
-            titleAlert = "Action failed"
+            if let userLogin = Backend.shared.getUserLogin() {
+                var dictOTP = UserDefaults.standard.dictionary(forKey: "OTPEnableInfoKey") as? [String:Bool] ?? [:]
+                dictOTP[userLogin.id] = isToggleOn
+                UserDefaults.standard.setValue(dictOTP, forKey: "OTPEnableInfoKey")
+                UserDefaults.standard.synchronize()
+            }
+            
+            titleAlert = "Action is pending"
             messageAlert = "Server is not ready at the moment."
             isShowAlert = true
         }

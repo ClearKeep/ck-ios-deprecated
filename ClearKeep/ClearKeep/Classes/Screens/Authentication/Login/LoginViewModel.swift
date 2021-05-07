@@ -7,8 +7,13 @@
 
 import Foundation
 
+struct UserLoginResponseInfo {
+    let userId: String
+    let userDisplayName: String
+    let userEmail: String
+    let signInType: SocialLogin.SignInType
+}
+
 class LoginViewModel: ObservableObject {
-    
-    var loginResponseResult: Auth_AuthRes?
-    var signInType: SocialLogin.SignInType?
+    var userLoginResponseInfo = UserLoginResponseInfo(userId: "", userDisplayName: "", userEmail: "", signInType: .email)
 }
