@@ -159,7 +159,7 @@ extension HistoryChatView {
             }
             .padding()
         }
-        .applyNavigationBarStyle()
+        .applyNavigationBarChatStyle()
     }
 }
 
