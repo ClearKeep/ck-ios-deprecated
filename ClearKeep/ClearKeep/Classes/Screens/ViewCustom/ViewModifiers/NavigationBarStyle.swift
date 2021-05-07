@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
-    var title: String
+    var title: String?
     var leftBarItems: (() -> L)?
     var rightBarItems: (() -> R)?
     
@@ -16,7 +16,7 @@ struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
         VStack(alignment: .leading) {
             Spacer()
                 .grandientBackground()
-                .frame(width: UIScreen.main.bounds.width, height: 60)
+                .frame(width: UIScreen.main.bounds.width, height: 20 + (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
             
             VStack(alignment: .leading) {
                 HStack {
@@ -26,10 +26,12 @@ struct NavigationBarStyle<L,R>: ViewModifier where L: View, R: View {
                 }
                 .padding(.top, 29)
                 
-                Text(title)
-                    .font(AppTheme.fonts.linkLarge.font)
-                    .foregroundColor(AppTheme.colors.black.color)
-                    .padding(.top, 23)
+                if let title = title {
+                    Text(title)
+                        .font(AppTheme.fonts.linkLarge.font)
+                        .foregroundColor(AppTheme.colors.black.color)
+                        .padding(.top, 23)
+                }
             }
             .padding([.trailing , .leading , .bottom] , 16)
             
@@ -79,7 +81,7 @@ struct NavigationBarChatStyle<T>: ViewModifier where T: View {
             .padding(.top, 46)
             .padding(16)
             .gradientHeader()
-            .frame(width: UIScreen.main.bounds.width, height: 114)
+            .frame(width: UIScreen.main.bounds.width, height: 60 + (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
             content
         }
         .navigationBarHidden(true)
@@ -100,7 +102,7 @@ struct OldNavigationBarChatStyle: ViewModifier {
 }
 
 extension View {
-    func applyNavigationBarStyle<L, R>(title: String, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
+    func applyNavigationBarStyle<L, R>(title: String? = nil, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
         self.modifier(NavigationBarStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     

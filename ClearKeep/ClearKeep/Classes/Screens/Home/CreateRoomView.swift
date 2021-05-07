@@ -32,89 +32,62 @@ struct CreateRoomView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .leading , spacing: 0){
-                Spacer()
-                    .grandientBackground()
-                    .frame(width: UIScreen.main.bounds.width, height: 60)
+        VStack(alignment: .leading) {
+            Text("Group Name")
+                .font(AppTheme.fonts.textSmall.font)
+                .foregroundColor(AppTheme.colors.gray1.color)
+                .padding(.top, 23)
+                .padding(.bottom, 5)
+            
+            HStack {
+                TextField("Name this group", text: $groupName)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .font(AppTheme.fonts.textSmall.font)
+                    .padding(4)
+                    .frame(height: 52)
                 
-                VStack(alignment: .leading , spacing: 0) {
-                    HStack {
-                        Button {
-                            self.presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image("arrow-left")
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(AppTheme.colors.gray1.color)
-                        }
-                        
-                        Spacer()
-                        
-                        Button {
-                            createRoom()
-                        } label: {
-                            Text("Create")
-                                .font(AppTheme.fonts.linkMedium.font)
-                                .foregroundColor(AppTheme.colors.primary.color)
-                        }
-                        .opacity(self.groupName.isEmpty ? 0.3 : 1.0)
-                        .disabled(self.groupName.isEmpty)
-                    }
-                    .padding(.top, 29)
-                    
-                    Text("New Group Message")
-                        .font(AppTheme.fonts.linkLarge.font)
-                        .foregroundColor(AppTheme.colors.black.color)
-                        .padding(.top, 23)
-                    
-                    Text("Group Name")
-                        .font(AppTheme.fonts.textSmall.font)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                        .padding(.top, 23)
-                        .padding(.bottom, 5)
-                    
-                    HStack {
-                        TextField("Name this group", text: $groupName)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .font(AppTheme.fonts.textSmall.font)
-                            .padding(4)
-                            .frame(height: 52)
-
-                    }
-                    .padding(.horizontal)
-                    .background(AppTheme.colors.gray5.color)
-                    .cornerRadius(16)
-                    .clipped()
-
-                    
-                    
-                    
-                    Text("User in this Group")
-                        .font(AppTheme.fonts.textMedium.font)
-                        .foregroundColor(AppTheme.colors.gray2.color)
-                        .padding([.top , .bottom] , 16)
-                    
-                    Group {
-                        ScrollView(.vertical, showsIndicators: false, content: {
-                            VStack(alignment:.leading , spacing: 16) {
-                                ForEach(listMembers , id: \.id) { user in
-                                    ContactView(people: user)
-                                }
-                            }
-                        })
-                    }
-
- 
-                }.padding([.trailing , .leading , .bottom] , 16)
             }
-            .navigationBarTitle(Text(""), displayMode: .inline)
-            .navigationBarHidden(true)
-            .edgesIgnoringSafeArea(.top)
+            .padding(.horizontal)
+            .background(AppTheme.colors.gray5.color)
+            .cornerRadius(16)
+            .clipped()
+            
+            Text("User in this Group")
+                .font(AppTheme.fonts.textMedium.font)
+                .foregroundColor(AppTheme.colors.gray2.color)
+                .padding([.top , .bottom] , 16)
+            
+            Group {
+                ScrollView(.vertical, showsIndicators: false, content: {
+                    VStack(alignment:.leading , spacing: 16) {
+                        ForEach(listMembers , id: \.id) { user in
+                            ContactView(people: user)
+                        }
+                    }
+                })
+            }
         }
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarHidden(true)
-        .edgesIgnoringSafeArea(.top)
+        .padding([.trailing , .leading , .bottom] , 16)
+        .applyNavigationBarStyle(title: "New Group Message", leftBarItems: {
+            Button {
+                self.presentationMode.wrappedValue.dismiss()
+            } label: {
+                Image("arrow-left")
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+        }, rightBarItems: {
+            Button {
+                createRoom()
+            } label: {
+                Text("Create")
+                    .font(AppTheme.fonts.linkMedium.font)
+                    .foregroundColor(AppTheme.colors.primary.color)
+            }
+            .opacity(self.groupName.isEmpty ? 0.3 : 1.0)
+            .disabled(self.groupName.isEmpty)
+        })
         .alert(isPresented: self.$isShowAlert, content: {
             Alert(title: Text(self.titleAlert),
                   message: Text(self.messageAlert),
