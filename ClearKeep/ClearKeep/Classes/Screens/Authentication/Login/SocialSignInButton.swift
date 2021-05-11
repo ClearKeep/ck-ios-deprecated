@@ -13,28 +13,14 @@ struct SocialSignInButton: View {
     var body: some View {
         VStack {
             Button(action: signInType.action) {
-                HStack(alignment: .center, spacing: 4) {
-                    Spacer()
-                    
-                    Text(signInType.title)
-                        .font(AppTheme.fonts.linkSmall.font)
-                        .foregroundColor(signInType.titleColor)
-                        .padding(.leading, 8)
-                    
-                    Image(signInType.iconName)
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24, alignment: .center)
-                        .padding(.all, 8)
-                    
-                    Spacer()
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.white)
-//                        .shadow(color: .primary, radius: 2, x: 0, y: 2)
-                )
+                Image(signInType.iconName)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24, alignment: .center)
+                    .padding(.all, 15)
+                    .background(AppTheme.colors.offWhite.color)
+                    .clipShape(Circle())
             }
         }
     }

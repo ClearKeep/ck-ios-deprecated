@@ -90,7 +90,7 @@ struct TextFieldProfile: View {
     private var keyboardType: UIKeyboardType
     private var onEditingChanged: (Bool) -> Void
     
-    init(_ title: String, header: String? = nil, keyboardType: UIKeyboardType = .default, text: Binding<String>, disable: Binding<Bool>, onEditingChanged: @escaping (Bool) -> Void) {
+    init(_ title: String, header: String? = nil, keyboardType: UIKeyboardType = .default, text: Binding<String>, disable: Binding<Bool> = .constant(false), onEditingChanged: @escaping (Bool) -> Void) {
         self.title = title
         self.header = header
         self.keyboardType = keyboardType
