@@ -41,6 +41,21 @@ struct LoginView: View {
                             LogoIconView()
                                 .padding(.top, 20)
                             
+                            if loginViewModel.isUseCustomServer {
+                                HStack(spacing: 4) {
+                                    Image("Alert")
+                                        .renderingMode(.template)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24, alignment: .center)
+                                        .foregroundColor(AppTheme.colors.warningLight.color)
+                                        
+                                    Text("You are using custom server")
+                                        .font(AppTheme.fonts.textSmall.font)
+                                        .foregroundColor(AppTheme.colors.warningLight.color)
+                                }
+                            }  
+                            
                             VStack(alignment: .leading, spacing: 24) {
                                 
                                 WrappedTextFieldWithLeftIcon("Email", leftIconName: "Mail", shouldShowBorderWhenFocused: false, keyboardType: UIKeyboardType.emailAddress, text: $email, errorMessage: $errorMsgEmail)
@@ -51,45 +66,50 @@ struct LoginView: View {
                                     loginWithEmailAndPassword()
                                 }
                                 
-                                NavigationLink(destination: ForgotPassWordView(isPresentModel: $isForgotPassword), isActive: $isForgotPassword) {
-                                    Button(action: {
-                                        isForgotPassword = true
-                                    }) {
-                                        Text("Forgot password?")
-                                            .font(AppTheme.fonts.linkSmall.font)
+                                HStack {
+                                    NavigationLink(destination: AdvanceServerSettingsView(isUseCustomServer: $loginViewModel.isUseCustomServer, customServerURL: $loginViewModel.customServerURL, customServerPort: $loginViewModel.customServerPort)) {
+                                        Text("Advance Server Settings")
+                                            .font(AppTheme.fonts.linkXSmall.font)
                                             .foregroundColor(AppTheme.colors.offWhite.color)
+                                            .frame(height: 30)
                                     }
-                                    .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
+                                    
+                                    Spacer()
+                                    
+                                    NavigationLink(destination: ForgotPassWordView()) {
+                                        Text("Forgot password?")
+                                            .font(AppTheme.fonts.linkXSmall.font)
+                                            .foregroundColor(AppTheme.colors.offWhite.color)
+                                            .frame(height: 30)
+                                    }
                                 }
+                                .padding(.horizontal, 6)
+                                
                                 
                                 Divider()
                                     .frame(height: 0.5)
                                     .background(AppTheme.colors.offWhite.color)
                                 
-                                SocialSignInButton(signInType: .google)
-                                
-                                SocialSignInButton(signInType: .office365)
-                                
-                                SocialSignInButton(signInType: .facebook)
-                                
-                                HStack {
+                                VStack(alignment: .center, spacing: 24) {
+                                    Text("Social Sign-in")
+                                        .font(AppTheme.fonts.linkSmall.font)
+                                        .foregroundColor(AppTheme.colors.offWhite.color)
+                                    
+                                    HStack(spacing: 40) {
+                                        SocialSignInButton(signInType: .google)
+                                        SocialSignInButton(signInType: .office365)
+                                        SocialSignInButton(signInType: .facebook)
+                                    }
+                                    
                                     Spacer()
                                     
                                     Text("Don't have an account?")
                                         .font(AppTheme.fonts.linkSmall.font)
                                         .foregroundColor(AppTheme.colors.offWhite.color)
                                     
-                                    Spacer()
-                                }
-                                .padding(.top, 20)
-                                
-                                NavigationLink(destination: RegisterView(isPresentModel: $isRegister), isActive: $isRegister) {
-                                    Button(action: {
-                                        isRegister = true
-                                    }) {
+                                    NavigationLink(destination: RegisterView()) {
                                         HStack {
                                             Spacer()
-                                            
                                             Text("Sign up")
                                                 .font(AppTheme.fonts.linkSmall.font)
                                                 .foregroundColor(AppTheme.colors.offWhite.color)
@@ -97,13 +117,12 @@ struct LoginView: View {
                                                 .background(Color.clear)
                                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                                 .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(Color.white, lineWidth: 2))
-                                            
                                             Spacer()
                                         }
-                                        
+                                        .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                                     }
-                                    .frame(width: UIScreen.main.bounds.width - 40, height: 30, alignment: .trailing)
                                 }
+                                .frame(maxWidth: .infinity)
                             }
                             
                             NavigationLink(
@@ -179,7 +198,6 @@ struct LoginView: View {
             .grandientBackground()
         }
     }
-    
 }
 
 extension LoginView {

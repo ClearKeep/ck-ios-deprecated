@@ -9,8 +9,8 @@ import SwiftUI
 
 struct RegisterView: View {
 
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var viewRouter: ViewRouter
-    @Binding var isPresentModel: Bool
     
     @ObservedObject var viewModel = RegisterViewModel()
 
@@ -37,7 +37,7 @@ struct RegisterView: View {
                             
                             HStack {
                                 PlainButton("Sign in instead") {
-                                    self.isPresentModel = false
+                                    self.presentationMode.wrappedValue.dismiss()
                                 }
                                 
                                 Spacer()
@@ -68,7 +68,7 @@ struct RegisterView: View {
                   message: Text(self.viewModel.messageAlert),
                   dismissButton: .default(Text("OK"), action: {
                     if viewModel.isRegisterSuccess {
-                        isPresentModel = false
+                        self.presentationMode.wrappedValue.dismiss()
                     }
                   }))
         })
@@ -80,6 +80,6 @@ struct RegisterView: View {
 
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterView(isPresentModel: .constant(true))
+        RegisterView()
     }
 }

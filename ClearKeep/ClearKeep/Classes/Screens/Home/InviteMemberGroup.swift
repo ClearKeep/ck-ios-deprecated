@@ -14,7 +14,6 @@ struct InviteMemberGroup: View {
     
     @State var selectedRows = Set<People>()
     @State private var searchText: String = ""
-    @Binding var isPresentModel: Bool
     
     @State var users : [People] = []
     @State var hudVisible : Bool = false
@@ -48,8 +47,7 @@ struct InviteMemberGroup: View {
         .padding([.trailing , .leading , .bottom] , 16)
         .applyNavigationBarGradidentStyle(title: "New Message", leftBarItems: {
             Button {
-                isPresentModel = false
-                presentationMode.wrappedValue.dismiss()
+                self.presentationMode.wrappedValue.dismiss()
             } label: {
                 Image("ic_close")
                     .frame(width: 24, height: 24)

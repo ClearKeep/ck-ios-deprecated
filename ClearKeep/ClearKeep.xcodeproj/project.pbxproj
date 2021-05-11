@@ -43,6 +43,7 @@
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
+		1098A327264A320600B26F2F /* AdvanceServerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */; };
 		10AA457A26423C6A000EB6E1 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457926423C6A000EB6E1 /* Binding+Extension.swift */; };
 		10AA4580264254E1000EB6E1 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457F264254E1000EB6E1 /* ChangePasswordView.swift */; };
 		10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA4587264257B2000EB6E1 /* ChangePasswordViewModel.swift */; };
@@ -282,6 +283,7 @@
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
+		1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceServerSettingsView.swift; sourceTree = "<group>"; };
 		10AA457926423C6A000EB6E1 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
 		10AA457F264254E1000EB6E1 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		10AA4587264257B2000EB6E1 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
@@ -557,6 +559,14 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		1098A322264A31DC00B26F2F /* AdvanceServerSettings */ = {
+			isa = PBXGroup;
+			children = (
+				1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */,
+			);
+			path = AdvanceServerSettings;
+			sourceTree = "<group>";
+		};
 		10AA457E264254A7000EB6E1 /* UserProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,6 +729,7 @@
 		16208E41252D72EB000A6CE7 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				1098A322264A31DC00B26F2F /* AdvanceServerSettings */,
 				10AA45A426428844000EB6E1 /* PasscodeView */,
 				68A2ACB525C3E636002873E5 /* ForgotPassword */,
 				686F25CB255CE7F900953C5E /* Register */,
@@ -1621,6 +1632,7 @@
 				56205B4425A2FB9100B39D07 /* GridView.swift in Sources */,
 				10AA4580264254E1000EB6E1 /* ChangePasswordView.swift in Sources */,
 				56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */,
+				1098A327264A320600B26F2F /* AdvanceServerSettingsView.swift in Sources */,
 				5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */,
 				108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */,
 				1015C44C2625542B00407C35 /* DefaultFonts.swift in Sources */,

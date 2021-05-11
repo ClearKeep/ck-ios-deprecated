@@ -29,7 +29,6 @@ struct ServerMainView: View {
     @State private var isDirectMessageExpanded: Bool = true
     
     @State private var isShowingPeopleView = false
-    @State private var isShowingInviteMemberGroupView = false
     
     @Binding var isShowingServerDetailView: Bool
     @Binding var currentUserName: String
@@ -181,7 +180,7 @@ extension ServerMainView {
                 
                 Spacer()
                 
-                NavigationLink(destination: InviteMemberGroup(isPresentModel:$isShowingInviteMemberGroupView).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms), isActive: $isShowingInviteMemberGroupView) {
+                NavigationLink(destination: InviteMemberGroup().environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)) {
                     Image("Plus")
                         .resizable()
                         .frame(width: 20, height: 20, alignment: .center)

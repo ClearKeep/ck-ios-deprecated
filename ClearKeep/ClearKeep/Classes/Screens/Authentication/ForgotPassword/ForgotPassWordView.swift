@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ForgotPassWordView: View {
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var viewRouter: ViewRouter
     
     @State var email: String = ""
-    @Binding var isPresentModel: Bool
     @State private var isEmailValid : Bool = true
     @State var hudVisible = false
     @State var isShowAlert = false
@@ -29,7 +29,7 @@ struct ForgotPassWordView: View {
                         .fixedSize()
                         .scaledToFit()
                         .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
-                            self.isPresentModel = false
+                            self.presentationMode.wrappedValue.dismiss()
                         })
                     Text("Forgot password")
                         .fontWeight(.bold)

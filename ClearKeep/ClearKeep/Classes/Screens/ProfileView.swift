@@ -36,35 +36,37 @@ struct ProfileView: View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 16) {
                 ScrollView(.vertical, showsIndicators: false) {
-                    userProfilePicture()
-                    
-                    TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
-                    
-                    TextFieldProfile("Email", header: "Email", keyboardType: .emailAddress, text: $email, disable: $emailDisable) { (_) in }
-                    
-                    TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
-                    
-                    NavigationLink(destination:
-                                    ChangePasswordView(viewModel: ChangePasswordViewModel())
-                    ) {
-                        HStack {
-                            Text("Change Password")
-                                .font(AppTheme.fonts.linkSmall.font)
-                                .foregroundColor(AppTheme.colors.primary.color)
-                                .lineLimit(2)
-                            
-                            Spacer()
-                            
-                            Image("arrow-right")
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 16, height: 16, alignment: .center)
-                                .foregroundColor(AppTheme.colors.primary.color)
+                    VStack(alignment: .leading, spacing: 16) {
+                        userProfilePicture()
+                        
+                        TextFieldProfile("UserName", header: "Username", text: $userName, disable: $userNameDisable) { (_) in }
+                        
+                        TextFieldProfile("Email", header: "Email", keyboardType: .emailAddress, text: $email, disable: $emailDisable) { (_) in }
+                        
+                        TextFieldProfile("Phone Number", header: "Phone Number", keyboardType: .phonePad, text: $phoneNumber, disable: $phoneNumberDisable) { (_) in }
+                        
+                        NavigationLink(destination:
+                                        ChangePasswordView(viewModel: ChangePasswordViewModel())
+                        ) {
+                            HStack {
+                                Text("Change Password")
+                                    .font(AppTheme.fonts.linkSmall.font)
+                                    .foregroundColor(AppTheme.colors.primary.color)
+                                    .lineLimit(2)
+                                
+                                Spacer()
+                                
+                                Image("arrow-right")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 16, height: 16, alignment: .center)
+                                    .foregroundColor(AppTheme.colors.primary.color)
+                            }
                         }
+                        
+                        twoFactorAuthView()
                     }
-                    
-                    twoFactorAuthView()
                 }
             }
             .padding([.trailing , .leading , .bottom] , 16)

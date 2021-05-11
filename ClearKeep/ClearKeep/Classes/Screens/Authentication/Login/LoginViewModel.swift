@@ -15,5 +15,9 @@ struct UserLoginResponseInfo {
 }
 
 class LoginViewModel: ObservableObject {
+    @Published var isUseCustomServer = false
+    @Published var customServerURL = ""
+    @Published var customServerPort = ""
+    
     var userLoginResponseInfo = UserLoginResponseInfo(userId: "", userDisplayName: "", userEmail: "", signInType: .email)
 }

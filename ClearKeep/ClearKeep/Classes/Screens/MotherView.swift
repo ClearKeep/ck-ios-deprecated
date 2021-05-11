@@ -21,7 +21,7 @@ struct MotherView: View {
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
             case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
-            case .register: RegisterView(isPresentModel: .constant(true))
+            case .register: RegisterView()
             case .tabview:
                 //TabViewContainer().transition(.move(edge: .trailing))
                 HomeMainView().transition(.move(edge: .trailing))
