@@ -93,7 +93,7 @@ struct GroupChatDetailView: View {
             
             Spacer()
         }
-        .applyNavigationBarPlainStyle(title: groupModel?.groupName ?? "Group", leftBarItems: {
+        .applyNavigationBarPlainStyleDark(title: groupModel?.groupName ?? "Group", leftBarItems: {
             Image("Chev-left")
                 .resizable()
                 .scaledToFit()

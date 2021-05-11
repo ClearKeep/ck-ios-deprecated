@@ -20,43 +20,35 @@ struct ForgotPassWordView: View {
     @State var titleAlert = ""
     
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading) {
-                HStack(spacing: 16) {
-                    Image("ic_back_white")
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .fixedSize()
-                        .scaledToFit()
-                        .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        })
-                    Text("Forgot password")
-                        .fontWeight(.bold)
-                        .font(AppTheme.fonts.textMedium.font)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                }.padding(.top, 59)
-                
-                Text("Please enter your email to reset your password")
-                    .fontWeight(.medium)
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.gray5.color)
-                    .padding(.top, 26)
-                
-                TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { _ in  }
-                    .padding(.top, 16)
-                
-                ButtonAuth("Reset password") {
-                    forgotPassword()
-                }.padding(.top, 24)
-                
-                Spacer()
-                
-            }
+        VStack(alignment: .leading) {
+            Text("Please enter your email to reset your password")
+                .fontWeight(.medium)
+                .font(AppTheme.fonts.textMedium.font)
+                .foregroundColor(AppTheme.colors.gray5.color)
+                .padding(.top, 26)
+            
+            TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { _ in  }
+                .padding(.top, 16)
+            
+            ButtonAuth("Reset password") {
+                forgotPassword()
+            }.padding(.top, 24)
+            
+            Spacer()
         }
-        .padding(16)
-        .navigationBarHidden(true)
-        .navigationBarTitle("", displayMode: .inline)
+        .padding(.horizontal, 16)
+        .applyNavigationBarPlainStyleLight(title: "Forgot password", leftBarItems: {
+            Image("ic_back_white")
+                .frame(width: 40, height: 40)
+                .foregroundColor(AppTheme.colors.offWhite.color)
+                .fixedSize()
+                .scaledToFit()
+                .onTapGesture {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+        }, rightBarItems: {
+            Spacer()
+        })
         .grandientBackground()
         .onTapGesture {
             self.hideKeyboard()

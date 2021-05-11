@@ -33,7 +33,8 @@ struct GroupChatMemberView: View {
             }
             .padding(.top, 24)
             .padding(.horizontal)
-        }.applyNavigationBarPlainStyle(title: "Member", leftBarItems: {
+        }
+        .applyNavigationBarPlainStyleDark(title: "Member", leftBarItems: {
             Image("Chev-left")
                 .resizable()
                 .scaledToFit()

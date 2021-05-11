@@ -46,6 +46,8 @@ struct NavigationBarGradidentStyle<L,R>: ViewModifier where L: View, R: View {
 
 struct NavigationBarPlainStyle<L,R>: ViewModifier where L: View, R: View {
     var title: String
+    var titleFont: Font
+    var titleColor: Color
     var leftBarItems: (() -> L)?
     var rightBarItems: (() -> R)?
     
@@ -53,10 +55,10 @@ struct NavigationBarPlainStyle<L,R>: ViewModifier where L: View, R: View {
         VStack(alignment: .leading) {
             HStack {
                 leftBarItems?()
-                    .padding(.trailing, 16)
+                    .padding(.trailing, 8)
                 Text(title)
-                    .font(AppTheme.fonts.linkLarge.font)
-                    .foregroundColor(AppTheme.colors.black.color)
+                    .font(titleFont)
+                    .foregroundColor(titleColor)
                 Spacer()
                 rightBarItems?()
             }
@@ -126,8 +128,12 @@ extension View {
         self.modifier(NavigationBarGradidentStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     
-    func applyNavigationBarPlainStyle<L, R>(title: String, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
-        self.modifier(NavigationBarPlainStyle(title: title, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
+    func applyNavigationBarPlainStyleDark<L, R>(title: String, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
+        self.modifier(NavigationBarPlainStyle(title: title, titleFont: AppTheme.fonts.linkLarge.font, titleColor: AppTheme.colors.black.color, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
+    }
+    
+    func applyNavigationBarPlainStyleLight<L, R>(title: String, leftBarItems: @escaping (() -> L), rightBarItems: @escaping (() -> R)) -> some View where L: View, R: View {
+        self.modifier(NavigationBarPlainStyle(title: title, titleFont: AppTheme.fonts.textMedium.font, titleColor: AppTheme.colors.offWhite.color, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     
     func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping (() -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {
