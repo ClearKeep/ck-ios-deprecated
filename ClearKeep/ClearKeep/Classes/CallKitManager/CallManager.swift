@@ -45,6 +45,7 @@ final class CallManager: NSObject {
     }
 
     // MARK: Actions
+    // NOTE: user make a call to others
     func startCall(clientId: String, clientName: String?,
                    avatar: String? = nil, groupId: Int64, groupToken: String,
                    callType type: Constants.CallType = .audio ,
@@ -207,6 +208,8 @@ extension CallManager {
         // pre-heat the AVAudioSession
         //OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance())
         
+        // NOTE: report call to CallKit here
+        
         // Report the incoming call to the system
         provider.reportNewIncomingCall(with: uuid, update: update) { error in
             /*
@@ -278,7 +281,7 @@ extension CallManager: CXProviderDelegate {
         action.fulfill()
     }
 
-    
+    // NOTE: user tap Answer button
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
@@ -303,7 +306,7 @@ extension CallManager: CXProviderDelegate {
         action.fulfill()
     }
 
-    
+    // NOTE: Use tap on Decline
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
@@ -351,6 +354,7 @@ extension CallManager: CXProviderDelegate {
         action.fulfill()
     }
 
+    // NOTE: time out event
     func provider(_ provider: CXProvider, timedOutPerforming action: CXAction) {
         print("Timed out \(#function)")
 

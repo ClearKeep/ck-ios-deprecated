@@ -63,6 +63,7 @@ struct MessageNotificationView_Previews: PreviewProvider {
 
         }
         .padding()
+        .padding(.top, 40)
         .grandientBackground()
     }
 }

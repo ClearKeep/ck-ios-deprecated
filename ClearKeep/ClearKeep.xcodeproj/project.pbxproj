@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1007344E264BBF6B00CF897D /* IncomingCallNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */; };
 		100D335C2637BAB200344D36 /* PlainColorBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100D335B2637BAB200344D36 /* PlainColorBackground.swift */; };
 		100D33642637C55400344D36 /* JoinServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100D33632637C55400344D36 /* JoinServerView.swift */; };
 		1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C9362608754B0081C135 /* MultilineTextField.swift */; };
@@ -247,6 +248,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingCallNotificationView.swift; sourceTree = "<group>"; };
 		100D335B2637BAB200344D36 /* PlainColorBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainColorBackground.swift; sourceTree = "<group>"; };
 		100D33632637C55400344D36 /* JoinServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinServerView.swift; sourceTree = "<group>"; };
 		1013C9362608754B0081C135 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
@@ -951,6 +953,7 @@
 				1027ED372629955F00731BFE /* MessageNotificationView.swift */,
 				10237D9F262E915C005183C4 /* LeftMainMenuView.swift */,
 				10237DB2262EC242005183C4 /* MenuDirectMessageRow.swift */,
+				1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */,
 			);
 			path = ViewCustom;
 			sourceTree = "<group>";
@@ -1639,6 +1642,7 @@
 				569FFB91254BCB1D00C487F5 /* CKSignalPreKey.m in Sources */,
 				106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */,
 				569FFBB7254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift in Sources */,
+				1007344E264BBF6B00CF897D /* IncomingCallNotificationView.swift in Sources */,
 				56205B0825A2C36D00B39D07 /* JanusVideoRoom.swift in Sources */,
 				6880CF5725F9C1C100F3DECE /* signal.pb.swift in Sources */,
 				56205B0B25A2C36D00B39D07 /* CameraSession.swift in Sources */,
