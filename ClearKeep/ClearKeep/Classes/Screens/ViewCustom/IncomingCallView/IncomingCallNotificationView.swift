@@ -10,15 +10,17 @@ import SwiftUI
 struct IncomingCallNotificationView: View {
     let title: String
     let callerName: String
+    let isShowAvatar: Bool
     let avatarImage: Image?
     
     let declineAction: VoidCompletion
     let answerAction: VoidCompletion
+    let tapOnBannerAction: VoidCompletion
     
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
-                if let avatar = avatarImage {
+                if isShowAvatar {
                     ChannelUserAvatar(avatarSize: 56, text: callerName, image: avatarImage, status: .none, gradientBackgroundType: .primary)
                 }
                 
@@ -62,7 +64,10 @@ struct IncomingCallNotificationView: View {
             .font(AppTheme.fonts.linkSmall.font)
             .foregroundColor(AppTheme.colors.offWhite.color)
         }
-        .embededInCardView()
+        .embededInCardView(showShadow: true)
+        .onTapGesture {
+            tapOnBannerAction()
+        }
         .transition(.move(edge: .top))
     }
 }
@@ -70,9 +75,9 @@ struct IncomingCallNotificationView: View {
 struct IncomingCallNotificationView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 20) {
-            IncomingCallNotificationView(title: "Incoming voice call", callerName: "Alex Sancho", avatarImage: Image("ic_app"), declineAction: {}, answerAction: {})
+            IncomingCallNotificationView(title: "Incoming voice call", callerName: "Alex Sancho", isShowAvatar: true, avatarImage: Image("ic_app"), declineAction: {}, answerAction: {}, tapOnBannerAction: {})
             
-            IncomingCallNotificationView(title: "Incoming Voice Group call", callerName: "Dev Group", avatarImage: nil, declineAction: {}, answerAction: {})
+            IncomingCallNotificationView(title: "Incoming Voice Group call", callerName: "Dev Group", isShowAvatar: false, avatarImage: nil, declineAction: {}, answerAction: {}, tapOnBannerAction: {})
 
         }
         .padding(.all, 16)

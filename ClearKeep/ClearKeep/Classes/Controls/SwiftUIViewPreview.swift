@@ -25,7 +25,17 @@ struct SwiftUIViewPreview: View {
             Spacer()
                 .frame(height: 100)
             
+            RoundedRectangle(cornerRadius: 32)
+                .frame(width: 100, height: 100, alignment: .center)
+            .background(Color.blue)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 32, style: .continuous)
+            )
+                .shadow(color: .gray, radius: 3, x: 0, y: 3)
+            
             VStack(spacing: 20) {
+                
+                
                 
                 CustomTextFieldWithLeftIcon("Input", leftIconName: "Mail", text: $text1, errorMessage: $errorMessage1) { (changed) in
                     print("\(changed)")

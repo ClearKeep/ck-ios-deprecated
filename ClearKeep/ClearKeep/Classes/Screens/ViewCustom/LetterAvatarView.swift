@@ -12,7 +12,7 @@ struct LetterAvatarView: View {
     let image: Image? 
     let textColor: UIColor = .white
     let backgroundColor: UIColor = .black
-    
+ 
     init(text: String, image: Image? = nil) {
         self.text = text
         self.image = image

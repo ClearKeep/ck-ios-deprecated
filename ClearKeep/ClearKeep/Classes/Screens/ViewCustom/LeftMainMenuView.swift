@@ -76,6 +76,9 @@ struct LeftMainMenuView: View {
                 Button(action: {
                     self.leftMenuStatus.selectedServerID = LeftMainMenuView.joinServerItemID
                     self.joinServerHandler()
+                    
+                    // Test notification
+                    self.showBanner.toggle()
                 }, label: {
                     Image("Plus_white")
                         .resizable()

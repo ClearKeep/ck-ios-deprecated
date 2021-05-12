@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1007344E264BBF6B00CF897D /* IncomingCallNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */; };
+		10073453264BC55600CF897D /* IncomingCallFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10073452264BC55600CF897D /* IncomingCallFullScreenView.swift */; };
+		10073458264BCD8600CF897D /* BlurBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10073457264BCD8600CF897D /* BlurBackground.swift */; };
+		10073464264BE6EB00CF897D /* IncomingCallFullScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10073463264BE6EB00CF897D /* IncomingCallFullScreenViewModel.swift */; };
+		1007346C264C011A00CF897D /* TopBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1007346B264C011A00CF897D /* TopBanner.swift */; };
 		100D335C2637BAB200344D36 /* PlainColorBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100D335B2637BAB200344D36 /* PlainColorBackground.swift */; };
 		100D33642637C55400344D36 /* JoinServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100D33632637C55400344D36 /* JoinServerView.swift */; };
 		1013C9372608754B0081C135 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1013C9362608754B0081C135 /* MultilineTextField.swift */; };
@@ -249,6 +253,10 @@
 
 /* Begin PBXFileReference section */
 		1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingCallNotificationView.swift; sourceTree = "<group>"; };
+		10073452264BC55600CF897D /* IncomingCallFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingCallFullScreenView.swift; sourceTree = "<group>"; };
+		10073457264BCD8600CF897D /* BlurBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurBackground.swift; sourceTree = "<group>"; };
+		10073463264BE6EB00CF897D /* IncomingCallFullScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingCallFullScreenViewModel.swift; sourceTree = "<group>"; };
+		1007346B264C011A00CF897D /* TopBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBanner.swift; sourceTree = "<group>"; };
 		100D335B2637BAB200344D36 /* PlainColorBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainColorBackground.swift; sourceTree = "<group>"; };
 		100D33632637C55400344D36 /* JoinServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinServerView.swift; sourceTree = "<group>"; };
 		1013C9362608754B0081C135 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
@@ -527,6 +535,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10073462264BE6C800CF897D /* IncomingCallView */ = {
+			isa = PBXGroup;
+			children = (
+				1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */,
+				10073452264BC55600CF897D /* IncomingCallFullScreenView.swift */,
+				10073463264BE6EB00CF897D /* IncomingCallFullScreenViewModel.swift */,
+			);
+			path = IncomingCallView;
+			sourceTree = "<group>";
+		};
 		1013C9572608A64F0081C135 /* GroupChatDetailView */ = {
 			isa = PBXGroup;
 			children = (
@@ -599,12 +617,14 @@
 		10E83D3326240531002D7B10 /* ViewModifiers */ = {
 			isa = PBXGroup;
 			children = (
+				10073457264BCD8600CF897D /* BlurBackground.swift */,
 				10E83D3F262405E7002D7B10 /* GradientBackground.swift */,
 				100D335B2637BAB200344D36 /* PlainColorBackground.swift */,
 				10D650CB2626BEF60018528B /* CardViewContainer.swift */,
 				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
 				1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */,
 				10AA45B626429DBC000EB6E1 /* View+Shake.swift */,
+				1007346B264C011A00CF897D /* TopBanner.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -939,6 +959,7 @@
 		56205B4225A2FB7400B39D07 /* ViewCustom */ = {
 			isa = PBXGroup;
 			children = (
+				10073462264BE6C800CF897D /* IncomingCallView */,
 				10AA4599264287CB000EB6E1 /* PassCodeInput */,
 				10E83D3326240531002D7B10 /* ViewModifiers */,
 				56694A8325B537A2008E8EC5 /* HUD */,
@@ -953,7 +974,6 @@
 				1027ED372629955F00731BFE /* MessageNotificationView.swift */,
 				10237D9F262E915C005183C4 /* LeftMainMenuView.swift */,
 				10237DB2262EC242005183C4 /* MenuDirectMessageRow.swift */,
-				1007344D264BBF6A00CF897D /* IncomingCallNotificationView.swift */,
 			);
 			path = ViewCustom;
 			sourceTree = "<group>";
@@ -1550,6 +1570,7 @@
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
+				1007346C264C011A00CF897D /* TopBanner.swift in Sources */,
 				10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */,
 				569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */,
 				689247B7256510A900EAD2B7 /* SearchPeopleViewModel.swift in Sources */,
@@ -1565,6 +1586,7 @@
 				6880CF5F25F9C1C100F3DECE /* user.pb.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				10237D9B262E86E3005183C4 /* MainMenuButton.swift in Sources */,
+				10073464264BE6EB00CF897D /* IncomingCallFullScreenViewModel.swift in Sources */,
 				1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */,
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,
@@ -1611,6 +1633,7 @@
 				1063815B2636BB16000ED2D1 /* ServerMainViewModel.swift in Sources */,
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
+				10073453264BC55600CF897D /* IncomingCallFullScreenView.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
@@ -1688,6 +1711,7 @@
 				6880CF6425F9C1C100F3DECE /* notify_push.pb.swift in Sources */,
 				56694ADC25B53C8A008E8EC5 /* InnerIndicatorText.swift in Sources */,
 				56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */,
+				10073458264BCD8600CF897D /* BlurBackground.swift in Sources */,
 				688B67E42570F86000B95235 /* RealmGroups.swift in Sources */,
 				6880CF5E25F9C1C100F3DECE /* server_info.pb.swift in Sources */,
 				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
