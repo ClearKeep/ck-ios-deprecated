@@ -10,7 +10,7 @@ import SwiftUI
 struct GradientBackground: ViewModifier {
     
     func body(content: Content) -> some View {
-        ZStack(alignment: .center) {
+        ZStack(alignment: .topLeading) {
             LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
                 .frame(minWidth: 0,
                        maxWidth: .infinity,

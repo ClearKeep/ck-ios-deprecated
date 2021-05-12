@@ -17,22 +17,6 @@ struct AdvanceServerSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            HStack(spacing: 16) {
-                Image("ic_back_white")
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(AppTheme.colors.offWhite.color)
-                    .fixedSize()
-                    .scaledToFit()
-                    .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
-                        self.presentationMode.wrappedValue.dismiss()
-                    })
-                Text("Advance Server Settings")
-                    .fontWeight(.bold)
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.offWhite.color)
-            }.padding(.top, 59)
-            
-            
             HStack(spacing: 8) {
                 Button(action: {
                     isUseCustomServer.toggle()
@@ -67,9 +51,19 @@ struct AdvanceServerSettingsView: View {
             
             Spacer()
         }
-        .padding(16)
-        .navigationBarHidden(true)
-        .navigationBarTitle("", displayMode: .inline)
+        .padding(.horizontal, 16)
+        .applyNavigationBarPlainStyleLight(title: "Advance Server Settings", leftBarItems: {
+            Image("ic_back_white")
+                .frame(width: 40, height: 40)
+                .foregroundColor(AppTheme.colors.offWhite.color)
+                .fixedSize()
+                .scaledToFit()
+                .onTapGesture {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+        }, rightBarItems: {
+            Spacer()
+        })
         .grandientBackground()
         .onTapGesture {
             self.hideKeyboard()

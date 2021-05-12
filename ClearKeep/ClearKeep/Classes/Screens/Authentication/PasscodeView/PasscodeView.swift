@@ -29,61 +29,53 @@ struct PasscodeView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading, spacing: 24) {
-                HStack(spacing: 16) {
-                    Image("ic_back_white")
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .fixedSize()
-                        .scaledToFit()
-                        .onTapGesture(count: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/, perform: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        })
-                    Text("Enter Your OTP")
-                        .fontWeight(.bold)
+        VStack(alignment: .leading, spacing: 24) {
+           Text("Please input a code that has been sent to your phone")
+                .fontWeight(.medium)
+                .font(AppTheme.fonts.textMedium.font)
+                .foregroundColor(AppTheme.colors.background.color)
+                .padding(.top, 20)
+            
+            PassCodeInputField(inputModel: self.passCodeModel)
+                .padding(.vertical, 16)
+                .onReceive([self.passCodeModel.isValid].publisher.first()) { value in
+                    if value && !isPassCodeVerified {
+                        checkInputtedPasscode()
+                    }
+                }
+            
+            HStack() {
+                Spacer()
+                VStack(spacing: 4) {
+                    Text("Don’t get the code?")
                         .font(AppTheme.fonts.textMedium.font)
                         .foregroundColor(AppTheme.colors.offWhite.color)
-                }.padding(.top, 59)
-                
-                Text("Please input a code that has been sent to your phone")
-                    .fontWeight(.medium)
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.background.color)
-                    .padding(.top, 20)
-                
-                PassCodeInputField(inputModel: self.passCodeModel)
-                    .padding(.vertical, 16)
-                    .onReceive([self.passCodeModel.isValid].publisher.first()) { value in
-                        if value && !isPassCodeVerified {
-                            checkInputtedPasscode()
-                        }
-                    }
-                
-                HStack() {
-                    Spacer()
-                    VStack(spacing: 4) {
-                        Text("Don’t get the code?")
-                            .font(AppTheme.fonts.textMedium.font)
+                    
+                    Button(action: resendCode) {
+                        Text("Resend Code")
+                            .font(AppTheme.fonts.linkMedium.font)
                             .foregroundColor(AppTheme.colors.offWhite.color)
                         
-                        Button(action: resendCode) {
-                            Text("Resend Code")
-                                .font(AppTheme.fonts.linkMedium.font)
-                                .foregroundColor(AppTheme.colors.offWhite.color)
-                            
-                        }
                     }
-                    Spacer()
                 }
-                
                 Spacer()
-                
             }
+            
+            Spacer()
         }
-        .padding(16)
-        .navigationBarHidden(true)
-        .navigationBarTitle("", displayMode: .inline)
+        .padding(.horizontal, 16)
+        .applyNavigationBarPlainStyleLight(title: "Enter Your OTP", leftBarItems: {
+            Image("ic_back_white")
+                .frame(width: 40, height: 40)
+                .foregroundColor(AppTheme.colors.offWhite.color)
+                .fixedSize()
+                .scaledToFit()
+                .onTapGesture {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+        }, rightBarItems: {
+            Spacer()
+        })
         .grandientBackground()
         .onTapGesture {
             self.hideKeyboard()
