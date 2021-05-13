@@ -12,6 +12,8 @@ class ServerMainViewModel: ObservableObject {
     
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
     
+    @Published var selectedGroupChatId: Int64? = -1
+    
     func start(ourEncryptionManager: CKAccountSignalEncryptionManager?){
         self.ourEncryptionManager = ourEncryptionManager
     }
