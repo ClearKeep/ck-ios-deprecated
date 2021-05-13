@@ -147,6 +147,12 @@ final class CallManager: NSObject {
     func handleIncomingPushEvent(payload: PKPushPayload, completion: ((NSError?) -> Void)? = nil) {
         let jsonData = JSON(payload.dictionaryPayload)
         print("Payload: \(payload.dictionaryPayload)")
+        if let currentUserId = jsonData["client_id"].string, let savedCurrentUserId = Backend.shared.getUserLogin()?.id, currentUserId != savedCurrentUserId {
+            print("This call is not belong to me")
+            print("\(currentUserId) # \(savedCurrentUserId)")
+            return
+        }
+        
         if let username = jsonData["from_client_name"].string,
            let roomId = jsonData["group_id"].string,
            let clientId = jsonData["from_client_id"].string,

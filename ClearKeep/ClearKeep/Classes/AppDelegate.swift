@@ -74,6 +74,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        // TODO: to check with backend for this key
+        if let currentUserId = userInfo["client_id"] as? String, let savedCurrentUserId = Backend.shared.getUserLogin()?.id, currentUserId != savedCurrentUserId {
+            print("This notification is not belong to me")
+            print("\(currentUserId) # \(savedCurrentUserId)")
+            return
+        }
+        
         let content = UNMutableNotificationContent()
         content.title = userInfo[""] as? String ?? ""
         content.sound = UNNotificationSound.default
@@ -85,8 +92,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         UNUserNotificationCenter.current().add(request)
         
         UIApplication.shared.applicationIconBadgeNumber += 1
-        
-        
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
