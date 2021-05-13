@@ -14,7 +14,7 @@ struct ServerMainView: View {
     @EnvironmentObject var messsagesRealms : RealmMessages
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject var viewModel = ServerMainViewModel()
+    @EnvironmentObject var viewModel: ServerMainViewModel
     
     @State var ourEncryptionManager: CKAccountSignalEncryptionManager?
     @State var pushActive = false
@@ -198,21 +198,25 @@ extension ServerMainView {
     private func listGroupChat() -> some View {
         Group {
             ForEach(self.filteredGroupRealm(isForPeer: false), id: \.groupID) { group in
-                NavigationLink(destination: groupChatDestination(groupModel: group)) {
-                    Text(viewModel.getGroupName(group: group))
-                        .font(AppTheme.fonts.linkSmall.font)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                    
-                    Spacer()
-                    
-                    if viewModel.getGroupUnreadMessageNumber(group: group) > 0 {
-                        Text("\(viewModel.getGroupUnreadMessageNumber(group: group))")
-                            .font(AppTheme.fonts.textXSmall.font)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .frame(width: 24, height: 24, alignment: .center)
-                            .background(AppTheme.colors.secondary.color)
-                            .clipShape(Circle())
-                    }
+                Button(action: {
+                    viewModel.selectedGroupChatId = group.groupID
+                }) {
+                    NavigationLink(destination: groupChatDestination(groupModel: group), tag: group.groupID, selection: $viewModel.selectedGroupChatId, label: {
+                        Text(viewModel.getGroupName(group: group))
+                            .font(AppTheme.fonts.linkSmall.font)
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                        
+                        Spacer()
+                        
+                        if viewModel.getGroupUnreadMessageNumber(group: group) > 0 {
+                            Text("\(viewModel.getGroupUnreadMessageNumber(group: group))")
+                                .font(AppTheme.fonts.textXSmall.font)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .frame(width: 24, height: 24, alignment: .center)
+                                .background(AppTheme.colors.secondary.color)
+                                .clipShape(Circle())
+                        }
+                    })
                 }
             }
         }
@@ -256,23 +260,27 @@ extension ServerMainView {
     private func listDirectMessage() -> some View {
         Group {
             ForEach(self.filteredGroupRealm(isForPeer: true), id: \.groupID) { group in
-                NavigationLink(destination:  groupChatDestination(groupModel: group)) {
-                    ChannelUserAvatar(avatarSize: 24, statusSize: 8, text: viewModel.getGroupName(group: group), font: AppTheme.fonts.linkSmall.font, image: viewModel.getGroupAvatarImage(group: group), status: viewModel.getGroupOnlineStatus(group: group), gradientBackgroundType: .accent)
-                    
-                    Text(viewModel.getGroupName(group: group))
-                        .font(AppTheme.fonts.linkSmall.font)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                    
-                    Spacer()
-                    
-                    if viewModel.getGroupUnreadMessageNumber(group: group) > 0 {
-                        Text("\(viewModel.getGroupUnreadMessageNumber(group: group))")
-                            .font(AppTheme.fonts.textXSmall.font)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .frame(width: 24, height: 24, alignment: .center)
-                            .background(AppTheme.colors.secondary.color)
-                            .clipShape(Circle())
-                    }
+                Button(action: {
+                    viewModel.selectedGroupChatId = group.groupID
+                }) {
+                    NavigationLink(destination: groupChatDestination(groupModel: group), tag: group.groupID, selection: $viewModel.selectedGroupChatId, label: {
+                        ChannelUserAvatar(avatarSize: 24, statusSize: 8, text: viewModel.getGroupName(group: group), font: AppTheme.fonts.linkSmall.font, image: viewModel.getGroupAvatarImage(group: group), status: viewModel.getGroupOnlineStatus(group: group), gradientBackgroundType: .accent)
+                        
+                        Text(viewModel.getGroupName(group: group))
+                            .font(AppTheme.fonts.linkSmall.font)
+                            .foregroundColor(AppTheme.colors.gray1.color)
+                        
+                        Spacer()
+                        
+                        if viewModel.getGroupUnreadMessageNumber(group: group) > 0 {
+                            Text("\(viewModel.getGroupUnreadMessageNumber(group: group))")
+                                .font(AppTheme.fonts.textXSmall.font)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                .frame(width: 24, height: 24, alignment: .center)
+                                .background(AppTheme.colors.secondary.color)
+                                .clipShape(Circle())
+                        }
+                    })
                 }
             }
         }

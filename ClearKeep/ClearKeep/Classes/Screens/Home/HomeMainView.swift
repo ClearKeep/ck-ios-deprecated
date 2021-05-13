@@ -14,7 +14,7 @@ enum HomeMainContentType: String {
 
 struct HomeMainView: View {
     
-    @ObservedObject var mainViewModel: HomeMainViewModel = HomeMainViewModel()
+    @EnvironmentObject var mainViewModel: HomeMainViewModel
     @State private var isShowingServerDetailView = false
     @State var currentUserName: String = ""
     
