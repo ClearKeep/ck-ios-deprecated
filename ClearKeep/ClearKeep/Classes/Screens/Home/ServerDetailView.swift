@@ -239,6 +239,10 @@ struct ServerDetailView: View {
 
         }
         
+        DispatchQueue.main.async {
+            UIApplication.shared.unregisterForRemoteNotifications()
+        }
+        
         // Clean signin state
         let currentSignInType = SocialLogin.shared.currentSignInType
         SocialLogin.shared.saveSignInType(nil)

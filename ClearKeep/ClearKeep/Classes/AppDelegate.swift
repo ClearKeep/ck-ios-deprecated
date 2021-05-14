@@ -137,18 +137,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         UIApplication.shared.applicationIconBadgeNumber = 0
         // cheating fix callkit request failure in the first time
         let _ = CallManager.shared
-        UNUserNotificationCenter.current()
-            .requestAuthorization(
-                options: [.alert, .sound, .badge]) { [weak self] granted, _ in
-                print("Permission granted: \(granted)")
-                guard granted else { return }
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-                
-                self?.getNotificationSettings()
-            }
         
+        askPermissionForRemoteNotification()
         
         let voipRegistry: PKPushRegistry = PKPushRegistry(queue: .main)
         
@@ -205,7 +195,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         return true
     }
 
-        
+    func askPermissionForRemoteNotification() {
+        UNUserNotificationCenter.current()
+            .requestAuthorization(
+                options: [.alert, .sound, .badge]) { [weak self] granted, _ in
+                print("Permission granted: \(granted)")
+                guard granted else { return }
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+                
+                self?.getNotificationSettings()
+            }
+    }
     
     @objc func applicationDidBecomeActive() {
         print("------------ become app")
