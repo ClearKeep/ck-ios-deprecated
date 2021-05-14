@@ -18,12 +18,11 @@ struct GradientBackground: ViewModifier {
                        maxHeight: .infinity,
                        alignment: .topLeading
                 )
-                //.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
                 
             
             content
-                .edgesIgnoringSafeArea(.all)
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
