@@ -196,6 +196,7 @@ struct LoginView: View {
             }
             .keyboardAdaptive()
             .grandientBackground()
+            .edgesIgnoringSafeArea(.all)
         }
     }
 }

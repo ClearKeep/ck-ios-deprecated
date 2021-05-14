@@ -74,6 +74,7 @@ struct RegisterView: View {
         })
         .keyboardAdaptive()
         .grandientBackground()
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
