@@ -439,6 +439,11 @@ extension LoginView {
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
                                 self.viewRouter.current = .tabview
+                                
+                                DispatchQueue.main.async {
+                                    let appDelegate: AppDelegate? = UIApplication.shared.delegate as? AppDelegate
+                                    appDelegate?.askPermissionForRemoteNotification()
+                                }
                             }else {
                                 UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
                                 self.messageAlert = "Something went wrong"
