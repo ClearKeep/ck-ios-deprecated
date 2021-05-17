@@ -27,6 +27,9 @@
 		1027ED0D2628463A00731BFE /* ChannelUserAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED0C2628463A00731BFE /* ChannelUserAvatar.swift */; };
 		1027ED1B26294B1000731BFE /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED1A26294B1000731BFE /* RoundedButton.swift */; };
 		1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027ED372629955F00731BFE /* MessageNotificationView.swift */; };
+		1035971526524516002FE572 /* BlurBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035971426524516002FE572 /* BlurBackground.swift */; };
+		1035971C265247F1002FE572 /* OutgoingCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035971B265247F1002FE572 /* OutgoingCallView.swift */; };
+		1035972126524808002FE572 /* OutgoingCallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035972026524808002FE572 /* OutgoingCallViewModel.swift */; };
 		103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */; };
 		103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
 		103B494C2625766800EDD89B /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */; };
@@ -267,6 +270,9 @@
 		1027ED0C2628463A00731BFE /* ChannelUserAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelUserAvatar.swift; sourceTree = "<group>"; };
 		1027ED1A26294B1000731BFE /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		1027ED372629955F00731BFE /* MessageNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageNotificationView.swift; sourceTree = "<group>"; };
+		1035971426524516002FE572 /* BlurBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurBackground.swift; sourceTree = "<group>"; };
+		1035971B265247F1002FE572 /* OutgoingCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingCallView.swift; sourceTree = "<group>"; };
+		1035972026524808002FE572 /* OutgoingCallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingCallViewModel.swift; sourceTree = "<group>"; };
 		103AECB92609A0FE001EEF78 /* GroupChatMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatMemberView.swift; sourceTree = "<group>"; };
 		103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		103B49482625766800EDD89B /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
@@ -547,6 +553,23 @@
 			path = AppTheme;
 			sourceTree = "<group>";
 		};
+		10359719265245A8002FE572 /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				1035971A265245B9002FE572 /* OutgoingCallView */,
+			);
+			path = Call;
+			sourceTree = "<group>";
+		};
+		1035971A265245B9002FE572 /* OutgoingCallView */ = {
+			isa = PBXGroup;
+			children = (
+				1035971B265247F1002FE572 /* OutgoingCallView.swift */,
+				1035972026524808002FE572 /* OutgoingCallViewModel.swift */,
+			);
+			path = OutgoingCallView;
+			sourceTree = "<group>";
+		};
 		103B4942262575C900EDD89B /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -603,6 +626,7 @@
 				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
 				1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */,
 				10AA45B626429DBC000EB6E1 /* View+Shake.swift */,
+				1035971426524516002FE572 /* BlurBackground.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -683,6 +707,7 @@
 		16208E36252D63F9000A6CE7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				10359719265245A8002FE572 /* Call */,
 				10AA457E264254A7000EB6E1 /* UserProfile */,
 				56205B4225A2FB7400B39D07 /* ViewCustom */,
 				56E7EE5C255A3D0F0060C146 /* MessengerView */,
@@ -1512,6 +1537,8 @@
 				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
 				56694AD925B53C8A008E8EC5 /* CircularProgressShape.swift in Sources */,
 				6880CF5925F9C1C100F3DECE /* group.pb.swift in Sources */,
+				1035971C265247F1002FE572 /* OutgoingCallView.swift in Sources */,
+				1035971526524516002FE572 /* BlurBackground.swift in Sources */,
 				6887F46A257895D900ACB377 /* NotificationService.swift in Sources */,
 				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				100D33642637C55400344D36 /* JoinServerView.swift in Sources */,
@@ -1562,6 +1589,7 @@
 				6880CF5F25F9C1C100F3DECE /* user.pb.swift in Sources */,
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				10237D9B262E86E3005183C4 /* MainMenuButton.swift in Sources */,
+				1035972126524808002FE572 /* OutgoingCallViewModel.swift in Sources */,
 				1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */,
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,

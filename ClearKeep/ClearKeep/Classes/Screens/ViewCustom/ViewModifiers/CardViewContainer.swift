@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CardViewContainer: ViewModifier {
     let level: Int
-    
+    let showShadow: Bool
+
     var borderColor: Color {
         switch level {
         case 1: return AppTheme.colors.gray2.color
@@ -26,12 +27,12 @@ struct CardViewContainer: ViewModifier {
             .clipShape(
                 RoundedRectangle(cornerRadius: 32, style: .continuous)
             )
-            //.shadow(color: borderColor, radius: 3, x: 0, y: 3)
+            .shadow(color: borderColor, radius: showShadow ? 3 : 0, x: 0, y: showShadow ? 3 : 0)
     }
 }
 
 extension View {
-    func embededInCardView(level: Int = 3) -> some View {
-        self.modifier(CardViewContainer(level: level))
+    func embededInCardView(level: Int = 3, showShadow: Bool = false) -> some View {
+        self.modifier(CardViewContainer(level: level, showShadow: showShadow))
     }
 }

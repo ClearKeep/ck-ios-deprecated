@@ -49,6 +49,7 @@ final class CallManager: NSObject {
                    avatar: String? = nil, groupId: Int64, groupToken: String,
                    callType type: Constants.CallType = .audio ,
                    isCallGroup: Bool) {
+        print("### CallManager.startCall")
         let call = CallBox(uuid: UUID(), clientId: clientId, isOutgoing: true)
         call.clientName = clientName
         call.groupToken = groupToken
@@ -57,9 +58,11 @@ final class CallManager: NSObject {
         call.type = type
         call.isCallGroup = isCallGroup
         call.hasStartedConnectingDidChange = { [weak self] in
+            print("### CallManager.startCall hasStartedConnectingDidChange")
             self?.provider.reportOutgoingCall(with: call.uuid, startedConnectingAt: call.connectingDate)
         }
         call.hasConnectedDidChange = { [weak self] in
+            print("### CallManager.startCall hasConnectedDidChange")
             self?.provider.reportOutgoingCall(with: call.uuid, connectedAt: call.connectDate)
         }
 
@@ -77,6 +80,7 @@ final class CallManager: NSObject {
     }
 
     func end(call: CallBox) {
+        print("### CallManager.endCall")
         let endCallAction = CXEndCallAction(call: call.uuid)
         let transaction = CXTransaction()
         transaction.addAction(endCallAction)
@@ -116,6 +120,7 @@ final class CallManager: NSObject {
     }
 
     private func addCall(_ call: CallBox) {
+        print("### CallManager.addCall ")
         calls.append(call)
 
         call.stateDidChange = { [weak self] in
@@ -126,6 +131,7 @@ final class CallManager: NSObject {
     }
 
     private func removeCall(_ call: CallBox) {
+        print("### CallManager.removeCall")
 //        calls = calls.filter {$0 === call}
         if !call.isCallGroup {
             Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
@@ -229,6 +235,7 @@ extension CallManager {
     }
 
     func sendFakeAudioInterruptionNotificationToStartAudioResources() {
+        print("### CallManager.sendFakeAudioInterruptionNotificationToStartAudioResources")
         var userInfo = Dictionary<AnyHashable, Any>()
         let interrupttioEndedRaw = AVAudioSession.InterruptionType.ended.rawValue
         userInfo[AVAudioSessionInterruptionTypeKey] = interrupttioEndedRaw
@@ -236,6 +243,7 @@ extension CallManager {
     }
     
     func configureAudioSession() {
+        print("### CallManager.configureAudioSession")
         // See https://forums.developer.apple.com/thread/64544
         let session = AVAudioSession.sharedInstance()
         do {
@@ -260,6 +268,7 @@ extension CallManager: CXProviderDelegate {
     }
 
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
+        print("### CallManager.provider perform action: CXStartCallAction)")
         /*
             Configure the audio session, but do not start call audio here, since it must be done once
             the audio session has been activated by the system after having its priority elevated.
@@ -280,6 +289,7 @@ extension CallManager: CXProviderDelegate {
 
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
+        print("### CallManager.provider perform action: CXAnswerCallAction)")
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
             action.fail()
@@ -305,6 +315,7 @@ extension CallManager: CXProviderDelegate {
 
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
+        print("### CallManager.provider perform action: CXEndCallAction)")
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
             action.fail()
@@ -322,6 +333,7 @@ extension CallManager: CXProviderDelegate {
     }
 
     func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {
+        print("### CallManager.provider perform action: CXSetHeldCallAction)")
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
             action.fail()
@@ -339,6 +351,7 @@ extension CallManager: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
+        print("### CallManager.provider perform action: CXSetMutedCallAction)")
         // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
         guard let call = self.callWithUUID(uuid: action.callUUID) else {
             action.fail()
@@ -359,6 +372,7 @@ extension CallManager: CXProviderDelegate {
 
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         print("Received \(#function)")
+        print("### CallManager.provider  didActivate audioSession: AVAudioSession)")
         
         // If we are returning from a hold state
         if answerCall?.hasConnected ?? false {

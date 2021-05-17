@@ -122,6 +122,7 @@ final class CallBox: NSObject {
     
     var canStartCall: ((Bool) -> Void)?
     func startCall(withAudioSession audioSession: AVAudioSession?, completion: ((_ success: Bool) -> Void)?) {
+        print("### CallBox.startCall withAudioSession audioSession")
 //        OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance(with: audioSession))
         if videoRoom == nil {
             videoRoom = JanusVideoRoom(delegate: self, token: groupToken)
@@ -141,6 +142,7 @@ final class CallBox: NSObject {
     
     var canAnswerCall: ((Bool) -> Void)?
     func answerCall(withAudioSession audioSession: AVAudioSession, completion: ((_ success: Bool) -> Void)?) {
+        print("### CallBox.answerCall withAudioSession audioSession")
 //        OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance(with: audioSession))
         if videoRoom == nil {
             videoRoom = JanusVideoRoom(delegate: self, token: groupToken)
@@ -162,6 +164,7 @@ final class CallBox: NSObject {
     }
     
     func startJoinRoom() {
+        print("### CallBox.startJoinRoom")
         videoRoom?.joinRoom(withRoomId: roomId, username: clientName ?? "iOS", completeCallback: { [weak self](isSuccess, error) in
             if error != nil || !isSuccess {
                 print(error?.localizedDescription ?? "")
@@ -175,6 +178,7 @@ final class CallBox: NSObject {
     }
     
     func endCall() {
+        print("### CallBox.endCall")
         /*
          Simulate the end taking effect immediately, since
          the example app is not backed by a real network service
