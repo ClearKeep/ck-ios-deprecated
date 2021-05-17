@@ -12,6 +12,7 @@ import AVFoundation
 
 class MessageChatViewModel: ObservableObject, Identifiable {
     var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    
     var isRequesting = false
     var groupId: Int64 = 0
     var clientId: String = ""
@@ -23,34 +24,31 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
     }
     
-//    init(clientId: String, username: String = "", groupId: Int64 = 0, groupType: String) {
-//        self.groupId = groupId
-//        self.clientId = clientId
-//        self.username = username
-//        self.groupType = groupType
-//        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-//    }
-    
-    func setup(clientId: String, username: String = "", groupId: Int64 = 0, groupType: String) {
+    func setup(clientId: String, username: String, groupId: Int64, groupType: String) {
         self.groupId = groupId
         self.clientId = clientId
         self.username = username
         self.groupType = groupType
     }
     
-    func callPeerToPeer(group: GroupModel, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
-        if isRequesting { return }
-        isRequesting = true
-        requestVideoCall(isCallGroup: false, clientId: clientId, groupId: group.groupID, callType: type, completion: completion)
+    func setup(groupId: Int64, groupType: String) {
+        self.groupId = groupId
+        self.groupType = groupType
     }
     
-    func callGroup(group: GroupModel, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
+    func callPeerToPeer(groupId: Int64, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
         if isRequesting { return }
         isRequesting = true
-        requestVideoCall(isCallGroup: true, clientId: clientId, groupId: group.groupID, callType: type, completion: completion)
+        requestVideoCall(isCallGroup: false, clientId: clientId, groupId: groupId, callType: type, completion: completion)
     }
     
-    func requestVideoCall(isCallGroup: Bool ,clientId: String, groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
+    func callGroup(groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
+        if isRequesting { return }
+        isRequesting = true
+        requestVideoCall(isCallGroup: true, groupId: groupId, callType: type, completion: completion)
+    }
+    
+    func requestVideoCall(isCallGroup: Bool ,clientId: String = "", groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
         Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
             self.isRequesting = false
             completion?()
@@ -112,6 +110,23 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     completion?(group)
                 }
             }
+        }
+    }
+    
+    func sendMessage(payload: Data, fromClientId: String, toClientId: String, groupType: String, completion: ((MessageModel) -> ())?) {
+        do {
+            guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                                                                                 name: clientId,
+                                                                                 deviceId: recipientDeviceId) else { return }
+            
+            Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: toClientId , groupId: groupId , groupType: groupType) { (result) in
+                if let result = result {
+                    let messageModel = MessageModel(id: result.id, groupID: result.groupID, groupType: result.groupType, fromClientID: result.fromClientID, fromDisplayName: "", clientID: result.clientID, message: payload, createdAt: result.createdAt, updatedAt: result.updatedAt)
+                    completion?(messageModel)
+                }
+            }
+        } catch {
+            print("Send message error: \(error)")
         }
     }
     

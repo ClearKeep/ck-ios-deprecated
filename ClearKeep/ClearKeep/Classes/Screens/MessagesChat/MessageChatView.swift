@@ -258,12 +258,12 @@ extension MessageChatView {
                     hudVisible = true
                     // CallManager call
                     if let group = groupRealms.getGroup(clientId: clientId, type: groupType) {
-                        viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
+                        viewModel.callPeerToPeer(groupId: group.groupID, clientId: clientId, callType: type) {
                             hudVisible = false
                         }
                     } else {
                         viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                            viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
+                            viewModel.callPeerToPeer(groupId: group.groupID, clientId: clientId, callType: type) {
                                 hudVisible = false
                             }
                         }
