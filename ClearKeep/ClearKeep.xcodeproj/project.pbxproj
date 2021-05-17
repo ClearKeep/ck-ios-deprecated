@@ -227,6 +227,8 @@
 		AACA7258848E78382F486218 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */; };
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
+		CB4DA68E265206B000EFCB96 /* MessageCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */; };
+		CB4DA690265206CA00EFCB96 /* GroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -488,6 +490,8 @@
 		8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8879DC7F394065C06A1F2DE /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCommonView.swift; sourceTree = "<group>"; };
+		CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatView.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1128,6 +1132,8 @@
 			isa = PBXGroup;
 			children = (
 				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
+				CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */,
+				CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */,
 			);
 			path = MessengerView;
 			sourceTree = "<group>";
@@ -1563,6 +1569,7 @@
 				56C7F35E254ACCC600737C5F /* CKSignedPreKey.swift in Sources */,
 				10237D9B262E86E3005183C4 /* MainMenuButton.swift in Sources */,
 				1027ED382629955F00731BFE /* MessageNotificationView.swift in Sources */,
+				CB4DA68E265206B000EFCB96 /* MessageCommonView.swift in Sources */,
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
@@ -1659,6 +1666,7 @@
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
 				10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
+				CB4DA690265206CA00EFCB96 /* GroupChatView.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
