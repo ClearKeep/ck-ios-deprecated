@@ -238,7 +238,7 @@ extension GroupChatView {
         })
     }
     
-    func getIdLastItem() -> String {
+    private func getIdLastItem() -> String {
         let msgInRoom = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
         var id = ""
         if msgInRoom.count > 0 {
@@ -247,21 +247,19 @@ extension GroupChatView {
         return id
     }
     
-    func didReceiveMessage(publication: Message_MessageObjectResponse) {
-        if !realmMessages.isExistMessage(msgId: publication.id) {
-            self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
-                let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
-                var message = messageModel
-                message.fromDisplayName = fromDisplayName
-                self.realmMessages.add(message: message)
-                self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: message.message, lastMessageAt: message.createdAt, idLastMessage: message.id)
-                self.reloadData()
-                self.scrollingProxy.scrollTo(.end)
-            })
-        }
+    private func didReceiveMessage(publication: Message_MessageObjectResponse) {
+        self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
+            let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
+            var message = messageModel
+            message.fromDisplayName = fromDisplayName
+            self.realmMessages.add(message: message)
+            self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: message.message, lastMessageAt: message.createdAt, idLastMessage: message.id)
+            self.reloadData()
+            self.scrollingProxy.scrollTo(.end)
+        })
     }
     
-    func registerWithGroup(_ groupId: Int64) {
+    private func registerWithGroup(_ groupId: Int64) {
         if let group = self.realmGroups.filterGroup(groupId: groupId) {
             if !group.isRegister {
                 if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.viewModel.ourEncryptionManager {
@@ -292,7 +290,7 @@ extension GroupChatView {
         }
     }
     
-    func getMessageInRoom() {
+    private func getMessageInRoom() {
         if viewModel.groupId != 0 {
             Backend.shared.getMessageInRoom(viewModel.groupId,
                                             self.realmGroups.getTimeSyncInGroup(groupID: viewModel.groupId)) { (result, error) in
@@ -351,12 +349,6 @@ extension GroupChatView {
             self.messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
         }
     }
-    
-//    private func send() {
-//        let trimmedText = messageStr.trimmingCharacters(in: .whitespacesAndNewlines)
-//        if trimmedText.isEmpty { return }
-//        self.sendMessage(messageStr: trimmedText)
-//    }
     
     private func sendMessage(messageStr: String) {
         func handleSentMessage(messageModel: MessageModel) {
