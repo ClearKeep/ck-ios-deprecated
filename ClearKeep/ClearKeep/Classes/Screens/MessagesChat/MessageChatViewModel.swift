@@ -11,17 +11,30 @@ import SwiftUI
 import AVFoundation
 
 class MessageChatViewModel: ObservableObject, Identifiable {
-    var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    // MARK: - Constants
+    private let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
-    var isRequesting = false
+    // MARK: - Variables
+    var ourEncryptionManager: CKAccountSignalEncryptionManager?
     var groupId: Int64 = 0
     var clientId: String = ""
     var username: String = ""
     var groupType: String = "peer"
-    @Published var recipientDeviceId: UInt32 = 0
     
+    private var isRequesting = false
+    private var isGroup: Bool = false
+    
+    // MARK: - Published
+    @Published var recipientDeviceId: UInt32 = 0
+    @Published var isForceProcessKey: Bool = true
+    
+    // MARK: - Init & Deinit
     init() {
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
+    }
+    
+    deinit {
+        print("deinit: \(self)")
     }
     
     func setup(clientId: String, username: String, groupId: Int64, groupType: String) {
@@ -29,11 +42,13 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         self.clientId = clientId
         self.username = username
         self.groupType = groupType
+        isGroup = false
     }
     
     func setup(groupId: Int64, groupType: String) {
         self.groupId = groupId
         self.groupType = groupType
+        isGroup = true
     }
     
     func callPeerToPeer(groupId: Int64, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
@@ -242,5 +257,117 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 print("processKeyStoreOnlyPublicKey exception: \(error)")
             }
         }
+    }
+    
+    func decryptionMessage(publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())?) {
+        guard let ourEncryptionMng = ourEncryptionManager else { return }
+        
+        if isGroup {
+            guard let senderAccount = self.getSenderAccount(fromClientID: publication.fromClientID) else {
+                return
+            }
+            if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupId) {
+                let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: publication.fromClientID, deviceId: senderAccount.deviceId)
+                
+                let messageModel = MessageModel(id: publication.id,
+                                                groupID: publication.groupID,
+                                                groupType: publication.groupType,
+                                                fromClientID: publication.fromClientID,
+                                                fromDisplayName: "",
+                                                clientID: publication.clientID,
+                                                message: messageDecryption,
+                                                createdAt: publication.createdAt,
+                                                updatedAt: publication.updatedAt)
+                completion?(messageModel)
+            } else {
+                requestKeyInGroup(byGroupId: groupId, publication: publication, completion: completion)
+                return
+            }
+        } else {
+            let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: clientId, deviceId: 111)
+            
+            let messageModel = MessageModel(id: publication.id,
+                                            groupID: publication.groupID,
+                                            groupType: publication.groupType,
+                                            fromClientID: publication.fromClientID,
+                                            fromDisplayName: "",
+                                            clientID: publication.clientID,
+                                            message: messageDecryption,
+                                            createdAt: publication.createdAt,
+                                            updatedAt: publication.updatedAt)
+            completion?(messageModel)
+        }
+    }
+    
+    private func decryptedMessage(messageData: Data, fromClientID: String, deviceId: Int32) -> Data {
+        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
+        guard let ourEncryptionMng = self.ourEncryptionManager else { return messageError }
+        do {
+            if isGroup {
+                return try ourEncryptionMng.decryptFromGroup(messageData,
+                                                             groupId: groupId,
+                                                             name: fromClientID,
+                                                             deviceId: UInt32(deviceId))
+            } else {
+                return try ourEncryptionMng.decryptFromAddress(messageData,
+                                                               name: fromClientID,
+                                                               deviceId: UInt32(deviceId))
+            }
+        } catch {
+            return messageError
+        }
+    }
+    
+    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())?) {
+        if self.isForceProcessKey {
+            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
+                                                         groupId: groupId) {(result, error, response) in
+                guard let groupResponse = response else {
+                    print("Request prekey \(groupId) fail")
+                    return
+                }
+                self.processSenderKey(byGroupId: groupResponse.groupID,
+                                      responseSenderKey: groupResponse.clientKey)
+                // decrypt message again
+                self.decryptionMessage(publication: publication, completion: completion)
+                self.isForceProcessKey = false
+            }
+        }
+    }
+    
+    func processSenderKey(byGroupId groupId: Int64,
+                          responseSenderKey: Signal_GroupClientKeyObject) {
+        let deviceID = 444
+        if let ourAccountEncryptMng = self.ourEncryptionManager,
+           let connectionDb = self.connectionDb {
+            // save account infor
+            connectionDb.readWrite { (transaction) in
+                var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
+                if account == nil {
+                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
+                    account?.save(with: transaction)
+                }
+            }
+            do {
+                let addresss = SignalAddress(name: responseSenderKey.clientID,
+                                             deviceId: Int32(deviceID))
+                try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
+                                                         address: addresss,
+                                                         skdmDtata: responseSenderKey.clientKeyDistribution)
+            } catch {
+                print("processSenderKey error: \(error)")
+            }
+        }
+    }
+    
+    private func getSenderAccount(fromClientID: String) -> CKAccount? {
+        if let connectionDb = self.connectionDb {
+            var account: CKAccount?
+            connectionDb.read { (transaction) in
+                account = CKAccount.allAccounts(withUsername: fromClientID, transaction: transaction).first
+            }
+            return account
+        }
+        return nil
     }
 }

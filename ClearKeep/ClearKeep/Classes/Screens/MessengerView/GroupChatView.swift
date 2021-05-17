@@ -21,11 +21,9 @@ struct GroupChatView: View {
     @State private var alertVisible = false
     @State private var messageStr = ""
     @State private var messages = [MessageModel]()
-    @State private var isForceProcessKey = true
     
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
-    private let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     private let scrollingProxy = ListScrollingProxy()
     
     private var userName: String = ""
@@ -122,7 +120,7 @@ struct GroupChatView: View {
                     // appeding message...
                     // adding animation...
                     withAnimation(.easeIn){
-                        self.send()
+                        self.sendMessage(messageStr: messageStr)
                     }
                     messageStr = ""
                 }, label: {
@@ -160,19 +158,27 @@ struct GroupChatView: View {
             self.getMessageInRoom()
         }
         .onDisappear(){
-            UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+            if isGroup() {
+                UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
+            } else {
+                UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
                 if publication.groupType == "group"{
                     if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-                        self.isForceProcessKey = true
-                        self.decryptionMessage(publication: publication)
+                        self.viewModel.isForceProcessKey = true
+                        self.didReceiveMessage(publication: publication)
                     }
                 }
                 if publication.groupType == "peer" {
-                    self.didReceiveMessage(userInfo: obj.userInfo)
+                    if let clientId = userInfo["clientId"] as? String,
+                       clientId == self.clientId,
+                       !realmMessages.isExistMessage(msgId: publication.id) {
+                        self.didReceiveMessage(publication: publication)
+                    }
                 }
             }
         }
@@ -192,12 +198,6 @@ struct GroupChatView: View {
                    }),
                    secondaryButton: .default(Text("Cancel")))
         })
-    }
-}
-
-struct GroupChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        GroupChatView(userName: "1", clientId: "1").environmentObject(RealmGroups()).environmentObject(RealmMessages())
     }
 }
 
@@ -247,106 +247,17 @@ extension GroupChatView {
         return id
     }
     
-    func didReceiveMessage(userInfo: [AnyHashable : Any]?) {
-        if let userInfo = userInfo,
-           let clientId = userInfo["clientId"] as? String,
-           let publication = userInfo["publication"] as? Message_MessageObjectResponse,
-           //            publication.groupID.isEmpty,
-           clientId == self.clientId {
-            if !realmMessages.isExistMessage(msgId: publication.id){
-                if let ourEncryptionMng = self.viewModel.ourEncryptionManager {
-                    do {
-                        let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                                    name: clientId,
-                                                                                    deviceId: UInt32(111))
-                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                        print("Message decryption: \(messageDecryption ?? "Empty error")")
-
-                        DispatchQueue.main.async {
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: self.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: decryptedData,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            self.realmMessages.add(message: post)
-                            self.realmGroups.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            self.reloadData()
-                            self.scrollingProxy.scrollTo(.end)
-                        }
-                    } catch {
-                        //save message error when can't decrypt
-                        DispatchQueue.main.async {
-                            let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: self.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: messageError,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            self.realmMessages.add(message: post)
-                            self.realmGroups.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            self.reloadData()
-                            self.scrollingProxy.scrollTo(.end)
-                        }
-                        print("Decryption message error: \(error)")
-                    }
-                }
-            }
-        }
-    }
-    
-    func decryptionMessage(publication: Message_MessageObjectResponse) {
-        if let ourEncryptionMng = self.viewModel.ourEncryptionManager,
-           let connectionDb = self.connectionDb {
-            do {
-                var account: CKAccount?
-                connectionDb.read { (transaction) in
-                    account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
-                }
-                if let senderAccount = account {
-                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: viewModel.groupId) {
-                        let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                                  groupId: viewModel.groupId,
-                                                                                  name: publication.fromClientID,
-                                                                                  deviceId: UInt32(senderAccount.deviceId))
-                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                        print("Message decryption: \(messageDecryption ?? "Empty error")")
-                        
-                        DispatchQueue.main.async {
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: self.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: decryptedData,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            self.realmMessages.add(message: post)
-                            self.realmGroups.updateLastMessage(groupID: viewModel.groupId, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            self.reloadData()
-                        }
-                        
-                        return
-                    }else {
-                        requestKeyInGroup(byGroupId: viewModel.groupId, publication: publication)
-                    }
-                }else {
-                    requestKeyInGroup(byGroupId: viewModel.groupId, publication: publication)
-                }
-            } catch {
-                print("Decryption message error: \(error)")
-                requestKeyInGroup(byGroupId: viewModel.groupId, publication: publication)
-            }
-            //            requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
+    func didReceiveMessage(publication: Message_MessageObjectResponse) {
+        if !realmMessages.isExistMessage(msgId: publication.id) {
+            self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
+                let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
+                var message = messageModel
+                message.fromDisplayName = fromDisplayName
+                self.realmMessages.add(message: message)
+                self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: message.message, lastMessageAt: message.createdAt, idLastMessage: message.id)
+                self.reloadData()
+                self.scrollingProxy.scrollTo(.end)
+            })
         }
     }
     
@@ -377,51 +288,6 @@ extension GroupChatView {
                         
                     }
                 }
-            }
-        }
-    }
-    
-    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
-        
-        if self.isForceProcessKey {
-            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-                                                         groupId: groupId) {(result, error, response) in
-                guard let groupResponse = response else {
-                    print("Request prekey \(groupId) fail")
-                    return
-                }
-                self.processSenderKey(byGroupId: groupResponse.groupID,
-                                      responseSenderKey: groupResponse.clientKey)
-                // decrypt message again
-                self.decryptionMessage(publication: publication)
-                self.isForceProcessKey = false
-            }
-        }
-    }
-    
-    private func processSenderKey(byGroupId groupId: Int64,
-                                  responseSenderKey: Signal_GroupClientKeyObject) {
-        
-        let deviceID = 444
-        
-        if let ourAccountEncryptMng = self.viewModel.ourEncryptionManager,
-           let connectionDb = self.connectionDb {
-            // save account infor
-            connectionDb.readWrite { (transaction) in
-                var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
-                if account == nil {
-                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
-                    account?.save(with: transaction)
-                }
-            }
-            do {
-                let addresss = SignalAddress(name: responseSenderKey.clientID,
-                                             deviceId: Int32(deviceID))
-                try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
-                                                         address: addresss,
-                                                         skdmDtata: responseSenderKey.clientKeyDistribution)
-            } catch {
-                print("processSenderKey error: \(error)")
             }
         }
     }
@@ -486,13 +352,13 @@ extension GroupChatView {
         }
     }
     
-    private func send() {
-        let trimmedText = messageStr.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmedText.isEmpty { return }
-        self.sendMessage(messageStr: trimmedText)
-    }
+//    private func send() {
+//        let trimmedText = messageStr.trimmingCharacters(in: .whitespacesAndNewlines)
+//        if trimmedText.isEmpty { return }
+//        self.sendMessage(messageStr: trimmedText)
+//    }
     
-    func sendMessage(messageStr: String) {
+    private func sendMessage(messageStr: String) {
         func handleSentMessage(messageModel: MessageModel) {
             let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
             var message = messageModel
@@ -506,10 +372,9 @@ extension GroupChatView {
             self.scrollingProxy.scrollTo(.end)
         }
         
-        if messageStr.trimmingCharacters(in: .whitespaces).isEmpty {
+        if messageStr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return
         }
-        
         
         guard let payload = messageStr.data(using: .utf8) else {
             return
@@ -538,8 +403,11 @@ extension GroupChatView {
         }
         self.reloadData()
     }
-    
-    func createTitleView() -> some View {
+}
+
+// MARK - Private function setupView
+extension GroupChatView {
+    private func createTitleView() -> some View {
         Group {
             if isGroup() {
                 NavigationLink(
