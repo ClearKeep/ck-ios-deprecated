@@ -287,7 +287,7 @@ extension GroupMessageChatView {
                 if status == .alreadyAuthorized || status == .justAuthorized {
                     hudVisible = true
                     // CallManager call
-                    viewModel.callGroup(group: groupModel, callType: type) {
+                    viewModel.callGroup(groupId: groupModel.groupID, callType: type) {
                         hudVisible = false
                     }
                 } else {

@@ -229,6 +229,7 @@
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
 		CB4DA68E265206B000EFCB96 /* MessageCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */; };
 		CB4DA690265206CA00EFCB96 /* GroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */; };
+		CB4DA694265269C500EFCB96 /* RootPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -492,6 +493,7 @@
 		B8879DC7F394065C06A1F2DE /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCommonView.swift; sourceTree = "<group>"; };
 		CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatView.swift; sourceTree = "<group>"; };
+		CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootPresentationMode.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1159,6 +1161,7 @@
 				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
 				10D650BB262681300018528B /* UIFont+Font.swift */,
 				10AA457926423C6A000EB6E1 /* Binding+Extension.swift */,
+				CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1626,6 +1629,7 @@
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				1013C95C2608A66B0081C135 /* GroupChatDetailView.swift in Sources */,
 				686F25F5255E774600953C5E /* Constant.swift in Sources */,
+				CB4DA694265269C500EFCB96 /* RootPresentationMode.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
 				56694ADB25B53C8A008E8EC5 /* CircularProgressIndicator.swift in Sources */,
 				68A2AC8625C3ABF0002873E5 /* ForgotPassWordView.swift in Sources */,
