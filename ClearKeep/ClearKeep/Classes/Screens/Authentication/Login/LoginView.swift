@@ -68,7 +68,7 @@ struct LoginView: View {
                                 
                                 HStack {
                                     NavigationLink(destination: AdvanceServerSettingsView(isUseCustomServer: $loginViewModel.isUseCustomServer, customServerURL: $loginViewModel.customServerURL, customServerPort: $loginViewModel.customServerPort)) {
-                                        Text("Advance Server Settings")
+                                        Text("Advanced Server Settings")
                                             .font(AppTheme.fonts.linkXSmall.font)
                                             .foregroundColor(AppTheme.colors.offWhite.color)
                                             .frame(height: 30)
