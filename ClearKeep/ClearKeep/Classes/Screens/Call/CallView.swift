@@ -84,12 +84,13 @@ struct CallHeaderView: View {
     
     var body: some View {
         // Top bar
-        if viewModel.callStatus == .answered,
-           viewModel.callType == Constants.CallType.audio {
+//        if viewModel.callStatus == .answered,
+//           viewModel.callType == Constants.CallType.audio
+//        {
             HStack() {
                 Spacer()
                 // button camera switch
-                if viewModel.callType != .audio { // TODO: check requesting audio
+//                if viewModel.callType != .audio { // TODO: check requesting audio
 //                    Button(action: {
 //                        viewModel.isVideoRequesting = false
 //                    }, label: {
@@ -100,7 +101,7 @@ struct CallHeaderView: View {
 //                            .background(Color(.lightGray).opacity(0.7))
 //                            .clipShape(Circle())
 //                    })
-                } else {
+//                } else {
                     Button(action: {
                         viewModel.updateCallTypeVideo()
                     }, label: {
@@ -117,8 +118,9 @@ struct CallHeaderView: View {
                         .background(Color(.lightGray).opacity(0.7))
                         .clipShape(Capsule())
                     }).frame(width: 65)
-                }
-            }.padding([.trailing, .top])
+//                }
+//            }
+            .padding([.trailing, .top])
         }
     }
 }
@@ -199,12 +201,23 @@ struct CallActionsView: View {
                 Spacer()
 
                 VStack {
-                    Color.white.opacity(0.5)
-                        .frame(width: 45, height: 8)
-                        .clipShape(Capsule())
-                        .padding(.top, 5)
-                
                     HStack(spacing: 0) {
+                        Spacer()
+                        
+                        /// Button micro
+                        Button(action: {
+                            viewModel.microChange()
+                        }, label: {
+                            Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
+                                .font(.system(size: 22))
+                                .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
+                                .padding()
+                                .background(Color.white.opacity(viewModel.microEnable ? 0.2 : 1))
+                                .clipShape(Circle())
+                        }).frame(width: reader.size.width * 0.2)
+                        
+                        Spacer()
+                        
                         // Button camera
                         Button(action: {
                             viewModel.cameraChange()
@@ -217,6 +230,9 @@ struct CallActionsView: View {
                                 .clipShape(Circle())
                         }).frame(width: reader.size.width * 0.2)
 
+                        Spacer()
+                        
+                        /*
                         // Button speaker
                         Button(action: {
                             viewModel.speakerChange()
@@ -228,7 +244,8 @@ struct CallActionsView: View {
                                 .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
                                 .clipShape(Circle())
                         }).frame(width: reader.size.width * 0.2)
-
+                        */
+                        
                         // button swipe camera
                         Button(action: {
                             viewModel.cameraSwipeChange()
@@ -241,17 +258,8 @@ struct CallActionsView: View {
                                 .clipShape(Circle())
                         }).frame(width: reader.size.width * 0.2)
 
-                        // button micro
-                        Button(action: {
-                            viewModel.microChange()
-                        }, label: {
-                            Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
-                                .padding()
-                                .background(Color.white.opacity(viewModel.microEnable ? 0.2 : 1))
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
+                        Spacer()
+                        
                         // button end call
                         Button(action: {
                             viewModel.endCall()
@@ -264,12 +272,13 @@ struct CallActionsView: View {
                                 .background(Color.red)
                                 .clipShape(Circle())
                         }).frame(width: reader.size.width * 0.2)
+                        
+                        Spacer()
                     }
                     .padding(.bottom, 14)
                     .padding(.top, 5)
                 }
                 .background(Color.black.opacity(0.5))
-                .clipShape(RoundedTopShape())
             }.background(Color.clear)
         }.background(Color.clear)
     }
@@ -282,8 +291,10 @@ struct CallActionsView: View {
 //}
 //
 //
-//struct CallView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CallView()
-//    }
-//}
+struct CallView_Previews: PreviewProvider {
+    static var previews: some View {
+        CallView()
+        
+        CallActionsView(viewModel: CallViewModel())
+    }
+}

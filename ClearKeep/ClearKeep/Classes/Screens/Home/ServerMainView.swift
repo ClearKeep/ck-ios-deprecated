@@ -15,7 +15,7 @@ struct ServerMainView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @EnvironmentObject var viewModel: ServerMainViewModel
-    
+
     @State var ourEncryptionManager: CKAccountSignalEncryptionManager?
     @State var pushActive = false
     @State var isForceProcessKeyInGroup = true

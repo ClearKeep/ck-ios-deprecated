@@ -556,6 +556,8 @@
 		10359719265245A8002FE572 /* Call */ = {
 			isa = PBXGroup;
 			children = (
+				6873AA8C259B1D4D009FD141 /* CallView.swift */,
+				56205B3225A2CC2C00B39D07 /* CallViewModel.swift */,
 				1035971A265245B9002FE572 /* OutgoingCallView */,
 			);
 			path = Call;
@@ -721,8 +723,6 @@
 				16E32C6D2538330D007ED99A /* MasterView.swift */,
 				16E32C7225383372007ED99A /* MenuView.swift */,
 				16E32C772538338D007ED99A /* ProfileView.swift */,
-				6873AA8C259B1D4D009FD141 /* CallView.swift */,
-				56205B3225A2CC2C00B39D07 /* CallViewModel.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
