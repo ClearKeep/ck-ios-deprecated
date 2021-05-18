@@ -194,84 +194,90 @@ struct CallActionsView: View {
     @ObservedObject var viewModel: CallViewModel
 
     var body: some View {
-        GeometryReader{ reader in
-            VStack {
-                Spacer()
+        Group {
+            if viewModel.callGroup {
+                GeometryReader { reader in
+                    VStack {
+                        Spacer()
 
-                VStack {
-                    Color.white.opacity(0.5)
-                        .frame(width: 45, height: 8)
-                        .clipShape(Capsule())
-                        .padding(.top, 5)
-                
-                    HStack(spacing: 0) {
-                        // Button camera
-                        Button(action: {
-                            viewModel.cameraChange()
-                        }, label: {
-                            Image(systemName: viewModel.cameraOn ? "video.fill" : "video.slash.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
-                                .padding()
-                                .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
+                        VStack {
+                            Color.white.opacity(0.5)
+                                .frame(width: 45, height: 8)
+                                .clipShape(Capsule())
+                                .padding(.top, 5)
+                        
+                            HStack(spacing: 0) {
+                                // Button camera
+                                Button(action: {
+                                    viewModel.cameraChange()
+                                }, label: {
+                                    Image(systemName: viewModel.cameraOn ? "video.fill" : "video.slash.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
+                                        .padding()
+                                        .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
+                                        .clipShape(Circle())
+                                }).frame(width: reader.size.width * 0.2)
 
-                        // Button speaker
-                        Button(action: {
-                            viewModel.speakerChange()
-                        }, label: {
-                            Image(systemName: !viewModel.speakerEnable ? "speaker.1.fill" : "speaker.2.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
-                                .padding()
-                                .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
+                                // Button speaker
+                                Button(action: {
+                                    viewModel.speakerChange()
+                                }, label: {
+                                    Image(systemName: !viewModel.speakerEnable ? "speaker.1.fill" : "speaker.2.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(viewModel.cameraOn ? Color.white: Color.black)
+                                        .padding()
+                                        .background(Color.white.opacity(viewModel.cameraOn ? 0.2 : 1))
+                                        .clipShape(Circle())
+                                }).frame(width: reader.size.width * 0.2)
 
-                        // button swipe camera
-                        Button(action: {
-                            viewModel.cameraSwipeChange()
-                        }, label: {
-                            Image(systemName: "camera.rotate.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .background(Color.white.opacity(0.2))
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
+                                // button swipe camera
+                                Button(action: {
+                                    viewModel.cameraSwipeChange()
+                                }, label: {
+                                    Image(systemName: "camera.rotate.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(Color.white)
+                                        .padding()
+                                        .background(Color.white.opacity(0.2))
+                                        .clipShape(Circle())
+                                }).frame(width: reader.size.width * 0.2)
 
-                        // button micro
-                        Button(action: {
-                            viewModel.microChange()
-                        }, label: {
-                            Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
-                                .padding()
-                                .background(Color.white.opacity(viewModel.microEnable ? 0.2 : 1))
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
-                        // button end call
-                        Button(action: {
-                            viewModel.endCall()
-                            //                            isShowCall = false
-                        }, label: {
-                            Image(systemName: "phone.fill")
-                                .font(.system(size: 22))
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .background(Color.red)
-                                .clipShape(Circle())
-                        }).frame(width: reader.size.width * 0.2)
-                    }
-                    .padding(.bottom, 14)
-                    .padding(.top, 5)
-                }
-                .background(Color.black.opacity(0.5))
-                .clipShape(RoundedTopShape())
-            }.background(Color.clear)
-        }.background(Color.clear)
+                                // button micro
+                                Button(action: {
+                                    viewModel.microChange()
+                                }, label: {
+                                    Image(systemName: viewModel.microEnable ? "mic.fill": "mic.slash.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(viewModel.microEnable ? Color.white: Color.black)
+                                        .padding()
+                                        .background(Color.white.opacity(viewModel.microEnable ? 0.2 : 1))
+                                        .clipShape(Circle())
+                                }).frame(width: reader.size.width * 0.2)
+                                // button end call
+                                Button(action: {
+                                    viewModel.endCall()
+                                    //                            isShowCall = false
+                                }, label: {
+                                    Image(systemName: "phone.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(Color.white)
+                                        .padding()
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                }).frame(width: reader.size.width * 0.2)
+                            }
+                            .padding(.bottom, 14)
+                            .padding(.top, 5)
+                        }
+                        .background(Color.black.opacity(0.5))
+                        .clipShape(RoundedTopShape())
+                    }.background(Color.clear)
+                }.background(Color.clear)
+            } else {
+                PeerCallView(viewModel: viewModel)
+            }
+        }
     }
 }
 
