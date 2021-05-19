@@ -150,10 +150,9 @@ extension ServerMainView {
     private func groupChatDestination(groupModel: GroupModel) -> some View {
         Group {
             if groupModel.groupType == "peer" {
-                MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
-                                groupID : groupModel.groupID,
-                                userName: viewModel.getPeerReceiveName(inGroup: groupModel),
-                                groupType: groupModel.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                GroupChatView(userName: viewModel.getPeerReceiveName(inGroup: groupModel),
+                              clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
+                              groupId: groupModel.groupID).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             } else {
                 GroupMessageChatView(groupModel: groupModel).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             }

@@ -284,18 +284,24 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 return
             }
         } else {
-            let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: clientId, deviceId: 111)
-            
-            let messageModel = MessageModel(id: publication.id,
-                                            groupID: publication.groupID,
-                                            groupType: publication.groupType,
-                                            fromClientID: publication.fromClientID,
-                                            fromDisplayName: "",
-                                            clientID: publication.clientID,
-                                            message: messageDecryption,
-                                            createdAt: publication.createdAt,
-                                            updatedAt: publication.updatedAt)
-            completion?(messageModel)
+            if ourEncryptionMng.sessionRecordExistsForUsername(clientId, deviceId: 111) {
+                let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: clientId, deviceId: 111)
+                
+                let messageModel = MessageModel(id: publication.id,
+                                                groupID: publication.groupID,
+                                                groupType: publication.groupType,
+                                                fromClientID: publication.fromClientID,
+                                                fromDisplayName: "",
+                                                clientID: publication.clientID,
+                                                message: messageDecryption,
+                                                createdAt: publication.createdAt,
+                                                updatedAt: publication.updatedAt)
+                completion?(messageModel)
+            } else {
+                requestBundleRecipient(byClientId: clientId, {
+                    self.decryptionMessage(publication: publication, completion: completion)
+                })
+            }
         }
     }
     

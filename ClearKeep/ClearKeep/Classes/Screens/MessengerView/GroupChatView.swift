@@ -87,6 +87,7 @@ struct GroupChatView: View {
                                 ListScrollingHelper(proxy: self.scrollingProxy)
                             )
                     }
+                    .padding(.bottom, 40)
                     .onAppear(perform: {
                         self.scrollingProxy.scrollTo(.end)
                     })
