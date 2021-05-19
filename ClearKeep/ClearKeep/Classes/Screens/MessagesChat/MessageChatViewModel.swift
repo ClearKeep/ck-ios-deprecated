@@ -128,16 +128,49 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func sendMessage(payload: Data, fromClientId: String, toClientId: String, groupType: String, completion: ((MessageModel) -> ())?) {
+    func sendMessage(payload: Data, fromClientId: String, completion: ((MessageModel) -> ())?) {
         do {
-            guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
-                                                                                 name: clientId,
-                                                                                 deviceId: recipientDeviceId) else { return }
-            
-            Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: toClientId , groupId: groupId , groupType: groupType) { (result) in
-                if let result = result {
-                    let messageModel = MessageModel(id: result.id, groupID: result.groupID, groupType: result.groupType, fromClientID: result.fromClientID, fromDisplayName: "", clientID: result.clientID, message: payload, createdAt: result.createdAt, updatedAt: result.updatedAt)
-                    completion?(messageModel)
+            if isGroup {
+                guard let senderAccount = self.getSenderAccount(fromClientID: fromClientId),
+                      let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
+                                                                                   groupId: groupId,
+                                                                                   name: fromClientId,
+                                                                                   deviceId: UInt32(senderAccount.deviceId)) else { return }
+                
+                Backend.shared.send(encryptedData.data, fromClientId: fromClientId, groupId: groupId, groupType: groupType) { (result) in
+                    if let result = result {
+                        DispatchQueue.main.async {
+                            let messageModel = MessageModel(id: result.id,
+                                                            groupID: result.groupID,
+                                                            groupType: result.groupType,
+                                                            fromClientID: result.fromClientID,
+                                                            fromDisplayName: "",
+                                                            clientID: result.clientID,
+                                                            message: payload,
+                                                            createdAt: result.createdAt,
+                                                            updatedAt: result.updatedAt)
+                            completion?(messageModel)
+                        }
+                    }
+                }
+            } else {
+                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
+                                                                                     name: clientId,
+                                                                                     deviceId: recipientDeviceId) else { return }
+                
+                Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: clientId , groupId: groupId , groupType: groupType) { (result) in
+                    if let result = result {
+                        let messageModel = MessageModel(id: result.id,
+                                                        groupID: result.groupID,
+                                                        groupType: result.groupType,
+                                                        fromClientID: result.fromClientID,
+                                                        fromDisplayName: "",
+                                                        clientID: result.clientID,
+                                                        message: payload,
+                                                        createdAt: result.createdAt,
+                                                        updatedAt: result.updatedAt)
+                        completion?(messageModel)
+                    }
                 }
             }
         } catch {
