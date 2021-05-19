@@ -86,19 +86,26 @@ extension CallActionButtonView {
 
 struct CallActionButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        VStack(spacing: 20) {
         CallActionButtonView(onIcon: "Microphone",
                              offIcon: "Microphone-off",
                              isOn: true,
                              title: "Mute",
                              action: {})
 
-        CallActionButtonView(onIcon: "Phone-off",
-                             offIcon: "Phone-off",
-                             isOn: true,
-                             title: "Voice",
-                             styleButton: .voice,
-                             action: {})
+            CallActionButtonView(onIcon: "Speaker",
+                                 offIcon: "Speaker",
+                                 isOn: true,
+                                 title: "Speaker",
+                                 styleButton: .voice,
+                                 action: {})
+
+            CallActionButtonView(onIcon: "Phone-off",
+                                 offIcon: "Phone-off",
+                                 isOn: true,
+                                 title: "End Call",
+                                 styleButton: .endCall,
+                                 action: {})
         }
         .background(Color.green)
     }

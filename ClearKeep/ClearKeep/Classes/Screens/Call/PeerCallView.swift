@@ -20,16 +20,19 @@ struct PeerCallView: View {
                     .blur(radius: 70)
                     
                 if viewModel.callType == .video {
-                    VideoContainerView(viewModel: viewModel)
-                    CallVideoActionView(viewModel: viewModel)
+                    VStack(spacing: 0) {
+                        VideoContainerView(viewModel: viewModel)
+                        CallVideoActionView(viewModel: viewModel)
+                            .frame(height: 120)
+                    }
+                    .edgesIgnoringSafeArea(.all)
+                    
+                    SingleVideoCallInfoView(viewModel: viewModel)
                 } else {
-                    singleCallInfoView()
                     CallVoiceActionView(viewModel: viewModel)
+                    SingleVoiceCallInfoView(viewModel: viewModel)
                 }
             }
-            .frame(width: reader.size.width)
-            .grandientBackground()
-            .edgesIgnoringSafeArea(.all)
             .onAppear(perform: {
                 if let callBox = CallManager.shared.calls.first {
                     viewModel.updateCallBox(callBox: callBox)
@@ -39,10 +42,20 @@ struct PeerCallView: View {
                 viewModel.didReceiveMessageGroup(userInfo: obj.userInfo)
             })
         }
+    }
+}
 
+struct SingleVoiceCallInfoView: View {
+    @ObservedObject var viewModel: CallViewModel
+    
+    func image(withName: String?) -> Image? {
+        guard let name = withName, !name.isEmpty else {
+            return nil
+        }
+        return Image(name)
     }
     
-    private func singleCallInfoView() -> some View {
+    var body: some View {
         VStack(spacing: 32) {
             Spacer()
                 .frame(height: 60)
@@ -53,7 +66,7 @@ struct PeerCallView: View {
                     .foregroundColor(AppTheme.colors.gray5.color)
             }
             
-            ChannelUserAvatar(avatarSize: 160, text: viewModel.getUserName(), font: AppTheme.fonts.defaultFont(ofSize: 72).font, image: Image("ic_app"), status: .none, gradientBackgroundType: GradientBackgroundType.accent)
+            ChannelUserAvatar(avatarSize: 160, text: viewModel.getUserName(), font: AppTheme.fonts.defaultFont(ofSize: 72).font, image: image(withName: viewModel.callBox?.avatar), status: .none, gradientBackgroundType: GradientBackgroundType.accent)
             
             VStack(spacing: 8) {
                 Text(viewModel.getUserName())
@@ -71,9 +84,60 @@ struct PeerCallView: View {
             
             Spacer()
         }
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
+struct SingleVideoCallInfoView: View {
+    @ObservedObject var viewModel: CallViewModel
+    
+    var body: some View {
+        VStack(spacing: 32) {
+            Spacer()
+                .frame(height: 60)
+            
+            if viewModel.callStatus != .answered {
+                Text(viewModel.getStatusMessage())
+                    .font(AppTheme.fonts.textMedium.font)
+                    .foregroundColor(AppTheme.colors.gray5.color)
+                
+                Text(viewModel.getUserName())
+                    .font(AppTheme.fonts.displayMediumBold.font)
+                    .foregroundColor(AppTheme.colors.offWhite.color)
+                    .lineLimit(2)
+                    .padding(.horizontal, 16)
+            } else {
+                HStack(alignment: .top, spacing: 0) {
+                    Button(action: {}, label: {
+                        Image("ic_back")
+                            .frame(width: 24, height: 24, alignment: .leading)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                    })
+                    .padding(.all, 8)
+                    .padding(.leading, 8)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(viewModel.getUserName())
+                            .font(AppTheme.fonts.displayMediumBold.font)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                        
+                        Text(viewModel.timeCall)
+                            .font(AppTheme.fonts.displaySmall.font)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                    }
+                    
+                    Spacer()
+                }
+                
+            }
+            
+                
+            Spacer()
+        }
+        .edgesIgnoringSafeArea(.top)
+    }
+}
+    
 struct PeerCallView_Previews: PreviewProvider {
     static var previews: some View {
         PeerCallView(viewModel: CallViewModel())

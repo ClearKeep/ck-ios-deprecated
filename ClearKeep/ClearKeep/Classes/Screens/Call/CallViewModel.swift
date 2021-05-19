@@ -17,12 +17,12 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var cameraFront = false
     @Published var microEnable = true
     @Published var speakerEnable = false
-    @Published var callStatus: CallStatus = .calling
+    @Published var callStatus: CallStatus = .answered// .calling
     @Published var callGroup = false
-    @Published var timeCall = ""
+    @Published var timeCall = "1:15" //""
     @Published var remoteViewRenderSize: CGSize = CGSize.zero
     @Published var isVideoRequesting = false
-    @Published var callType: Constants.CallType = .audio
+    @Published var callType: Constants.CallType = .video// .audio
     
     enum RenderScaleMode {
         case scaleToFit
@@ -92,7 +92,7 @@ class CallViewModel: NSObject, ObservableObject {
     }
     
     func getUserName() -> String {
-        return callBox?.clientName ?? ""
+        return callBox?.clientName ?? "N/A" //""
     }
     
     func updateVideoView() {

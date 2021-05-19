@@ -34,7 +34,7 @@ struct CallVoiceActionView: View {
                         Spacer()
                         CallActionButtonView(onIcon: "Speaker",
                                              offIcon: "Speaker",
-                                             isOn: viewModel.cameraFront,
+                                             isOn: viewModel.speakerEnable,
                                              title: "Speaker",
                                              styleButton: .voice,
                                              action: viewModel.speakerChange)
@@ -55,16 +55,16 @@ struct CallVoiceActionView: View {
                 }
                 .frame(width: reader.size.width)
                 .padding(.vertical, 16)
-                .padding(.bottom, 20)
+                .padding(.bottom, 48)
             }
         }
         .background(Color.clear)
-        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
 struct CallVoiceActionView_Previews: PreviewProvider {
     static var previews: some View {
         CallVoiceActionView(viewModel: CallViewModel())
+            .background(Color.blue)
     }
 }
