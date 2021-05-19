@@ -38,7 +38,7 @@ struct GroupMessageChatView: View {
         self.groupModel = groupModel
         self.isNewCreatedGroup = isNewCreatedGroup
         ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-        
+        viewModel.username = groupModel.groupName
     }
     
     var body: some View {
