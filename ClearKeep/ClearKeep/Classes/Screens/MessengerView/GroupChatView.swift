@@ -380,21 +380,21 @@ extension GroupChatView {
             if viewModel.groupId == 0 {
                 viewModel.createGroup(username: userName, clientId: clientId) { (group) in
                     realmGroups.add(group: group)
-                    viewModel.sendMessage(payload: payload, fromClientId: myAccount.username, toClientId: clientId, groupType: groupType) { messageModel in
+                    viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
                         DispatchQueue.main.async {
                             handleSentMessage(messageModel: messageModel)
                         }
                     }
                 }
             } else {
-                viewModel.sendMessage(payload: payload, fromClientId: myAccount.username, toClientId: clientId, groupType: groupType) { messageModel in
+                viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
                     DispatchQueue.main.async {
                         handleSentMessage(messageModel: messageModel)
                     }
                 }
             }
+            self.reloadData()
         }
-        self.reloadData()
     }
 }
 
