@@ -74,7 +74,7 @@ extension RecentCreatedGroupChatView {
                 if status == .alreadyAuthorized || status == .justAuthorized {
                     hudVisible = true
                     // CallManager call
-                    viewModel.callGroup(group: self.viewRouter.recentCreatedGroupModel!, callType: type) {
+                    viewModel.callGroup(groupId: self.viewRouter.recentCreatedGroupModel!.groupID, callType: type) {
                         hudVisible = false
                     }
                 } else {
