@@ -52,7 +52,7 @@ struct AdvanceServerSettingsView: View {
             Spacer()
         }
         .padding(.horizontal, 16)
-        .applyNavigationBarPlainStyleLight(title: "Advance Server Settings", leftBarItems: {
+        .applyNavigationBarPlainStyleLight(title: "Advanced Server Settings", leftBarItems: {
             Image("ic_back_white")
                 .frame(width: 40, height: 40)
                 .foregroundColor(AppTheme.colors.offWhite.color)
