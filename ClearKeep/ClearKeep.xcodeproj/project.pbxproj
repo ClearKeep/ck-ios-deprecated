@@ -143,7 +143,6 @@
 		56694AF625B56A52008E8EC5 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 56694AF525B56A52008E8EC5 /* Tools.m */; };
 		566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */; };
 		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
-		566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */; };
 		5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693C2F925A6A4DB005FB8C6 /* CallBox.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
@@ -394,7 +393,6 @@
 		56694AF525B56A52008E8EC5 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
 		566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScrollingProxy.swift; sourceTree = "<group>"; };
 		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
-		566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatViewModel.swift; sourceTree = "<group>"; };
 		5693C2F925A6A4DB005FB8C6 /* CallBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBox.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
@@ -1055,7 +1053,6 @@
 			children = (
 				1013C9572608A64F0081C135 /* GroupChatDetailView */,
 				566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */,
-				566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */,
 			);
 			path = GroupMessageChat;
 			sourceTree = "<group>";
@@ -1622,7 +1619,6 @@
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
 				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
-				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,

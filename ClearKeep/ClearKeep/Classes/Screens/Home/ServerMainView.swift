@@ -154,7 +154,7 @@ extension ServerMainView {
                               clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
                               groupId: groupModel.groupID).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             } else {
-                GroupMessageChatView(groupModel: groupModel).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                GroupChatView(groupName: groupModel.groupName, groupId: groupModel.groupID).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
             }
         }
     }
