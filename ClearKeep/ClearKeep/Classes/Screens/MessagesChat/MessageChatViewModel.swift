@@ -25,6 +25,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     private var isGroup: Bool = false
     
     // MARK: - Published
+    @Published var messages: [MessageModel] = []
     @Published var recipientDeviceId: UInt32 = 0
     @Published var isForceProcessKey: Bool = true
     
@@ -43,12 +44,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         self.username = username
         self.groupType = groupType
         isGroup = false
+        messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
     }
     
     func setup(groupId: Int64, groupType: String) {
         self.groupId = groupId
         self.groupType = groupType
         isGroup = true
+        messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
     }
     
     func callPeerToPeer(groupId: Int64, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
@@ -122,6 +125,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                            idLastMessage: result.lastMessage.id,
                                            timeSyncMessage: 0)
                     self.groupId = group.groupID
+                    RealmManager.shared.realmGroups.add(group: group)
                     completion?(group)
                 }
             }
@@ -144,11 +148,18 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                             groupID: result.groupID,
                                                             groupType: result.groupType,
                                                             fromClientID: result.fromClientID,
-                                                            fromDisplayName: "",
+                                                            fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
                                                             clientID: result.clientID,
                                                             message: payload,
                                                             createdAt: result.createdAt,
                                                             updatedAt: result.updatedAt)
+                            
+                            RealmManager.shared.realmMessages.add(message: messageModel)
+                            self.messages.append(messageModel)
+                            RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
+                                                                   lastMessage: messageModel.message,
+                                                                   lastMessageAt: messageModel.createdAt,
+                                                                   idLastMessage: messageModel.id)
                             completion?(messageModel)
                         }
                     }
@@ -164,11 +175,17 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                         groupID: result.groupID,
                                                         groupType: result.groupType,
                                                         fromClientID: result.fromClientID,
-                                                        fromDisplayName: "",
+                                                        fromDisplayName:  RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
                                                         clientID: result.clientID,
                                                         message: payload,
                                                         createdAt: result.createdAt,
                                                         updatedAt: result.updatedAt)
+                        RealmManager.shared.realmMessages.add(message: messageModel)
+                        self.messages.append(messageModel)
+                        RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
+                                                               lastMessage: messageModel.message,
+                                                               lastMessageAt: messageModel.createdAt,
+                                                               idLastMessage: messageModel.id)
                         completion?(messageModel)
                     }
                 }
@@ -205,7 +222,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                         buddy.username = recipientResponse.clientID
                                         buddy.save(with:transaction)
                                         
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
+                                        let device = CKDevice(deviceId: NSNumber(value:111),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: buddy.uniqueId,
                                                               parentCollection: CKBuddy.collection,
@@ -214,7 +231,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                         device.save(with:transaction)
                                     } else {
                                         myBuddy?.save(with: transaction)
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
+                                        let device = CKDevice(deviceId: NSNumber(value:111),
                                                               trustLevel: .trustedTofu,
                                                               parentKey: myBuddy!.uniqueId,
                                                               parentCollection: CKBuddy.collection,
@@ -224,16 +241,15 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                     }
                                 }
                             })
-                        }
                         // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
                         self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
                         
                         // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-                        //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
+//                                            self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
 //                    }
-//                    print("processPreKeyBundle recipient finished")
-//                    completion()
-//                } else {
+                    print("processPreKeyBundle recipient finished")
+                    completion()
+                }
 //                    completion()
 //                }
             }
@@ -306,35 +322,41 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
-                                                fromDisplayName: "",
+                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: messageDecryption,
                                                 createdAt: publication.createdAt,
                                                 updatedAt: publication.updatedAt)
+                RealmManager.shared.realmMessages.add(message: messageModel)
+                self.messages.append(messageModel)
+                RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID, lastMessage: messageModel.message, lastMessageAt: messageModel.createdAt, idLastMessage: messageModel.id)
                 completion?(messageModel)
             } else {
                 requestKeyInGroup(byGroupId: groupId, publication: publication, completion: completion)
                 return
             }
         } else {
-            if ourEncryptionMng.sessionRecordExistsForUsername(clientId, deviceId: 111) {
+//            if ourEncryptionMng.sessionRecordExistsForUsername(clientId, deviceId: 111) {
                 let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: clientId, deviceId: 111)
                 
                 let messageModel = MessageModel(id: publication.id,
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
-                                                fromDisplayName: "",
+                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: messageDecryption,
                                                 createdAt: publication.createdAt,
                                                 updatedAt: publication.updatedAt)
+                RealmManager.shared.realmMessages.add(message: messageModel)
+                self.messages.append(messageModel)
+                RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID, lastMessage: messageModel.message, lastMessageAt: messageModel.createdAt, idLastMessage: messageModel.id)
                 completion?(messageModel)
-            } else {
-                requestBundleRecipient(byClientId: clientId, {
-                    self.decryptionMessage(publication: publication, completion: completion)
-                })
-            }
+//            } else {
+//                requestBundleRecipient(byClientId: clientId, {
+//                    self.decryptionMessage(publication: publication, completion: completion)
+//                })
+//            }
         }
     }
     
@@ -409,4 +431,107 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
         return nil
     }
+    
+    func getIdLastItem() -> String {
+        let msgInRoom = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
+        var id = ""
+        if msgInRoom.count > 0 {
+            id = msgInRoom[msgInRoom.count - 1].id
+        }
+        return id
+    }
+    
+    func isExistedGroup() -> Bool {
+        if groupId == 0, let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId) {
+            groupId = group.groupID
+        }
+        
+        return groupId != 0
+    }
+    
+    func getMessageInRoom(completion: (() -> ())? = nil) {
+        if isExistedGroup() {
+            Backend.shared.getMessageInRoom(groupId,
+                                            RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
+                if let result = result {
+                    if !result.lstMessage.isEmpty {
+                        DispatchQueue.main.async {
+                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
+                                return msg1.createdAt > msg2.createdAt
+                            }
+                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
+                        }
+                    }
+                    result.lstMessage.forEach { (message) in
+                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
+                        if filterMessage.isEmpty {
+                            if let ourEncryptionMng = self.ourEncryptionManager {
+                                do {
+                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
+                                                                                                name: self.clientId,
+                                                                                                deviceId: UInt32(555))
+                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                                    print("Message decryption: \(messageDecryption ?? "Empty error")")
+                                    
+                                    DispatchQueue.main.async {
+                                        let post = MessageModel(id: message.id,
+                                                                groupID: message.groupID,
+                                                                groupType: message.groupType,
+                                                                fromClientID: message.fromClientID,
+                                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
+                                                                clientID: message.clientID,
+                                                                message: decryptedData,
+                                                                createdAt: message.createdAt,
+                                                                updatedAt: message.updatedAt)
+                                        RealmManager.shared.realmMessages.add(message: post)
+                                        self.messages.append(post)
+                                        self.groupId = message.groupID
+                                        RealmManager.shared.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
+                                    }
+                                } catch {
+                                    print("Decryption message error: \(error)")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func isExistMessage(msgId: String) -> Bool {
+        return RealmManager.shared.realmMessages.isExistMessage(msgId: msgId)
+    }
+    
+    func registerWithGroup(_ groupId: Int64) {
+        if let group = RealmManager.shared.realmGroups.filterGroup(groupId: groupId) {
+            if !group.isRegister {
+                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
+                    let userName = myAccount.username
+                    let deviceID = Int32(555)
+                    let address = SignalAddress(name: userName, deviceId: deviceID)
+                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
+                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
+                    
+                    do {
+                        let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
+                        Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                                                                   clientId: userName,
+                                                                   deviceId: deviceID,
+                                                                   senderKeyData: signalSKDM.serializedData()) { (result, error) in
+                            print("Register group with result: \(result)")
+                            if result {
+                                RealmManager.shared.realmGroups.registerGroup(groupId: groupId)
+                            }
+                        }
+                        
+                    } catch {
+                        print("Register group error: \(error)")
+                        
+                    }
+                }
+            }
+        }
+    }
+
 }

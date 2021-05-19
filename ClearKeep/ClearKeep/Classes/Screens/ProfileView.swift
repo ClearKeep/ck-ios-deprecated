@@ -11,8 +11,6 @@ import GoogleSignIn
 struct ProfileView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var groupRealms : RealmGroups
-    @EnvironmentObject var realmMessages : RealmMessages
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
