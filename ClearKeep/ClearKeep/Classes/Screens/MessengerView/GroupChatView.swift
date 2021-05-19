@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import Introspect
 
 struct GroupChatView: View {
     // MARK: - Variables
@@ -21,11 +22,11 @@ struct GroupChatView: View {
     @State private var alertVisible = false
     @State private var messageStr = ""
     @State private var messages = [MessageModel]()
+    @State private var scrollView: UIScrollView?
     
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
     private let scrollingProxy = ListScrollingProxy()
-    
     private var userName: String = ""
     private var groupName: String = ""
     private var groupType: String = "peer"
@@ -56,7 +57,6 @@ struct GroupChatView: View {
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false, content: {
-                HStack { Spacer() }
                 if #available(iOS 14.0, *) {
                     ScrollViewReader{ reader in
                         let messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
@@ -87,13 +87,13 @@ struct GroupChatView: View {
                                 ListScrollingHelper(proxy: self.scrollingProxy)
                             )
                     }
-                    .padding(.bottom, 40)
-                    .onAppear(perform: {
-                        self.scrollingProxy.scrollTo(.end)
-                    })
+                    .introspectScrollView { scrollView in
+                        scrollView.scrollToBottom(animated: false)
+                        self.scrollView = scrollView
+                    }
                     .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollingProxy.scrollTo(.end)
+                            self.scrollView?.scrollToBottom(animated: true)
                         }
                     }
                 }
@@ -329,7 +329,7 @@ extension GroupChatView {
                                         self.viewModel.groupId = message.groupID
                                         self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
                                         self.reloadData()
-                                        self.scrollingProxy.scrollTo(.end)
+                                        self.scrollView?.scrollToBottom(animated: true)
                                     }
                                 } catch {
                                     print("Decryption message error: \(error)")
@@ -338,7 +338,7 @@ extension GroupChatView {
                         }
                     }
                     self.reloadData()
-                    self.scrollingProxy.scrollTo(.end)
+                    self.scrollView?.scrollToBottom(animated: true)
                 }
             }
         }
@@ -362,7 +362,7 @@ extension GroupChatView {
                                                lastMessageAt: messageModel.createdAt,
                                                idLastMessage: messageModel.id)
             self.reloadData()
-            self.scrollingProxy.scrollTo(.end)
+            self.scrollView?.scrollToBottom(animated: true)
         }
         
         if messageStr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -393,7 +393,6 @@ extension GroupChatView {
                     }
                 }
             }
-            self.reloadData()
         }
     }
 }
@@ -423,6 +422,15 @@ extension GroupChatView {
                         .lineLimit(2)
                 }
             }
+        }
+    }
+}
+
+extension UIScrollView {
+    func scrollToBottom(animated: Bool) {
+        DispatchQueue.main.async {
+            let bottomOffset = CGPoint(x: 0, y: self.contentSize.height - self.bounds.height + self.contentInset.bottom)
+            self.setContentOffset(bottomOffset, animated: animated)
         }
     }
 }
