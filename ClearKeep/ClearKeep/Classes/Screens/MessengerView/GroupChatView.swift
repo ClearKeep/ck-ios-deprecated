@@ -236,7 +236,8 @@ extension GroupChatView {
             self.scrollView?.scrollToBottom()
         }
         
-        if messageStr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        let messageStr = messageStr.trimmingCharacters(in: .whitespacesAndNewlines)
+        if messageStr.isEmpty {
             return
         }
         
