@@ -368,8 +368,7 @@ extension ServerMainView {
             if let ourEncryptionMng = self.ourEncryptionManager {
                 do {
                     let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
-                                                                                name: groupResponse.lastMessage.fromClientID,
-                                                                                deviceId: UInt32(111))
+                                                                                name: groupResponse.lastMessage.fromClientID)
                     let lastMessage = groupResponse.lastMessage
                     DispatchQueue.main.async {
                         let message = MessageModel(id: lastMessage.id,
@@ -418,8 +417,7 @@ extension ServerMainView {
                     if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: publication.groupID) {
                         let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
                                                                                   groupId: publication.groupID,
-                                                                                  name: publication.fromClientID,
-                                                                                  deviceId: UInt32(senderAccount.deviceId))
+                                                                                  name: publication.fromClientID)
                         let messageDecryption = String(data: decryptedData, encoding: .utf8)
                         print("Message decryption: \(messageDecryption ?? "Empty error")")
                         
@@ -458,7 +456,7 @@ extension ServerMainView {
             if !group.isRegister {
                 if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
                     let userName = myAccount.username
-                    let deviceID = Int32(555)
+                    let deviceID = Int32(111)
                     let address = SignalAddress(name: userName, deviceId: deviceID)
                     let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
                     let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
@@ -506,7 +504,7 @@ extension ServerMainView {
     private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         
-        let deviceID = 444
+        let deviceID = 111
         
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
@@ -545,8 +543,7 @@ extension ServerMainView {
                     
                     if message.isEmpty {
                         let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                                    name: publication.fromClientID,
-                                                                                    deviceId: UInt32(555))
+                                                                                    name: publication.fromClientID)
                         let messageDecryption = String(data: decryptedData, encoding: .utf8)
                         print("Message decryption peer: \(messageDecryption ?? "Empty error")")
                         let post = MessageModel(id: publication.id,

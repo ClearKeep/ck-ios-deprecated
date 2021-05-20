@@ -233,8 +233,8 @@ struct ServerDetailView: View {
                 CKAccount.removeAllAccounts(in: transaction)
             }
             CKSignalCoordinate.shared.myAccount = nil
-            self.realmMessages.removeAll()
-            self.groupRealms.removeAll()
+            RealmManager.shared.realmMessages.removeAll()
+            RealmManager.shared.realmGroups.removeAll()
             self.viewRouter.current = .login
 
         }

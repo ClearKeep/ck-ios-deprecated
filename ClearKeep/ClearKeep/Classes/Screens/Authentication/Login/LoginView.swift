@@ -386,7 +386,7 @@ extension LoginView {
             UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
            
-            let address = SignalAddress(name: userID, deviceId: Int32(555))
+            let address = SignalAddress(name: userID, deviceId: Int32(111))
             hudVisible = true
             Backend.shared.authenticator.register(address: address) { (result, error) in
                 hudVisible = false
@@ -410,11 +410,11 @@ extension LoginView {
     
     private func loginForUser(clientID : String) {
         hudVisible = true
-        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
+//        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
             hudVisible = false
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
-                if let _ = response {
+//                if let _ = response {
                     // save account
                     var myAccount: CKAccount?
                     dbConnection.readWrite({ (transaction) in
@@ -435,7 +435,7 @@ extension LoginView {
                         Backend.shared.signalSubscrible(clientId: account.username)
                         Backend.shared.notificationSubscrible(clientId: account.username)
                     }
-                    if result {
+//                    if result {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
@@ -451,14 +451,14 @@ extension LoginView {
                                 self.isShowAlert = true
                             }
                         }
-                    }else {
-                        print("requestKey Error: \(error?.localizedDescription ?? "")")
-                    }
-                }
+//                    }else {
+//                        print("requestKey Error: \(error?.localizedDescription ?? "")")
+//                    }
+//                }
             } catch {
                 print("Login with error: \(error)")
             }
-        }
+//        }
     }
     
     private func updateUserInfo(responseUserKey: Signal_PeerGetClientKeyResponse, clientId: String) {

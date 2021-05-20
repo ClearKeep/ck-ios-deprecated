@@ -76,7 +76,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                         UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
                         UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
                         UserDefaults.standard.synchronize()
-
+                        
                         AVCaptureDevice.authorizeVideo(completion: { (status) in
                             AVCaptureDevice.authorizeAudio(completion: { (status) in
                                 if status == .alreadyAuthorized || status == .justAuthorized {
@@ -138,8 +138,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 guard let senderAccount = self.getSenderAccount(fromClientID: fromClientId),
                       let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
                                                                                    groupId: groupId,
-                                                                                   name: fromClientId,
-                                                                                   deviceId: UInt32(senderAccount.deviceId)) else { return }
+                                                                                   name: fromClientId) else { return }
                 
                 Backend.shared.send(encryptedData.data, fromClientId: fromClientId, groupId: groupId, groupType: groupType) { (result) in
                     if let result = result {
@@ -157,38 +156,53 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                             RealmManager.shared.realmMessages.add(message: messageModel)
                             self.messages.append(messageModel)
                             RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
-                                                                   lastMessage: messageModel.message,
-                                                                   lastMessageAt: messageModel.createdAt,
-                                                                   idLastMessage: messageModel.id)
+                                                                              lastMessage: messageModel.message,
+                                                                              lastMessageAt: messageModel.createdAt,
+                                                                              idLastMessage: messageModel.id)
                             completion?(messageModel)
                         }
                     }
                 }
             } else {
-                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
-                                                                                     name: clientId,
-                                                                                     deviceId: recipientDeviceId) else { return }
+                guard let ourEncryptionManager = ourEncryptionManager,
+                      ourEncryptionManager.sessionRecordExistsForUsername(clientId, deviceId: 111) else {
+                    requestBundleRecipient(byClientId: clientId) {
+                        self.sendMessage(payload: payload, fromClientId: fromClientId, completion: completion)
+                    }
+                    return
+                }
                 
-                Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: clientId , groupId: groupId , groupType: groupType) { (result) in
-                    if let result = result {
-                        let messageModel = MessageModel(id: result.id,
-                                                        groupID: result.groupID,
-                                                        groupType: result.groupType,
-                                                        fromClientID: result.fromClientID,
-                                                        fromDisplayName:  RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
-                                                        clientID: result.clientID,
-                                                        message: payload,
-                                                        createdAt: result.createdAt,
-                                                        updatedAt: result.updatedAt)
-                        RealmManager.shared.realmMessages.add(message: messageModel)
-                        self.messages.append(messageModel)
-                        RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
-                                                               lastMessage: messageModel.message,
-                                                               lastMessageAt: messageModel.createdAt,
-                                                               idLastMessage: messageModel.id)
-                        completion?(messageModel)
+                func send() {
+                    let encryptedData = try! ourEncryptionManager.encryptToAddress(payload,
+                                                                                  name: clientId)
+                    
+                    Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: self.clientId , groupId: self.groupId , groupType: self.groupType) { (result) in
+                        if let result = result {
+                            DispatchQueue.main.async {
+                                let messageModel = MessageModel(id: result.id,
+                                                                groupID: result.groupID,
+                                                                groupType: result.groupType,
+                                                                fromClientID: result.fromClientID,
+                                                                fromDisplayName:  RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
+                                                                clientID: result.clientID,
+                                                                message: payload,
+                                                                createdAt: result.createdAt,
+                                                                updatedAt: result.updatedAt)
+                                RealmManager.shared.realmMessages.add(message: messageModel)
+                                
+                                self.messages.append(messageModel)
+                                RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
+                                                                                  lastMessage: messageModel.message,
+                                                                                  lastMessageAt: messageModel.createdAt,
+                                                                                  idLastMessage: messageModel.id)
+                                completion?(messageModel)
+                            }
+                        }
                     }
                 }
+                requestBundleRecipient(byClientId: clientId) {
+                    send()
+              }
             }
         } catch {
             print("Send message error: \(error)")
@@ -196,7 +210,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-
+        
         Backend.shared.authenticator
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
@@ -204,54 +218,55 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                     print("Request prekey \(clientId) fail")
                     return
                 }
-                // check exist session recipient in database
-//                if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                    self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-//                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
-                        if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                           let myAccount = CKSignalCoordinate.shared.myAccount {
-                            // save devcice by recipient account
-                            connectionDb.readWrite ({ (transaction) in
-                                if let _ = myAccount.refetch(with: transaction) {
-                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
-                                                                     accountUniqueId: myAccount.uniqueId,
-                                                                     transaction: transaction)
-                                    if myBuddy == nil {
-                                        let buddy = CKBuddy()!
-                                        buddy.accountUniqueId = myAccount.uniqueId
-                                        buddy.username = recipientResponse.clientID
-                                        buddy.save(with:transaction)
-                                        
-                                        let device = CKDevice(deviceId: NSNumber(value:111),
-                                                              trustLevel: .trustedTofu,
-                                                              parentKey: buddy.uniqueId,
-                                                              parentCollection: CKBuddy.collection,
-                                                              publicIdentityKeyData: nil,
-                                                              lastSeenDate:nil)
-                                        device.save(with:transaction)
-                                    } else {
-                                        myBuddy?.save(with: transaction)
-                                        let device = CKDevice(deviceId: NSNumber(value:111),
-                                                              trustLevel: .trustedTofu,
-                                                              parentKey: myBuddy!.uniqueId,
-                                                              parentCollection: CKBuddy.collection,
-                                                              publicIdentityKeyData: nil,
-                                                              lastSeenDate:nil)
-                                        device.save(with:transaction)
-                                    }
-                                }
-                            })
-                        // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
-                        self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-                        
-                        // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-//                                            self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-//                    }
-                    print("processPreKeyBundle recipient finished")
-                    completion()
+//                // check exist session recipient in database
+//                //                if let ourAccountEncryptMng = self?.ourEncryptionManager {
+//                self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
+//                //                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
+                if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+                   let myAccount = CKSignalCoordinate.shared.myAccount {
+                    // save devcice by recipient account
+                    connectionDb.readWrite ({ (transaction) in
+                        if let _ = myAccount.refetch(with: transaction) {
+                            let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
+                                                             accountUniqueId: myAccount.uniqueId,
+                                                             transaction: transaction)
+                            if myBuddy == nil {
+                                let buddy = CKBuddy()!
+                                buddy.accountUniqueId = myAccount.uniqueId
+                                buddy.username = recipientResponse.clientID
+                                buddy.save(with:transaction)
+
+                                let device = CKDevice(deviceId: NSNumber(value:111),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: buddy.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            } else {
+                                myBuddy?.save(with: transaction)
+                                let device = CKDevice(deviceId: NSNumber(value:111),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: myBuddy!.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            }
+                        }
+                    })
                 }
-//                    completion()
+//                    // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
+                    self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
+//
+//                    // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
+//                    //                                            self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
+//                    //                    }
+//                    print("processPreKeyBundle recipient finished")
+                    completion()
 //                }
+                //                    completion()
+                //                }
             }
         //        }
     }
@@ -268,7 +283,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 }
                 
                 let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(555),
+                                                                deviceId: UInt32(111),
                                                                 preKeyId: UInt32(recipientResponse.preKeyID),
                                                                 preKeyPublic: preKeyKeyPair.publicKey,
                                                                 signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
@@ -277,7 +292,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                 identityKey: recipientResponse.identityKeyPublic)
                 
                 let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 555)
+                                                  deviceId: 111)
                 let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
                                                                 context: ourEncryptionMng.signalContext)
                 try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
@@ -296,7 +311,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
                                         publicKey: recipientResponse.preKey)
                 
-                let bundle = CKBundle(deviceId: UInt32(555),
+                let bundle = CKBundle(deviceId: UInt32(111),
                                       registrationId: UInt32(recipientResponse.registrationID),
                                       identityKey: recipientResponse.identityKeyPublic,
                                       signedPreKey: ckSignedPreKey,
@@ -316,7 +331,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 return
             }
             if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupId) {
-                let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: publication.fromClientID, deviceId: senderAccount.deviceId)
+                let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: publication.fromClientID)
                 
                 let messageModel = MessageModel(id: publication.id,
                                                 groupID: publication.groupID,
@@ -336,43 +351,35 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                 return
             }
         } else {
-//            if ourEncryptionMng.sessionRecordExistsForUsername(clientId, deviceId: 111) {
-                let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: clientId, deviceId: 111)
-                
-                let messageModel = MessageModel(id: publication.id,
-                                                groupID: publication.groupID,
-                                                groupType: publication.groupType,
-                                                fromClientID: publication.fromClientID,
-                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                clientID: publication.clientID,
-                                                message: messageDecryption,
-                                                createdAt: publication.createdAt,
-                                                updatedAt: publication.updatedAt)
-                RealmManager.shared.realmMessages.add(message: messageModel)
-                self.messages.append(messageModel)
-                RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID, lastMessage: messageModel.message, lastMessageAt: messageModel.createdAt, idLastMessage: messageModel.id)
-                completion?(messageModel)
-//            } else {
-//                requestBundleRecipient(byClientId: clientId, {
-//                    self.decryptionMessage(publication: publication, completion: completion)
-//                })
-//            }
+            let messageDecryption = decryptedMessage(messageData: publication.message, fromClientID: publication.fromClientID)
+            
+            let messageModel = MessageModel(id: publication.id,
+                                            groupID: publication.groupID,
+                                            groupType: publication.groupType,
+                                            fromClientID: publication.fromClientID,
+                                            fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
+                                            clientID: publication.clientID,
+                                            message: messageDecryption,
+                                            createdAt: publication.createdAt,
+                                            updatedAt: publication.updatedAt)
+            RealmManager.shared.realmMessages.add(message: messageModel)
+            self.messages.append(messageModel)
+            RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID, lastMessage: messageModel.message, lastMessageAt: messageModel.createdAt, idLastMessage: messageModel.id)
+            completion?(messageModel)
         }
     }
     
-    private func decryptedMessage(messageData: Data, fromClientID: String, deviceId: Int32) -> Data {
+    private func decryptedMessage(messageData: Data, fromClientID: String) -> Data {
         let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
         guard let ourEncryptionMng = self.ourEncryptionManager else { return messageError }
         do {
             if isGroup {
                 return try ourEncryptionMng.decryptFromGroup(messageData,
                                                              groupId: groupId,
-                                                             name: fromClientID,
-                                                             deviceId: UInt32(deviceId))
+                                                             name: fromClientID)
             } else {
                 return try ourEncryptionMng.decryptFromAddress(messageData,
-                                                               name: fromClientID,
-                                                               deviceId: UInt32(deviceId))
+                                                               name: fromClientID)
             }
         } catch {
             return messageError
@@ -398,7 +405,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     
     func processSenderKey(byGroupId groupId: Int64,
                           responseSenderKey: Signal_GroupClientKeyObject) {
-        let deviceID = 444
+        let deviceID = 111
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             // save account infor
@@ -468,8 +475,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                             if let ourEncryptionMng = self.ourEncryptionManager {
                                 do {
                                     let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
-                                                                                                name: self.clientId,
-                                                                                                deviceId: UInt32(555))
+                                                                                                name: self.clientId)
                                     let messageDecryption = String(data: decryptedData, encoding: .utf8)
                                     print("Message decryption: \(messageDecryption ?? "Empty error")")
                                     
@@ -508,7 +514,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             if !group.isRegister {
                 if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
                     let userName = myAccount.username
-                    let deviceID = Int32(555)
+                    let deviceID = Int32(111)
                     let address = SignalAddress(name: userName, deviceId: deviceID)
                     let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
                     let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
@@ -533,5 +539,5 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             }
         }
     }
-
+    
 }

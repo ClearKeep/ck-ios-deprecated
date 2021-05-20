@@ -155,14 +155,14 @@ extension CKAccountSignalEncryptionManager {
         return try sessionBuilder.processPreKeyBundle(preKeyBundle)
     }
     
-    public func encryptToAddress(_ data:Data, name:String, deviceId:UInt32) throws -> SignalCiphertext {
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(555))
+    public func encryptToAddress(_ data:Data, name:String, deviceId:Int32 = 111) throws -> SignalCiphertext {
+        let address = SignalAddress(name: name.lowercased(), deviceId: deviceId)
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
         return try sessionCipher.encryptData(data)
     }
     
-    public func decryptFromAddress(_ data:Data, name:String, deviceId:UInt32) throws -> Data {
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(444))
+    public func decryptFromAddress(_ data:Data, name:String, deviceId:Int32 = 222) throws -> Data {
+        let address = SignalAddress(name: name.lowercased(), deviceId: deviceId)
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
         let cipherText = SignalCiphertext(data: data, type: .unknown)
         return try sessionCipher.decryptCiphertext(cipherText)
@@ -181,16 +181,16 @@ extension CKAccountSignalEncryptionManager {
         return try sessionBuilder.processSession(with: senderKeyName, skdm: signalSKDM)
     }
     
-    public func encryptToGroup(_ data:Data, groupId: Int64, name:String, deviceId:UInt32) throws -> SignalCiphertext {
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(555))
+    public func encryptToGroup(_ data:Data, groupId: Int64, name:String, deviceId:Int32 = 111) throws -> SignalCiphertext {
+        let address = SignalAddress(name: name.lowercased(), deviceId: deviceId)
         let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
         let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
         return try groupCipher.encryptData(data)
     }
     
-    public func decryptFromGroup(_ data:Data, groupId: Int64, name: String, deviceId: UInt32) throws -> Data {
+    public func decryptFromGroup(_ data:Data, groupId: Int64, name: String, deviceId: Int32 = 222) throws -> Data {
         
-        let address = SignalAddress(name: name.lowercased(), deviceId: Int32(444))
+        let address = SignalAddress(name: name.lowercased(), deviceId: deviceId)
         let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
         
         let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
