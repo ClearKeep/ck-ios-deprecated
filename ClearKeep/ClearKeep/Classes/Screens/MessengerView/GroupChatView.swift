@@ -271,7 +271,7 @@ extension GroupChatView {
         Group {
             if isGroup() {
                 NavigationLink(
-                    destination: MotherView(),
+                    destination: GroupChatDetailView(groupModel: viewModel.getGroupModel()),
                     label: {
                         Text(groupName)
                             .foregroundColor(AppTheme.colors.offWhite.color)
