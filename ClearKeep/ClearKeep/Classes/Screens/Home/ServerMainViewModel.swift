@@ -41,7 +41,7 @@ class ServerMainViewModel: ObservableObject {
                                 buddy.username = recipientResponse.clientID
                                 buddy.save(with:transaction)
                                 
-                                let device = CKDevice(deviceId: NSNumber(value:555),
+                                let device = CKDevice(deviceId: NSNumber(value:111),
                                                       trustLevel: .trustedTofu,
                                                       parentKey: buddy.uniqueId,
                                                       parentCollection: CKBuddy.collection,
@@ -50,7 +50,7 @@ class ServerMainViewModel: ObservableObject {
                                 device.save(with:transaction)
                             } else {
                                 myBuddy?.save(with: transaction)
-                                let device = CKDevice(deviceId: NSNumber(value:555),
+                                let device = CKDevice(deviceId: NSNumber(value:111),
                                                       trustLevel: .trustedTofu,
                                                       parentKey: myBuddy!.uniqueId,
                                                       parentCollection: CKBuddy.collection,
@@ -77,7 +77,7 @@ class ServerMainViewModel: ObservableObject {
                 }
                 
                 let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(555),
+                                                                deviceId: UInt32(111),
                                                                 preKeyId: UInt32(recipientResponse.preKeyID),
                                                                 preKeyPublic: preKeyKeyPair.publicKey,
                                                                 signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
@@ -86,7 +86,7 @@ class ServerMainViewModel: ObservableObject {
                                                                 identityKey: recipientResponse.identityKeyPublic)
                 
                 let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 555)
+                                                  deviceId: 111)
                 let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
                                                                 context: ourEncryptionMng.signalContext)
                 try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
@@ -105,7 +105,7 @@ class ServerMainViewModel: ObservableObject {
                 let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
                                         publicKey: recipientResponse.preKey)
                 
-                let bundle = CKBundle(deviceId: UInt32(555),
+                let bundle = CKBundle(deviceId: UInt32(111),
                                       registrationId: UInt32(recipientResponse.registrationID),
                                       identityKey: recipientResponse.identityKeyPublic,
                                       signedPreKey: ckSignedPreKey,
