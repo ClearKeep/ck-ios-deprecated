@@ -7,11 +7,10 @@
 
 import SwiftUI
 import AVFoundation
+import Introspect
 
 struct GroupChatView: View {
     // MARK: - Variables
-    @EnvironmentObject var realmGroups : RealmGroups
-    @EnvironmentObject var realmMessages : RealmMessages
     @EnvironmentObject var viewRouter: ViewRouter
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -20,11 +19,9 @@ struct GroupChatView: View {
     @State private var hudVisible = false
     @State private var alertVisible = false
     @State private var messageStr = ""
-    @State private var messages = [MessageModel]()
+    @State private var scrollView: UIScrollView?
     
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
-    
-    private let scrollingProxy = ListScrollingProxy()
     
     private var userName: String = ""
     private var groupName: String = ""
@@ -56,44 +53,38 @@ struct GroupChatView: View {
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false, content: {
-                HStack { Spacer() }
                 if #available(iOS 14.0, *) {
                     ScrollViewReader{ reader in
-                        let messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
-                        MessageListView(messages: messages) { msg in
+                        MessageListView(messages: viewModel.messages) { msg in
                             // Chat Bubbles...
                             MessageBubble(msg: msg.message, isGroup: isGroup(), isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                                 .id(msg.message.id)
                         }
-                        .onChange(of: realmMessages.allMessageInGroup(groupId: groupId).count) { _ in
-                            reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                        .onChange(of: viewModel.messages.count) { _ in
+                            reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                         }
                         .onAppear(perform: {
-                            reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                            reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                         })
                         .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                reader.scrollTo(self.getIdLastItem(), anchor: .bottom)
+                                reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                             }
                         }
                     }
                 } else {
-                    let messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
-                    MessageListView(messages: messages) { msg in
+                    MessageListView(messages: viewModel.messages) { msg in
                         // Chat Bubbles...
                         MessageBubble(msg: msg.message, isGroup: isGroup(), isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                             .id(msg.message.id)
-                            .background(
-                                ListScrollingHelper(proxy: self.scrollingProxy)
-                            )
                     }
-                    .padding(.bottom, 40)
-                    .onAppear(perform: {
-                        self.scrollingProxy.scrollTo(.end)
-                    })
+                    .introspectScrollView { scrollView in
+                        scrollView.scrollToBottom(animated: false)
+                        self.scrollView = scrollView
+                    }
                     .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollingProxy.scrollTo(.end)
+                            self.scrollView?.scrollToBottom()
                         }
                     }
                 }
@@ -141,22 +132,16 @@ struct GroupChatView: View {
             call(callType: callType)
         })
         .onAppear() {
-            DispatchQueue.main.async {
-                self.realmMessages.loadSavedData()
-                self.realmGroups.loadSavedData()
-            }
-            
             if isGroup() {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                self.registerWithGroup(groupId)
+                self.viewModel.registerWithGroup(groupId)
             } else {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
-                if viewModel.groupId == 0, let group = realmGroups.getGroup(clientId: clientId, type: groupType) {
-                    viewModel.groupId = group.groupID
-                }
                 self.viewModel.requestBundleRecipient(byClientId: clientId){}
             }
-            self.getMessageInRoom()
+            self.viewModel.getMessageInRoom {
+                self.scrollView?.scrollToBottom()
+            }
         }
         .onDisappear(){
             if isGroup() {
@@ -170,21 +155,23 @@ struct GroupChatView: View {
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
                 if publication.groupType == "group"{
                     if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-                        self.viewModel.isForceProcessKey = true
-                        self.didReceiveMessage(publication: publication)
+                        viewModel.isForceProcessKey = true
+                        didReceiveMessage(publication: publication)
                     }
                 }
                 if publication.groupType == "peer" {
                     if let clientId = userInfo["clientId"] as? String,
                        clientId == self.clientId,
-                       !realmMessages.isExistMessage(msgId: publication.id) {
-                        self.didReceiveMessage(publication: publication)
+                       !viewModel.isExistMessage(msgId: publication.id) {
+                        didReceiveMessage(publication: publication)
                     }
                 }
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
-            self.getMessageInRoom()
+            self.viewModel.getMessageInRoom {
+                self.scrollView?.scrollToBottom()
+            }
         })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
@@ -218,14 +205,12 @@ extension GroupChatView {
                             hudVisible = false
                         }
                     } else {
-                        if let group = realmGroups.getGroup(clientId: clientId, type: groupType) {
-                            viewModel.groupId = group.groupID
-                            viewModel.callPeerToPeer(groupId: group.groupID, clientId: clientId, callType: type) {
+                        if viewModel.isExistedGroup() {
+                            viewModel.callPeerToPeer(groupId: viewModel.groupId, clientId: clientId, callType: type) {
                                 hudVisible = false
                             }
                         } else {
                             viewModel.createGroup(username: userName, clientId: clientId) { (group) in
-                                realmGroups.add(group: group)
                                 viewModel.callPeerToPeer(groupId: group.groupID, clientId: clientId, callType: type) {
                                     hudVisible = false
                                 }
@@ -239,130 +224,15 @@ extension GroupChatView {
         })
     }
     
-    private func getIdLastItem() -> String {
-        let msgInRoom = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
-        var id = ""
-        if msgInRoom.count > 0 {
-            id = msgInRoom[msgInRoom.count - 1].id
-        }
-        return id
-    }
-    
     private func didReceiveMessage(publication: Message_MessageObjectResponse) {
         self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
-            let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
-            var message = messageModel
-            message.fromDisplayName = fromDisplayName
-            self.realmMessages.add(message: message)
-            self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: message.message, lastMessageAt: message.createdAt, idLastMessage: message.id)
-            self.reloadData()
-            self.scrollingProxy.scrollTo(.end)
+            self.scrollView?.scrollToBottom()
         })
-    }
-    
-    private func registerWithGroup(_ groupId: Int64) {
-        if let group = self.realmGroups.filterGroup(groupId: groupId) {
-            if !group.isRegister {
-                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.viewModel.ourEncryptionManager {
-                    let userName = myAccount.username
-                    let deviceID = Int32(555)
-                    let address = SignalAddress(name: userName, deviceId: deviceID)
-                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-                    
-                    do {
-                        let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-                        Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-                                                                   clientId: userName,
-                                                                   deviceId: deviceID,
-                                                                   senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                            print("Register group with result: \(result)")
-                            if result {
-                                self.realmGroups.registerGroup(groupId: groupId)
-                            }
-                        }
-                        
-                    } catch {
-                        print("Register group error: \(error)")
-                        
-                    }
-                }
-            }
-        }
-    }
-    
-    private func getMessageInRoom() {
-        if viewModel.groupId != 0 {
-            Backend.shared.getMessageInRoom(viewModel.groupId,
-                                            self.realmGroups.getTimeSyncInGroup(groupID: viewModel.groupId)) { (result, error) in
-                if let result = result {
-                    if !result.lstMessage.isEmpty {
-                        DispatchQueue.main.async {
-                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
-                                return msg1.createdAt > msg2.createdAt
-                            }
-                            self.realmGroups.updateTimeSyncMessageInGroup(groupID: viewModel.groupId, lastMessageAt: listMsgSorted[0].createdAt)
-                        }
-                    }
-                    result.lstMessage.forEach { (message) in
-                        let filterMessage = self.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
-                        if filterMessage.isEmpty {
-                            if let ourEncryptionMng = self.viewModel.ourEncryptionManager {
-                                do {
-                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
-                                                                                                name: clientId,
-                                                                                                deviceId: UInt32(555))
-                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                                    print("Message decryption: \(messageDecryption ?? "Empty error")")
-                                    
-                                    DispatchQueue.main.async {
-                                        let post = MessageModel(id: message.id,
-                                                                groupID: message.groupID,
-                                                                groupType: message.groupType,
-                                                                fromClientID: message.fromClientID,
-                                                                fromDisplayName: self.realmGroups.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
-                                                                clientID: message.clientID,
-                                                                message: decryptedData,
-                                                                createdAt: message.createdAt,
-                                                                updatedAt: message.updatedAt)
-                                        self.realmMessages.add(message: post)
-                                        self.viewModel.groupId = message.groupID
-                                        self.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
-                                        self.reloadData()
-                                        self.scrollingProxy.scrollTo(.end)
-                                    }
-                                } catch {
-                                    print("Decryption message error: \(error)")
-                                }
-                            }
-                        }
-                    }
-                    self.reloadData()
-                    self.scrollingProxy.scrollTo(.end)
-                }
-            }
-        }
-    }
-    
-    private func reloadData(){
-        DispatchQueue.main.async {
-            self.realmMessages.loadSavedData()
-            self.messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
-        }
     }
     
     private func sendMessage(messageStr: String) {
         func handleSentMessage(messageModel: MessageModel) {
-            let fromDisplayName = realmGroups.getDisplayNameSenderMessage(fromClientId: messageModel.fromClientID, groupID: messageModel.groupID)
-            var message = messageModel
-            message.fromDisplayName = fromDisplayName
-            self.realmMessages.add(message: messageModel)
-            self.realmGroups.updateLastMessage(groupID: messageModel.groupID,
-                                               lastMessage: messageModel.message,
-                                               lastMessageAt: messageModel.createdAt,
-                                               idLastMessage: messageModel.id)
-            self.reloadData()
-            self.scrollingProxy.scrollTo(.end)
+            self.scrollView?.scrollToBottom()
         }
         
         if messageStr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -374,12 +244,8 @@ extension GroupChatView {
         }
         
         if let myAccount = CKSignalCoordinate.shared.myAccount {
-            if viewModel.groupId == 0, let group = realmGroups.getGroup(clientId: clientId) {
-                viewModel.groupId = group.groupID
-            }
-            if viewModel.groupId == 0 {
+            if viewModel.isExistedGroup(){
                 viewModel.createGroup(username: userName, clientId: clientId) { (group) in
-                    realmGroups.add(group: group)
                     viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
                         DispatchQueue.main.async {
                             handleSentMessage(messageModel: messageModel)
@@ -393,7 +259,6 @@ extension GroupChatView {
                     }
                 }
             }
-            self.reloadData()
         }
     }
 }

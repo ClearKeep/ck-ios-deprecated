@@ -24,6 +24,7 @@ target 'ClearKeep' do
   
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
+  pod 'Introspect'
   
   target 'ClearKeepTests' do
     inherit! :search_paths
