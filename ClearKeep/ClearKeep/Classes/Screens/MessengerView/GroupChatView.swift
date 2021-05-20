@@ -53,6 +53,7 @@ struct GroupChatView: View {
     var body: some View {
         VStack {
             ScrollView(.vertical, showsIndicators: false, content: {
+                HStack { Spacer() }
                 if #available(iOS 14.0, *) {
                     ScrollViewReader{ reader in
                         MessageListView(messages: viewModel.messages) { msg in
