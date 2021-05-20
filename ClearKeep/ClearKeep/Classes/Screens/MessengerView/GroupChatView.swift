@@ -10,12 +10,14 @@ import AVFoundation
 import Introspect
 
 struct GroupChatView: View {
-    // MARK: - Variables
+    // MARK: - EnvironmentObject
     @EnvironmentObject var viewRouter: ViewRouter
     
+    // MARK: - Environment
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.rootPresentationMode) var rootPresentationMode: Binding<RootPresentationMode>
     
+    // MARK: - State
     @State private var hudVisible = false
     @State private var alertVisible = false
     @State private var messageStr = ""
@@ -23,12 +25,14 @@ struct GroupChatView: View {
     
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
+    // MARK: - Variables
     private var userName: String = ""
     private var groupName: String = ""
     private var groupType: String = "peer"
     private var clientId: String = ""
     private var groupId: Int64 = 0
     
+    // MARK: - Init
     private init() {
     }
     
@@ -58,7 +62,7 @@ struct GroupChatView: View {
                     ScrollViewReader{ reader in
                         MessageListView(messages: viewModel.messages) { msg in
                             // Chat Bubbles...
-                            MessageBubble(msg: msg.message, isGroup: isGroup(), isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
+                            MessageBubble(msg: msg.message, isGroup: viewModel.isGroup, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                                 .id(msg.message.id)
                         }
                         .onChange(of: viewModel.messages.count) { _ in
@@ -76,7 +80,7 @@ struct GroupChatView: View {
                 } else {
                     MessageListView(messages: viewModel.messages) { msg in
                         // Chat Bubbles...
-                        MessageBubble(msg: msg.message, isGroup: isGroup(), isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
+                        MessageBubble(msg: msg.message, isGroup: viewModel.isGroup, isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                             .id(msg.message.id)
                     }
                     .introspectScrollView { scrollView in
@@ -133,7 +137,7 @@ struct GroupChatView: View {
             call(callType: callType)
         })
         .onAppear() {
-            if isGroup() {
+            if viewModel.isGroup {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
                 self.viewModel.registerWithGroup(groupId)
             } else {
@@ -145,7 +149,7 @@ struct GroupChatView: View {
             }
         }
         .onDisappear(){
-            if isGroup() {
+            if viewModel.isGroup {
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatGroup)
             } else {
                 UserDefaults.standard.setValue(false, forKey: Constants.isChatRoom)
@@ -188,24 +192,50 @@ struct GroupChatView: View {
                    secondaryButton: .default(Text("Cancel")))
         })
     }
+    
+    private func createTitleView() -> some View {
+        Group {
+            if viewModel.isGroup {
+                NavigationLink(
+                    destination: GroupChatDetailView(groupModel: viewModel.getGroupModel()),
+                    label: {
+                        Text(groupName)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .font(AppTheme.fonts.textLarge.font)
+                            .fontWeight(.medium)
+                            .lineLimit(2)
+                    })
+            } else {
+                HStack {
+                    ChannelUserAvatar(avatarSize: 36, text: userName)
+                    
+                    Text(userName)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .font(AppTheme.fonts.textLarge.font)
+                        .fontWeight(.medium)
+                        .lineLimit(2)
+                }
+            }
+        }
+    }
 }
 
+// MARK: - Private function
 extension GroupChatView {
-    private func isGroup() -> Bool {
-        return groupType == "group" ? true : false
-    }
-    
-    func call(callType type: Constants.CallType) {
+    private func call(callType type: Constants.CallType) {
         AVCaptureDevice.authorizeVideo(completion: { (status) in
             AVCaptureDevice.authorizeAudio(completion: { (status) in
                 if status == .alreadyAuthorized || status == .justAuthorized {
                     hudVisible = true
-                    if isGroup() {
+                    if viewModel.isGroup {
                         // CallManager call
                         viewModel.callGroup(groupId: viewModel.groupId, callType: type) {
                             hudVisible = false
                         }
                     } else {
+                        viewModel.callPeerToPeer(groupId: viewModel.groupId, clientId: clientId, callType: type) {
+                            hudVisible = false
+                        }
                         if viewModel.isExistedGroup() {
                             viewModel.callPeerToPeer(groupId: viewModel.groupId, clientId: clientId, callType: type) {
                                 hudVisible = false
@@ -259,35 +289,6 @@ extension GroupChatView {
                             handleSentMessage(messageModel: messageModel)
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-// MARK - Private function setupView
-extension GroupChatView {
-    private func createTitleView() -> some View {
-        Group {
-            if isGroup() {
-                NavigationLink(
-                    destination: GroupChatDetailView(groupModel: viewModel.getGroupModel()),
-                    label: {
-                        Text(groupName)
-                            .foregroundColor(AppTheme.colors.offWhite.color)
-                            .font(AppTheme.fonts.textLarge.font)
-                            .fontWeight(.medium)
-                            .lineLimit(2)
-                    })
-            } else {
-                HStack {
-                    ChannelUserAvatar(avatarSize: 36, text: userName)
-                    
-                    Text(userName)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
-                        .font(AppTheme.fonts.textLarge.font)
-                        .fontWeight(.medium)
-                        .lineLimit(2)
                 }
             }
         }
