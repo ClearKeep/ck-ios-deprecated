@@ -23,7 +23,6 @@ struct GroupChatView: View {
     
     @ObservedObject var viewModel: MessageChatViewModel = MessageChatViewModel()
     
-    private let scrollingProxy = ListScrollingProxy()
     private var userName: String = ""
     private var groupName: String = ""
     private var groupType: String = "peer"
@@ -78,9 +77,6 @@ struct GroupChatView: View {
                         // Chat Bubbles...
                         MessageBubble(msg: msg.message, isGroup: isGroup(), isShowAvatarAndUserName: msg.showAvatarAndUserName, rectCorner: msg.rectCorner)
                             .id(msg.message.id)
-                            .background(
-                                ListScrollingHelper(proxy: self.scrollingProxy)
-                            )
                     }
                     .introspectScrollView { scrollView in
                         scrollView.scrollToBottom(animated: false)
@@ -88,7 +84,7 @@ struct GroupChatView: View {
                     }
                     .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollView?.scrollToBottom(animated: true)
+                            self.scrollView?.scrollToBottom()
                         }
                     }
                 }
@@ -145,7 +141,7 @@ struct GroupChatView: View {
             }
             self.viewModel.getMessageInRoom {
                 self.reloadData()
-                self.scrollView?.scrollToBottom(animated: true)
+                self.scrollView?.scrollToBottom()
             }
         }
         .onDisappear(){
@@ -176,7 +172,7 @@ struct GroupChatView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
             self.viewModel.getMessageInRoom {
                 self.reloadData()
-                self.scrollView?.scrollToBottom(animated: true)
+                self.scrollView?.scrollToBottom()
             }
         })
         .keyboardManagment()
@@ -233,7 +229,7 @@ extension GroupChatView {
     private func didReceiveMessage(publication: Message_MessageObjectResponse) {
         self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
             self.reloadData()
-            self.scrollingProxy.scrollTo(.end)
+            self.scrollView?.scrollToBottom()
         })
     }
     
@@ -247,7 +243,7 @@ extension GroupChatView {
     private func sendMessage(messageStr: String) {
         func handleSentMessage(messageModel: MessageModel) {
             self.reloadData()
-            self.scrollView?.scrollToBottom(animated: true)
+            self.scrollView?.scrollToBottom()
         }
         
         if messageStr.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -303,15 +299,6 @@ extension GroupChatView {
                         .lineLimit(2)
                 }
             }
-        }
-    }
-}
-
-extension UIScrollView {
-    func scrollToBottom(animated: Bool) {
-        DispatchQueue.main.async {
-            let bottomOffset = CGPoint(x: 0, y: self.contentSize.height - self.bounds.height + self.contentInset.bottom)
-            self.setContentOffset(bottomOffset, animated: animated)
         }
     }
 }

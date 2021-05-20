@@ -142,7 +142,6 @@
 		56694AE625B53C8A008E8EC5 /* LinearWaitingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56694AD025B53C89008E8EC5 /* LinearWaitingShape.swift */; };
 		56694AF625B56A52008E8EC5 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 56694AF525B56A52008E8EC5 /* Tools.m */; };
 		566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */; };
-		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
 		5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693C2F925A6A4DB005FB8C6 /* CallBox.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
@@ -156,7 +155,6 @@
 		569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC0254BE94E00C487F5 /* CKDatabaseManager.m */; };
 		569FFBCA254BEC0E00C487F5 /* SecondaryIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */; };
 		569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */; };
-		56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA86E254C030F00B72317 /* MessageChatView.swift */; };
 		56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */; };
 		56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA87E254C0ADC00B72317 /* MessageModel.swift */; };
 		56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */; };
@@ -227,6 +225,7 @@
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
 		CB26AF4626555C7D00A6AE15 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB26AF4526555C7D00A6AE15 /* RealmManager.swift */; };
+		CB26AF4826560D0900A6AE15 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB26AF4726560D0900A6AE15 /* UIViewExtensions.swift */; };
 		CB4DA68E265206B000EFCB96 /* MessageCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */; };
 		CB4DA690265206CA00EFCB96 /* GroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */; };
 		CB4DA694265269C500EFCB96 /* RootPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */; };
@@ -393,7 +392,6 @@
 		56694AF425B56A51008E8EC5 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
 		56694AF525B56A52008E8EC5 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
 		566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScrollingProxy.swift; sourceTree = "<group>"; };
-		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
 		5693C2F925A6A4DB005FB8C6 /* CallBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBox.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
@@ -415,7 +413,6 @@
 		569FFBC5254BE96C00C487F5 /* CKDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDatabaseManager.h; sourceTree = "<group>"; };
 		569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryIndexes.swift; sourceTree = "<group>"; };
 		569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDatabaseConstants.swift; sourceTree = "<group>"; };
-		56BDA86E254C030F00B72317 /* MessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageChatView.swift; sourceTree = "<group>"; };
 		56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageChatViewModel.swift; sourceTree = "<group>"; };
 		56BDA87E254C0ADC00B72317 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessageModel.swift; path = ClearKeep/Classes/Screens/MessagesChat/MessageModel.swift; sourceTree = SOURCE_ROOT; };
 		56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignalCoordinate.swift; sourceTree = "<group>"; };
@@ -491,6 +488,7 @@
 		AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8879DC7F394065C06A1F2DE /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CB26AF4526555C7D00A6AE15 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		CB26AF4726560D0900A6AE15 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		CB4DA68D265206B000EFCB96 /* MessageCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCommonView.swift; sourceTree = "<group>"; };
 		CB4DA68F265206CA00EFCB96 /* GroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatView.swift; sourceTree = "<group>"; };
 		CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootPresentationMode.swift; sourceTree = "<group>"; };
@@ -1054,7 +1052,6 @@
 			isa = PBXGroup;
 			children = (
 				1013C9572608A64F0081C135 /* GroupChatDetailView */,
-				566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */,
 			);
 			path = GroupMessageChat;
 			sourceTree = "<group>";
@@ -1081,7 +1078,6 @@
 		56BDA86D254C02F300B72317 /* MessagesChat */ = {
 			isa = PBXGroup;
 			children = (
-				56BDA86E254C030F00B72317 /* MessageChatView.swift */,
 				56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */,
 			);
 			path = MessagesChat;
@@ -1161,6 +1157,7 @@
 				10D650BB262681300018528B /* UIFont+Font.swift */,
 				10AA457926423C6A000EB6E1 /* Binding+Extension.swift */,
 				CB4DA693265269C500EFCB96 /* RootPresentationMode.swift */,
+				CB26AF4726560D0900A6AE15 /* UIViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1578,6 +1575,7 @@
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
 				CB26AF4626555C7D00A6AE15 /* RealmManager.swift in Sources */,
 				1015C4562625544C00407C35 /* AppTheme.swift in Sources */,
+				CB26AF4826560D0900A6AE15 /* UIViewExtensions.swift in Sources */,
 				56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
 				6880CF5A25F9C1C100F3DECE /* auth.grpc.swift in Sources */,
 				56205B1525A2C36D00B39D07 /* JanusRolePublish.swift in Sources */,
@@ -1622,7 +1620,6 @@
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
-				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
 				68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
@@ -1669,7 +1666,6 @@
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
 				10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */,
-				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
 				CB4DA690265206CA00EFCB96 /* GroupChatView.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
