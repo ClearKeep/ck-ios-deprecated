@@ -15,18 +15,17 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     private let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
     // MARK: - Variables
-    var ourEncryptionManager: CKAccountSignalEncryptionManager?
-    var groupId: Int64 = 0
-    var clientId: String = ""
-    var username: String = ""
-    var groupType: String = "peer"
+    private(set) var ourEncryptionManager: CKAccountSignalEncryptionManager?
+    private(set) var groupId: Int64 = 0
+    private(set) var clientId: String = ""
+    private(set) var username: String = ""
+    private(set) var groupType: String = "peer"
+    private(set) var isGroup: Bool = false
     
     private var isRequesting = false
-    private var isGroup: Bool = false
     
     // MARK: - Published
     @Published var messages: [MessageModel] = []
-    @Published var recipientDeviceId: UInt32 = 0
     @Published var isForceProcessKey: Bool = true
     
     // MARK: - Init & Deinit
@@ -35,7 +34,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     deinit {
-        print("deinit: \(self)")
+        Debug.DLog("Deinit \(self)")
     }
     
     func setup(clientId: String, username: String, groupId: Int64, groupType: String) {
@@ -54,50 +53,73 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
     }
     
-    func callPeerToPeer(groupId: Int64, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
-        if isRequesting { return }
-        isRequesting = true
-        requestVideoCall(isCallGroup: false, clientId: clientId, groupId: groupId, callType: type, completion: completion)
+    // MARK: - Data managements
+    func getGroupModel() -> GroupModel? {
+        return RealmManager.shared.realmGroups.filterGroup(groupId: groupId)
     }
     
-    func callGroup(groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
-        if isRequesting { return }
-        isRequesting = true
-        requestVideoCall(isCallGroup: true, groupId: groupId, callType: type, completion: completion)
-    }
-    
-    func requestVideoCall(isCallGroup: Bool ,clientId: String = "", groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
-        Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
-            self.isRequesting = false
-            completion?()
-            if let response = response {
-                if response.hasStunServer {
-                    DispatchQueue.main.async {
-                        UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
-                        UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
-                        UserDefaults.standard.synchronize()
-                        
-                        AVCaptureDevice.authorizeVideo(completion: { (status) in
-                            AVCaptureDevice.authorizeAudio(completion: { (status) in
-                                if status == .alreadyAuthorized || status == .justAuthorized {
-                                    CallManager.shared.startCall(clientId: clientId,
-                                                                 clientName: self.username,
-                                                                 avatar: "",
-                                                                 groupId: groupId,
-                                                                 groupToken: response.groupRtcToken,
-                                                                 callType: type,
-                                                                 isCallGroup: isCallGroup)
+    func getMessageInRoom(completion: (() -> ())? = nil) {
+        if isExistedGroup() {
+            Backend.shared.getMessageInRoom(groupId,
+                                            RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
+                if let result = result {
+                    if !result.lstMessage.isEmpty {
+                        DispatchQueue.main.async {
+                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
+                                return msg1.createdAt > msg2.createdAt
+                            }
+                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
+                        }
+                    }
+                    result.lstMessage.forEach { (message) in
+                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
+                        if filterMessage.isEmpty {
+                            if let ourEncryptionMng = self.ourEncryptionManager {
+                                do {
+                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
+                                                                                                name: self.clientId)
+                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
+                                    Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
+                                    
+                                    DispatchQueue.main.async {
+                                        let post = MessageModel(id: message.id,
+                                                                groupID: message.groupID,
+                                                                groupType: message.groupType,
+                                                                fromClientID: message.fromClientID,
+                                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
+                                                                clientID: message.clientID,
+                                                                message: decryptedData,
+                                                                createdAt: message.createdAt,
+                                                                updatedAt: message.updatedAt)
+                                        RealmManager.shared.realmMessages.add(message: post)
+                                        self.messages.append(post)
+                                        self.groupId = message.groupID
+                                        RealmManager.shared.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
+                                    }
+                                } catch {
+                                    Debug.DLog("Decryption message error: \(error)")
                                 }
-                            })
-                        })
+                            }
+                        }
                     }
                 }
             }
         }
     }
     
+    func isExistedGroup() -> Bool {
+        if groupId == 0, let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId) {
+            groupId = group.groupID
+        }
+        
+        return groupId != 0
+    }
+    
     func createGroup(username: String, clientId: String, completion: ((GroupModel) -> ())?) {
-        guard let myAccount = CKSignalCoordinate.shared.myAccount else { return print("My Account is nil") }
+        guard let myAccount = CKSignalCoordinate.shared.myAccount else {
+            return Debug.DLog("My Account is nil")
+        }
+        
         var req = Group_CreateGroupRequest()
         let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
         req.groupName = "\(username)-\(userNameLogin)"
@@ -132,11 +154,23 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
+    func isExistMessage(msgId: String) -> Bool {
+        return RealmManager.shared.realmMessages.isExistMessage(msgId: msgId)
+    }
+    
+    func getIdLastItem() -> String {
+        var id = ""
+        if messages.count > 0 {
+            id = messages[messages.count - 1].id
+        }
+        return id
+    }
+    
+    // MARK: - Send & received message
     func sendMessage(payload: Data, fromClientId: String, completion: ((MessageModel) -> ())?) {
-        do {
-            if isGroup {
-                guard let senderAccount = self.getSenderAccount(fromClientID: fromClientId),
-                      let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
+        if isGroup {
+            do {
+                guard let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
                                                                                    groupId: groupId,
                                                                                    name: fromClientId) else { return }
                 
@@ -163,17 +197,21 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                         }
                     }
                 }
-            } else {
-                guard let ourEncryptionManager = ourEncryptionManager,
-                      ourEncryptionManager.sessionRecordExistsForUsername(clientId, deviceId: 111) else {
-                    requestBundleRecipient(byClientId: clientId) {
-                        self.sendMessage(payload: payload, fromClientId: fromClientId, completion: completion)
-                    }
-                    return
+            } catch {
+                Debug.DLog("Send message error: \(error)")
+            }
+        } else {
+            guard let ourEncryptionManager = ourEncryptionManager,
+                  ourEncryptionManager.sessionRecordExistsForUsername(clientId, deviceId: 111) else {
+                requestBundleRecipient(byClientId: clientId) {
+                    self.sendMessage(payload: payload, fromClientId: fromClientId, completion: completion)
                 }
-                
-                func send() {
-                    let encryptedData = try! ourEncryptionManager.encryptToAddress(payload,
+                return
+            }
+            
+            func send() {
+                do {
+                    let encryptedData = try ourEncryptionManager.encryptToAddress(payload,
                                                                                   name: clientId)
                     
                     Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: self.clientId , groupId: self.groupId , groupType: self.groupType) { (result) in
@@ -199,126 +237,13 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                             }
                         }
                     }
+                    
+                } catch {
+                    Debug.DLog("Send message error: \(error)")
                 }
-                requestBundleRecipient(byClientId: clientId) {
-                    send()
-              }
             }
-        } catch {
-            print("Send message error: \(error)")
-        }
-    }
-    
-    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-        
-        Backend.shared.authenticator
-            .requestKey(byClientId: clientId) { [weak self](result, error, response) in
-                
-                guard let recipientResponse = response else {
-                    print("Request prekey \(clientId) fail")
-                    return
-                }
-//                // check exist session recipient in database
-//                //                if let ourAccountEncryptMng = self?.ourEncryptionManager {
-//                self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-//                //                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
-                if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                   let myAccount = CKSignalCoordinate.shared.myAccount {
-                    // save devcice by recipient account
-                    connectionDb.readWrite ({ (transaction) in
-                        if let _ = myAccount.refetch(with: transaction) {
-                            let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
-                                                             accountUniqueId: myAccount.uniqueId,
-                                                             transaction: transaction)
-                            if myBuddy == nil {
-                                let buddy = CKBuddy()!
-                                buddy.accountUniqueId = myAccount.uniqueId
-                                buddy.username = recipientResponse.clientID
-                                buddy.save(with:transaction)
-
-                                let device = CKDevice(deviceId: NSNumber(value:111),
-                                                      trustLevel: .trustedTofu,
-                                                      parentKey: buddy.uniqueId,
-                                                      parentCollection: CKBuddy.collection,
-                                                      publicIdentityKeyData: nil,
-                                                      lastSeenDate:nil)
-                                device.save(with:transaction)
-                            } else {
-                                myBuddy?.save(with: transaction)
-                                let device = CKDevice(deviceId: NSNumber(value:111),
-                                                      trustLevel: .trustedTofu,
-                                                      parentKey: myBuddy!.uniqueId,
-                                                      parentCollection: CKBuddy.collection,
-                                                      publicIdentityKeyData: nil,
-                                                      lastSeenDate:nil)
-                                device.save(with:transaction)
-                            }
-                        }
-                    })
-                }
-//                    // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
-                    self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-//
-//                    // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-//                    //                                            self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-//                    //                    }
-//                    print("processPreKeyBundle recipient finished")
-                    completion()
-//                }
-                //                    completion()
-                //                }
-            }
-        //        }
-    }
-    
-    private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
-            do {
-                let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
-                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientResponse.signedPreKey)
-                
-                guard let preKeyKeyPair = remotePrekey.keyPair,
-                      let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-                    return
-                }
-                
-                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(111),
-                                                                preKeyId: UInt32(recipientResponse.preKeyID),
-                                                                preKeyPublic: preKeyKeyPair.publicKey,
-                                                                signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
-                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-                                                                signature: recipientResponse.signedPreKeySignature,
-                                                                identityKey: recipientResponse.identityKeyPublic)
-                
-                let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 111)
-                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
-                                                                context: ourEncryptionMng.signalContext)
-                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-            } catch {
-                print("processKeyStoreHasPrivateKey exception: \(error)")
-            }
-        }
-    }
-    
-    private func processKeyStoreOnlyPublicKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
-            do {
-                let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientResponse.signedPreKeyID),
-                                                    publicKey: recipientResponse.signedPreKey,
-                                                    signature: recipientResponse.signedPreKeySignature)
-                let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
-                                        publicKey: recipientResponse.preKey)
-                
-                let bundle = CKBundle(deviceId: UInt32(111),
-                                      registrationId: UInt32(recipientResponse.registrationID),
-                                      identityKey: recipientResponse.identityKeyPublic,
-                                      signedPreKey: ckSignedPreKey,
-                                      preKeys: [ckPreKey])
-                try ourEncryptionMng.consumeIncomingBundle(recipientResponse.clientID, bundle: bundle)
-            } catch {
-                print("processKeyStoreOnlyPublicKey exception: \(error)")
+            requestBundleRecipient(byClientId: clientId) {
+                send()
             }
         }
     }
@@ -369,6 +294,175 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
+    // MARK: - Private functions
+    private func getSenderAccount(fromClientID: String) -> CKAccount? {
+        if let connectionDb = self.connectionDb {
+            var account: CKAccount?
+            connectionDb.read { (transaction) in
+                account = CKAccount.allAccounts(withUsername: fromClientID, transaction: transaction).first
+            }
+            return account
+        }
+        return nil
+    }
+    
+    
+    func callPeerToPeer(groupId: Int64, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
+        if isRequesting { return }
+        isRequesting = true
+        requestVideoCall(isCallGroup: false, clientId: clientId, groupId: groupId, callType: type, completion: completion)
+    }
+    
+    func callGroup(groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
+        if isRequesting { return }
+        isRequesting = true
+        requestVideoCall(isCallGroup: true, groupId: groupId, callType: type, completion: completion)
+    }
+    
+    private func requestVideoCall(isCallGroup: Bool ,clientId: String = "", groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
+        Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
+            self.isRequesting = false
+            completion?()
+            if let response = response {
+                if response.hasStunServer {
+                    DispatchQueue.main.async {
+                        UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
+                        UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
+                        UserDefaults.standard.synchronize()
+                        
+                        AVCaptureDevice.authorizeVideo(completion: { (status) in
+                            AVCaptureDevice.authorizeAudio(completion: { (status) in
+                                if status == .alreadyAuthorized || status == .justAuthorized {
+                                    CallManager.shared.startCall(clientId: clientId,
+                                                                 clientName: self.username,
+                                                                 avatar: "",
+                                                                 groupId: groupId,
+                                                                 groupToken: response.groupRtcToken,
+                                                                 callType: type,
+                                                                 isCallGroup: isCallGroup)
+                                }
+                            })
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
+        
+        Backend.shared.authenticator
+            .requestKey(byClientId: clientId) { [weak self](result, error, response) in
+                
+                guard let recipientResponse = response else {
+                    Debug.DLog("Request prekey \(clientId) fail")
+                    return
+                }
+                //                // check exist session recipient in database
+                //                //                if let ourAccountEncryptMng = self?.ourEncryptionManager {
+                //                self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
+                //                //                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
+                if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
+                   let myAccount = CKSignalCoordinate.shared.myAccount {
+                    // save devcice by recipient account
+                    connectionDb.readWrite ({ (transaction) in
+                        if let _ = myAccount.refetch(with: transaction) {
+                            let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
+                                                             accountUniqueId: myAccount.uniqueId,
+                                                             transaction: transaction)
+                            if myBuddy == nil {
+                                let buddy = CKBuddy()!
+                                buddy.accountUniqueId = myAccount.uniqueId
+                                buddy.username = recipientResponse.clientID
+                                buddy.save(with:transaction)
+                                
+                                let device = CKDevice(deviceId: NSNumber(value:111),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: buddy.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            } else {
+                                myBuddy?.save(with: transaction)
+                                let device = CKDevice(deviceId: NSNumber(value:111),
+                                                      trustLevel: .trustedTofu,
+                                                      parentKey: myBuddy!.uniqueId,
+                                                      parentCollection: CKBuddy.collection,
+                                                      publicIdentityKeyData: nil,
+                                                      lastSeenDate:nil)
+                                device.save(with:transaction)
+                            }
+                        }
+                    })
+                }
+                //                    // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
+                self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
+                //
+                //                    // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
+                //                    //                                            self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
+                //                    //                    }
+                //                    print("processPreKeyBundle recipient finished")
+                completion()
+                //                }
+                //                    completion()
+                //                }
+            }
+        //        }
+    }
+    
+    private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
+        if let ourEncryptionMng = self.ourEncryptionManager {
+            do {
+                let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
+                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientResponse.signedPreKey)
+                
+                guard let preKeyKeyPair = remotePrekey.keyPair,
+                      let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
+                    return
+                }
+                
+                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
+                                                                deviceId: UInt32(111),
+                                                                preKeyId: UInt32(recipientResponse.preKeyID),
+                                                                preKeyPublic: preKeyKeyPair.publicKey,
+                                                                signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
+                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
+                                                                signature: recipientResponse.signedPreKeySignature,
+                                                                identityKey: recipientResponse.identityKeyPublic)
+                
+                let remoteAddress = SignalAddress(name: recipientResponse.clientID,
+                                                  deviceId: 111)
+                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
+                                                                context: ourEncryptionMng.signalContext)
+                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
+            } catch {
+                Debug.DLog("processKeyStoreHasPrivateKey exception: \(error)")
+            }
+        }
+    }
+    
+    private func processKeyStoreOnlyPublicKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
+        if let ourEncryptionMng = self.ourEncryptionManager {
+            do {
+                let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientResponse.signedPreKeyID),
+                                                    publicKey: recipientResponse.signedPreKey,
+                                                    signature: recipientResponse.signedPreKeySignature)
+                let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
+                                        publicKey: recipientResponse.preKey)
+                
+                let bundle = CKBundle(deviceId: UInt32(111),
+                                      registrationId: UInt32(recipientResponse.registrationID),
+                                      identityKey: recipientResponse.identityKeyPublic,
+                                      signedPreKey: ckSignedPreKey,
+                                      preKeys: [ckPreKey])
+                try ourEncryptionMng.consumeIncomingBundle(recipientResponse.clientID, bundle: bundle)
+            } catch {
+                Debug.DLog("processKeyStoreOnlyPublicKey exception: \(error)")
+            }
+        }
+    }
+    
     private func decryptedMessage(messageData: Data, fromClientID: String) -> Data {
         let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
         guard let ourEncryptionMng = self.ourEncryptionManager else { return messageError }
@@ -391,7 +485,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
             Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                          groupId: groupId) {(result, error, response) in
                 guard let groupResponse = response else {
-                    print("Request prekey \(groupId) fail")
+                    Debug.DLog("Request prekey \(groupId) fail")
                     return
                 }
                 self.processSenderKey(byGroupId: groupResponse.groupID,
@@ -423,90 +517,9 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                          address: addresss,
                                                          skdmDtata: responseSenderKey.clientKeyDistribution)
             } catch {
-                print("processSenderKey error: \(error)")
+                Debug.DLog("processSenderKey error: \(error)")
             }
         }
-    }
-    
-    private func getSenderAccount(fromClientID: String) -> CKAccount? {
-        if let connectionDb = self.connectionDb {
-            var account: CKAccount?
-            connectionDb.read { (transaction) in
-                account = CKAccount.allAccounts(withUsername: fromClientID, transaction: transaction).first
-            }
-            return account
-        }
-        return nil
-    }
-    
-    func getIdLastItem() -> String {
-        let msgInRoom = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
-        var id = ""
-        if msgInRoom.count > 0 {
-            id = msgInRoom[msgInRoom.count - 1].id
-        }
-        return id
-    }
-    
-    func isExistedGroup() -> Bool {
-        if groupId == 0, let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId) {
-            groupId = group.groupID
-        }
-        
-        return groupId != 0
-    }
-    
-    func getMessageInRoom(completion: (() -> ())? = nil) {
-        if isExistedGroup() {
-            Backend.shared.getMessageInRoom(groupId,
-                                            RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
-                if let result = result {
-                    if !result.lstMessage.isEmpty {
-                        DispatchQueue.main.async {
-                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
-                                return msg1.createdAt > msg2.createdAt
-                            }
-                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
-                        }
-                    }
-                    result.lstMessage.forEach { (message) in
-                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
-                        if filterMessage.isEmpty {
-                            if let ourEncryptionMng = self.ourEncryptionManager {
-                                do {
-                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
-                                                                                                name: self.clientId)
-                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                                    print("Message decryption: \(messageDecryption ?? "Empty error")")
-                                    
-                                    DispatchQueue.main.async {
-                                        let post = MessageModel(id: message.id,
-                                                                groupID: message.groupID,
-                                                                groupType: message.groupType,
-                                                                fromClientID: message.fromClientID,
-                                                                fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
-                                                                clientID: message.clientID,
-                                                                message: decryptedData,
-                                                                createdAt: message.createdAt,
-                                                                updatedAt: message.updatedAt)
-                                        RealmManager.shared.realmMessages.add(message: post)
-                                        self.messages.append(post)
-                                        self.groupId = message.groupID
-                                        RealmManager.shared.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
-                                    }
-                                } catch {
-                                    print("Decryption message error: \(error)")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func isExistMessage(msgId: String) -> Bool {
-        return RealmManager.shared.realmMessages.isExistMessage(msgId: msgId)
     }
     
     func registerWithGroup(_ groupId: Int64) {
@@ -525,22 +538,18 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                    clientId: userName,
                                                                    deviceId: deviceID,
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                            print("Register group with result: \(result)")
+                            Debug.DLog("Register group with result: \(result)")
                             if result {
                                 RealmManager.shared.realmGroups.registerGroup(groupId: groupId)
                             }
                         }
                         
                     } catch {
-                        print("Register group error: \(error)")
-                        
+                        Debug.DLog("Register group error: \(error)")
                     }
                 }
             }
         }
     }
     
-    func getGroupModel() -> GroupModel? {
-        return RealmManager.shared.realmGroups.filterGroup(groupId: groupId)
-    }
 }

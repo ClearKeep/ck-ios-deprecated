@@ -7,6 +7,21 @@
 
 import Foundation
 
+struct Debug {
+   
+   /// Print information
+   /// - Parameters:
+   ///   - message: Message of log
+   ///   - object: Object to log
+   ///   - function: Function's name
+   ///   - line: Line number of function
+   static func DLog(_ message: String, _ object: Any? = "", function: String = #function, line: Int = #line) {
+      #if DEBUG
+      print("- [", function, "] - [ LINE", line, "] -", message, object as Any)
+      #endif
+   }
+}
+
 struct Constants {
     static let keySaveUser = "keySaveUser"
     static let isChatRoom = "isChatRoom"
