@@ -140,7 +140,6 @@ struct GroupChatView: View {
                 self.viewModel.requestBundleRecipient(byClientId: clientId){}
             }
             self.viewModel.getMessageInRoom {
-                self.reloadData()
                 self.scrollView?.scrollToBottom()
             }
         }
@@ -171,7 +170,6 @@ struct GroupChatView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
             self.viewModel.getMessageInRoom {
-                self.reloadData()
                 self.scrollView?.scrollToBottom()
             }
         })
@@ -228,21 +226,12 @@ extension GroupChatView {
     
     private func didReceiveMessage(publication: Message_MessageObjectResponse) {
         self.viewModel.decryptionMessage(publication: publication, completion: { messageModel in
-            self.reloadData()
             self.scrollView?.scrollToBottom()
         })
     }
     
-    private func reloadData() {
-        DispatchQueue.main.async {
-//            self.realmMessages.loadSavedData()
-//            self.messages = realmMessages.allMessageInGroup(groupId: viewModel.groupId)
-        }
-    }
-    
     private func sendMessage(messageStr: String) {
         func handleSentMessage(messageModel: MessageModel) {
-            self.reloadData()
             self.scrollView?.scrollToBottom()
         }
         
