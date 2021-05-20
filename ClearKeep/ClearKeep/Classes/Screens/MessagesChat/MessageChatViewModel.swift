@@ -540,4 +540,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
+    func getGroupModel() -> GroupModel? {
+        return RealmManager.shared.realmGroups.filterGroup(groupId: groupId)
+    }
 }
