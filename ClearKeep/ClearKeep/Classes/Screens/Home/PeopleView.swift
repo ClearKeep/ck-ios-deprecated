@@ -41,9 +41,7 @@ struct PeopleView: View {
                         HStack {
                             VStack(alignment:.leading , spacing: 16) {
                                 ForEach(self.peoples , id: \.id) { user in
-                                    NavigationLink(destination: GroupChatView(userName: user.userName, clientId: user.id)
-                                                    .environmentObject(groupRealms)
-                                                    .environmentObject(messsagesRealms)){
+                                    NavigationLink(destination: GroupChatView(userName: user.userName, clientId: user.id)){
                                         ContactView(people: user)
                                     }
                                 }
