@@ -245,18 +245,18 @@ extension GroupChatView {
         }
         
         if let myAccount = CKSignalCoordinate.shared.myAccount {
-            if viewModel.isExistedGroup(){
+            if viewModel.isExistedGroup() {
+                viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
+                    DispatchQueue.main.async {
+                        handleSentMessage(messageModel: messageModel)
+                    }
+                }
+            } else {
                 viewModel.createGroup(username: userName, clientId: clientId) { (group) in
                     viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
                         DispatchQueue.main.async {
                             handleSentMessage(messageModel: messageModel)
                         }
-                    }
-                }
-            } else {
-                viewModel.sendMessage(payload: payload, fromClientId: myAccount.username) { messageModel in
-                    DispatchQueue.main.async {
-                        handleSentMessage(messageModel: messageModel)
                     }
                 }
             }
