@@ -233,9 +233,6 @@ extension GroupChatView {
                             hudVisible = false
                         }
                     } else {
-                        viewModel.callPeerToPeer(groupId: viewModel.groupId, clientId: clientId, callType: type) {
-                            hudVisible = false
-                        }
                         if viewModel.isExistedGroup() {
                             viewModel.callPeerToPeer(groupId: viewModel.groupId, clientId: clientId, callType: type) {
                                 hudVisible = false
