@@ -25,8 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func show(_ scene: UIScene) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let contentView = MotherView()
-            .environmentObject(RealmGroups())
-            .environmentObject(RealmMessages())
+            .environmentObject(RealmManager.shared.realmGroups)
+            .environmentObject(RealmManager.shared.realmMessages)
             .environmentObject(appDelegate.viewRouter)
             .environmentObject(HomeMainViewModel())
             .environmentObject(ServerMainViewModel())
