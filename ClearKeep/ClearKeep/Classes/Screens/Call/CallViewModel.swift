@@ -13,16 +13,16 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var remoteVideoView: RTCMTLEAGLVideoView?
     @Published var remotesVideoView = [RTCMTLEAGLVideoView]()
     
-    @Published var cameraOn = true
+    @Published var cameraOn = false
     @Published var cameraFront = false
     @Published var microEnable = true
     @Published var speakerEnable = false
-    @Published var callStatus: CallStatus = .answered// .calling
+    @Published var callStatus: CallStatus = .calling
     @Published var callGroup = false
-    @Published var timeCall = "1:15" //""
+    @Published var timeCall = ""
     @Published var remoteViewRenderSize: CGSize = CGSize.zero
     @Published var isVideoRequesting = false
-    @Published var callType: Constants.CallType = .video// .audio
+    @Published var callType: Constants.CallType = .audio
     
     enum RenderScaleMode {
         case scaleToFit
