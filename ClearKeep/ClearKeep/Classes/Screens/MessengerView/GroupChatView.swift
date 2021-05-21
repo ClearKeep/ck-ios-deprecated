@@ -36,13 +36,12 @@ struct GroupChatView: View {
     private init() {
     }
     
-    init(userName: String, clientId: String, groupId: Int64 = 0) {
+    init(userName: String, clientId: String) {
         self.init()
         self.userName = userName
         self.clientId = clientId
         self.groupType = "peer"
-        self.groupId = groupId
-        self.viewModel.setup(clientId: clientId, username: userName, groupId: groupId, groupType: groupType)
+        self.viewModel.setup(clientId: clientId, username: userName, groupType: groupType)
     }
     
     init(groupName: String, groupId: Int64) {

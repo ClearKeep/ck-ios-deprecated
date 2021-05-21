@@ -151,8 +151,7 @@ extension ServerMainView {
         Group {
             if groupModel.groupType == "peer" {
                 GroupChatView(userName: viewModel.getPeerReceiveName(inGroup: groupModel),
-                              clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
-                              groupId: groupModel.groupID)
+                              clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}))
             } else {
                 GroupChatView(groupName: groupModel.groupName, groupId: groupModel.groupID)
             }

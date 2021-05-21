@@ -37,10 +37,10 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         Debug.DLog("Deinit \(self)")
     }
     
-    func setup(clientId: String, username: String, groupId: Int64, groupType: String) {
-        self.groupId = groupId
+    func setup(clientId: String, username: String, groupType: String) {
         self.clientId = clientId
         self.username = username
+        self.groupId = RealmManager.shared.realmGroups.getGroup(clientId: clientId)?.groupID ?? 0
         self.groupType = groupType
         isGroup = false
         messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
