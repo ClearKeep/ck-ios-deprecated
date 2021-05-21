@@ -504,7 +504,7 @@ extension ServerMainView {
     private func processSenderKey(byGroupId groupId: Int64,
                                   responseSenderKey: Signal_GroupClientKeyObject) {
         
-        let deviceID = 111
+        let deviceID = 222
         
         if let ourAccountEncryptMng = self.ourEncryptionManager,
            let connectionDb = self.connectionDb {
