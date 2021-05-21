@@ -108,8 +108,8 @@ struct CreateRoomView: View {
 extension CreateRoomView {
     
     private func createRoom(){
-        
-        if groupName.trimmingCharacters(in: .whitespaces).isEmpty {
+        let groupNameTrimed = groupName.trimmingCharacters(in: .whitespacesAndNewlines)
+        if groupNameTrimed.isEmpty {
             self.isShowAlert = true
             self.titleAlert = "Create Room Error"
             self.messageAlert = "Group name can't be empty"
@@ -130,7 +130,7 @@ extension CreateRoomView {
             let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
             lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
             var req = Group_CreateGroupRequest()
-            req.groupName = self.groupName
+            req.groupName = groupNameTrimed
             req.groupType = "group"
             req.createdByClientID = account.username
             req.lstClientID = lstClientID.map{$0.id}
