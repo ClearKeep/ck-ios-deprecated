@@ -159,7 +159,6 @@ struct GroupChatView: View {
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
                 if publication.groupType == "group"{
                     if UserDefaults.standard.bool(forKey: Constants.isChatGroup){
-                        viewModel.isForceProcessKey = true
                         didReceiveMessage(publication: publication)
                     }
                 }

@@ -26,7 +26,6 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     
     // MARK: - Published
     @Published var messages: [MessageModel] = []
-    @Published var isForceProcessKey: Bool = true
     
     // MARK: - Init & Deinit
     init() {
@@ -227,7 +226,6 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                 createdAt: result.createdAt,
                                                                 updatedAt: result.updatedAt)
                                 RealmManager.shared.realmMessages.add(message: messageModel)
-                                
                                 self.messages.append(messageModel)
                                 RealmManager.shared.realmGroups.updateLastMessage(groupID: messageModel.groupID,
                                                                                   lastMessage: messageModel.message,
@@ -481,23 +479,20 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())?) {
-        if self.isForceProcessKey {
-            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-                                                         groupId: groupId) {(result, error, response) in
-                guard let groupResponse = response else {
-                    Debug.DLog("Request prekey \(groupId) fail")
-                    return
-                }
-                self.processSenderKey(byGroupId: groupResponse.groupID,
-                                      responseSenderKey: groupResponse.clientKey)
-                // decrypt message again
-                self.decryptionMessage(publication: publication, completion: completion)
-                self.isForceProcessKey = false
+        Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
+                                                     groupId: groupId) {(result, error, response) in
+            guard let groupResponse = response else {
+                Debug.DLog("Request prekey \(groupId) fail")
+                return
             }
+            self.processSenderKey(byGroupId: groupResponse.groupID,
+                                  responseSenderKey: groupResponse.clientKey)
+            // decrypt message again
+            self.decryptionMessage(publication: publication, completion: completion)
         }
     }
     
-    func processSenderKey(byGroupId groupId: Int64,
+    private func processSenderKey(byGroupId groupId: Int64,
                           responseSenderKey: Signal_GroupClientKeyObject) {
         let deviceID = 222
         if let ourAccountEncryptMng = self.ourEncryptionManager,
