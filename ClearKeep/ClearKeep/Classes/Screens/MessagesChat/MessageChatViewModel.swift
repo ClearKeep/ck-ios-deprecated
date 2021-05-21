@@ -58,6 +58,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
     }
     
     func getMessageInRoom(completion: (() -> ())? = nil) {
+        if isGroup {
+            getMessageGroup(completion: completion)
+        } else {
+            getMessagePeerToPeer(completion: completion)
+        }
+    }
+    
+    private func getMessagePeerToPeer(completion: (() -> ())? = nil) {
         if isExistedGroup() {
             Backend.shared.getMessageInRoom(groupId,
                                             RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
@@ -97,6 +105,81 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                     }
                                 } catch {
                                     Debug.DLog("Decryption message error: \(error)")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func getMessageGroup(completion: (() -> ())? = nil) {
+        if isExistedGroup() {
+            Backend.shared.getMessageInRoom(groupId ,
+                                            RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
+                if let result = result {
+                    if !result.lstMessage.isEmpty {
+                        DispatchQueue.main.async {
+                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
+                                return msg1.createdAt > msg2.createdAt
+                            }
+                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
+                        }
+                    }
+                    result.lstMessage.forEach { (message) in
+                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId:
+                                                                                    message.groupID).filter{$0.id == message.id}
+                        if filterMessage.isEmpty {
+                            if let ourEncryptionMng = self.ourEncryptionManager,
+                               let connectionDb = self.connectionDb {
+                                do {
+                                    var account: CKAccount?
+                                    connectionDb.read { (transaction) in
+                                        account = CKAccount.allAccounts(withUsername:
+                                                                            message.fromClientID, transaction: transaction).first
+                                    }
+                                    if let senderAccount = account {
+                                        if
+                                            ourEncryptionMng.senderKeyExistsForUsername(message.fromClientID, deviceId:
+                                                                                            senderAccount.deviceId, groupId: self.groupId) {
+                                            let decryptedData = try
+                                                ourEncryptionMng.decryptFromGroup(message.message,
+                                                                                  groupId: message.groupID,
+                                                                                  name: message.fromClientID)
+                                            let messageDecryption = String(data: decryptedData, encoding:
+                                                                            .utf8)
+                                            Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
+                                            DispatchQueue.main.async {
+                                                RealmManager.shared.realmGroups.updateLastMessage(groupID: self.groupId, lastMessage: decryptedData, lastMessageAt: message.createdAt,
+                                                                                   idLastMessage: message.id)
+                                                let post = MessageModel(id: message.id,
+                                                                        groupID: message.groupID,
+                                                                        groupType: message.groupType,
+                                                                        fromClientID: message.fromClientID,
+                                                                        fromDisplayName:
+                                                                            RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: message.fromClientID,
+                                                                                                                         groupID: message.groupID),
+                                                                        clientID: message.clientID,
+                                                                        message: decryptedData,
+                                                                        createdAt: message.createdAt,
+                                                                        updatedAt: message.updatedAt)
+                                                RealmManager.shared.realmMessages.add(message: post)
+                                                completion?()
+                                            }
+                                            return
+                                        }else {
+                                            self.requestKeyInGroup(byGroupId: self.groupId, publication:
+                                                                message, completion: nil)
+                                        }
+                                    }else {
+                                        self.requestKeyInGroup(byGroupId: self.groupId, publication:
+                                                            message, completion: nil)
+                                    }
+                                } catch {
+                                    Debug.DLog("Decryption message error: \(error)")
+                                    self.requestKeyInGroup(byGroupId: self.groupId, publication:
+                                                        message, completion: nil)
                                 }
                             }
                         }
