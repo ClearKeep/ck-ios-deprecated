@@ -138,7 +138,7 @@ struct GroupChatView: View {
         .onAppear() {
             if viewModel.isGroup {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                self.viewModel.registerWithGroup(groupId)
+                self.viewModel.registerWithGroup()
             } else {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
                 self.viewModel.requestBundleRecipient(byClientId: clientId){}
