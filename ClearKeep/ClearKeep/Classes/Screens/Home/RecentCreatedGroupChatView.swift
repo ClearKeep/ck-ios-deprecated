@@ -34,7 +34,7 @@ struct RecentCreatedGroupChatView: View {
                     .padding(.leading, 10)
                     .foregroundColor(.blue)
                     .onTapGesture {
-                        self.viewRouter.current = .tabview
+                        self.viewRouter.current = .home
                     }
                 Text("").frame(width: 40, height: 40)
                                                 

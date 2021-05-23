@@ -9,9 +9,7 @@ import SwiftUI
 import GoogleSignIn
 
 struct ProfileView: View {
-    
-    @EnvironmentObject var viewRouter: ViewRouter
-    
+
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var userName: String = "User name"

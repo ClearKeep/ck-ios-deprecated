@@ -29,7 +29,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(RealmManager.shared.realmMessages)
             .environmentObject(appDelegate.viewRouter)
             .environmentObject(HomeMainViewModel())
-            .environmentObject(ServerMainViewModel())
 
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)

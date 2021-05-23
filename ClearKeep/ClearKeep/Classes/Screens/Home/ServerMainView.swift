@@ -14,7 +14,7 @@ struct ServerMainView: View {
     @EnvironmentObject var messsagesRealms : RealmMessages
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @EnvironmentObject var viewModel: ServerMainViewModel
+    @ObservedObject var viewModel: ServerMainViewModel = ServerMainViewModel()
     
     @State var ourEncryptionManager: CKAccountSignalEncryptionManager?
     @State var pushActive = false
@@ -199,7 +199,7 @@ extension ServerMainView {
                 Button(action: {
                     viewModel.selectedGroupChatId = group.groupID
                 }) {
-                    NavigationLink(destination: groupChatDestination(groupModel: group), tag: group.groupID, selection: $viewModel.selectedGroupChatId, label: {
+                    NavigationLink(destination: groupChatDestination(groupModel: group), label: {
                         Text(viewModel.getGroupName(group: group))
                             .font(AppTheme.fonts.linkSmall.font)
                             .foregroundColor(AppTheme.colors.gray1.color)

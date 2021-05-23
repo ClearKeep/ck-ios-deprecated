@@ -416,7 +416,7 @@ extension CallManager: CXProviderDelegate {
             self.answerCall = nil
             self.removeAllCalls()
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.viewRouter.current = .login
+                appDelegate.viewRouter.current = .home
             }
         }
     }
