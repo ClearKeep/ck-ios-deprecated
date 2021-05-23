@@ -29,7 +29,7 @@ struct MotherView: View {
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .callVideo: CallView()
 //            case .inviteMember: InviteMemberGroup()
-            case .recentCreatedGroupChat: RecentCreatedGroupChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .recentCreatedGroupChat: GroupChatView(groupName: viewRouter.recentCreatedGroupModel!.groupName, groupId: viewRouter.recentCreatedGroupModel!.groupID)
             }
         }
     }
