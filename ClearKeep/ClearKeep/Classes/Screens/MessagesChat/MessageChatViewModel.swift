@@ -600,8 +600,8 @@ class MessageChatViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func registerWithGroup(_ groupId: Int64) {
-        if let group = RealmManager.shared.realmGroups.filterGroup(groupId: groupId) {
+    func registerWithGroup() {
+        if let group = getGroupModel() {
             if !group.isRegister {
                 if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
                     let userName = myAccount.username
@@ -618,7 +618,7 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
                             Debug.DLog("Register group with result: \(result)")
                             if result {
-                                RealmManager.shared.realmGroups.registerGroup(groupId: groupId)
+                                RealmManager.shared.realmGroups.registerGroup(groupId: self.groupId)
                             }
                         }
                         

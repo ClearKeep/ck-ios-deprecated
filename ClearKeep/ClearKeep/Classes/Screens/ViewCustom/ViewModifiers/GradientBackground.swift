@@ -31,9 +31,9 @@ extension View {
         self.modifier(GradientBackground())
     }
     
-    func gradientHeader() -> some View{
+    func gradientHeader(opacity: Double = 1.0) -> some View {
         ZStack(alignment: .center) {
-            self.background(LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing))
+            self.background(LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing).opacity(opacity))
         }
     }
 }

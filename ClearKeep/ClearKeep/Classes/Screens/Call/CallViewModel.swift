@@ -13,7 +13,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var remoteVideoView: RTCMTLEAGLVideoView?
     @Published var remotesVideoView = [RTCMTLEAGLVideoView]()
     
-    @Published var cameraOn = true
+    @Published var cameraOn = false
     @Published var cameraFront = false
     @Published var microEnable = true
     @Published var speakerEnable = false
@@ -92,7 +92,7 @@ class CallViewModel: NSObject, ObservableObject {
     }
     
     func getUserName() -> String {
-        return callBox?.clientName ?? ""
+        return callBox?.clientName ?? "N/A" //""
     }
     
     func updateVideoView() {
