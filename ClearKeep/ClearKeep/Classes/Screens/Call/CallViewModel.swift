@@ -13,7 +13,7 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var remoteVideoView: RTCMTLEAGLVideoView?
     @Published var remotesVideoView = [RTCMTLEAGLVideoView]()
     
-    @Published var cameraOn = false
+    @Published var cameraOn = true
     @Published var cameraFront = false
     @Published var microEnable = true
     @Published var speakerEnable = false
@@ -43,6 +43,13 @@ class CallViewModel: NSObject, ObservableObject {
     func updateCallBox(callBox: CallBox) {
         self.callBox = callBox
         self.callType = callBox.type
+        
+        if callBox.type == .audio {
+            self.cameraOn = false
+        } else {
+            self.cameraOn = true
+        }
+        
         updateVideoView()
 
         self.callBox?.stateDidChange = { [weak self] in
@@ -148,6 +155,7 @@ class CallViewModel: NSObject, ObservableObject {
     
     func cameraChange() {
         cameraOn = !cameraOn
+        
         if let callBox = self.callBox {
             if cameraOn {
                 callBox.videoRoom?.publisher?.cameraOn()
@@ -273,6 +281,7 @@ class CallViewModel: NSObject, ObservableObject {
             if error == nil {
                 DispatchQueue.main.async {
                     guard let self = self else { return }
+                    self.cameraOn = true
                     self.callType = .video
                     self.callBox?.type = .video
                     self.callBox?.videoRoom?.publisher?.cameraOn()
