@@ -162,6 +162,16 @@ struct GroupChatView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
+            if UserDefaults.standard.bool(forKey: Constants.isChatRoom) {
+                if let userInfo = obj.userInfo,
+                   let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
+                    if publication.notifyType == "peer-update-key" {
+                        self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
+                    }
+                }
+            }
+        })
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.AppBecomeActive), perform: { (obj) in
             self.viewModel.getMessageInRoom {
                 self.scrollView?.scrollToBottom()

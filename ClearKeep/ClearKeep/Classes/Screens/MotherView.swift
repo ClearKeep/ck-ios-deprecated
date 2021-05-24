@@ -20,7 +20,7 @@ struct MotherView: View {
                     HomeMainView().transition(.move(edge: .trailing))
                 }
             case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
-            case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .profile: ProfileView()
             case .register: RegisterView()
             case .tabview:
                 //TabViewContainer().transition(.move(edge: .trailing))
