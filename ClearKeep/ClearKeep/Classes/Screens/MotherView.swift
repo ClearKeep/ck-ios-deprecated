@@ -29,7 +29,10 @@ struct MotherView: View {
 //            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .callVideo: CallView()
 //            case .inviteMember: InviteMemberGroup()
-            case .recentCreatedGroupChat: GroupChatView(groupName: viewRouter.recentCreatedGroupModel!.groupName, groupId: viewRouter.recentCreatedGroupModel!.groupID)
+            case .recentCreatedGroupChat:
+                NavigationView {
+                    GroupChatView(groupName: viewRouter.recentCreatedGroupModel!.groupName, groupId: viewRouter.recentCreatedGroupModel!.groupID)
+                }
             }
         }
     }
