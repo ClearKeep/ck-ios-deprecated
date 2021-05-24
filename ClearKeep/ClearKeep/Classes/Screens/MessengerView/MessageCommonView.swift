@@ -40,3 +40,45 @@ struct MessageListView<Content: View>: View {
         .padding(.top, 25)
     }
 }
+
+struct MessageToolBar: View {
+    
+    var sendAction: (String) -> ()
+    @State private var messageText: String = ""
+    
+    var body: some View {
+        HStack(spacing: 15) {
+            Button {} label: {
+                Image("ic_photo")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            Button {} label: {
+                Image("ic_tag")
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+            
+            MultilineTextField("Type Something Here", text: $messageText)
+                .padding(.vertical, 4)
+                .padding(.horizontal)
+                .background(AppTheme.colors.gray5.color)
+                .cornerRadius(16)
+                .clipped()
+            
+            // Send Button...
+            Button(action: {
+                // appeding message...
+                // adding animation...
+                withAnimation(.easeIn){
+                    sendAction(messageText)
+                }
+                messageText = ""
+            }, label: {
+                Image("ic_sent")
+                    .foregroundColor(AppTheme.colors.primary.color)
+            })
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+        .animation(.easeOut)
+    }
+}

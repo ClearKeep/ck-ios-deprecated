@@ -31,7 +31,7 @@ struct GroupChatView: View {
     private var groupType: String = "peer"
     private var clientId: String = ""
     private var groupId: Int64 = 0
-    
+    private var isCreateGroup: Bool = false
     // MARK: - Init
     private init() {
     }
@@ -44,11 +44,12 @@ struct GroupChatView: View {
         self.viewModel.setup(clientId: clientId, username: userName, groupType: groupType)
     }
     
-    init(groupName: String, groupId: Int64) {
+    init(groupName: String, groupId: Int64, isCreateGroup: Bool = false) {
         self.init()
         self.groupName = groupName
         self.groupType = "group"
         self.groupId = groupId
+        self.isCreateGroup = isCreateGroup
         self.viewModel.setup(groupId: groupId, groupType: groupType)
     }
     
@@ -94,57 +95,47 @@ struct GroupChatView: View {
                 }
             })
             
-            HStack(spacing: 15) {
-                Button {} label: {
-                    Image("ic_photo")
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                }
-                Button {} label: {
-                    Image("ic_tag")
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                }
-                
-                MultilineTextField("Type Something Here", text: $messageStr)
-                    .padding(.vertical, 4)
-                    .padding(.horizontal)
-                    .background(AppTheme.colors.gray5.color)
-                    .cornerRadius(16)
-                    .clipped()
-                
-                // Send Button...
-                Button(action: {
-                    // appeding message...
-                    // adding animation...
-                    withAnimation(.easeIn){
-                        self.sendMessage(messageStr: messageStr)
-                    }
-                    messageStr = ""
-                }, label: {
-                    Image("ic_sent")
-                        .foregroundColor(AppTheme.colors.primary.color)
-                })
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-            .animation(.easeOut)
+            MessageToolBar(sendAction: { message in
+                sendMessage(messageStr: message)
+            })
+            
         }
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
         }, invokeBackButton: {
-            self.presentationMode.wrappedValue.dismiss()
+            if isCreateGroup {
+                self.viewRouter.current = .tabview
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
+            }
         }, invokeCallButton: { callType in
             call(callType: callType)
         })
         .onAppear() {
             if viewModel.isGroup {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatGroup)
-                self.viewModel.registerWithGroup()
+//                self.viewModel.registerWithGroup()
+                DispatchQueue.main.async {
+                    RealmManager.shared.realmMessages.loadSavedData()
+                    RealmManager.shared.realmGroups.loadSavedData()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.viewModel.registerWithGroup()
+                        self.viewModel.getMessageInRoom {
+                            self.scrollView?.scrollToBottom()
+                        }
+                    }
+                }
             } else {
                 UserDefaults.standard.setValue(true, forKey: Constants.isChatRoom)
                 self.viewModel.requestBundleRecipient(byClientId: clientId){}
-            }
-            self.viewModel.getMessageInRoom {
-                self.scrollView?.scrollToBottom()
+                DispatchQueue.main.async {
+                    RealmManager.shared.realmMessages.loadSavedData()
+                    RealmManager.shared.realmGroups.loadSavedData()
+                }
+                self.viewModel.getMessageInRoom {
+                    self.scrollView?.scrollToBottom()
+                }
             }
         }
         .onDisappear(){

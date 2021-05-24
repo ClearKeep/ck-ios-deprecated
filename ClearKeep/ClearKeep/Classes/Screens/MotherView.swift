@@ -31,7 +31,7 @@ struct MotherView: View {
 //            case .inviteMember: InviteMemberGroup()
             case .recentCreatedGroupChat:
                 NavigationView {
-                    GroupChatView(groupName: viewRouter.recentCreatedGroupModel!.groupName, groupId: viewRouter.recentCreatedGroupModel!.groupID)
+                    GroupChatView(groupName: viewRouter.recentCreatedGroupModel!.groupName, groupId: viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
                 }
             }
         }

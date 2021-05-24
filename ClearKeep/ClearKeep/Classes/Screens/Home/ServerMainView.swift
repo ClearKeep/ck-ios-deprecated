@@ -466,14 +466,14 @@ extension ServerMainView {
                                                                    clientId: userName,
                                                                    deviceId: deviceID,
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                            print("Register group with result: \(result)")
+                            print("Register group \(group.groupName) with result: \(result)")
                             if result {
                                 self.groupRealms.registerGroup(groupId: groupId)
                             }
                         }
                         
                     } catch {
-                        print("Register group error: \(error)")
+                        print("Register group \(group.groupName) error: \(error)")
                         
                     }
                 }

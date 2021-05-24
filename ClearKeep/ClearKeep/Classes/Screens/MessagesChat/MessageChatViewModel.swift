@@ -616,14 +616,14 @@ class MessageChatViewModel: ObservableObject, Identifiable {
                                                                    clientId: userName,
                                                                    deviceId: deviceID,
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                            Debug.DLog("Register group with result: \(result)")
+                            Debug.DLog("Register group \(group.groupName) with result: \(result)")
                             if result {
                                 RealmManager.shared.realmGroups.registerGroup(groupId: self.groupId)
                             }
                         }
                         
                     } catch {
-                        Debug.DLog("Register group error: \(error)")
+                        Debug.DLog("Register group \(group.groupName) error: \(error)")
                     }
                 }
             }
