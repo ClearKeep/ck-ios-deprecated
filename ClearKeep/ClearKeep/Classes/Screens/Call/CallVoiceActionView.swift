@@ -14,6 +14,7 @@ struct CallVoiceActionView: View {
         GeometryReader { reader in
             VStack {
                 Spacer()
+                    .frame(height: reader.size.height/2)
 
                 VStack {
                     HStack(spacing: 16) {
@@ -41,6 +42,8 @@ struct CallVoiceActionView: View {
                         Spacer()
                     }
                     
+                    Spacer()
+                    
                     HStack {
                         Spacer()
                         CallActionButtonView(onIcon: "Phone-off",
@@ -51,7 +54,7 @@ struct CallVoiceActionView: View {
                                              action: { viewModel.endCall() })
                         Spacer()
                     }
-                    .padding(.top, 115)
+                    
                 }
                 .frame(width: reader.size.width)
                 .padding(.vertical, 16)

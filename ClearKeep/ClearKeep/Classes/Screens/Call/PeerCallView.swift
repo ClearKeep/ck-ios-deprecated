@@ -56,34 +56,47 @@ struct SingleVoiceCallInfoView: View {
     }
     
     var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
-                .frame(height: 60)
-            
-            if viewModel.callType == .audio, viewModel.callStatus != .answered, !viewModel.getStatusMessage().isEmpty {
-                Text(viewModel.getStatusMessage())
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.gray5.color)
-            }
-            
-            ChannelUserAvatar(avatarSize: 160, text: viewModel.getUserName(), font: AppTheme.fonts.defaultFont(ofSize: 72).font, image: image(withName: viewModel.callBox?.avatar), status: .none, gradientBackgroundType: GradientBackgroundType.accent)
-            
-            VStack(spacing: 8) {
-                Text(viewModel.getUserName())
-                    .font(AppTheme.fonts.displayMediumBold.font)
-                    .foregroundColor(AppTheme.colors.offWhite.color)
-                    .lineLimit(2)
-                    .padding(.horizontal, 16)
+        GeometryReader { reader in
+            VStack {
+                Spacer()
                 
-                if viewModel.callType == .audio, viewModel.callStatus == .answered {
-                    Text(viewModel.timeCall)
-                        .font(AppTheme.fonts.displaySmall.font)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
+                VStack(spacing: 32) {
+                    Spacer()
+                        .frame(height: 60)
+                    
+                    if viewModel.callType == .audio, viewModel.callStatus != .answered, !viewModel.getStatusMessage().isEmpty {
+                        Text(viewModel.getStatusMessage())
+                            .font(AppTheme.fonts.textMedium.font)
+                            .foregroundColor(AppTheme.colors.gray5.color)
+                    }
+                    
+                    ChannelUserAvatar(avatarSize: 160, text: viewModel.getUserName(), font: AppTheme.fonts.defaultFont(ofSize: 72).font, image: image(withName: viewModel.callBox?.avatar), status: .none, gradientBackgroundType: GradientBackgroundType.accent)
+                    
+                    VStack(spacing: 8) {
+                        Text(viewModel.getUserName())
+                            .font(AppTheme.fonts.displayMediumBold.font)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                            .lineLimit(2)
+                            .padding(.horizontal, 16)
+                        
+                        if viewModel.callType == .audio, viewModel.callStatus == .answered {
+                            Text(viewModel.timeCall)
+                                .font(AppTheme.fonts.displaySmall.font)
+                                .foregroundColor(AppTheme.colors.offWhite.color)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    Spacer()
+                        .frame(height: reader.size.height/2)
                 }
+                
+                Spacer()
             }
-            
-            Spacer()
+            .frame(width: reader.size.width, height: reader.size.height)
         }
+        
         .edgesIgnoringSafeArea(.top)
     }
 }
@@ -141,5 +154,11 @@ struct SingleVideoCallInfoView: View {
 struct PeerCallView_Previews: PreviewProvider {
     static var previews: some View {
         PeerCallView(viewModel: CallViewModel())
+    }
+}
+
+struct SingleVoiceCallInfoView_Previews: PreviewProvider {
+    static var previews: some View {
+        SingleVoiceCallInfoView(viewModel: CallViewModel())
     }
 }
