@@ -1062,6 +1062,7 @@
 		566DA9A42553D6F20076F2F0 /* GroupMessageChat */ = {
 			isa = PBXGroup;
 			children = (
+				CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */,
 				1013C9572608A64F0081C135 /* GroupChatDetailView */,
 			);
 			path = GroupMessageChat;
@@ -1089,6 +1090,7 @@
 		56BDA86D254C02F300B72317 /* MessagesChat */ = {
 			isa = PBXGroup;
 			children = (
+				CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */,
 			);
 			path = MessagesChat;
 			sourceTree = "<group>";
@@ -1140,9 +1142,7 @@
 			children = (
 				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
 				CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */,
-				CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */,
 				CB6EFFEC265BCABC00945DB7 /* ChatService.swift */,
-				CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */,
 			);
 			path = MessengerView;
 			sourceTree = "<group>";
