@@ -15,7 +15,7 @@ struct GroupCallView: View {
         GeometryReader { reader in
             ZStack(alignment: .top) {
                 if viewModel.callType == .video {
-                    VStack {
+                    VStack(spacing: 0) {
                         VideoContainerView(viewModel: viewModel)
                         CallVideoActionView(viewModel: viewModel)
                             .frame(height: 120)

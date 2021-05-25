@@ -116,19 +116,38 @@ class CallViewModel: NSObject, ObservableObject {
                 self.callGroup = isGroup
             }
             
-            print("updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
+            print("#TEST updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
+            
+            self.remotesVideoView.removeAll()
+            if self.callGroup {
+                if let lstRemote = self.callBox?.videoRoom?.remotes.values {
+                    lstRemote.forEach { (listener) in
+                        self.remotesVideoView.append(listener.videoRenderView)
+                    }
+                    print("#TEST add remotes videos (\(lstRemote.count)) to the list")
+                }
+                
+                if let localVideo = self.localVideoView {
+                    self.remotesVideoView.append(localVideo)
+                    print("#TEST add local video to the list")
+                }
+            }
+            
+            /*
             if let lstRemote = self.callBox?.videoRoom?.remotes.values {
                 self.remotesVideoView.removeAll()
-                if lstRemote.count > 2 {
+                if lstRemote.count > 1 {
                     if let localVideo = self.localVideoView {
                         self.remotesVideoView.append(localVideo)
+                        print("#TEST add local video to the list")
                     }
                 }
                 lstRemote.forEach { (listener) in
                     self.remotesVideoView.append(listener.videoRenderView)
                 }
+                print("#TEST add remotes videos (\(lstRemote.count)) to the list")
             }
-            
+            */
         }
     }
     
