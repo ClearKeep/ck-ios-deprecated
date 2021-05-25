@@ -17,7 +17,7 @@ struct MotherView: View {
             case .tabview:
                 HomeMainView().transition(.move(edge: .trailing))
             case .callVideo: CallView()
-            case .recentCreatedGroupChat: RecentCreatedGroupChatView()
+            case .recentCreatedGroupChat: MessagerGroupView(groupName: self.viewRouter.recentCreatedGroupModel!.groupName, groupId: self.viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
             }
         }
     }
