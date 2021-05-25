@@ -132,22 +132,6 @@ class CallViewModel: NSObject, ObservableObject {
                     print("#TEST add local video to the list")
                 }
             }
-            
-            /*
-            if let lstRemote = self.callBox?.videoRoom?.remotes.values {
-                self.remotesVideoView.removeAll()
-                if lstRemote.count > 1 {
-                    if let localVideo = self.localVideoView {
-                        self.remotesVideoView.append(localVideo)
-                        print("#TEST add local video to the list")
-                    }
-                }
-                lstRemote.forEach { (listener) in
-                    self.remotesVideoView.append(listener.videoRenderView)
-                }
-                print("#TEST add remotes videos (\(lstRemote.count)) to the list")
-            }
-            */
         }
     }
     

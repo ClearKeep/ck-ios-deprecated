@@ -21,6 +21,7 @@
 		1015C4512625543700407C35 /* DefaultColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4502625543700407C35 /* DefaultColors.swift */; };
 		1015C4562625544C00407C35 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4552625544C00407C35 /* AppTheme.swift */; };
 		101751172643AEB000BC2328 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101751162643AEB000BC2328 /* LoginViewModel.swift */; };
+		101DC2B8265CDD3700B2DE72 /* CustomVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101DC2B7265CDD3700B2DE72 /* CustomVideoView.swift */; };
 		10231E3C261ABC3500F92FB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */; };
 		10237D9B262E86E3005183C4 /* MainMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10237D9A262E86E3005183C4 /* MainMenuButton.swift */; };
 		10237DA0262E915C005183C4 /* LeftMainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10237D9F262E915C005183C4 /* LeftMainMenuView.swift */; };
@@ -267,6 +268,7 @@
 		1015C4502625543700407C35 /* DefaultColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultColors.swift; sourceTree = "<group>"; };
 		1015C4552625544C00407C35 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		101751162643AEB000BC2328 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		101DC2B7265CDD3700B2DE72 /* CustomVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoView.swift; sourceTree = "<group>"; };
 		10231E3B261ABC3500F92FB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		10237D9A262E86E3005183C4 /* MainMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuButton.swift; sourceTree = "<group>"; };
 		10237D9F262E915C005183C4 /* LeftMainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMainMenuView.swift; sourceTree = "<group>"; };
@@ -548,6 +550,7 @@
 				10011A1C2653D25A009EAFB3 /* PeerCallView.swift */,
 				10C3EF502654A31E007EB81E /* GroupCallView.swift */,
 				10C3EF552654A812007EB81E /* VideoContainerView.swift */,
+				101DC2B7265CDD3700B2DE72 /* CustomVideoView.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -1553,6 +1556,7 @@
 				10011A0E26539B9F009EAFB3 /* CallVideoActionView.swift in Sources */,
 				56205B3325A2CC2C00B39D07 /* CallViewModel.swift in Sources */,
 				6880CF6025F9C1C100F3DECE /* video_call.grpc.swift in Sources */,
+				101DC2B8265CDD3700B2DE72 /* CustomVideoView.swift in Sources */,
 				68CFA513256C9F3700109725 /* CreateRoomView.swift in Sources */,
 				1059C46A262D3F4000ED4878 /* SocialLogin+Facebook.swift in Sources */,
 				101751172643AEB000BC2328 /* LoginViewModel.swift in Sources */,

@@ -31,7 +31,7 @@ struct GroupVideoContainerView: View {
                     VStack {
                         let columns = viewModel.remotesVideoView.count < 3 ? 1 : 2
                         GridView(columns: columns, list: viewModel.remotesVideoView) { videoView  in
-                            let view = VideoView(rtcVideoView: videoView)
+                            let view = CustomVideoView(rtcVideoView: videoView)
                             let sizeView = view.getFrame(lstVideo: viewModel.remotesVideoView, containerHeight: reader.size.height)
                             view
                                 .frame(width: sizeView.width, height: sizeView.height)
@@ -42,7 +42,6 @@ struct GroupVideoContainerView: View {
                         }
                     }
                 })
-                .background(Color.red)
             }
         }
     }
