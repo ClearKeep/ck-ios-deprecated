@@ -13,23 +13,11 @@ struct MotherView: View {
         VStack {
             switch viewRouter.current {
             case .login:
-                if CKExtensions.getUserToken().isEmpty {
-                    LoginView()
-                } else {
-//                    TabViewContainer().transition(.move(edge: .trailing))
-                    HomeMainView().transition(.move(edge: .trailing))
-                }
-            case .masterDetail: MasterDetailView().transition(.move(edge: .trailing))
-            case .profile: ProfileView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
-            case .register: RegisterView()
+                LoginView()
             case .tabview:
-                //TabViewContainer().transition(.move(edge: .trailing))
                 HomeMainView().transition(.move(edge: .trailing))
-            case .search: SearchPeopleView()
-//            case .createRoom: CreateRoomView(isPresentModel: .constant(true))
             case .callVideo: CallView()
-//            case .inviteMember: InviteMemberGroup()
-            case .recentCreatedGroupChat: RecentCreatedGroupChatView().environmentObject(RealmGroups()).environmentObject(RealmMessages())
+            case .recentCreatedGroupChat: RecentCreatedGroupChatView()
             }
         }
     }
@@ -45,20 +33,14 @@ class ViewRouter: ObservableObject {
     
     enum Page {
         case login
-        case masterDetail
-        case profile
-        case register
         case tabview
-        case search
-//        case createRoom
         case callVideo
-//        case inviteMember
         case recentCreatedGroupChat
     }
     
     private static func initialPage() -> Page {
         
-        return Backend.shared.authenticator.loggedIn() ? .masterDetail : .login
+        return CKExtensions.getUserToken().isEmpty ? .login : .tabview
     }
     
     let objectWillChange = PassthroughSubject<ViewRouter,Never>()
