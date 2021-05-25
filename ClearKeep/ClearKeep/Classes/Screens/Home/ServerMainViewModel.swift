@@ -62,6 +62,8 @@ class ServerMainViewModel: ObservableObject {
                     })
                 }
                 self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
+                
+                completion()
             }
     }
     

@@ -108,22 +108,16 @@ struct ServerMainView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage), perform: { (obj) in
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                
-                let isChatRoom = UserDefaults.standard.bool(forKey: Constants.isChatRoom)
-                let isChatGroup = UserDefaults.standard.bool(forKey: Constants.isChatGroup)
-                
+                let openGroupId = UserDefaults.standard.integer(forKey: Constants.openGroupId)
+                if openGroupId == publication.groupID { return }
                 if publication.groupType == "peer" {
-                    if !isChatRoom && !isChatGroup {
-                        self.viewModel.requestBundleRecipient(byClientId: publication
-                                                                .fromClientID) {
-                            self.didReceiveMessagePeer(userInfo: userInfo)
-                        }
+                    self.viewModel.requestBundleRecipient(byClientId: publication
+                                                            .fromClientID) {
+                        self.didReceiveMessagePeer(userInfo: userInfo)
                     }
                 } else {
-                    if !isChatRoom && !isChatGroup {
-                        self.isForceProcessKeyInGroup = true
-                        self.decryptionMessage(publication: publication)
-                    }
+                    self.isForceProcessKeyInGroup = true
+                    self.decryptionMessage(publication: publication)
                 }
             }
         })
@@ -150,12 +144,13 @@ extension ServerMainView {
     private func groupChatDestination(groupModel: GroupModel) -> some View {
         Group {
             if groupModel.groupType == "peer" {
-                MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
-                                groupID : groupModel.groupID,
+                MessagerView(clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
+                                groupId : groupModel.groupID,
                                 userName: viewModel.getPeerReceiveName(inGroup: groupModel),
-                                groupType: groupModel.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                                groupType: groupModel.groupType)
             } else {
-                GroupMessageChatView(groupModel: groupModel).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+//                GroupMessageChatView(groupModel: groupModel)
+                MessagerGroupView(groupName: groupModel.groupName, groupId: groupModel.groupID)
             }
         }
     }
@@ -370,7 +365,7 @@ extension ServerMainView {
                 do {
                     let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
                                                                                 name: groupResponse.lastMessage.fromClientID,
-                                                                                deviceId: UInt32(111))
+                                                                                deviceId: UInt32(555))
                     let lastMessage = groupResponse.lastMessage
                     DispatchQueue.main.async {
                         let message = MessageModel(id: lastMessage.id,
