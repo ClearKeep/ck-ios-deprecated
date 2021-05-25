@@ -233,6 +233,12 @@
 		AACA7258848E78382F486218 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */; };
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
+		CB6EFFE5265BC4CF00945DB7 /* MessagerCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */; };
+		CB6EFFE7265BC5FC00945DB7 /* MessagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */; };
+		CB6EFFE9265BC83200945DB7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */; };
+		CB6EFFEB265BC8DD00945DB7 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */; };
+		CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
+		CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -500,6 +506,12 @@
 		8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8879DC7F394065C06A1F2DE /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerCommonView.swift; sourceTree = "<group>"; };
+		CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerView.swift; sourceTree = "<group>"; };
+		CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1154,6 +1166,10 @@
 			isa = PBXGroup;
 			children = (
 				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
+				CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */,
+				CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */,
+				CB6EFFEC265BCABC00945DB7 /* ChatService.swift */,
+				CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */,
 			);
 			path = MessengerView;
 			sourceTree = "<group>";
@@ -1179,6 +1195,7 @@
 				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
 				10D650BB262681300018528B /* UIFont+Font.swift */,
 				10AA457926423C6A000EB6E1 /* Binding+Extension.swift */,
+				CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1208,6 +1225,7 @@
 				688B67E32570F86000B95235 /* RealmGroups.swift */,
 				68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */,
 				68C0AF962574E4600018F5D5 /* RealmMessages.swift */,
+				CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -1573,6 +1591,7 @@
 				56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */,
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
+				CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
 				10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */,
@@ -1602,6 +1621,8 @@
 				6880CF5D25F9C1C100F3DECE /* server_info.grpc.swift in Sources */,
 				56694ADE25B53C8A008E8EC5 /* Indicator.swift in Sources */,
 				56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */,
+				CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */,
+				CB6EFFE5265BC4CF00945DB7 /* MessagerCommonView.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */,
 				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
@@ -1683,12 +1704,14 @@
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */,
 				10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */,
+				CB6EFFE9265BC83200945DB7 /* UIViewExtension.swift in Sources */,
 				6880CF5B25F9C1C100F3DECE /* notify.pb.swift in Sources */,
 				100D335C2637BAB200344D36 /* PlainColorBackground.swift in Sources */,
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
 				10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */,
 				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
+				CB6EFFEB265BC8DD00945DB7 /* RealmManager.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
@@ -1727,6 +1750,7 @@
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
 				10AA45A62642885B000EB6E1 /* PasscodeView.swift in Sources */,
 				68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */,
+				CB6EFFE7265BC5FC00945DB7 /* MessagerView.swift in Sources */,
 				56694ADF25B53C8A008E8EC5 /* InfoShape.swift in Sources */,
 				56205B1425A2C36D00B39D07 /* Janus+Utilities.swift in Sources */,
 				56694AE325B53C8A008E8EC5 /* CircularWaitingShape.swift in Sources */,
@@ -1901,8 +1925,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
@@ -1917,7 +1941,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = clearkeep3;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

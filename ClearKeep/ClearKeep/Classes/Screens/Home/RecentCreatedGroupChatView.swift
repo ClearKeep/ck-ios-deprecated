@@ -9,9 +9,6 @@ import SwiftUI
 import AVFoundation
 
 struct RecentCreatedGroupChatView: View {
-    
-    @EnvironmentObject var groupRealms : RealmGroups
-    @EnvironmentObject var messsagesRealms : RealmMessages
     @EnvironmentObject var viewRouter: ViewRouter
     
     @State var hudVisible = false
@@ -21,7 +18,7 @@ struct RecentCreatedGroupChatView: View {
     var body: some View {
         NavigationView {
             VStack {
-                GroupMessageChatView(groupModel: self.viewRouter.recentCreatedGroupModel!, isNewCreatedGroup: true).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                MessagerGroupView(groupName: self.viewRouter.recentCreatedGroupModel!.groupName, groupId: self.viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
             }
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarBackButtonHidden(true)

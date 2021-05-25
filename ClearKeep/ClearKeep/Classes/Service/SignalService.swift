@@ -26,17 +26,18 @@ extension SignalService {
             do {
                 let call = self.clientSignal.listen(request) { publication in
                     guard let data = try? publication.serializedData(), let response = try? Message_MessageObjectResponse(serializedData: data) else {
-                        print("Error serializedData")
+                        Debug.DLog("Error serializedData")
                         return
                     }
                     DispatchQueue.main.async {
+                        Debug.DLog("heard from \(publication.fromClientID)")
                         heard(publication.fromClientID, response)
                     }
                 }
                 let status = try call.status.wait()
-                print("listen finished: \(status)")
+                Debug.DLog("listen finished: \(status)")
             } catch {
-                print("Error", error.localizedDescription)
+                Debug.DLog("listen failed", error.localizedDescription)
             }
         }
     }
