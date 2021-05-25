@@ -443,7 +443,7 @@ extension ServerMainView {
                     requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
                 }
             } catch {
-                print("Decryption message error: \(error)")
+                Debug.DLog("Decryption message error: \(error)")
                 requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
             }
         }
@@ -486,7 +486,7 @@ extension ServerMainView {
             Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                          groupId: groupId) {(result, error, response) in
                 guard let groupResponse = response else {
-                    print("Request prekey \(groupId) fail")
+                    Debug.DLog("Request prekey \(groupId) fail")
                     return
                 }
                 self.processSenderKey(byGroupId: groupResponse.groupID,
@@ -591,7 +591,7 @@ extension ServerMainView {
                         self.groupRealms.sort()
                         self.reloadData()
                     }
-                    print("Decryption message error: \(error)")
+                    Debug.DLog("Decryption message error: \(error)")
                 }
             }
         }

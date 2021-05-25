@@ -403,7 +403,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
                 guard let recipientResponse = response else {
-                    print("Request prekey \(clientId) fail")
+                    Debug.DLog("Request prekey \(clientId) fail")
                     return
                 }
                 // check exist session recipient in database

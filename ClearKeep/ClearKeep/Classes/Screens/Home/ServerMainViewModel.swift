@@ -24,7 +24,7 @@ class ServerMainViewModel: ObservableObject {
             .requestKey(byClientId: clientId) { [weak self](result, error, response) in
                 
                 guard let recipientResponse = response else {
-                    print("Request prekey \(clientId) fail")
+                    Debug.DLog("Request prekey \(clientId) fail")
                     return
                 }
                 if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),

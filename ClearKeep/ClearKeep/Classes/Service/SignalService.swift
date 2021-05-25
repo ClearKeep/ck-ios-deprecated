@@ -43,23 +43,34 @@ extension SignalService {
     }
     
     func subscribe(clientId: String, completion: @escaping (() -> Void)) {
-        print("subscribe signal to \(clientId)")
+        Debug.DLog("subscribe signal to \(clientId)")
         let request: Message_SubscribeRequest = .with {
             $0.clientID = clientId
         }
-        clientSignal.subscribe(request).response.whenComplete { (result) in
-            print(result, "subscribe signal complete")
+        let response = clientSignal.subscribe(request).response
+        
+        response.whenComplete { (result) in
+            Debug.DLog("\(result) subscribe signal completed")
             completion()
+        }
+        response.whenFailure { error in
+            Debug.DLog("\(error) subscribe signal failed")
         }
     }
     
     func unsubscribe(clientId: String, completion: @escaping (() -> Void)){
-        print("unsubscribe signal to \(clientId)")
+        Debug.DLog("unsubscribe signal to \(clientId)")
         var request = Message_UnSubscribeRequest()
         request.clientID = clientId
-        clientSignal.unSubscribe(request).response.whenComplete { (result) in
-            print(result, "unsubscribe signal complete")
+        
+        let response = clientSignal.unSubscribe(request).response
+        
+        response.whenComplete { (result) in
+            Debug.DLog("\(result) unsubscribe signal completed")
             completion()
+        }
+        response.whenFailure { error in
+            Debug.DLog("\(error) unsubscribe signal failed")
         }
     }
 }
