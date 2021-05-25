@@ -232,6 +232,10 @@ struct ServerDetailView: View {
             connectionDb.readWrite { (transaction) in
                 CKAccount.removeAllAccounts(in: transaction)
             }
+            if let myAccount = CKSignalCoordinate.shared.myAccount {
+                Backend.shared.signalUnsubcrible(clientId: myAccount.username)
+                Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
+            }
             CKSignalCoordinate.shared.myAccount = nil
             self.realmMessages.removeAll()
             self.groupRealms.removeAll()
