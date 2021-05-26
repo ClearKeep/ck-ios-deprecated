@@ -21,15 +21,16 @@ struct MessageBubble: View {
         HStack(alignment: .top,spacing: 10){
             if msg.myMsg {
                 VStack(spacing: 5) {
-                    if isShowAvatarAndUserName {
-                        HStack {
-                            Spacer()
-                            Text(dateTime())
-                                .font(AppTheme.fonts.textXSmall.font)
-                                .foregroundColor(AppTheme.colors.gray3.color)
-                        }.padding(.top, 10)
-                    }
+//                    if isShowAvatarAndUserName {
+//                        HStack {
+//                            Spacer()
+//
+//                        }.padding(.top, 10)
+//                    }
                     HStack {
+                        Text(dateTime())
+                        .font(AppTheme.fonts.textXSmall.font)
+                        .foregroundColor(AppTheme.colors.gray3.color)
                         Spacer()
                         Text(stringValue())
                             .padding([.top , .bottom], 12)
@@ -52,10 +53,6 @@ struct MessageBubble: View {
                                     .font(AppTheme.fonts.linkSmall.font)
                                     .foregroundColor(UIColor.random().color)
                                     .padding(.leading, 8)
-                                Text(dateTime())
-                                    .font(AppTheme.fonts.textXSmall.font)
-                                    .padding(.leading, 4)
-                                    .foregroundColor(AppTheme.colors.gray3.color)
                                 Spacer()
                             }
                         }
@@ -76,18 +73,22 @@ struct MessageBubble: View {
                             })
                             
                             Spacer()
+                            Text(dateTime())
+                                .font(AppTheme.fonts.textXSmall.font)
+                                .padding(.leading, 4)
+                                .foregroundColor(AppTheme.colors.gray3.color)
                         }
                     }
                 } else {
                     VStack(spacing: 5){
-                        if isShowAvatarAndUserName {
-                            HStack {
-                                Text(dateTime())
-                                    .font(AppTheme.fonts.textXSmall.font)
-                                    .foregroundColor(AppTheme.colors.gray3.color)
-                                Spacer()
-                            }.padding(.top, 10)
-                        }
+//                        if isShowAvatarAndUserName {
+//                            HStack {
+//                                Text(dateTime())
+//                                    .font(AppTheme.fonts.textXSmall.font)
+//                                    .foregroundColor(AppTheme.colors.gray3.color)
+//                                Spacer()
+//                            }.padding(.top, 10)
+//                        }
                         
                         HStack(alignment: .firstTextBaseline) {
                             Text(stringValue())
@@ -105,6 +106,9 @@ struct MessageBubble: View {
                                     .foregroundColor(AppTheme.colors.gray1.color)
                             })                            
                             Spacer()
+                            Text(dateTime())
+                                .font(AppTheme.fonts.textXSmall.font)
+                                .foregroundColor(AppTheme.colors.gray3.color)
                         }
                         
                     }

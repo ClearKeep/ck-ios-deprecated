@@ -125,6 +125,7 @@ struct MessagerView: View {
         })
         .onAppear() {
             UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
+            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
             
             self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
             DispatchQueue.main.async {
@@ -137,11 +138,12 @@ struct MessagerView: View {
         }
         .onDisappear(){
             UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
+            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                if publication.groupType == "peer" && groupId == publication.groupID {
+                if publication.groupType == "peer" && groupId == publication.groupID && UserDefaults.standard.bool(forKey: Constants.isInChatRoom) {
                     self.viewModel.didReceiveMessage(userInfo: obj.userInfo, completion: {
                         self.scrollView?.scrollToBottom()
                     })

@@ -16,6 +16,9 @@ struct HomeMainView: View {
     
     @EnvironmentObject var mainViewModel: HomeMainViewModel
     @State private var isShowingServerDetailView = false
+    @State private var isShowingBanner = false
+    @State private var messageData: MessagerBannerModifier.MessageData = MessagerBannerModifier.MessageData()
+    
     @State var currentUserName: String = ""
     
     var body: some View {
@@ -23,7 +26,7 @@ struct HomeMainView: View {
             ZStack(alignment: .topLeading) {
                 GeometryReader { geometry in
                     HStack(alignment: .top) {
-                       
+                        
                         LeftMainMenuView(leftMenuStatus: mainViewModel.menuItems,
                                          joinServerHandler: {
                                             self.mainViewModel.homeMainContentType = .joinNewServer
@@ -31,7 +34,7 @@ struct HomeMainView: View {
                                          manageContactHandler: {})
                         
                         switch self.mainViewModel.homeMainContentType {
-                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName)
+                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
                         case .joinNewServer: JoinServerView()
                         }
                     }
@@ -47,6 +50,7 @@ struct HomeMainView: View {
                 }
             }
         }
+        .messagerBannerModifier(data: $messageData, show: $isShowingBanner)
         .onAppear(){
             do {
                 let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)

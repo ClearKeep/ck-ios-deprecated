@@ -52,5 +52,6 @@ protocol AppColors {
     var label: UIColor { get }
     
     var textFieldIconTint: UIColor { get }
+    var shadow: UIColor { get }
 }
 
