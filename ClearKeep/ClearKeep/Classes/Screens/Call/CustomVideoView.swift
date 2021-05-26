@@ -103,13 +103,11 @@ struct CustomVideoView: View {
         // The first item has full width
         if indexInTheListList == 0 && lstVideo.count % 2 == 1 {
             width = UIScreen.main.bounds.size.width
-            print("#TEST getFrame(lstVideo:) lstVideo.count = \(lstVideo.count), indexInTheListList = \(indexInTheListList), width = \(width)")
-        }
+         }
         
         // If there no more than 2 videos on screen only
         if lstVideo.count <= 2 {
             width = UIScreen.main.bounds.size.width
-            print("#TEST getFrame(lstVideo:) lstVideo.count = \(lstVideo.count), width = \(width)")
         }
         
         let height = containerHeight

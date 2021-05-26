@@ -93,7 +93,7 @@ class RealmGroups: ObservableObject {
         return time
     }
     
-    func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String{
+    func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String {
         let group = self.filterGroup(groupId: groupID)
         let from = group?.lstClientID.filter{$0.id == fromClientId}.first
         return from?.username ?? ""

@@ -40,16 +40,8 @@ class CustomVideoViewConfig: ObservableObject {
     }
     
     func fetchLocalUserName() {
-        let realmGroups = RealmGroups()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            let fetchedUsername = realmGroups.getDisplayNameSenderMessage(fromClientId: self.clientId, groupID: self.groupId)
-            if fetchedUsername.isEmpty {
-                self.fetchLocalUserName()
-            } else {
-                self.userName = fetchedUsername
-            }
-        }
+        let fetchedUsername = RealmGroup.getDisplayNameSenderMessage(fromClientId: self.clientId, groupID: self.groupId)
+        self.userName = fetchedUsername
     }
     
     init(clientId: String, groupId: Int64) {

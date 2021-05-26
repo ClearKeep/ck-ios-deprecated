@@ -37,13 +37,11 @@ struct VideoView: UIViewRepresentable {
         // The first item has full width
         if indexInTheListList == 0 && lstVideo.count % 2 == 1 {
             width = UIScreen.main.bounds.size.width
-            print("#TEST getFrame(lstVideo:) lstVideo.count = \(lstVideo.count), indexInTheListList = \(indexInTheListList), width = \(width)")
         }
         
         // If there no more than 2 videos on screen only
         if lstVideo.count <= 2 {
             width = UIScreen.main.bounds.size.width
-            print("#TEST getFrame(lstVideo:) lstVideo.count = \(lstVideo.count), width = \(width)")
         }
         
         let height = containerHeight
@@ -64,40 +62,4 @@ struct VideoView: UIViewRepresentable {
             return CGSize(width: 0, height: 0)
         }
     }
-    
-    /*
-    func getFrame(lstVideo: [RTCMTLEAGLVideoView]) -> CGSize{
-        let indexOfList = lstVideo.firstIndex(of: self.rtcVideoView) ?? 0
-        let width = UIScreen.main.bounds.size.width
-        let height = UIScreen.main.bounds.size.height
-        switch lstVideo.count {
-        case 2:
-            return CGSize(width: width, height: height / 2)
-        case 4:
-            return CGSize(width: width / 2, height: height / 2)
-        case 5:
-            if indexOfList < 4 {
-                return CGSize(width: width / 2, height: height / 3)
-            } else {
-                return CGSize(width: width, height: height / 3)
-            }
-        case 6:
-            return CGSize(width: width / 2, height: height / 3)
-        default:
-            return CGSize(width: 0, height: 0)
-        }
-    }
-    */
 }
-//#else
-//struct VideoView: UIViewRepresentable {
-//    let rtcVideoView: RTCEAGLVideoView
-//
-//    func makeUIView(context: Context) -> RTCEAGLVideoView {
-//        return rtcVideoView
-//    }
-//
-//    func updateUIView(_ videoView: RTCEAGLVideoView, context: Context) {
-//    }
-//}
-//#endif

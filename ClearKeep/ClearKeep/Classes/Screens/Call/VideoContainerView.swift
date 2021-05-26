@@ -37,9 +37,6 @@ struct GroupVideoContainerView: View {
                             view
                                 .frame(width: sizeView.width, height: sizeView.height)
                                 .clipShape(Rectangle())
-                                .onAppear {
-                                    print("#TEST show  viewModel.remoteVideoView video with size \(sizeView.width) x \(sizeView.height)")
-                                }
                         }
                     }
                 })
@@ -64,9 +61,6 @@ struct P2PVideoContainerView: View {
                                alignment: .center)
                         .clipShape(Rectangle())
                         .animation(.easeInOut(duration: 0.6))
-                        .onAppear {
-                            print("#TEST show  viewModel.remoteVideoView video with size \(width) x \(height)")
-                        }
                 }
                 
                 // local video
@@ -89,9 +83,6 @@ struct P2PVideoContainerView: View {
                                     .animation(.easeInOut(duration: 0.6))
                             }
                         }
-                        .onAppear {
-                            print("#TEST show local video with size \(widthOfContainerView) x \(heightOfContainerView)")
-                        }
                     } else {
                         let width = reader.frame(in: .global).width
                         let height = reader.frame(in: .global).height
@@ -101,9 +92,6 @@ struct P2PVideoContainerView: View {
                                    alignment: .center)
                             .clipShape(Rectangle())
                             .animation(.easeInOut(duration: 0.6))
-                            .onAppear {
-                                print("#TEST show local video with size \(width) x \(height)")
-                            }
                     }
                 }
             }

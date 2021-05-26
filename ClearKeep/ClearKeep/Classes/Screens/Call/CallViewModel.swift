@@ -119,8 +119,6 @@ class CallViewModel: NSObject, ObservableObject {
                 self.callGroup = isGroup
             }
             
-            print("#TEST updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
-            
             self.remotesVideoView.removeAll()
             
             if self.callGroup {
@@ -133,11 +131,10 @@ class CallViewModel: NSObject, ObservableObject {
                             let keyClientId = "\(clientId)"
                             self.remotesVideoViewDict[keyClientId] = listener.videoRenderView
                             if self.remotesVideoViewConfig[keyClientId] == nil {
-                                self.remotesVideoViewConfig[keyClientId] = CustomVideoViewConfig(clientId: keyClientId, groupId: groupId) // TODO: update config here
+                                self.remotesVideoViewConfig[keyClientId] = CustomVideoViewConfig(clientId: keyClientId, groupId: groupId)
                             }
                         }
                     }
-                    print("#TEST add remotes videos (\(lstRemote.count)) to the list")
                 }
                 
                 if let localVideo = self.localVideoView {
@@ -149,7 +146,6 @@ class CallViewModel: NSObject, ObservableObject {
                             self.remotesVideoViewConfig[currentUserId] = CustomVideoViewConfig(clientId: currentUserId, groupId: groupId)
                         }
                     }
-                    print("#TEST add local video to the list")
                 }
             }
         }
