@@ -99,9 +99,14 @@ struct MessagerBannerModifier: ViewModifier {
                 .foregroundColor(AppTheme.colors.gray3.color)
                 .lineLimit(1)
             
-            HStack(spacing: 16) {
+            HStack() {
                 ChannelUserAvatar(avatarSize: 24, text: data.senderName, image: data.userIcon, status: .none, gradientBackgroundType: .primary)
-                Text("\(data.senderName): \(data.message)")
+                    .padding(.trailing, 16)
+                Text(data.senderName + ":")
+                    .font(AppTheme.fonts.linkMedium.font)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+                    .lineLimit(1)
+                Text(data.message)
                     .font(AppTheme.fonts.textMedium.font)
                     .foregroundColor(AppTheme.colors.gray1.color)
                     .lineLimit(1)
