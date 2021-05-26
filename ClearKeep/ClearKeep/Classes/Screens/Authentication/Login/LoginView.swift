@@ -201,52 +201,6 @@ struct LoginView: View {
     }
 }
 
-extension LoginView {
-    
-    private func register() {
-        self.viewRouter.current = .register
-    }
-    
-    private func registerWithGroup() {
-        guard let deviceID: Int32 = Int32(deviceID),
-              let myAccount = CKAccount(username: email, deviceId: deviceID, accountType: .none),
-              let connectionDb = CKDatabaseManager.shared.database?.newConnection() else {
-            print("DeviceID always number")
-            return
-        }
-        let groupId: Int64 = 1234
-        do {
-            // save my Account
-            connectionDb.readWrite { (transaction) in
-                myAccount.save(with: transaction)
-            }
-            let ourSignalEncryptionMng = try CKAccountSignalEncryptionManager(accountKey: myAccount.uniqueId,
-                                                                              databaseConnection: connectionDb)
-            
-            let address = SignalAddress(name: email, deviceId: deviceID)
-            let groupSessionBuilder = SignalGroupSessionBuilder(context: ourSignalEncryptionMng.signalContext)
-            let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-            let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-            
-            CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
-            CKSignalCoordinate.shared.myAccount = myAccount
-            
-            Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-                                                       clientId: email,
-                                                       deviceId: deviceID,
-                                                       senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                print("Register group with result: \(result)")
-                if result {
-                    //                    Backend.shared.signalSubscrible(clientId: self.email)
-                    self.viewRouter.current = .masterDetail
-                }
-            }
-        } catch {
-            print("Register group error: \(error)")
-        }
-    }
-}
-
 // MARK: - Google SignIn Button
 extension LoginView {
     

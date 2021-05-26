@@ -25,7 +25,7 @@ struct HomeView: View {
         Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
             
             guard let recipientStore = response else {
-                print("Request prekey \(clientID) fail")
+                Debug.DLog("Request prekey \(clientID) fail")
                 return
             }
             

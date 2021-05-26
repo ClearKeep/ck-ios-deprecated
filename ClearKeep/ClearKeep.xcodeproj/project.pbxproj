@@ -65,7 +65,6 @@
 		10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650D52626D2A60018528B /* UX+WrappedTextField.swift */; };
 		10D650DE2626F4F30018528B /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D650DD2626F4F30018528B /* RegisterViewModel.swift */; };
 		10D7E32026316EB700478957 /* ServerMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D7E31F26316EB600478957 /* ServerMainView.swift */; };
-		10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */; };
 		10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
 		10E83D40262405E7002D7B10 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D3F262405E7002D7B10 /* GradientBackground.swift */; };
 		10EDAA1F261C1DB100D2E7A7 /* SocialLogin+Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */; };
@@ -89,9 +88,6 @@
 		16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = 16C83CB525300887002E3115 /* CGRPCZlib */; };
 		16C83CC525303F20002E3115 /* SignalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CC425303F20002E3115 /* SignalService.swift */; };
 		16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC6425253B59C400A4E20C /* CKClientStore.swift */; };
-		16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6525383157007ED99A /* MasterDetailView.swift */; };
-		16E32C6E2538330D007ED99A /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C6D2538330D007ED99A /* MasterView.swift */; };
-		16E32C7325383372007ED99A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C7225383372007ED99A /* MenuView.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
 		328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */; };
 		5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603463B25B145BA00F57ED6 /* MessageBubble.swift */; };
@@ -148,8 +144,6 @@
 		56694AE625B53C8A008E8EC5 /* LinearWaitingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56694AD025B53C89008E8EC5 /* LinearWaitingShape.swift */; };
 		56694AF625B56A52008E8EC5 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 56694AF525B56A52008E8EC5 /* Tools.m */; };
 		566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */; };
-		566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */; };
-		566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */; };
 		5693C2FA25A6A4DB005FB8C6 /* CallBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693C2F925A6A4DB005FB8C6 /* CallBox.swift */; };
 		569FFB70254BC39300C487F5 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
 		569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
@@ -163,8 +157,6 @@
 		569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC0254BE94E00C487F5 /* CKDatabaseManager.m */; };
 		569FFBCA254BEC0E00C487F5 /* SecondaryIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */; };
 		569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */; };
-		56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA86E254C030F00B72317 /* MessageChatView.swift */; };
-		56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */; };
 		56BDA87F254C0ADC00B72317 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA87E254C0ADC00B72317 /* MessageModel.swift */; };
 		56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */; };
 		56BF0CBF2550FF270012E831 /* CKDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CBE2550FF270012E831 /* CKDevice.m */; };
@@ -208,7 +200,6 @@
 		688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67D22570F4CA00B95235 /* FileGroups.swift */; };
 		688B67DC2570F7ED00B95235 /* RealmGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67DB2570F7ED00B95235 /* RealmGroup.swift */; };
 		688B67E42570F86000B95235 /* RealmGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67E32570F86000B95235 /* RealmGroups.swift */; };
-		6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6892479D25627E3700EAD2B7 /* TabViewContainer.swift */; };
 		689247A3256283E200EAD2B7 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247A2256283E200EAD2B7 /* PeopleView.swift */; };
 		689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */; };
 		689247AD2563B67A00EAD2B7 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247AC2563B67A00EAD2B7 /* People.swift */; };
@@ -233,6 +224,12 @@
 		AACA7258848E78382F486218 /* Pods_ClearKeepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A212FC53B8F5F1B5894DB1 /* Pods_ClearKeepTests.framework */; };
 		AC529548DA751A76E4523F9D /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */; };
 		C16D280B5F7DDBB0EAF64BBF /* Pods_ClearKeep_ClearKeepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */; };
+		CB6EFFE5265BC4CF00945DB7 /* MessagerCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */; };
+		CB6EFFE7265BC5FC00945DB7 /* MessagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */; };
+		CB6EFFE9265BC83200945DB7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */; };
+		CB6EFFEB265BC8DD00945DB7 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */; };
+		CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
+		CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -311,7 +308,6 @@
 		10D650D52626D2A60018528B /* UX+WrappedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+WrappedTextField.swift"; sourceTree = "<group>"; };
 		10D650DD2626F4F30018528B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		10D7E31F26316EB600478957 /* ServerMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMainView.swift; sourceTree = "<group>"; };
-		10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCreatedGroupChatView.swift; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
@@ -340,9 +336,6 @@
 		16BDC85525306C1200552C48 /* UX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UX.swift; sourceTree = "<group>"; };
 		16C83CC425303F20002E3115 /* SignalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalService.swift; sourceTree = "<group>"; };
 		16CC6425253B59C400A4E20C /* CKClientStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKClientStore.swift; sourceTree = "<group>"; };
-		16E32C6525383157007ED99A /* MasterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterDetailView.swift; sourceTree = "<group>"; };
-		16E32C6D2538330D007ED99A /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
-		16E32C7225383372007ED99A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		16E32C772538338D007ED99A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		1D1A7615AE34C5F264B3034C /* Pods-ClearKeep-ClearKeepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep-ClearKeepUITests/Pods-ClearKeep-ClearKeepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
@@ -402,8 +395,6 @@
 		56694AF425B56A51008E8EC5 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
 		56694AF525B56A52008E8EC5 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
 		566CF16925B17EB800DE2A3F /* ListScrollingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScrollingProxy.swift; sourceTree = "<group>"; };
-		566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatView.swift; sourceTree = "<group>"; };
-		566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMessageChatViewModel.swift; sourceTree = "<group>"; };
 		5693C2F925A6A4DB005FB8C6 /* CallBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallBox.swift; sourceTree = "<group>"; };
 		569FFB6E254BC39300C487F5 /* CKYapDatabaseObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKYapDatabaseObject.h; sourceTree = "<group>"; };
 		569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CKYapDatabaseObject.m; sourceTree = "<group>"; };
@@ -425,8 +416,6 @@
 		569FFBC5254BE96C00C487F5 /* CKDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDatabaseManager.h; sourceTree = "<group>"; };
 		569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryIndexes.swift; sourceTree = "<group>"; };
 		569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDatabaseConstants.swift; sourceTree = "<group>"; };
-		56BDA86E254C030F00B72317 /* MessageChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageChatView.swift; sourceTree = "<group>"; };
-		56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageChatViewModel.swift; sourceTree = "<group>"; };
 		56BDA87E254C0ADC00B72317 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessageModel.swift; path = ClearKeep/Classes/Screens/MessagesChat/MessageModel.swift; sourceTree = SOURCE_ROOT; };
 		56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignalCoordinate.swift; sourceTree = "<group>"; };
 		56BF0CBE2550FF270012E831 /* CKDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDevice.m; sourceTree = "<group>"; };
@@ -473,7 +462,6 @@
 		688B67D22570F4CA00B95235 /* FileGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGroups.swift; sourceTree = "<group>"; };
 		688B67DB2570F7ED00B95235 /* RealmGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmGroup.swift; sourceTree = "<group>"; };
 		688B67E32570F86000B95235 /* RealmGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmGroups.swift; sourceTree = "<group>"; };
-		6892479D25627E3700EAD2B7 /* TabViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewContainer.swift; sourceTree = "<group>"; };
 		689247A2256283E200EAD2B7 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewModel.swift; sourceTree = "<group>"; };
 		689247AC2563B67A00EAD2B7 /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
@@ -500,6 +488,12 @@
 		8C9127AA14A9D8D76ED3E2FB /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5E0756AB354C5703BF1AF7 /* Pods_ClearKeep_ClearKeepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_ClearKeepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8879DC7F394065C06A1F2DE /* Pods-ClearKeepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerCommonView.swift; sourceTree = "<group>"; };
+		CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerView.swift; sourceTree = "<group>"; };
+		CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -720,9 +714,6 @@
 				16208E42252D732C000A6CE7 /* Home */,
 				1604993525355B4F0071E651 /* MotherView.swift */,
 				68CFA4B825677E0B00109725 /* MotherViewModel.swift */,
-				16E32C6525383157007ED99A /* MasterDetailView.swift */,
-				16E32C6D2538330D007ED99A /* MasterView.swift */,
-				16E32C7225383372007ED99A /* MenuView.swift */,
 				16E32C772538338D007ED99A /* ProfileView.swift */,
 			);
 			path = Screens;
@@ -769,7 +760,6 @@
 			children = (
 				10237DAA262EBB7E005183C4 /* HomeMainView.swift */,
 				16208E61252D7906000A6CE7 /* HomeView.swift */,
-				6892479D25627E3700EAD2B7 /* TabViewContainer.swift */,
 				689247A2256283E200EAD2B7 /* PeopleView.swift */,
 				689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */,
 				689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */,
@@ -778,7 +768,6 @@
 				68CFA517256CA23300109725 /* CreateRoomViewModel.swift */,
 				68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */,
 				68CFA521256CF04600109725 /* InviteMemberViewModel.swift */,
-				10DC8692260DC31E00583E59 /* RecentCreatedGroupChatView.swift */,
 				10D7E31F26316EB600478957 /* ServerMainView.swift */,
 				1063815A2636BB16000ED2D1 /* ServerMainViewModel.swift */,
 				100D33632637C55400344D36 /* JoinServerView.swift */,
@@ -1073,9 +1062,8 @@
 		566DA9A42553D6F20076F2F0 /* GroupMessageChat */ = {
 			isa = PBXGroup;
 			children = (
+				CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */,
 				1013C9572608A64F0081C135 /* GroupChatDetailView */,
-				566DA9A52553D7130076F2F0 /* GroupMessageChatView.swift */,
-				566DA9AA2553D7280076F2F0 /* GroupMessageChatViewModel.swift */,
 			);
 			path = GroupMessageChat;
 			sourceTree = "<group>";
@@ -1102,8 +1090,7 @@
 		56BDA86D254C02F300B72317 /* MessagesChat */ = {
 			isa = PBXGroup;
 			children = (
-				56BDA86E254C030F00B72317 /* MessageChatView.swift */,
-				56BDA879254C03DB00B72317 /* MessageChatViewModel.swift */,
+				CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */,
 			);
 			path = MessagesChat;
 			sourceTree = "<group>";
@@ -1154,6 +1141,8 @@
 			isa = PBXGroup;
 			children = (
 				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
+				CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */,
+				CB6EFFEC265BCABC00945DB7 /* ChatService.swift */,
 			);
 			path = MessengerView;
 			sourceTree = "<group>";
@@ -1179,6 +1168,7 @@
 				10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */,
 				10D650BB262681300018528B /* UIFont+Font.swift */,
 				10AA457926423C6A000EB6E1 /* Binding+Extension.swift */,
+				CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1208,6 +1198,7 @@
 				688B67E32570F86000B95235 /* RealmGroups.swift */,
 				68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */,
 				68C0AF962574E4600018F5D5 /* RealmMessages.swift */,
+				CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -1539,7 +1530,6 @@
 				56694AD925B53C8A008E8EC5 /* CircularProgressShape.swift in Sources */,
 				6880CF5925F9C1C100F3DECE /* group.pb.swift in Sources */,
 				6887F46A257895D900ACB377 /* NotificationService.swift in Sources */,
-				16E32C6625383157007ED99A /* MasterDetailView.swift in Sources */,
 				10011A1D2653D25A009EAFB3 /* PeerCallView.swift in Sources */,
 				100D33642637C55400344D36 /* JoinServerView.swift in Sources */,
 				569FFB93254BCB1E00C487F5 /* CKSignalSenderKey.m in Sources */,
@@ -1573,6 +1563,7 @@
 				56C7F359254ACC5B00737C5F /* CKPreKey.swift in Sources */,
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
+				CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
 				10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */,
@@ -1602,6 +1593,8 @@
 				6880CF5D25F9C1C100F3DECE /* server_info.grpc.swift in Sources */,
 				56694ADE25B53C8A008E8EC5 /* Indicator.swift in Sources */,
 				56205B1625A2C36D00B39D07 /* RTCCustomFrameCapturer.swift in Sources */,
+				CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */,
+				CB6EFFE5265BC4CF00945DB7 /* MessagerCommonView.swift in Sources */,
 				68C036FC256DF58B00B9D49A /* SelectPeopleEvent.swift in Sources */,
 				106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */,
 				6881DBE625E8AE21009EDA73 /* KeyboardHandler.swift in Sources */,
@@ -1618,20 +1611,16 @@
 				689247AD2563B67A00EAD2B7 /* People.swift in Sources */,
 				10D7E32026316EB700478957 /* ServerMainView.swift in Sources */,
 				10417A83263913AB003FF6F2 /* ServerDetailView.swift in Sources */,
-				56BDA87A254C03DB00B72317 /* MessageChatViewModel.swift in Sources */,
 				10E83D2F262404A4002D7B10 /* UIColor+Hex.swift in Sources */,
 				56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */,
 				56BF0CC82551060A0012E831 /* CKAccount.m in Sources */,
 				56694ADA25B53C8A008E8EC5 /* LinearProgressIndicator.swift in Sources */,
 				56205B0F25A2C36D00B39D07 /* Janus.swift in Sources */,
-				16E32C6E2538330D007ED99A /* MasterView.swift in Sources */,
 				1015C4472625540500407C35 /* AppColors.swift in Sources */,
 				10237DB3262EC242005183C4 /* MenuDirectMessageRow.swift in Sources */,
 				6880CF5625F9C1C100F3DECE /* group.grpc.swift in Sources */,
 				10971560261417B10045FE63 /* SocialLogin.swift in Sources */,
 				56205B0C25A2C36D00B39D07 /* JanusWebsocket.swift in Sources */,
-				10DC8693260DC31E00583E59 /* RecentCreatedGroupChatView.swift in Sources */,
-				6892479E25627E3700EAD2B7 /* TabViewContainer.swift in Sources */,
 				6881DB6925C7A198009EDA73 /* ErrorResponse.swift in Sources */,
 				10AA459E264287CC000EB6E1 /* PassCodeInputModel.swift in Sources */,
 				1063815B2636BB16000ED2D1 /* ServerMainViewModel.swift in Sources */,
@@ -1640,8 +1629,6 @@
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
-				566DA9A62553D7130076F2F0 /* GroupMessageChatView.swift in Sources */,
-				566DA9AB2553D7280076F2F0 /* GroupMessageChatViewModel.swift in Sources */,
 				68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */,
 				56694ADD25B53C8A008E8EC5 /* CircularIndicatorShape.swift in Sources */,
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
@@ -1683,12 +1670,13 @@
 				56BF0CD125510B920012E831 /* YapDatabase+Extension.swift in Sources */,
 				328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */,
 				10D650D62626D2A60018528B /* UX+WrappedTextField.swift in Sources */,
+				CB6EFFE9265BC83200945DB7 /* UIViewExtension.swift in Sources */,
 				6880CF5B25F9C1C100F3DECE /* notify.pb.swift in Sources */,
 				100D335C2637BAB200344D36 /* PlainColorBackground.swift in Sources */,
 				56205B1025A2C36D00B39D07 /* JanusRole.swift in Sources */,
 				56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */,
 				10AA4588264257B2000EB6E1 /* ChangePasswordViewModel.swift in Sources */,
-				56BDA86F254C030F00B72317 /* MessageChatView.swift in Sources */,
+				CB6EFFEB265BC8DD00945DB7 /* RealmManager.swift in Sources */,
 				68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */,
 				56205B0925A2C36D00B39D07 /* JanusRoleListen.swift in Sources */,
 				688B67A92570B5FF00B95235 /* RealmHelper.swift in Sources */,
@@ -1718,7 +1706,6 @@
 				56205B1725A2C36D00B39D07 /* RTCFactory.swift in Sources */,
 				688B67E42570F86000B95235 /* RealmGroups.swift in Sources */,
 				6880CF5E25F9C1C100F3DECE /* server_info.pb.swift in Sources */,
-				16E32C7325383372007ED99A /* MenuView.swift in Sources */,
 				56694AE425B53C8A008E8EC5 /* CircularWaitingIndicator.swift in Sources */,
 				56694AA725B53C39008E8EC5 /* HUDModifier.swift in Sources */,
 				10237DA0262E915C005183C4 /* LeftMainMenuView.swift in Sources */,
@@ -1727,6 +1714,7 @@
 				16E32C782538338D007ED99A /* ProfileView.swift in Sources */,
 				10AA45A62642885B000EB6E1 /* PasscodeView.swift in Sources */,
 				68C0AF922574E3AD0018F5D5 /* RealmMessage.swift in Sources */,
+				CB6EFFE7265BC5FC00945DB7 /* MessagerView.swift in Sources */,
 				56694ADF25B53C8A008E8EC5 /* InfoShape.swift in Sources */,
 				56205B1425A2C36D00B39D07 /* Janus+Utilities.swift in Sources */,
 				56694AE325B53C8A008E8EC5 /* CircularWaitingShape.swift in Sources */,
@@ -1917,7 +1905,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = clearkeep3;
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3.1;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

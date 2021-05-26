@@ -46,7 +46,7 @@ class Authenticator {
                 switch result {
                 case .success(let response):
                     print(response)
-                    Backend.shared.signalSubscrible(clientId: clientId)
+//                    Backend.shared.signalSubscrible(clientId: clientId)
                     completion(true, nil)
                 case .failure(_):
                     completion(false, nil)
@@ -108,7 +108,7 @@ class Authenticator {
                         switch result {
                         case .success(let response):
                             print(response)
-                            Backend.shared.signalSubscrible(clientId: clientId)
+//                            Backend.shared.signalSubscrible(clientId: clientId)
                             completion(true, nil)
                         case .failure(_):
                             completion(false, nil)

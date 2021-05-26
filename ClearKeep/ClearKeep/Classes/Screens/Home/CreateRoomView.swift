@@ -127,8 +127,8 @@ extension CreateRoomView {
         
         if let account = CKSignalCoordinate.shared.myAccount {
             
-            let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
-            lstClientID.append(GroupMember(id: account.username, username: userNameLogin))
+            let userLogin = Backend.shared.getUserLogin()
+            lstClientID.append(GroupMember(id: account.username, username: userLogin?.displayName ?? account.username))
             var req = Group_CreateGroupRequest()
             req.groupName = self.groupName
             req.groupType = "group"
