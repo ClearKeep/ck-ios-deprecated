@@ -11,6 +11,7 @@ import SwiftUI
 struct GridView<Content: View, T: Hashable>: View {
     
     private let columns: Int
+    private let hasBigItem: Bool
     
     // Multi-dimensional array of your list. Modified as per rendering needs.
     private var list: [[T]] = []
@@ -21,6 +22,7 @@ struct GridView<Content: View, T: Hashable>: View {
     init(columns: Int, list: [T], @ViewBuilder content:@escaping (T) -> Content) {
         self.columns = columns
         self.content = content
+        self.hasBigItem = list.count % 2 == 1
         self.setupList(list)
     }
     
@@ -34,11 +36,16 @@ struct GridView<Content: View, T: Hashable>: View {
                 if columnIndex == 0 {
                     self.list.insert([object], at: column)
                     columnIndex += 1
-                }else {
+                    
+                    /// Show single item on the first row if total items is odd
+                    if hasBigItem && column == 0 {
+                        columnIndex = self.columns
+                    }
+                } else {
                     self.list[column].append(object)
                     columnIndex += 1
                 }
-            }else {
+            } else {
                 column += 1
                 self.list.insert([object], at: column)
                 columnIndex = 1
@@ -46,20 +53,26 @@ struct GridView<Content: View, T: Hashable>: View {
         }
     }
     
+    private func widthOfItem(numberItemInRow: Int) -> CGFloat {
+        if numberItemInRow > 0 {
+            return UIScreen.main.bounds.size.width / CGFloat(numberItemInRow)
+        } else {
+            return UIScreen.main.bounds.size.width/CGFloat(self.columns)
+        }
+    }
+    
     // The Magic goes here
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             ForEach(0 ..< self.list.count, id: \.self) { i  in
-                HStack {
+                HStack(spacing: 0) {
                     ForEach(self.list[i], id: \.self) { object in
-                        
                         // Your UI defined in the block is called from here.
                         self.content(object)
-                            .frame(width: UIScreen.main.bounds.size.width/CGFloat(self.columns))
+                            .frame(width: widthOfItem(numberItemInRow: self.list[i].count))
                     }
                 }
             }
-            
         }
     }
 }

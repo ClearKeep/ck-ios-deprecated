@@ -11,24 +11,47 @@ struct VideoContainerView: View {
     @ObservedObject var viewModel: CallViewModel
     
     var body: some View {
-        GeometryReader{ reader in
+        Group {
+            if viewModel.callGroup {
+                GroupVideoContainerView(viewModel: viewModel)
+            } else {
+                P2PVideoContainerView(viewModel: viewModel)
+            }
+        }
+    }
+}
+
+struct GroupVideoContainerView: View {
+    @ObservedObject var viewModel: CallViewModel
+    
+    var body: some View {
+        GeometryReader { reader in
             ZStack(alignment: .top) {
-                // remote videos
-                if viewModel.remotesVideoView.count > 1 {
-                    // show short
+                ScrollView(.vertical, showsIndicators: false, content: {
                     VStack {
-                        let columns = viewModel.remotesVideoView.count < 4 ? 1 : 2
-                        GridView(columns: columns, list: viewModel.remotesVideoView) { videoView in
-                            let view = VideoView(rtcVideoView: videoView)
-                            let sizeView = view.getFrame(lstVideo: viewModel.remotesVideoView)
+                        let columns = viewModel.remotesVideoView.count < 3 ? 1 : 2
+                        GridView(columns: columns, list: viewModel.remotesVideoView) { videoView  in
+                            let config = viewModel.videoViewConfig(for: videoView)
+                            let view = CustomVideoView(videoViewConfig: config, rtcVideoView: videoView)
+                            let sizeView = view.getFrame(lstVideo: viewModel.remotesVideoView, containerHeight: reader.size.height)
                             view
                                 .frame(width: sizeView.width, height: sizeView.height)
                                 .clipShape(Rectangle())
                         }
-                        Spacer()
                     }
-                }
-                else if let videoView = viewModel.remoteVideoView {
+                })
+            }
+        }
+    }
+}
+struct P2PVideoContainerView: View {
+    @ObservedObject var viewModel: CallViewModel
+    
+    var body: some View {
+        GeometryReader { reader in
+            ZStack(alignment: .top) {
+                // remote videos
+                if let videoView = viewModel.remoteVideoView {
                     // show full screen
                     let width = reader.frame(in: .global).width
                     let height = reader.frame(in: .global).height
@@ -36,15 +59,15 @@ struct VideoContainerView: View {
                         .frame(width: width,
                                height: height,
                                alignment: .center)
+                        .clipShape(Rectangle())
                         .animation(.easeInOut(duration: 0.6))
                 }
                 
                 // local video
-                if let videoView = viewModel.localVideoView , viewModel.remotesVideoView.count < 4 {
+                if let videoView = viewModel.localVideoView {
                     if viewModel.callStatus == .answered {
                         let widthOfContainerView: CGFloat = 120
                         let heightOfContainerView: CGFloat = 180
-                        
                         VStack {
                             Spacer()
                             HStack(alignment: .top) {
