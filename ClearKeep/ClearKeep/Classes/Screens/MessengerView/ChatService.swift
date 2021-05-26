@@ -234,7 +234,7 @@
 //                                                    groupID: publication.groupID,
 //                                                    groupType: publication.groupType,
 //                                                    fromClientID: publication.fromClientID,
-//                                                    fromDisplayName: RealmManager.shared.realmGroups.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
+//                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
 //                                                    clientID: publication.clientID,
 //                                                    message: decryptedData,
 //                                                    createdAt: publication.createdAt,

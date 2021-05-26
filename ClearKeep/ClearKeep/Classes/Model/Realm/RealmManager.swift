@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import RealmSwift
 class RealmManager {
     
     // MARK: - Singleton
@@ -18,5 +18,22 @@ class RealmManager {
     private init() {
         realmGroups = RealmGroups()
         realmMessages = RealmMessages()
+    }
+}
+
+extension RealmManager {
+    
+    func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String {
+        do {
+            let realm = try Realm()
+            let objects = realm.objects(RealmGroup.self)
+            let group = objects.filter { $0.groupId == groupID }.first
+            let user = group?.lstClientID.filter { $0.id == fromClientId }.first
+            return user?.displayName ?? ""
+        }
+        catch let error as NSError {
+            print(error.localizedDescription)
+            return ""
+        }
     }
 }
