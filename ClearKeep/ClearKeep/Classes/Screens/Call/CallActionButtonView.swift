@@ -18,6 +18,9 @@ struct CallActionButtonView: View {
     var title: String
     var action: VoidCompletion
     
+    var widthButton: CGFloat = 64
+    var widthInsideIcon: CGFloat = 24
+    
     var body: some View {
         VStack(spacing: 16) {
             Button(action: {
@@ -28,10 +31,10 @@ struct CallActionButtonView: View {
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(isOn ? activeForegroundColor : inactiveForegroundColor)
-                    .frame(width: 24, height: 24)
-                    .padding(.all, 20)
+                    .frame(width: widthInsideIcon, height: widthInsideIcon)
+                    .padding(.all, widthButton/2 - widthInsideIcon/2)
                     .background(isOn ? activeBackgroundColor : inactiveBackgroundColor)
-                    .cornerRadius(32)
+                    .cornerRadius(widthButton/2)
                     .overlay(Circle().stroke(inactiveForegroundColor, lineWidth: isOn ? 0 : 2))
             })
             
@@ -57,11 +60,15 @@ extension CallActionButtonView {
          isOn: Bool,
          title: String = "",
          styleButton: StyleButton = .video,
+         widthButton: CGFloat = 64,
+         widthInsideIcon: CGFloat = 24,
          action: @escaping VoidCompletion) {
         self.onIcon = onIcon
         self.offIcon = offIcon
         self.isOn = isOn
         self.title = title
+        self.widthButton = widthButton
+        self.widthInsideIcon = widthInsideIcon
         self.action = action
         
         switch styleButton {

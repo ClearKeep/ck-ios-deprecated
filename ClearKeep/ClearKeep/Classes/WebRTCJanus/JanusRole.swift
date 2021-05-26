@@ -131,9 +131,10 @@ class JanusRole: JanusPlugin {
         var msg: [String: Any]
         if pType == .publish {
             msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "publisher"]
-            if let username = username {
-                msg["display"] = username
-            }
+            msg["display"] = Backend.shared.getUserLogin()?.id
+//            if let username = username {
+//                msg["display"] = Backend.shared.getUserLogin()?.id ?? username
+//            }
         } else {
             msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "subscriber"]
             if let id = self.id, let privateId = self.privateId {

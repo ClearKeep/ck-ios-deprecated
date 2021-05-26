@@ -46,6 +46,7 @@
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
+		108D3455265E3BBF00A4EE1F /* CustomVideoViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		1098A327264A320600B26F2F /* AdvanceServerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */; };
@@ -293,6 +294,7 @@
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoViewConfig.swift; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceServerSettingsView.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				10C3EF502654A31E007EB81E /* GroupCallView.swift */,
 				10C3EF552654A812007EB81E /* VideoContainerView.swift */,
 				101DC2B7265CDD3700B2DE72 /* CustomVideoView.swift */,
+				108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -1566,6 +1569,7 @@
 				689247A82563B1BF00EAD2B7 /* PeopleViewModel.swift in Sources */,
 				56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */,
 				688B67D32570F4CA00B95235 /* FileGroups.swift in Sources */,
+				108D3455265E3BBF00A4EE1F /* CustomVideoViewConfig.swift in Sources */,
 				160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */,
 				10237DAB262EBB7E005183C4 /* HomeMainView.swift in Sources */,
 				68C4D56925F60E4800F31F77 /* NetworkMonitor.swift in Sources */,

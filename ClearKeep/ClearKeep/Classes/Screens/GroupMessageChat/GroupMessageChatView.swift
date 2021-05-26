@@ -145,6 +145,13 @@ struct GroupMessageChatView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.registerWithGroup(groupModel.groupID)
                     self.getMessageInRoom()
+                    
+                    print("#TEST groupid: \(groupModel.groupID)")
+                    for item in groupModel.lstClientID {
+                        print("#TEST \(item.id) \(item.username)")
+                    }
+                    print("#TEST My UserID = \(Backend.shared.getUserLogin()!.id)")
+                    
                 }
             }
         }

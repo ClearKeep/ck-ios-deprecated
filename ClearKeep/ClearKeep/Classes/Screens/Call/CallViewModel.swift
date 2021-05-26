@@ -24,6 +24,9 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var isVideoRequesting = false
     @Published var callType: Constants.CallType = .audio
     
+    @Published var remotesVideoViewConfig = [String : CustomVideoViewConfig]()
+    var remotesVideoViewDict = [String : RTCMTLEAGLVideoView]()
+    
     enum RenderScaleMode {
         case scaleToFit
         case scaleToFill
@@ -119,16 +122,33 @@ class CallViewModel: NSObject, ObservableObject {
             print("#TEST updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
             
             self.remotesVideoView.removeAll()
+            
             if self.callGroup {
+                let groupId = self.callBox?.roomId ?? 0
                 if let lstRemote = self.callBox?.videoRoom?.remotes.values {
                     lstRemote.forEach { (listener) in
                         self.remotesVideoView.append(listener.videoRenderView)
+                       
+                        if let clientId = listener.display {
+                            let keyClientId = "\(clientId)"
+                            self.remotesVideoViewDict[keyClientId] = listener.videoRenderView
+                            if self.remotesVideoViewConfig[keyClientId] == nil {
+                                self.remotesVideoViewConfig[keyClientId] = CustomVideoViewConfig(clientId: keyClientId, groupId: groupId) // TODO: update config here
+                            }
+                        }
                     }
                     print("#TEST add remotes videos (\(lstRemote.count)) to the list")
                 }
                 
                 if let localVideo = self.localVideoView {
                     self.remotesVideoView.append(localVideo)
+                    
+                    if let currentUserId = Backend.shared.getUserLogin()?.id {
+                        self.remotesVideoViewDict[currentUserId] = localVideo
+                        if self.remotesVideoViewConfig[currentUserId] == nil {
+                            self.remotesVideoViewConfig[currentUserId] = CustomVideoViewConfig(clientId: currentUserId, groupId: groupId)
+                        }
+                    }
                     print("#TEST add local video to the list")
                 }
             }
@@ -307,6 +327,19 @@ class CallViewModel: NSObject, ObservableObject {
                 // TODO: Check audio type update
             }
         }
+    }
+}
+
+extension CallViewModel {
+    
+    func videoViewConfig(for videoView: RTCMTLEAGLVideoView) -> CustomVideoViewConfig {
+        for (key, value) in remotesVideoViewDict where value == videoView {
+            if let config = remotesVideoViewConfig[key] {
+                return config
+            }
+        }
+        
+        return CustomVideoViewConfig(clientId: "", groupId: 0)
     }
 }
 

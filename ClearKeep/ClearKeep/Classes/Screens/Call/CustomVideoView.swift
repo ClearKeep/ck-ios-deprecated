@@ -8,61 +8,31 @@
 import SwiftUI
 import WebRTC
 
-class CustomVideoViewModel: ObservableObject {
-    @Published var cameraOn = true
-    @Published var microEnable = true
-    @Published var showOptionView = false
-    
-    let avatarImage: Image? = nil
-    let userName: String = "Alex"
-    
-    private var timeoutTimer: Timer?
-    func triggerOptionDisplayTimeout() {
-        showOptionView.toggle()
-        
-        if let timer = timeoutTimer {
-            timer.invalidate()
-            timeoutTimer = nil
-        }
-        
-        timeoutTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(showOptionViewTimeout), userInfo: nil, repeats: false)
-        RunLoop.current.add(timeoutTimer!, forMode: .default)
-    }
-    
-    @objc private func showOptionViewTimeout() {
-        showOptionView.toggle()
-        timeoutTimer?.invalidate()
-        timeoutTimer = nil
-    }
-}
-
 struct CustomVideoView: View {
-    @ObservedObject var viewModel = CustomVideoViewModel()
     
+    @ObservedObject var videoViewConfig: CustomVideoViewConfig
     let rtcVideoView: RTCMTLEAGLVideoView
     
     var body: some View {
         GeometryReader { reader in
             ZStack {
                 VideoView(rtcVideoView: rtcVideoView)
-                    .blur(radius: viewModel.showOptionView ? 70 : 0)
+                    .blur(radius: videoViewConfig.showOptionView ? 70 : 0)
                 
-//                Image("ic_app")
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(width: reader.size.width, height: reader.size.height)
-//                    .blur(radius: 70)
-                
-                if viewModel.showOptionView {
+                if videoViewConfig.showOptionView {
                     Group {
-                        if viewModel.microEnable {
+                        if videoViewConfig.microEnable {
                             VStack {
                                 CallActionButtonView(onIcon: "Microphone",
                                                      offIcon: "Microphone",
                                                      isOn: true,
                                                      title: "",
                                                      styleButton: .video,
-                                                     action: { })
+                                                     widthButton: 48,
+                                                     widthInsideIcon: 22,
+                                                     action: {
+                                                        videoViewConfig.microEnable.toggle()
+                                                     })
                                 
                                 Text("Tap to mute")
                                     .font(AppTheme.fonts.textXSmall.font)
@@ -76,8 +46,10 @@ struct CustomVideoView: View {
                                                      isOn: true,
                                                      title: "",
                                                      styleButton: .endCall,
+                                                     widthButton: 48,
+                                                     widthInsideIcon: 22,
                                                      action: {
-                                                        viewModel.microEnable.toggle()
+                                                        videoViewConfig.microEnable.toggle()
                                                      })
                                 
                                 Text("Microphone off")
@@ -87,7 +59,7 @@ struct CustomVideoView: View {
                             }
                         }
                     }
-                } else if !viewModel.microEnable {
+                } else if !videoViewConfig.microEnable {
                     VStack {
                         Spacer()
                         HStack {
@@ -96,8 +68,10 @@ struct CustomVideoView: View {
                                                  isOn: true,
                                                  title: "",
                                                  styleButton: .endCall,
+                                                 widthButton: 48,
+                                                 widthInsideIcon: 22,
                                                  action: {
-                                                    viewModel.microEnable.toggle()
+                                                    videoViewConfig.microEnable.toggle()
                                                  })
                                 .padding(.all, 2)
                             Spacer()
@@ -108,7 +82,7 @@ struct CustomVideoView: View {
                 
                 VStack(alignment: .center) {
                     Spacer()
-                    Text(viewModel.userName)
+                    Text(videoViewConfig.userName)
                         .font(AppTheme.fonts.displaySmallBold.font)
                         .foregroundColor(AppTheme.colors.offWhite.color)
                         .padding(.bottom, 24)
@@ -116,7 +90,7 @@ struct CustomVideoView: View {
             }
             .clipShape(Rectangle())
             .onTapGesture {
-                viewModel.triggerOptionDisplayTimeout()
+                videoViewConfig.triggerOptionDisplayTimeout()
             }
         }
     }
