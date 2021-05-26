@@ -36,4 +36,18 @@ extension RealmManager {
             return ""
         }
     }
+    
+    func getGroupName(by groupID: Int64) -> String {
+        do {
+            let realm = try Realm()
+            let objects = realm.objects(RealmGroup.self)
+            let group = objects.filter { $0.groupId == groupID }.first
+            
+            return group?.groupName ?? ""
+        }
+        catch let error as NSError {
+            print(error.localizedDescription)
+            return ""
+        }
+    }
 }

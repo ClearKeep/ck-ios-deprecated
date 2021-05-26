@@ -26,6 +26,7 @@ struct MessagerBannerModifier: ViewModifier {
         }
         
         init(groupName: String, senderName: String, userIcon: Image? = nil, message: String) {
+            self.groupName = groupName
             self.senderName = senderName
             self.userIcon = userIcon
             self.message = message
