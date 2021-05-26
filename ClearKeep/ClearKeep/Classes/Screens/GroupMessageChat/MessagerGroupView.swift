@@ -120,6 +120,7 @@ struct MessagerGroupView: View {
         })
         .onAppear() {
             UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
+            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
             DispatchQueue.main.async {
                 RealmManager.shared.realmMessages.loadSavedData()
                 RealmManager.shared.realmGroups.loadSavedData()
@@ -134,11 +135,12 @@ struct MessagerGroupView: View {
         }
         .onDisappear(){
             UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
+            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                if publication.groupType == "group" && groupId == publication.groupID {
+                if publication.groupType == "group" && groupId == publication.groupID && UserDefaults.standard.bool(forKey: Constants.isInChatRoom) {
                     self.viewModel.decryptionMessage(publication: publication, completion: {
                         self.scrollView?.scrollToBottom()
                     })

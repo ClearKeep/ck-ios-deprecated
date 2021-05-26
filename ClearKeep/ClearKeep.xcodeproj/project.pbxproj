@@ -230,6 +230,7 @@
 		CB6EFFEB265BC8DD00945DB7 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */; };
 		CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
 		CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */; };
+		CB99D6C9265E05A4000C59D6 /* MessagerBannerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -494,6 +495,7 @@
 		CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
+		CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerBannerModifier.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1143,6 +1145,7 @@
 				56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */,
 				CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */,
 				CB6EFFEC265BCABC00945DB7 /* ChatService.swift */,
+				CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */,
 			);
 			path = MessengerView;
 			sourceTree = "<group>";
@@ -1564,6 +1567,7 @@
 				16BDC85125306BC400552C48 /* LoginView.swift in Sources */,
 				56BF0CD9255147320012E831 /* CKBuddy.m in Sources */,
 				CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */,
+				CB99D6C9265E05A4000C59D6 /* MessagerBannerModifier.swift in Sources */,
 				56E7EE5E255A3D5D0060C146 /* MessengerViewModel.swift in Sources */,
 				56205B1225A2C36D00B39D07 /* Janus+WebSocketDelegate.swift in Sources */,
 				10D650C72626A47D0018528B /* SwiftUIViewPreview.swift in Sources */,

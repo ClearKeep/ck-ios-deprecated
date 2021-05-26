@@ -32,6 +32,8 @@ struct ServerMainView: View {
     
     @Binding var isShowingServerDetailView: Bool
     @Binding var currentUserName: String
+    @Binding var messageData: MessagerBannerModifier.MessageData
+    @Binding var isShowMessageBanner: Bool
     
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
@@ -430,6 +432,8 @@ extension ServerMainView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.messsagesRealms.add(message: post)
+                            self.messageData = MessagerBannerModifier.MessageData(groupName: "TODO", senderName: post.fromDisplayName, userIcon: nil, message: messageDecryption ?? "")
+                            self.isShowMessageBanner = true
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
                             self.reloadData()
@@ -555,6 +559,8 @@ extension ServerMainView {
                                                 createdAt: publication.createdAt,
                                                 updatedAt: publication.updatedAt)
                         DispatchQueue.main.async {
+                            self.messageData = MessagerBannerModifier.MessageData(senderName: post.fromDisplayName, userIcon: nil, message: messageDecryption ?? "")
+                            self.isShowMessageBanner = true
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
@@ -598,8 +604,8 @@ extension ServerMainView {
     }
 }
 
-struct ServerMainView_Previews: PreviewProvider {
-    static var previews: some View {
-        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
-    }
-}
+//struct ServerMainView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
+//    }
+//}
