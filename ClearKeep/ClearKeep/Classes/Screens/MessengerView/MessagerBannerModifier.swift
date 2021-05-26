@@ -64,7 +64,7 @@ struct MessagerBannerModifier: ViewModifier {
                         .foregroundColor(AppTheme.colors.primary.color)
                     }
                     .padding()
-                    .background(Color.white.opacity(0.8))
+                    .background(Color.white.opacity(0.95))
                     .clipShape(
                         RoundedRectangle(cornerRadius: 32, style: .continuous)
                     )
@@ -72,7 +72,7 @@ struct MessagerBannerModifier: ViewModifier {
                     
                     Spacer()
                 }
-                .padding(.top, 20)
+                .padding(.top, 10)
                 .padding([.leading, .trailing], 16)
                 .animation(.easeInOut)
                 .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
@@ -81,7 +81,7 @@ struct MessagerBannerModifier: ViewModifier {
                         self.show = false
                     }
                 }.onAppear(perform: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         withAnimation {
                             self.show = false
                         }

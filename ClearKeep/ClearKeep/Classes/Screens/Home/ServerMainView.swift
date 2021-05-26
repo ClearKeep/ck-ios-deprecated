@@ -432,7 +432,7 @@ extension ServerMainView {
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.messsagesRealms.add(message: post)
-                            self.messageData = MessagerBannerModifier.MessageData(groupName: "TODO", senderName: post.fromDisplayName, userIcon: nil, message: messageDecryption ?? "")
+                            self.messageData = MessagerBannerModifier.MessageData(groupName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID), senderName: post.fromDisplayName, userIcon: nil, message: messageDecryption ?? "")
                             self.isShowMessageBanner = true
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
