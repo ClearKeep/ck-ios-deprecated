@@ -136,7 +136,7 @@ struct NavigationBarCallStyle<L,R>: ViewModifier where L: View, R: View {
     var rightBarItems: (() -> R)?
     
     func body(content: Content) -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 leftBarItems?()
                     .padding(.trailing, 8)

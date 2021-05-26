@@ -38,6 +38,7 @@ extension JanusVideoRoomDelegate {
 class JanusVideoRoom: NSObject {
     var delegate: JanusVideoRoomDelegate?
     var remotes = [Int: JanusRoleListen]()
+    ///  TODO: add config
     var publisher: JanusRolePublish?
     var canvas = [Int: RTCCanvas]()
     
