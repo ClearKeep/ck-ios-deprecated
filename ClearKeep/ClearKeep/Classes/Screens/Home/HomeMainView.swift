@@ -25,7 +25,7 @@ struct HomeMainView: View {
         NavigationView {
             ZStack(alignment: .topLeading) {
                 GeometryReader { geometry in
-                    HStack(alignment: .top) {
+                    HStack(alignment: .top, spacing: 0) {
                         
                         LeftMainMenuView(leftMenuStatus: mainViewModel.menuItems,
                                          joinServerHandler: {
@@ -65,6 +65,11 @@ struct HomeMainView: View {
 struct HomeMainView_Previews: PreviewProvider {
     static var previews: some View {
         HomeMainView()
+            .environmentObject(RealmManager.shared.realmGroups)
+            .environmentObject(RealmManager.shared.realmMessages)
+            .environmentObject(HomeMainViewModel())
+            .environmentObject(ServerMainViewModel())
+            .environmentObject(ViewRouter())
     }
 }
 

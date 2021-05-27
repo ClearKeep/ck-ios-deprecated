@@ -47,6 +47,7 @@
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		108D3455265E3BBF00A4EE1F /* CustomVideoViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */; };
+		108D3496265F48D900A4EE1F /* Devices+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D3495265F48D900A4EE1F /* Devices+Size.swift */; };
 		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		1098A327264A320600B26F2F /* AdvanceServerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */; };
@@ -293,6 +294,7 @@
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoViewConfig.swift; sourceTree = "<group>"; };
+		108D3495265F48D900A4EE1F /* Devices+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Devices+Size.swift"; sourceTree = "<group>"; };
 		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceServerSettingsView.swift; sourceTree = "<group>"; };
@@ -1188,6 +1190,7 @@
 				686F25F4255E774600953C5E /* Constant.swift */,
 				108C7EC62616AF01003B6936 /* AppConfig.swift */,
 				68AE9CAE262D2DEB000B61AB /* MessageUtils.swift */,
+				108D3495265F48D900A4EE1F /* Devices+Size.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1639,6 +1642,7 @@
 				56BDA884254C1D7C00B72317 /* CKSignalCoordinate.swift in Sources */,
 				56205B1925A2C36D00B39D07 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				68C0AF972574E4600018F5D5 /* RealmMessages.swift in Sources */,
+				108D3496265F48D900A4EE1F /* Devices+Size.swift in Sources */,
 				569FFB94254BCB1E00C487F5 /* CKAccountSignalIdentity.m in Sources */,
 				10D650D12626C39B0018528B /* UX+TextField.swift in Sources */,
 				68AE9CAF262D2DEB000B61AB /* MessageUtils.swift in Sources */,
