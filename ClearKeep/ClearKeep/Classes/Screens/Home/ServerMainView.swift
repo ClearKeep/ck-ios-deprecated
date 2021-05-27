@@ -222,7 +222,7 @@ extension ServerMainView {
     private func directMessageSection() -> some View {
         VStack(spacing: 16) {
             HStack(spacing: 0) {
-                Text("Direct Messages (\(filteredGroupRealm(isForPeer: true).count)9+)")
+                Text("Direct Messages (\(filteredGroupRealm(isForPeer: true).count))")
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.gray1.color)
                 

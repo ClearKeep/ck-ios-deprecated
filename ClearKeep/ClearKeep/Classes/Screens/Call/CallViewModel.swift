@@ -49,9 +49,15 @@ class CallViewModel: NSObject, ObservableObject {
         
         if callBox.type == .audio {
             self.cameraOn = false
+            self.speakerEnable = false
         } else {
             self.cameraOn = true
+            self.speakerEnable = true
         }
+        
+        updateMicroConfig()
+        updateSpeakerConfig()
+        updateCameraConfig()
         
         updateVideoView()
 
@@ -174,18 +180,30 @@ class CallViewModel: NSObject, ObservableObject {
     
     func cameraChange() {
         cameraOn = !cameraOn
-        
-        if let callBox = self.callBox {
-            if cameraOn {
-                callBox.videoRoom?.publisher?.cameraOn()
-            } else {
-                callBox.videoRoom?.publisher?.cameraOff()
-            }
-        }
+        updateCameraConfig()
     }
     
     func speakerChange() {
         speakerEnable = !speakerEnable
+        updateSpeakerConfig()
+    }
+    
+    func microChange() {
+        microEnable = !microEnable
+        updateMicroConfig()
+    }
+    
+    func updateMicroConfig() {
+        if let callBox = self.callBox {
+            if microEnable {
+                callBox.videoRoom?.publisher?.unmuteAudio()
+            } else {
+                callBox.videoRoom?.publisher?.muteAudio()
+            }
+        }
+    }
+    
+    func updateSpeakerConfig() {
         if let callBox = self.callBox {
             if speakerEnable {
                 callBox.videoRoom?.publisher?.speakerOn()
@@ -195,13 +213,12 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func microChange() {
-        microEnable = !microEnable
+    func updateCameraConfig() {
         if let callBox = self.callBox {
-            if microEnable {
-                callBox.videoRoom?.publisher?.unmuteAudio()
+            if cameraOn {
+                callBox.videoRoom?.publisher?.cameraOn()
             } else {
-                callBox.videoRoom?.publisher?.muteAudio()
+                callBox.videoRoom?.publisher?.cameraOff()
             }
         }
     }
@@ -298,26 +315,34 @@ class CallViewModel: NSObject, ObservableObject {
         guard let callBox = self.callBox else { return }
         Backend.shared.updateVideoCall(callBox.roomId, callType: .video) { [weak self](response, error) in
             if error == nil {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.cameraOn = true
                     self.callType = .video
                     self.callBox?.type = .video
                     self.callBox?.videoRoom?.publisher?.cameraOn()
+                    self.speakerEnable = true
+                    self.updateSpeakerConfig()
+                    print("#TEST updateCallTypeVideo >>> video type")
                 }
             }
         }
     }
     
     func didReceiveMessageGroup(userInfo: [AnyHashable : Any]?) {
+        print("#TEST didReceiveMessageGroup >>>> userInfo: \(userInfo?.debugDescription ?? "")")
         if let userInfo = userInfo,
            let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
             if publication.notifyType == "audio" ||  publication.notifyType == "video" {
                 if publication.notifyType == "video" {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.callType = .video
                         self.callBox?.type = .video
-                        self.callBox?.videoRoom?.publisher?.cameraOn()
+                        self.speakerEnable = true
+                        self.updateSpeakerConfig()
+                        //self.callBox?.videoRoom?.publisher?.cameraOn()
+                        print("#TEST didReceiveMessageGroup >>>> video type")
                     }
                 }
                 // TODO: Check audio type update
