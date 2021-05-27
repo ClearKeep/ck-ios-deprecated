@@ -90,7 +90,7 @@ struct ServerMainView: View {
                 }
             })
         }
-        .padding()
+        .padding(.all, Constants.Device.isSmallScreenSize ? 10 : 16)
         .padding(.bottom, 20)
         .onTapGesture {
             self.hideKeyboard()
@@ -221,8 +221,8 @@ extension ServerMainView {
     
     private func directMessageSection() -> some View {
         VStack(spacing: 16) {
-            HStack {
-                Text("Direct Messages (\(filteredGroupRealm(isForPeer: true).count))")
+            HStack(spacing: 0) {
+                Text("Direct Messages (\(filteredGroupRealm(isForPeer: true).count)9+)")
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.gray1.color)
                 
@@ -608,8 +608,14 @@ extension ServerMainView {
     }
 }
 
-//struct ServerMainView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
-//    }
-//}
+struct ServerMainView_Previews: PreviewProvider {
+    static var previews: some View {
+        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("Alex"), messageData: .constant(MessagerBannerModifier.MessageData()), isShowMessageBanner: .constant(true))
+            .environmentObject(RealmManager.shared.realmGroups)
+            .environmentObject(RealmManager.shared.realmMessages)
+            .environmentObject(HomeMainViewModel())
+            .environmentObject(ServerMainViewModel())
+            .environmentObject(ViewRouter())
+            .padding(.leading, 64)
+    }
+}

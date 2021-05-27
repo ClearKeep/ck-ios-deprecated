@@ -34,7 +34,7 @@ struct ServerDetailView: View {
             
             HStack {
                 Spacer()
-                    .frame(width: 108)
+                    .frame(width: Constants.Size.leftBannerWidth + 16)
                 
                 VStack {
                     Spacer()

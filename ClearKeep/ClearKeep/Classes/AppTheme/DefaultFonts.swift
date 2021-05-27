@@ -24,9 +24,27 @@ struct DefaultFonts: AppFonts {
     var displayMedium: UIFont { return defaultFont(ofSize: 32, weight: .regular) }
     var displaySmall: UIFont { return defaultFont(ofSize: 24, weight: .regular) }
     
-    var displayLargeBold: UIFont { return defaultFont(ofSize: 48, weight: .bold) }
-    var displayMediumBold: UIFont { return defaultFont(ofSize: 32, weight: .bold) }
-    var displaySmallBold: UIFont { return defaultFont(ofSize: 24, weight: .bold) }
+    var displayLargeBold: UIFont {
+        if UIScreen.main.bounds.size.width < 350 {
+            return defaultFont(ofSize: 40, weight: .bold)
+        } else {
+            return defaultFont(ofSize: 48, weight: .bold)
+        }
+    }
+    var displayMediumBold: UIFont {
+        if UIScreen.main.bounds.size.width < 350 {
+            return defaultFont(ofSize: 30, weight: .bold)
+        } else {
+            return defaultFont(ofSize: 32, weight: .bold)
+        }
+    }
+    var displaySmallBold: UIFont {
+        if UIScreen.main.bounds.size.width < 350 {
+            return defaultFont(ofSize: 22, weight: .bold)
+        } else {
+            return defaultFont(ofSize: 24, weight: .bold)
+        }
+    }
     
     
     // Methods
