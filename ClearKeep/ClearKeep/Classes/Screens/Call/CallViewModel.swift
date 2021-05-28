@@ -66,6 +66,9 @@ class CallViewModel: NSObject, ObservableObject {
                 let boxStatus = self?.callBox!.status
                 if boxStatus == .answered {
                     self?.startCallTimer()
+                    if let type = self?.callBox?.type, type == .video {
+                        self?.forceEnableSpeaker()
+                    }
                 } else if self?.callStatus != .ringing, boxStatus == .ringing {
                     self?.startCallTimout()
                 } else if boxStatus == .ended {
@@ -185,6 +188,11 @@ class CallViewModel: NSObject, ObservableObject {
     
     func speakerChange() {
         speakerEnable = !speakerEnable
+        updateSpeakerConfig()
+    }
+    
+    func forceEnableSpeaker() {
+        speakerEnable = true
         updateSpeakerConfig()
     }
     
