@@ -60,6 +60,7 @@ struct P2PVideoContainerView: View {
                                height: height,
                                alignment: .center)
                         .clipShape(Rectangle())
+                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                         .animation(.easeInOut(duration: 0.6))
                 }
                 
@@ -80,6 +81,7 @@ struct P2PVideoContainerView: View {
                                     .cornerRadius(10)
                                     .padding(.trailing, 16)
                                     .padding(.bottom, 68)
+                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                                     .animation(.easeInOut(duration: 0.6))
                             }
                         }
@@ -91,6 +93,7 @@ struct P2PVideoContainerView: View {
                                    height: height,
                                    alignment: .center)
                             .clipShape(Rectangle())
+                            .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                             .animation(.easeInOut(duration: 0.6))
                     }
                 }
