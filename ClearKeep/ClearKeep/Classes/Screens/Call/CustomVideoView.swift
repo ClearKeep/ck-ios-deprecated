@@ -17,6 +17,7 @@ struct CustomVideoView: View {
         GeometryReader { reader in
             ZStack {
                 VideoView(rtcVideoView: rtcVideoView)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .blur(radius: videoViewConfig.showOptionView ? 70 : 0)
                 
                 if videoViewConfig.showOptionView {

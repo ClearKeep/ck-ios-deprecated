@@ -78,6 +78,7 @@ struct SingleVoiceCallInfoView: View {
                             .foregroundColor(AppTheme.colors.offWhite.color)
                             .lineLimit(2)
                             .padding(.horizontal, 16)
+                            .layoutPriority(1)
                         
                         if viewModel.callType == .audio, viewModel.callStatus == .answered {
                             Text(viewModel.timeCall)
