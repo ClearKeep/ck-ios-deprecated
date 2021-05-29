@@ -131,7 +131,7 @@ struct MessageBubble: View {
     }
     
     private func getDisplayName() -> String {
-        return RealmManager.shared.getDisplayNameSenderMessage(fromClientId: msg.clientID, groupID: msg.groupID)
+        return RealmManager.shared.getDisplayNameSenderMessage(fromClientId: msg.fromClientID, groupID: msg.groupID)
     }
 }
 
