@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeMainView: View {
+    @Environment(\.viewController) private var viewControllerHolder: UIViewController?
     
     @ObservedObject var viewModel: HomeMainViewModel = HomeMainViewModel()
     @ObservedObject var serverMainViewModel: ServerMainViewModel = ServerMainViewModel()
@@ -78,6 +79,14 @@ struct HomeMainView: View {
             } catch {
                 print("get user login error")
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.receiveCall)) { (obj) in
+            viewControllerHolder?.present(style: .overFullScreen, builder: {
+                CallView()
+            })
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.endCall)) { (obj) in
+            viewControllerHolder?.dismiss(animated: true, completion: nil)
         }
     }
 }

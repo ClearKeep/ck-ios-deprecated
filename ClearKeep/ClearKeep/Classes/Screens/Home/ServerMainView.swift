@@ -10,7 +10,6 @@ import SwiftUI
 struct ServerMainView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
-    @Environment(\.viewController) private var viewControllerHolder: UIViewController?
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @ObservedObject var viewModel: ServerMainViewModel
@@ -81,7 +80,12 @@ struct ServerMainView: View {
             self.viewModel.getJoinedGroup()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Notification), perform: { (obj) in
-            self.didReceiveMessageGroup(userInfo: obj.userInfo)
+            if let userInfo = obj.userInfo,
+               let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
+                if publication.notifyType == "new-peer" ||  publication.notifyType == "new-group" {
+                    self.viewModel.getJoinedGroup()
+                }
+            }
         })
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage), perform: { (obj) in
             if let userInfo = obj.userInfo,
@@ -103,7 +107,6 @@ struct ServerMainView: View {
 }
 
 fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View where CreateNewGroupView: View, Destination: View, Content: View {
-    
     // MARK: - State
     @State private var isExpanded: Bool = true
     
@@ -133,7 +136,6 @@ fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View
 }
 
 fileprivate struct SectionGroupView<Destination>: View where Destination: View {
-    
     // MARK: - Variables
     var titleSection: String
     var destination: Destination
@@ -168,308 +170,5 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
                     .foregroundColor(AppTheme.colors.gray1.color)
             }
         }
-    }
-}
-
-// Implement p2p & group chat
-
-extension ServerMainView {
-    
-//    func getProfileInfo() {
-//        let userLogin = Backend.shared.getUserLogin()
-//        self.currentUserName = userLogin?.displayName ?? ""
-//    }
-    
-//    func updateLastMessageInGroup(groupResponse: Group_GroupObjectResponse){
-//        // break last message with time login
-//        if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
-//            let updateAt = NSDate(timeIntervalSince1970: TimeInterval(groupResponse.lastMessage.createdAt/1000))
-//            if loginDate.compare(updateAt as Date) == ComparisonResult.orderedDescending {
-//                return
-//            }
-//        }
-//
-//        let lastMessageResponse = groupResponse.lastMessage
-//        var messageResponse = Message_MessageObjectResponse()
-//        messageResponse.id = lastMessageResponse.id
-//        messageResponse.groupID = lastMessageResponse.groupID
-//        messageResponse.groupType = lastMessageResponse.groupType
-//        messageResponse.fromClientID = lastMessageResponse.fromClientID
-//        messageResponse.clientID = lastMessageResponse.clientID
-//        messageResponse.message = lastMessageResponse.message
-//        messageResponse.createdAt = lastMessageResponse.createdAt
-//        messageResponse.updatedAt = lastMessageResponse.updatedAt
-//        messageResponse.unknownFields = lastMessageResponse.unknownFields
-//
-//        if groupResponse.groupType == "peer" {
-//            if let ourEncryptionMng = self.ourEncryptionManager {
-//                do {
-//                    let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
-//                                                                                name: groupResponse.lastMessage.fromClientID)
-//                    let lastMessage = groupResponse.lastMessage
-//                    DispatchQueue.main.async {
-//                        let message = MessageModel(id: lastMessage.id,
-//                                                   groupID: lastMessage.groupID,
-//                                                   groupType: lastMessage.groupType,
-//                                                   fromClientID: lastMessage.fromClientID,
-//                                                   clientID: lastMessage.clientID,
-//                                                   message: decryptedData,
-//                                                   createdAt: lastMessage.createdAt,
-//                                                   updatedAt: lastMessage.updatedAt)
-//                        self.messsagesRealms.add(message: message)
-//                        self.groupRealms.updateLastMessage(groupID: groupResponse.groupID, lastMessage: decryptedData, lastMessageAt: groupResponse.lastMessageAt, idLastMessage: groupResponse.lastMessage.id)
-//                        self.groupRealms.sort()
-//                        self.reloadData()
-//                    }
-//                } catch {
-//                    print("decrypt message error: ---- getJoinnedGroup")
-//                }
-//            }
-//        } else {
-//            self.decryptionMessage(publication: messageResponse)
-//        }
-//    }
-    
-    func didReceiveMessageGroup(userInfo: [AnyHashable : Any]?) {
-        if let userInfo = userInfo,
-           let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
-            if publication.notifyType == "new-peer" ||  publication.notifyType == "new-group" {
-                self.viewModel.getJoinedGroup()
-            }
-        }
-    }
-    
-//    func decryptionMessage(publication: Message_MessageObjectResponse) {
-//
-//        //        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
-//        if let ourEncryptionMng = self.ourEncryptionManager,
-//           let connectionDb = self.connectionDb {
-//            do {
-//                var account: CKAccount?
-//                connectionDb.read { (transaction) in
-//                    account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
-//                }
-//                if let senderAccount = account {
-//                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: publication.groupID) {
-//                        let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-//                                                                                  groupId: publication.groupID,
-//                                                                                  name: publication.fromClientID)
-//                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-//                        print("Message decryption: \(messageDecryption ?? "Empty error")")
-//
-//                        DispatchQueue.main.async {
-//                            let post = MessageModel(id: publication.id,
-//                                                    groupID: publication.groupID,
-//                                                    groupType: publication.groupType,
-//                                                    fromClientID: publication.fromClientID,
-//                                                    clientID: publication.clientID,
-//                                                    message: decryptedData,
-//                                                    createdAt: publication.createdAt,
-//                                                    updatedAt: publication.updatedAt)
-//                            self.messsagesRealms.add(message: post)
-//                            self.messageData = MessagerBannerModifier.MessageData(
-//                                groupName: RealmManager.shared.getGroupName(by: publication.groupID),
-//                                senderName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.clientID, groupID: publication.groupID),
-//                                userIcon: nil,
-//                                message: messageDecryption ?? "")
-//                            self.isShowMessageBanner = true
-//                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-//                            self.groupRealms.sort()
-//                            self.reloadData()
-//                        }
-//
-//                        return
-//                    } else {
-//                        requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
-//                    }
-//                } else {
-//                    requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
-//                }
-//            } catch {
-//                Debug.DLog("Decryption message error: \(error)")
-//                requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
-//            }
-//        }
-//    }
-    
-//    func registerWithGroup(_ groupId: Int64) {
-//        if let group = self.groupRealms.filterGroup(groupId: groupId) {
-//            if !group.isRegistered {
-//                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
-//                    let userName = myAccount.username
-//                    let deviceID = Int32(Constants.encryptedDeviceId)
-//                    let address = SignalAddress(name: userName, deviceId: deviceID)
-//                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-//                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-//
-//                    do {
-//                        let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-//                        Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-//                                                                   clientId: userName,
-//                                                                   deviceId: deviceID,
-//                                                                   senderKeyData: signalSKDM.serializedData()) { (result, error) in
-//                            print("Register group with result: \(result)")
-//                            if result {
-//                                self.groupRealms.registerGroup(groupId: groupId)
-//                            }
-//                        }
-//
-//                    } catch {
-//                        print("Register group error: \(error)")
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-//    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse) {
-//
-//        if self.isForceProcessKeyInGroup {
-//            Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-//                                                         groupId: groupId) {(result, error, response) in
-//                guard let groupResponse = response else {
-//                    Debug.DLog("Request prekey \(groupId) fail")
-//                    return
-//                }
-//                self.processSenderKey(byGroupId: groupResponse.groupID,
-//                                      responseSenderKey: groupResponse.clientKey)
-//
-//                // decrypt message again
-//                self.decryptionMessage(publication: publication)
-//                self.isForceProcessKeyInGroup = false
-//            }
-//        }
-//    }
-    
-//    private func processSenderKey(byGroupId groupId: Int64,
-//                                  responseSenderKey: Signal_GroupClientKeyObject) {
-//
-//        let deviceID = Constants.decryptedDeviceId
-//
-//        if let ourAccountEncryptMng = self.ourEncryptionManager,
-//           let connectionDb = self.connectionDb {
-//            // save account infor
-//            connectionDb.readWrite { (transaction) in
-//                var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
-//                if account == nil {
-//                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
-//                    account?.save(with: transaction)
-//                }
-//            }
-//            do {
-//                let addresss = SignalAddress(name: responseSenderKey.clientID,
-//                                             deviceId: Int32(deviceID))
-//                try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
-//                                                         address: addresss,
-//                                                         skdmDtata: responseSenderKey.clientKeyDistribution)
-//            } catch {
-//                print("processSenderKey error: \(error)")
-//            }
-//        }
-//    }
-    
-    
-//    func didReceiveMessagePeer(userInfo: [AnyHashable : Any]?) {
-//        if let userInfo = userInfo,
-//           let publication = userInfo["publication"] as? Message_MessageObjectResponse{
-//
-//            //            Backend.shared.authenticator
-//            //                .requestKey(byClientId: publication.fromClientID) {(result, error, response) in
-//            //                    if let response = response {
-//            if let ourEncryptionMng = self.ourEncryptionManager {
-//                do {
-//
-//                    let message = self.messsagesRealms.all.filter{$0.id == publication.id}
-//
-//                    if message.isEmpty {
-//                        let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
-//                                                                                    name: publication.fromClientID)
-//                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-//                        print("Message decryption peer: \(messageDecryption ?? "Empty error")")
-//                        let post = MessageModel(id: publication.id,
-//                                                groupID: publication.groupID,
-//                                                groupType: publication.groupType,
-//                                                fromClientID: publication.fromClientID,
-//                                                clientID: publication.clientID,
-//                                                message: decryptedData,
-//                                                createdAt: publication.createdAt,
-//                                                updatedAt: publication.updatedAt)
-//                        DispatchQueue.main.async {
-//                            self.messageData = MessagerBannerModifier.MessageData(senderName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.clientID, groupID: publication.groupID), userIcon: nil, message: messageDecryption ?? "")
-//                            self.isShowMessageBanner = true
-//                            self.messsagesRealms.add(message: post)
-//                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-//                            self.groupRealms.sort()
-//                            self.reloadData()
-//
-//                            print("message decypt realm: ----- \(viewModel.getMessage(data: self.groupRealms.all[0].lastMessage))")
-//
-//
-//                        }
-//                    } else {
-//                        DispatchQueue.main.async {
-//                            self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: message[0].message, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-//                            self.groupRealms.sort()
-//                            self.reloadData()
-//                        }
-//                    }
-//
-//                } catch {
-//
-//                    DispatchQueue.main.async {
-//                        let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-//
-//                        let post = MessageModel(id: publication.id,
-//                                                groupID: publication.groupID,
-//                                                groupType: publication.groupType,
-//                                                fromClientID: publication.fromClientID,
-//                                                clientID: publication.clientID,
-//                                                message: messageError,
-//                                                createdAt: publication.createdAt,
-//                                                updatedAt: publication.updatedAt)
-//                        self.messsagesRealms.add(message: post)
-//                        self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-//                        self.groupRealms.sort()
-//                        self.reloadData()
-//                    }
-//                    Debug.DLog("Decryption message error: \(error)")
-//                }
-//            }
-//        }
-//    }
-}
-
-
-struct ViewControllerHolder {
-    weak var value: UIViewController?
-}
-
-struct ViewControllerKey: EnvironmentKey {
-    static var defaultValue: ViewControllerHolder {
-        return ViewControllerHolder(value: UIApplication.shared.windows.first?.rootViewController)
-
-    }
-}
-
-extension EnvironmentValues {
-    var viewController: UIViewController? {
-        get { return self[ViewControllerKey.self].value }
-        set { self[ViewControllerKey.self].value = newValue }
-    }
-}
-
-extension UIViewController {
-    func present<Content: View>(style: UIModalPresentationStyle = .automatic, @ViewBuilder builder: () -> Content) {
-        let toPresent = UIHostingController(rootView: AnyView(EmptyView()))
-        toPresent.modalPresentationStyle = style
-        toPresent.rootView = AnyView(
-            builder()
-                .environment(\.viewController, toPresent)
-        )
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "dismissModal"), object: nil, queue: nil) { [weak toPresent] _ in
-            toPresent?.dismiss(animated: true, completion: nil)
-        }
-        self.present(toPresent, animated: true, completion: nil)
     }
 }

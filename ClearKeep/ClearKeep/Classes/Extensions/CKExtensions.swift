@@ -110,6 +110,8 @@ class CKExtensions {
 
 extension NSNotification {
     static let ReceiveMessage = NSNotification.Name.init("ReceiveMessage")
+    static let receiveCall = NSNotification.Name.init("receiveCall")
+    static let endCall = NSNotification.Name.init("endCall")
     
     static let Notification = NSNotification.Name.init("Notification")
     
