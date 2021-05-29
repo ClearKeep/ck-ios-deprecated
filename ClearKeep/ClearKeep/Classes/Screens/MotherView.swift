@@ -14,9 +14,8 @@ struct MotherView: View {
             switch viewRouter.current {
             case .login:
                 LoginView()
-            case .tabview:
-                HomeMainView().transition(.move(edge: .trailing))
-            case .callVideo: CallView()
+            case .home:
+                HomeMainView()
             case .recentCreatedGroupChat: MessagerGroupView(groupName: self.viewRouter.recentCreatedGroupModel!.groupName, groupId: self.viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
             }
         }
@@ -33,14 +32,13 @@ class ViewRouter: ObservableObject {
     
     enum Page {
         case login
-        case tabview
-        case callVideo
+        case home
         case recentCreatedGroupChat
     }
     
     private static func initialPage() -> Page {
         
-        return CKExtensions.getUserToken().isEmpty ? .login : .tabview
+        return CKExtensions.getUserToken().isEmpty ? .login : .home
     }
     
     let objectWillChange = PassthroughSubject<ViewRouter,Never>()

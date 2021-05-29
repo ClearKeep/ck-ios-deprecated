@@ -96,7 +96,7 @@ struct MessagerGroupView: View {
             createTitleView()
         }, invokeBackButton: {
             if self.isCreateGroup {
-                self.viewRouter.current = .tabview
+                self.viewRouter.current = .home
             } else {
                 self.presentationMode.wrappedValue.dismiss()
             }

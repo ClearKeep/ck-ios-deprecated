@@ -393,7 +393,7 @@ extension LoginView {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
-                                self.viewRouter.current = .tabview
+                                self.viewRouter.current = .home
                                 
                                 DispatchQueue.main.async {
                                     let appDelegate: AppDelegate? = UIApplication.shared.delegate as? AppDelegate
@@ -434,7 +434,7 @@ extension LoginView {
                 Backend.shared.registerTokenDevice { (response) in
                     if response {
                         hudVisible = false
-                        self.viewRouter.current = .tabview
+                        self.viewRouter.current = .home
                     }
                 }
             }
