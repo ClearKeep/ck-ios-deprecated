@@ -219,7 +219,9 @@ extension CallBox: JanusVideoRoomDelegate {
             if numberOfRemotes > 0 {
                 membersInCallDidChange?()
             } else {
-                CallManager.shared.end(call: self)
+                // Note: Keep the call so that other could join, uncomment to end call instead
+                // CallManager.shared.end(call: self)
+                membersInCallDidChange?()
             }
         } else {
             CallManager.shared.end(call: self)

@@ -108,6 +108,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
                         calls.forEach { (call) in
                             if call.isCallGroup {
                                 // TODO: handle for group call
+                                if call.status != .answered {
+                                    CallManager.shared.end(call: call)
+                                }
                             } else {
                                 CallManager.shared.end(call: call)
                             }
