@@ -11,14 +11,12 @@ import GoogleSignIn
 struct ServerDetailView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var groupRealms : RealmGroups
-    @EnvironmentObject var realmMessages : RealmMessages
     
-    @State var hudVisible = false
+    @State private var hudVisible = false
     @State private var showActionSheet = false
+    @State private var currentUserName: String = ""
     
-    @Binding var isShowingServerDetailView: Bool
-    @Binding var currentUserName: String
+    @Binding var showDetail: Bool
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -46,7 +44,7 @@ struct ServerDetailView: View {
                                 HStack {
                                     Spacer()
                                     Button {
-                                        self.isShowingServerDetailView.toggle()
+                                        showDetail = false
                                     } label: {
                                         Image("ic_close")
                                             .resizable()
@@ -90,7 +88,6 @@ struct ServerDetailView: View {
         .actionSheet(isPresented: $showActionSheet) {
             self.confirmationSheet
         }
-        
     }
 
     private func settingItemView(imageName: String, title: String, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
@@ -237,10 +234,8 @@ struct ServerDetailView: View {
                 Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
             }
             CKSignalCoordinate.shared.myAccount = nil
-            self.realmMessages.removeAll()
-            self.groupRealms.removeAll()
+            RealmManager.shared.removeAll()
             self.viewRouter.current = .login
-
         }
         
         DispatchQueue.main.async {
@@ -276,8 +271,8 @@ extension ServerDetailView {
 }
 
 
-struct ServerDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        ServerDetailView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
-    }
-}
+//struct ServerDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ServerDetailView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
+//    }
+//}

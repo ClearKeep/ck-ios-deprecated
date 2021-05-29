@@ -10,112 +10,44 @@ import SwiftUI
 
 class ServerMainViewModel: ObservableObject {
     
-    var ourEncryptionManager: CKAccountSignalEncryptionManager?
-    
     @Published var selectedGroupChatId: Int64? = -1
+    @Published var groups: [GroupModel] = []
+    @Published var peers: [GroupModel] = []
     
-    func start(ourEncryptionManager: CKAccountSignalEncryptionManager?){
-        self.ourEncryptionManager = ourEncryptionManager
-    }
-    
-    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-        
-        Backend.shared.authenticator
-            .requestKey(byClientId: clientId) { [weak self](result, error, response) in
-                
-                guard let recipientResponse = response else {
-                    Debug.DLog("Request prekey \(clientId) fail")
-                    return
-                }
-                if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                   let myAccount = CKSignalCoordinate.shared.myAccount {
-                    // save devcice by recipient account
-                    connectionDb.readWrite ({ (transaction) in
-                        if let _ = myAccount.refetch(with: transaction) {
-                            let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
-                                                             accountUniqueId: myAccount.uniqueId,
-                                                             transaction: transaction)
-                            if myBuddy == nil {
-                                let buddy = CKBuddy()!
-                                buddy.accountUniqueId = myAccount.uniqueId
-                                buddy.username = recipientResponse.clientID
-                                buddy.save(with:transaction)
-                                
-                                let device = CKDevice(deviceId: NSNumber(value:555),
-                                                      trustLevel: .trustedTofu,
-                                                      parentKey: buddy.uniqueId,
-                                                      parentCollection: CKBuddy.collection,
-                                                      publicIdentityKeyData: nil,
-                                                      lastSeenDate:nil)
-                                device.save(with:transaction)
-                            } else {
-                                myBuddy?.save(with: transaction)
-                                let device = CKDevice(deviceId: NSNumber(value:555),
-                                                      trustLevel: .trustedTofu,
-                                                      parentKey: myBuddy!.uniqueId,
-                                                      parentCollection: CKBuddy.collection,
-                                                      publicIdentityKeyData: nil,
-                                                      lastSeenDate:nil)
-                                device.save(with:transaction)
-                            }
-                        }
-                    })
-                }
-                self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-                
-                completion()
-            }
-    }
-    
-    private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
-            do {
-                let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
-                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientResponse.signedPreKey)
-                
-                guard let preKeyKeyPair = remotePrekey.keyPair,
-                      let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-                    return
-                }
-                
-                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(555),
-                                                                preKeyId: UInt32(recipientResponse.preKeyID),
-                                                                preKeyPublic: preKeyKeyPair.publicKey,
-                                                                signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
-                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-                                                                signature: recipientResponse.signedPreKeySignature,
-                                                                identityKey: recipientResponse.identityKeyPublic)
-                
-                let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 555)
-                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
-                                                                context: ourEncryptionMng.signalContext)
-                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-            } catch {
-                print("processKeyStoreHasPrivateKey exception: \(error)")
-            }
+    func reloadData() {
+        DispatchQueue.main.async {
+            let convertedAndSortedGroup = self.convertedAndSortedGroup(RealmManager.shared.getAllGroups())
+            self.groups = convertedAndSortedGroup.groups
+            self.peers = convertedAndSortedGroup.peers
         }
     }
     
-    private func processKeyStoreOnlyPublicKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
-            do {
-                let ckSignedPreKey = CKSignedPreKey(withPreKeyId: UInt32(recipientResponse.signedPreKeyID),
-                                                    publicKey: recipientResponse.signedPreKey,
-                                                    signature: recipientResponse.signedPreKeySignature)
-                let ckPreKey = CKPreKey(withPreKeyId: UInt32(recipientResponse.preKeyID),
-                                        publicKey: recipientResponse.preKey)
-                
-                let bundle = CKBundle(deviceId: UInt32(555),
-                                      registrationId: UInt32(recipientResponse.registrationID),
-                                      identityKey: recipientResponse.identityKeyPublic,
-                                      signedPreKey: ckSignedPreKey,
-                                      preKeys: [ckPreKey])
-                try ourEncryptionMng.consumeIncomingBundle(recipientResponse.clientID, bundle: bundle)
-            } catch {
-                print("processKeyStoreOnlyPublicKey exception: \(error)")
+    func getJoinedGroup(){
+        print("getJoinnedGroup")
+        
+        Backend.shared.getJoinnedGroup { [weak self] (result, error) in
+            guard let self = self else { return }
+            if let result = result {
+                result.lstGroup.forEach { (groupResponse) in
+                    let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
+                    let groupModel = GroupModel(groupID: groupResponse.groupID,
+                                                groupName: groupResponse.groupName,
+                                                groupToken: groupResponse.groupRtcToken,
+                                                groupAvatar: groupResponse.groupAvatar,
+                                                groupType: groupResponse.groupType,
+                                                createdByClientID: groupResponse.createdByClientID,
+                                                createdAt: groupResponse.createdAt,
+                                                updatedByClientID: groupResponse.updatedByClientID,
+                                                lstClientID: lstClientID,
+                                                updatedAt: groupResponse.updatedAt,
+                                                lastMessageAt: 0,
+                                                lastMessage: Data(),
+                                                idLastMessage: "",
+                                                timeSyncMessage: 0)
+                    RealmManager.shared.addAndUpdateGroup(group: groupModel)
+                }
             }
+            self.reloadData()
         }
     }
     
@@ -157,8 +89,44 @@ class ServerMainViewModel: ObservableObject {
         return ""
     }
     
-    func getMessage(data: Data) -> String{
-        return String(data: data, encoding: .utf8) ?? "x"
+    private func convertedAndSortedGroup(_ realmGroups: [RealmGroup]) -> (groups: [GroupModel], peers: [GroupModel]) {
+        var convertedGroups: [GroupModel] = []
+        var convertedPeers: [GroupModel] = []
+        
+        for realmGroup in realmGroups {
+            var lstClientId = Array<GroupMember>()
+            realmGroup.lstClientID.forEach { (member) in
+                lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+            }
+            
+            let group = GroupModel(groupID: realmGroup.groupId,
+                                   groupName: realmGroup.groupName,
+                                   groupToken: realmGroup.groupToken,
+                                   groupAvatar: realmGroup.avatarGroup,
+                                   groupType: realmGroup.groupType,
+                                   createdByClientID: realmGroup.createdByClientID,
+                                   createdAt: realmGroup.createdAt,
+                                   updatedByClientID: realmGroup.updatedByClientID,
+                                   lstClientID: lstClientId,
+                                   updatedAt: realmGroup.updatedAt,
+                                   lastMessageAt: realmGroup.lastMessageAt,
+                                   lastMessage: realmGroup.lastMessage,
+                                   idLastMessage: realmGroup.idLastMsg,
+                                   isRegistered: realmGroup.isRegistered,
+                                   timeSyncMessage: realmGroup.timeSyncMessage)
+            if group.groupType == "peer" {
+                convertedPeers.append(group)
+            } else {
+                convertedGroups.append(group)
+            }
+        }
+        let convertedAndSortedPeers = convertedPeers.sorted { (gr1, gr2) -> Bool in
+            return gr1.updatedAt > gr2.updatedAt
+        }
+        let convertedAndSortedGroups = convertedGroups.sorted { (gr1, gr2) -> Bool in
+            return gr1.updatedAt > gr2.updatedAt
+        }
+        return (convertedAndSortedGroups, convertedAndSortedPeers)
     }
 }
 
