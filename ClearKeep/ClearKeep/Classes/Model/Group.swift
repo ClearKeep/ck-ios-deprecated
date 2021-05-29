@@ -23,7 +23,7 @@ struct GroupModel: Identifiable , Codable {
     var lastMessageAt: Int64 = 0
     var lastMessage = Data()
     var idLastMessage: String
-    var isRegister: Bool = false
+    var isRegistered: Bool = false
     var timeSyncMessage: Int64
 }
 

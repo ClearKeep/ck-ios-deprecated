@@ -148,7 +148,7 @@ class RealmGroups: ObservableObject {
     func registerGroup(groupId: Int64){
         if let index = all.firstIndex(where: { $0.groupID == groupId }) {
             if var group = all.filter({$0.groupID == groupId}).first {
-                group.isRegister = true
+                group.isRegistered = true
                 let realmGroup = buildRealmGroup(group: group)
                 guard write(group: realmGroup) else { return }
                 all[index] = group
@@ -217,7 +217,7 @@ class RealmGroups: ObservableObject {
                                lastMessageAt: realmGroup.lastMessageAt,
                                lastMessage: realmGroup.lastMessage,
                                idLastMessage: realmGroup.idLastMsg,
-                               isRegister: realmGroup.isRegister,
+                               isRegistered: realmGroup.isRegistered,
                                timeSyncMessage: realmGroup.timeSyncMessage)
         
         return group
@@ -253,7 +253,7 @@ class RealmGroups: ObservableObject {
         realmGroup.lastMessage = group.lastMessage
         realmGroup.idLastMsg = group.idLastMessage
         realmGroup.lastMessageAt = group.lastMessageAt
-        realmGroup.isRegister = group.isRegister
+        realmGroup.isRegistered = group.isRegistered
         realmGroup.timeSyncMessage = group.timeSyncMessage
     }
     

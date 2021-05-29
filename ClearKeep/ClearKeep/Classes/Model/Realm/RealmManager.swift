@@ -21,33 +21,63 @@ class RealmManager {
     }
 }
 
+// MARK: - GET
 extension RealmManager {
-    
     func getDisplayNameSenderMessage(fromClientId: String , groupID: Int64) -> String {
-        do {
-            let realm = try Realm()
-            let objects = realm.objects(RealmGroup.self)
-            let group = objects.filter { $0.groupId == groupID }.first
-            let user = group?.lstClientID.filter { $0.id == fromClientId }.first
-            return user?.displayName ?? ""
-        }
-        catch let error as NSError {
-            print(error.localizedDescription)
-            return ""
+        let group = filterGroup(groupId: groupID)
+        let user = group?.lstClientID.filter { $0.id == fromClientId }.first
+        return user?.displayName ?? ""
+    }
+    
+    func getGroupName(by groupId: Int64) -> String {
+        return filterGroup(groupId: groupId)?.groupName ?? ""
+    }
+}
+
+// MARK: - UPDATE & INSERT
+extension RealmManager {
+    func updateLastMessage(_ message: MessageModel) {
+        realmMessages.add(message: message)
+        realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: message.message, lastMessageAt: message.createdAt, idLastMessage: message.id)
+    }
+}
+
+extension RealmManager {
+    func filterGroup(groupId: Int64) -> RealmGroup? {
+        let group = load(listOf: RealmGroup.self, filter: NSPredicate(format: "groupId == %d", groupId))
+        return group.first
+    }
+    
+    func registerGroup(groupId: Int64) {
+        if let group = filterGroup(groupId: groupId) {
+            write { realm in
+                group.isRegistered = true
+                realm.add(group, update: .modified)
+            }
         }
     }
     
-    func getGroupName(by groupID: Int64) -> String {
+    private func write(_ handler: ((_ realm: Realm) -> Void)) {
         do {
             let realm = try Realm()
-            let objects = realm.objects(RealmGroup.self)
-            let group = objects.filter { $0.groupId == groupID }.first
-            
-            return group?.groupName ?? ""
-        }
-        catch let error as NSError {
-            print(error.localizedDescription)
-            return ""
-        }
+            try realm.write {
+                handler(realm)
+            }
+        } catch { }
+    }
+    
+    private func load<T: Object>(listOf: T.Type, filter: NSPredicate? = nil) -> [T] {
+        do {
+            var objects = try Realm().objects(T.self)
+            if let filter = filter {
+                objects = objects.filter(filter)
+            }
+            var list = [T]()
+            for obj in objects {
+                list.append(obj)
+            }
+            return list
+        } catch { }
+        return []
     }
 }

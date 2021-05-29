@@ -48,8 +48,8 @@ struct MessageBubble: View {
                     VStack(alignment: .leading, spacing: 0){
                         HStack(spacing: 0) {
                             if isShowAvatarAndUserName {
-                                ChannelUserAvatar(avatarSize: 16, text: msg.fromDisplayName)
-                                Text(msg.fromDisplayName)
+                                ChannelUserAvatar(avatarSize: 16, text: getDisplayName())
+                                Text(getDisplayName())
                                     .font(AppTheme.fonts.linkSmall.font)
                                     .foregroundColor(UIColor.random().color)
                                     .padding(.leading, 8)
@@ -128,6 +128,10 @@ struct MessageBubble: View {
     private func stringValue() -> String {
         let str = String(data: msg.message, encoding: .utf8) ?? "x"
         return str
+    }
+    
+    private func getDisplayName() -> String {
+        return RealmManager.shared.getDisplayNameSenderMessage(fromClientId: msg.clientID, groupID: msg.groupID)
     }
 }
 

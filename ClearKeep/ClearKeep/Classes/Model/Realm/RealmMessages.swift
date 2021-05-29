@@ -141,7 +141,6 @@ class RealmMessages: ObservableObject {
                                    groupID: realmMessage.groupID,
                                    groupType: realmMessage.groupType,
                                    fromClientID: realmMessage.fromClientID,
-                                   fromDisplayName: realmMessage.fromDisplayName,
                                    clientID: realmMessage.clientID,
                                    message: realmMessage.message,
                                    createdAt: realmMessage.createdAt,
@@ -161,7 +160,6 @@ class RealmMessages: ObservableObject {
         realmMessage.groupID = message.groupID
         realmMessage.groupType = message.groupType
         realmMessage.fromClientID = message.fromClientID
-        realmMessage.fromDisplayName = message.fromDisplayName
         realmMessage.clientID = message.clientID
         realmMessage.message = message.message
         realmMessage.createdAt = message.createdAt
