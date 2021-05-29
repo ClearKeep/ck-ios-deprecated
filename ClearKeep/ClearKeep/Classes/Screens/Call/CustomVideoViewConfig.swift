@@ -40,7 +40,7 @@ class CustomVideoViewConfig: ObservableObject {
     }
     
     func fetchLocalUserName() {
-        let fetchedUsername = RealmManager.shared.getDisplayNameSenderMessage(fromClientId: clientId, groupID: groupId)
+        let fetchedUsername = RealmManager.shared.getSenderName(fromClientId: clientId, groupId: groupId)
         self.userName = fetchedUsername
     }
     

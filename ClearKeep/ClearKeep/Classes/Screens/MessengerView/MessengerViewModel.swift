@@ -16,11 +16,11 @@ class MessengerViewModel: ObservableObject, Identifiable {
     // MARK: - Variables
     private(set) var ourEncryptionManager: CKAccountSignalEncryptionManager?
     private(set) var groupId: Int64 = 0
-    private(set) var clientId: String = ""
+    private(set) var receiveId: String = ""
     private(set) var username: String = ""
     private(set) var groupType: String = "peer"
     private(set) var isGroup: Bool = false
-    private(set) var recipientDeviceId: UInt32 = 0
+    private(set) var isLatestPeerSignalKeyProcessed: Bool = false
     private var isRequesting = false
     
     // MARK: - Published
@@ -35,13 +35,15 @@ class MessengerViewModel: ObservableObject, Identifiable {
         Debug.DLog("Deinit \(self)")
     }
     
-    func setup(clientId: String, groupId: Int64, username: String, groupType: String) {
-        self.clientId = clientId
+    func setup(receiveId: String, groupId: Int64, username: String, groupType: String) {
+        self.receiveId = receiveId
         self.username = username
-        self.groupId = groupId
+        self.groupId = RealmManager.shared.getGroup(by: receiveId, type: groupType)?.groupId ?? 0
         self.groupType = groupType
         isGroup = false
-        messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
+        DispatchQueue.main.async {
+            self.messages = self.convertMessage(RealmManager.shared.getAllMessageInGroup(by: self.groupId))
+        }
     }
     
     func setup(groupId: Int64, username: String, groupType: String) {
@@ -49,12 +51,50 @@ class MessengerViewModel: ObservableObject, Identifiable {
         self.groupType = groupType
         self.username = username
         isGroup = true
-        messages = RealmManager.shared.realmMessages.allMessageInGroup(groupId: groupId)
+        DispatchQueue.main.async {
+            self.messages = self.convertMessage(RealmManager.shared.getAllMessageInGroup(by: self.groupId))
+        }
     }
     
+    func setGroupId(_ groupId: Int64) {
+        self.groupId = groupId
+    }
+    
+    func setIsLatestPeerSignalKeyProcessed(_ isLatestPeerSignalKeyProcessed: Bool) {
+        self.isLatestPeerSignalKeyProcessed = isLatestPeerSignalKeyProcessed
+    }
     // MARK: - Data managements
+    func reloadData() {
+        DispatchQueue.main.async {
+            self.messages = self.convertMessage(RealmManager.shared.getAllMessageInGroup(by: self.groupId))
+        }
+    }
+    
     func getGroupModel() -> GroupModel? {
-        return RealmManager.shared.realmGroups.filterGroup(groupId: groupId)
+        if let realmGroup = RealmManager.shared.getGroup(by: groupId) {
+            var lstClientId = Array<GroupMember>()
+            realmGroup.lstClientID.forEach { (member) in
+                lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+            }
+            
+            let group = GroupModel(groupID: realmGroup.groupId,
+                                   groupName: realmGroup.groupName,
+                                   groupToken: realmGroup.groupToken,
+                                   groupAvatar: realmGroup.avatarGroup,
+                                   groupType: realmGroup.groupType,
+                                   createdByClientID: realmGroup.createdByClientID,
+                                   createdAt: realmGroup.createdAt,
+                                   updatedByClientID: realmGroup.updatedByClientID,
+                                   lstClientID: lstClientId,
+                                   updatedAt: realmGroup.updatedAt,
+                                   lastMessageAt: realmGroup.lastMessageAt,
+                                   lastMessage: realmGroup.lastMessage,
+                                   idLastMessage: realmGroup.idLastMsg,
+                                   isRegistered: realmGroup.isRegistered,
+                                   timeSyncMessage: realmGroup.timeSyncMessage)
+            return group
+        }
+        return nil
     }
     
     func getIdLastItem() -> String {
@@ -74,44 +114,20 @@ class MessengerViewModel: ObservableObject, Identifiable {
     }
     
     private func getMessagePeerToPeer(completion: (() -> ())? = nil) {
-        if self.groupId != 0 {
+        if self.groupId != Constants.groupIdTemp {
             Backend.shared.getMessageInRoom(self.groupId,
-                                            RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: self.groupId)) { (result, error) in
+                                            RealmManager.shared.getTimeSyncInGroup(groupId: self.groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
                         DispatchQueue.main.async {
-                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
+                            RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
                         }
                     }
                     result.lstMessage.forEach { (message) in
-                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
-                        if filterMessage.isEmpty {
-                            if let ourEncryptionMng = self.ourEncryptionManager {
-                                do {
-                                    let decryptedData = try ourEncryptionMng.decryptFromAddress(message.message,
-                                                                                                name: self.clientId,
-                                                                                                deviceId: UInt32(555))
-                                    let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                                    Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
-                                    
-                                    DispatchQueue.main.async {
-                                        let post = MessageModel(id: message.id,
-                                                                groupID: message.groupID,
-                                                                groupType: message.groupType,
-                                                                fromClientID: message.fromClientID,
-                                                                fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
-                                                                clientID: message.clientID,
-                                                                message: decryptedData,
-                                                                createdAt: message.createdAt,
-                                                                updatedAt: message.updatedAt)
-                                        RealmManager.shared.realmMessages.add(message: post)
-                                        self.messages.append(post)
-                                        self.groupId = message.groupID
-                                        RealmManager.shared.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
-                                        completion?()
-                                    }
-                                } catch {
-                                    Debug.DLog("Decryption message error: \(error)")
+                        if !RealmManager.shared.isExistedMessageInGroup(by: message.id, groupId: message.groupID) {
+                            ChatService.shared.decryptMessageFromPeer(message) { messageModel in
+                                DispatchQueue.main.async {
+                                    self.messages.append(messageModel)
                                 }
                             }
                         }
@@ -123,194 +139,24 @@ class MessengerViewModel: ObservableObject, Identifiable {
     }
     
     private func getMessageGroup(completion: (() -> ())? = nil) {
-        if groupId != 0 {
-            Backend.shared.getMessageInRoom(groupId , RealmManager.shared.realmGroups.getTimeSyncInGroup(groupID: groupId)) { (result, error) in
+        if groupId != Constants.groupIdTemp {
+            Backend.shared.getMessageInRoom(groupId , RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
                         DispatchQueue.main.async {
                             let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
                                 return msg1.createdAt > msg2.createdAt
                             }
-                            RealmManager.shared.realmGroups.updateTimeSyncMessageInGroup(groupID: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
+                            RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
                         }
                     }
                     result.lstMessage.forEach { (message) in
-                        let filterMessage = RealmManager.shared.realmMessages.allMessageInGroup(groupId: message.groupID).filter{$0.id == message.id}
-                        if filterMessage.isEmpty {
-                            if let ourEncryptionMng = self.ourEncryptionManager,
-                               let connectionDb = self.connectionDb {
-                                do {
-                                    var account: CKAccount?
-                                    connectionDb.read { (transaction) in
-                                        account = CKAccount.allAccounts(withUsername: message.fromClientID, transaction: transaction).first
-                                    }
-                                    if let senderAccount = account {
-                                        if ourEncryptionMng.senderKeyExistsForUsername(message.fromClientID, deviceId: senderAccount.deviceId, groupId: message.groupID) {
-                                            let decryptedData = try ourEncryptionMng.decryptFromGroup(message.message,
-                                                                                                      groupId: message.groupID,
-                                                                                                      name: message.fromClientID,
-                                                                                                      deviceId: UInt32(senderAccount.deviceId))
-                                            let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                                            Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
-                                            
-                                            DispatchQueue.main.async {
-                                                RealmManager.shared.realmGroups.updateLastMessage(groupID: message.groupID, lastMessage: decryptedData, lastMessageAt: message.createdAt, idLastMessage: message.id)
-                                                let post = MessageModel(id: message.id,
-                                                                        groupID: message.groupID,
-                                                                        groupType: message.groupType,
-                                                                        fromClientID: message.fromClientID,
-                                                                        fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: message.fromClientID, groupID: message.groupID),
-                                                                        clientID: message.clientID,
-                                                                        message: decryptedData,
-                                                                        createdAt: message.createdAt,
-                                                                        updatedAt: message.updatedAt)
-                                                RealmManager.shared.realmMessages.add(message: post)
-                                                self.messages.append(post)
-                                                completion?()
-                                            }
-                                            
-                                            return
-                                        } else {
-                                            self.requestKeyInGroup(byGroupId: self.groupId, publication: message, completion: { post in
-                                                self.messages.append(post)
-                                                completion?()
-                                            })
-                                        }
-                                    } else {
-                                        self.requestKeyInGroup(byGroupId: self.groupId, publication: message, completion: { post in
-                                            self.messages.append(post)
-                                            completion?()
-                                        })
-                                    }
-                                } catch {
-                                    Debug.DLog("Decryption message error: \(error)")
-                                    self.requestKeyInGroup(byGroupId: self.groupId, publication: message, completion: { post in
-                                        self.messages.append(post)
-                                        completion?()
-                                    })
-                                }
-                            }
+                        if !RealmManager.shared.isExistedMessageInGroup(by: message.id, groupId: message.groupID) {
+                            ChatService.shared.decryptMessageFromGroup(message)
                         }
-                    }
-                    //                    self.reloadData()
-                }
-            }
-        }
-    }
-    
-    func didReceiveMessage(userInfo: [AnyHashable : Any]?, completion: (() -> ())? = nil) {
-        if let userInfo = userInfo,
-           let clientId = userInfo["clientId"] as? String,
-           let publication = userInfo["publication"] as? Message_MessageObjectResponse,
-           //            publication.groupID.isEmpty,
-           clientId == self.clientId {
-            
-            if !RealmManager.shared.realmMessages.isExistMessage(msgId: publication.id){
-                if let ourEncryptionMng = self.ourEncryptionManager {
-                    do {
-                        let decryptedData = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                                    name: clientId,
-                                                                                    deviceId: UInt32(555))
-                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                        Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
-                        
-                        DispatchQueue.main.async {
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: decryptedData,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            RealmManager.shared.realmMessages.add(message: post)
-                            self.messages.append(post)
-                            RealmManager.shared.realmGroups.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            completion?()
-                        }
-                    } catch {
-                        //save message error when can't decrypt
-                        DispatchQueue.main.async {
-                            let messageError = "unable to decrypt this message".data(using: .utf8) ?? Data()
-                            
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: messageError,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            RealmManager.shared.realmMessages.add(message: post)
-                            self.messages.append(post)
-                            RealmManager.shared.realmGroups.updateLastMessage(groupID: publication.groupID, lastMessage: messageError, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            completion?()
-                        }
-                        Debug.DLog("Decryption message error: \(error)")
                     }
                 }
             }
-        }
-    }
-    
-    func decryptionMessage(publication: Message_MessageObjectResponse, completion: (() -> ())? = nil) {
-        
-        //        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
-        if let ourEncryptionMng = self.ourEncryptionManager,
-           let connectionDb = self.connectionDb {
-            do {
-                var account: CKAccount?
-                connectionDb.read { (transaction) in
-                    account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
-                }
-                if let senderAccount = account {
-                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupId) {
-                        let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                                  groupId: groupId,
-                                                                                  name: publication.fromClientID,
-                                                                                  deviceId: UInt32(senderAccount.deviceId))
-                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                        Debug.DLog("Message decryption: \(messageDecryption ?? "Empty error")")
-                        
-                        DispatchQueue.main.async {
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: decryptedData,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            RealmManager.shared.realmMessages.add(message: post)
-                            self.messages.append(post)
-                            RealmManager.shared.realmGroups.updateLastMessage(groupID: self.groupId, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            completion?()
-                        }
-                        
-                        return
-                    }else {
-                        self.requestKeyInGroup(byGroupId: groupId, publication: publication, completion: { post in
-                            self.messages.append(post)
-                            completion?()
-                        })
-                    }
-                }else {
-                    self.requestKeyInGroup(byGroupId: groupId, publication: publication, completion: { post in
-                        self.messages.append(post)
-                        completion?()
-                    })
-                }
-            } catch {
-                Debug.DLog("Decryption message error: \(error)")
-                self.requestKeyInGroup(byGroupId: groupId, publication: publication, completion: { post in
-                    self.messages.append(post)
-                    completion?()
-                })
-            }
-            //            requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
         }
     }
     
@@ -324,250 +170,71 @@ class MessengerViewModel: ObservableObject, Identifiable {
             return
         }
         
-        //        self.viewModel.requestBundleRecipient(byClientId: clientId) {
-        
-        //        }
         if isGroup {
-            sendMessageGroup(payload: payload, completion: completion)
-        } else {
-            sendMessagePeer(payload: payload, completion: completion)
-        }
-    }
-    
-    private func sendMessagePeer(payload: Data, completion: (() -> ())? = nil) {
-        if let myAccount = CKSignalCoordinate.shared.myAccount {
-            do {
-                guard let encryptedData = try ourEncryptionManager?.encryptToAddress(payload,
-                                                                                     name: clientId,
-                                                                                     deviceId: self.recipientDeviceId) else { return }
-                if groupId == 0, let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId, type: groupType) {
-                    groupId = group.groupID
-                }
-                if groupId == 0 {
-                    createGroup(username: self.username, clientId: clientId) { (group) in
-                        RealmManager.shared.realmGroups.add(group: group)
-                        
-                        Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: group.groupID , groupType: "peer") { (result) in
-                            if let result = result {
-                                DispatchQueue.main.async {
-                                    let post = MessageModel(id: result.id,
-                                                            groupID: result.groupID,
-                                                            groupType: result.groupType,
-                                                            fromClientID: result.fromClientID,
-                                                            fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
-                                                            clientID: result.clientID,
-                                                            message: payload,
-                                                            createdAt: result.createdAt,
-                                                            updatedAt: result.updatedAt)
-                                    RealmManager.shared.realmMessages.add(message: post)
-                                    self.messages.append(post)
-                                    Debug.DLog("Sent message \(post)")
-                                    RealmManager.shared.realmGroups.updateLastMessage(groupID: result.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
-                                    completion?()
-                                }
-                            }
+            if let group = RealmManager.shared.getGroup(by: groupId) {
+                if group.isRegistered {
+                    ChatService.shared.sendMessageToGroup(groupId: groupId, messageData: payload) { message in
+                        DispatchQueue.main.async {
+                            self.messages.append(message)
                         }
                     }
                 } else {
-                    Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, toClientId: self.clientId , groupId: groupId , groupType: groupType) { (result) in
-                        if let result = result {
-                            DispatchQueue.main.async {
-                                let post = MessageModel(id: result.id,
-                                                        groupID: result.groupID,
-                                                        groupType: result.groupType,
-                                                        fromClientID: result.fromClientID,
-                                                        fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
-                                                        clientID: result.clientID,
-                                                        message: payload,
-                                                        createdAt: result.createdAt,
-                                                        updatedAt: result.updatedAt)
-                                RealmManager.shared.realmMessages.add(message: post)
-                                self.messages.append(post)
-                                Debug.DLog("Sent message \(post)")
-                                RealmManager.shared.realmGroups.updateLastMessage(groupID: result.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
-                                completion?()
+                    ChatService.shared.registerWithGroup(group.groupId) { isSuccess in
+                        if isSuccess {
+                            ChatService.shared.sendMessageToGroup(groupId: group.groupId, messageData: payload) { message in
+                                DispatchQueue.main.async {
+                                    self.messages.append(message)
+                                }
                             }
                         }
                     }
                 }
-                
-            } catch {
-                Debug.DLog("Send message error: \(error)")
             }
-        }
-    }
-    
-    func requestBundleRecipient(byClientId clientId: String,_ completion: @escaping () -> Void) {
-
-        Backend.shared.authenticator
-            .requestKey(byClientId: clientId) { [weak self](result, error, response) in
-                
-                guard let recipientResponse = response else {
-                    Debug.DLog("Request prekey \(clientId) fail")
-                    return
-                }
-                // check exist session recipient in database
-//                if let ourAccountEncryptMng = self?.ourEncryptionManager {
-                    self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
-//                    if !ourAccountEncryptMng.sessionRecordExistsForUsername(clientId, deviceId: 555) {
-                        if let connectionDb = CKDatabaseManager.shared.database?.newConnection(),
-                           let myAccount = CKSignalCoordinate.shared.myAccount {
-                            // save devcice by recipient account
-                            connectionDb.readWrite ({ (transaction) in
-                                if let _ = myAccount.refetch(with: transaction) {
-                                    let myBuddy = CKBuddy.fetchBuddy(username: recipientResponse.clientID,
-                                                                     accountUniqueId: myAccount.uniqueId,
-                                                                     transaction: transaction)
-                                    if myBuddy == nil {
-                                        let buddy = CKBuddy()!
-                                        buddy.accountUniqueId = myAccount.uniqueId
-                                        buddy.username = recipientResponse.clientID
-                                        buddy.save(with:transaction)
-                                        
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
-                                                              trustLevel: .trustedTofu,
-                                                              parentKey: buddy.uniqueId,
-                                                              parentCollection: CKBuddy.collection,
-                                                              publicIdentityKeyData: nil,
-                                                              lastSeenDate:nil)
-                                        device.save(with:transaction)
-                                    } else {
-                                        myBuddy?.save(with: transaction)
-                                        let device = CKDevice(deviceId: NSNumber(value:555),
-                                                              trustLevel: .trustedTofu,
-                                                              parentKey: myBuddy!.uniqueId,
-                                                              parentCollection: CKBuddy.collection,
-                                                              publicIdentityKeyData: nil,
-                                                              lastSeenDate:nil)
-                                        device.save(with:transaction)
-                                    }
-                                }
-                            })
-                        }
-                        // Case: 1 register user with server with publicKey, privateKey (preKey, signedPreKey)
-                        self?.processKeyStoreHasPrivateKey(recipientResponse: recipientResponse)
-                        
-                        // Case: 2 register user with server with only publicKey (preKey, signedPreKey)
-                        //                    self?.processKeyStoreOnlyPublicKey(recipientResponse: recipientResponse)
-//                    }
-//                    print("processPreKeyBundle recipient finished")
-//                    completion()
-//                } else {
-//                    completion()
-//                }
-            }
-        //        }
-    }
-    
-    func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
-            do {
-                let remotePrekey = try SignalPreKey.init(serializedData: recipientResponse.preKey)
-                let remoteSignedPrekey = try SignalPreKey.init(serializedData: recipientResponse.signedPreKey)
-                
-                guard let preKeyKeyPair = remotePrekey.keyPair,
-                      let signedPrekeyKeyPair = remoteSignedPrekey.keyPair else {
-                    return
-                }
-                
-                let signalPreKeyBundle = try SignalPreKeyBundle(registrationId: UInt32(recipientResponse.registrationID),
-                                                                deviceId: UInt32(555),
-                                                                preKeyId: UInt32(recipientResponse.preKeyID),
-                                                                preKeyPublic: preKeyKeyPair.publicKey,
-                                                                signedPreKeyId: UInt32(recipientResponse.signedPreKeyID),
-                                                                signedPreKeyPublic: signedPrekeyKeyPair.publicKey,
-                                                                signature: recipientResponse.signedPreKeySignature,
-                                                                identityKey: recipientResponse.identityKeyPublic)
-                
-                let remoteAddress = SignalAddress(name: recipientResponse.clientID,
-                                                  deviceId: 555)
-                let remoteSessionBuilder = SignalSessionBuilder(address: remoteAddress,
-                                                                context: ourEncryptionMng.signalContext)
-                try remoteSessionBuilder.processPreKeyBundle(signalPreKeyBundle)
-            } catch {
-                Debug.DLog("processKeyStoreHasPrivateKey exception: \(error)")
-            }
-        }
-    }
-    
-    private func sendMessageGroup(payload: Data, completion: (() -> ())? = nil) {
-        if let myAccount = CKSignalCoordinate.shared.myAccount {
-            do {
-                guard let encryptedData = try ourEncryptionManager?.encryptToGroup(payload,
-                                                                                   groupId: groupId,
-                                                                                   name: myAccount.username,
-                                                                                   deviceId: UInt32(myAccount.deviceId)) else { return }
-                Backend.shared.send(encryptedData.data, fromClientId: myAccount.username, groupId: groupId, groupType: "group") { (result) in
-                    if let result = result {
+        } else {
+            if groupId == Constants.groupIdTemp {
+                ChatService.shared.createPeerGroup(receiveId: receiveId) { [weak self] groupModel in
+                    guard let self = self else { return }
+                    self.setGroupId(groupModel.groupID)
+                    
+                    ChatService.shared.sendMessageToPeer(toClientId: self.receiveId, groupId: self.groupId, messageData: payload, isForceProcessKey: !self.isLatestPeerSignalKeyProcessed) { [self] message in
+                        self.isLatestPeerSignalKeyProcessed = true
                         DispatchQueue.main.async {
-                            let post = MessageModel(id: result.id,
-                                                    groupID: result.groupID,
-                                                    groupType: result.groupType,
-                                                    fromClientID: result.fromClientID,
-                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: result.fromClientID, groupID: result.groupID),
-                                                    clientID: result.clientID,
-                                                    message: payload,
-                                                    createdAt: result.createdAt,
-                                                    updatedAt: result.updatedAt)
-                            RealmManager.shared.realmMessages.add(message: post)
-                            self.messages.append(post)
-                            Debug.DLog("Sent message: \(post) to group \(self.groupId)")
-                            RealmManager.shared.realmGroups.updateLastMessage(groupID: result.groupID, lastMessage: payload, lastMessageAt: result.createdAt, idLastMessage: result.id)
-                            completion?()
+                            self.messages.append(message)
                         }
                     }
                 }
-            } catch {
-                Debug.DLog("Send message error: \(error) to group \(self.groupId)")
-            }
-        }
-    }
-    
-    func createGroup(username: String, clientId: String, completion: ((GroupModel) -> ())?) {
-        guard let myAccount = CKSignalCoordinate.shared.myAccount else { return print("My Account is nil") }
-        var req = Group_CreateGroupRequest()
-        let userNameLogin = (UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? "") as String
-        req.groupName = "\(username)-\(userNameLogin)"
-        req.groupType = "peer"
-        req.createdByClientID = myAccount.username
-        req.lstClientID = [myAccount.username , clientId]
-        
-        Backend.shared.createRoom(req) { (result , error)  in
-            if let result = result {
-                let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
-                
-                DispatchQueue.main.async {
-                    let group = GroupModel(groupID: result.groupID,
-                                           groupName: result.groupName,
-                                           groupToken: result.groupRtcToken,
-                                           groupAvatar: result.groupAvatar,
-                                           groupType: result.groupType,
-                                           createdByClientID: result.createdByClientID,
-                                           createdAt: result.createdAt,
-                                           updatedByClientID: result.updatedByClientID,
-                                           lstClientID: lstClientID,
-                                           updatedAt: result.updatedAt,
-                                           lastMessageAt: result.lastMessageAt,
-                                           lastMessage: Data(),
-                                           idLastMessage: result.lastMessage.id,
-                                           timeSyncMessage: 0)
-                    self.groupId = group.groupID
-                    completion?(group)
+            } else {
+                ChatService.shared.sendMessageToPeer(toClientId: receiveId, groupId: groupId, messageData: payload, isForceProcessKey: !isLatestPeerSignalKeyProcessed) { message in
+                    self.isLatestPeerSignalKeyProcessed = true
+                    DispatchQueue.main.async {
+                        self.messages.append(message)
+                    }
                 }
             }
         }
     }
     
-    func callPeerToPeer(group: GroupModel, clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
-        if isRequesting { return }
-        isRequesting = true
-        requestVideoCall(isCallGroup: false, clientId: clientId, groupId: group.groupID, callType: type, completion: completion)
+    func callPeerToPeer(clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
+        if groupId == Constants.groupIdTemp {
+            ChatService.shared.createPeerGroup(receiveId: receiveId) { [weak self] groupModel in
+                guard let self = self else { return }
+                self.setGroupId(groupModel.groupID)
+                
+                if self.isRequesting { return }
+                self.isRequesting = true
+                self.requestVideoCall(isCallGroup: false, clientId: clientId, groupId: groupModel.groupID, callType: type, completion: completion)
+            }
+        } else {
+            if isRequesting { return }
+            isRequesting = true
+            requestVideoCall(isCallGroup: false, clientId: clientId, groupId: groupId, callType: type, completion: completion)
+        }
     }
     
     func callGroup(callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
         if isRequesting { return }
         isRequesting = true
-        requestVideoCall(isCallGroup: true, clientId: clientId, groupId: groupId, callType: type, completion: completion)
+        requestVideoCall(isCallGroup: true, clientId: receiveId, groupId: groupId, callType: type, completion: completion)
     }
     
     private func requestVideoCall(isCallGroup: Bool ,clientId: String, groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
@@ -580,7 +247,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
                         UserDefaults.standard.setValue(response.turnServer.user, forKey: Constants.keySaveTurnServerUser)
                         UserDefaults.standard.setValue(response.turnServer.pwd, forKey: Constants.keySaveTurnServerPWD)
                         UserDefaults.standard.synchronize()
-
+                        
                         AVCaptureDevice.authorizeVideo(completion: { (status) in
                             AVCaptureDevice.authorizeAudio(completion: { (status) in
                                 if status == .alreadyAuthorized || status == .justAuthorized {
@@ -600,123 +267,21 @@ class MessengerViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func registerWithGroup(_ groupId: Int64) {
-        if let group = RealmManager.shared.realmGroups.filterGroup(groupId: groupId) {
-            if !group.isRegister {
-                if let myAccount = CKSignalCoordinate.shared.myAccount , let ourAccountEncryptMng = self.ourEncryptionManager {
-                    let userName = myAccount.username
-                    let deviceID = Int32(555)
-                    let address = SignalAddress(name: userName, deviceId: deviceID)
-                    let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
-                    let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
-                    
-                    do {
-                        let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-                        Backend.shared.authenticator.registerGroup(byGroupId: groupId,
-                                                                   clientId: userName,
-                                                                   deviceId: deviceID,
-                                                                   senderKeyData: signalSKDM.serializedData()) { (result, error) in
-                            print("Register group with result: \(result)")
-                            if result {
-                                RealmManager.shared.realmGroups.registerGroup(groupId: groupId)
-                            }
-                        }
-                        
-                    } catch {
-                        print("Register group error: \(error)")
-                        
-                    }
-                }
-            }
+    private func convertMessage(_ realmMesssages: [RealmMessage]) -> [MessageModel] {
+        var convertedMessages: [MessageModel] = []
+        for realmMessage in realmMesssages {
+            let message = MessageModel(id: realmMessage.id,
+                                       groupID: realmMessage.groupID,
+                                       groupType: realmMessage.groupType,
+                                       fromClientID: realmMessage.fromClientID,
+                                       clientID: realmMessage.clientID,
+                                       message: realmMessage.message,
+                                       createdAt: realmMessage.createdAt,
+                                       updatedAt: realmMessage.updatedAt)
+            convertedMessages.append(message)
         }
-    }
-    
-    // Request key group
-    func requestKeyInGroup(byGroupId groupId: Int64, publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())?) {
-        Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
-                                                     groupId: groupId) {(result, error, response) in
-            guard let groupResponse = response else {
-                Debug.DLog("Request prekey \(groupId) fail")
-                return
-            }
-            self.processSenderKey(byGroupId: groupResponse.groupID,
-                                  responseSenderKey: groupResponse.clientKey)
-            // decrypt message again
-            self.decryptionMessage(groupId: groupResponse.groupID, publication: publication, completion: completion)
-        }
-    }
-    
-    private func processSenderKey(byGroupId groupId: Int64,
-                          responseSenderKey: Signal_GroupClientKeyObject) {
-        let deviceID = 444
-        if let ourAccountEncryptMng = self.ourEncryptionManager,
-           let connectionDb = self.connectionDb {
-            // save account infor
-            connectionDb.readWrite { (transaction) in
-                var account = CKAccount.allAccounts(withUsername: responseSenderKey.clientID, transaction: transaction).first
-                if account == nil {
-                    account = CKAccount(username: responseSenderKey.clientID, deviceId: Int32(deviceID), accountType: .none)
-                    account?.save(with: transaction)
-                }
-            }
-            do {
-                let addresss = SignalAddress(name: responseSenderKey.clientID,
-                                             deviceId: Int32(deviceID))
-                try ourAccountEncryptMng.consumeIncoming(toGroup: groupId,
-                                                         address: addresss,
-                                                         skdmDtata: responseSenderKey.clientKeyDistribution)
-            } catch {
-                Debug.DLog("processSenderKey error: \(error)")
-            }
-        }
-    }
-    
-    func decryptionMessage(groupId: Int64, publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())?) {
-        
-        //        requestKeyInGroup(byGroupId: groupModel.groupID, publication: publication)
-        if let ourEncryptionMng = self.ourEncryptionManager,
-           let connectionDb = self.connectionDb {
-            do {
-                var account: CKAccount?
-                connectionDb.read { (transaction) in
-                    account = CKAccount.allAccounts(withUsername: publication.fromClientID, transaction: transaction).first
-                }
-                if let senderAccount = account {
-                    if ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: senderAccount.deviceId, groupId: groupId) {
-                        let decryptedData = try ourEncryptionMng.decryptFromGroup(publication.message,
-                                                                                  groupId: groupId,
-                                                                                  name: publication.fromClientID,
-                                                                                  deviceId: UInt32(senderAccount.deviceId))
-                        let messageDecryption = String(data: decryptedData, encoding: .utf8)
-                        print("Message decryption: \(messageDecryption ?? "Empty error")")
-                        
-                        DispatchQueue.main.async {
-                            let post = MessageModel(id: publication.id,
-                                                    groupID: publication.groupID,
-                                                    groupType: publication.groupType,
-                                                    fromClientID: publication.fromClientID,
-                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
-                                                    clientID: publication.clientID,
-                                                    message: decryptedData,
-                                                    createdAt: publication.createdAt,
-                                                    updatedAt: publication.updatedAt)
-                            RealmManager.shared.realmMessages.add(message: post)
-                            RealmManager.shared.realmGroups.updateLastMessage(groupID: groupId, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
-                            completion?(post)
-                        }
-                        
-                        return
-                    }else {
-                        requestKeyInGroup(byGroupId: groupId, publication: publication, completion: completion)
-                    }
-                }else {
-                    requestKeyInGroup(byGroupId: groupId, publication: publication, completion: completion)
-                }
-            } catch {
-                print("Decryption message error: \(error)")
-                requestKeyInGroup(byGroupId: groupId, publication: publication, completion: completion)
-            }
-            //            requestKeyInGroup(byGroupId: self.selectedRoom, publication: publication)
-        }
+        return convertedMessages.sorted(by: { (msg1, msg2) -> Bool in
+            return msg1.createdAt < msg2.createdAt
+        })
     }
 }

@@ -9,9 +9,6 @@ import SwiftUI
 
 struct PeopleView: View {
     
-    @EnvironmentObject var groupRealms : RealmGroups
-    @EnvironmentObject var messsagesRealms : RealmMessages
-    
     @State private var searchText: String = ""
     @ObservedObject var viewModel = PeopleViewModel()
     

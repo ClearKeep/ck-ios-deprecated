@@ -15,7 +15,6 @@ struct CreateRoomView: View {
     @State private var showSelectMemberView = false
     
     @EnvironmentObject var viewRouter: ViewRouter
-    @EnvironmentObject var realmGroups : RealmGroups
     
     @State var hudVisible = false
     @State var isShowAlert = false
@@ -155,7 +154,7 @@ extension CreateRoomView {
                                                lastMessage: Data(),
                                                idLastMessage: result.lastMessage.id,
                                                timeSyncMessage: 0)
-                        self.realmGroups.add(group: group)
+                        RealmManager.shared.addAndUpdateGroup(group: group)
                         self.viewRouter.recentCreatedGroupModel = group
                     }
                     self.createGroupSuccess = true

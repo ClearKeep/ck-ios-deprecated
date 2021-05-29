@@ -27,7 +27,6 @@ struct MessagerGroupView: View {
     // MARK: - Variables
     private var userName: String = ""
     private var groupName: String = ""
-    private var groupType: String = "peer"
     private var clientId: String = ""
     private var groupId: Int64 = 0
     private var isCreateGroup: Bool = false
@@ -39,10 +38,9 @@ struct MessagerGroupView: View {
     init(groupName: String, groupId: Int64, isCreateGroup: Bool = false) {
         self.init()
         self.groupName = groupName
-        self.groupType = "group"
         self.groupId = groupId
         self.isCreateGroup = isCreateGroup
-        self.viewModel.setup(groupId: groupId, username: groupName, groupType: groupType)
+        self.viewModel.setup(groupId: groupId, username: groupName, groupType: "group")
     }
     
     var body: some View {
@@ -119,31 +117,25 @@ struct MessagerGroupView: View {
                    secondaryButton: .default(Text("Cancel")))
         })
         .onAppear() {
+            ChatService.shared.setOpenedGroupId(groupId)
             UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
             UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
-            DispatchQueue.main.async {
-                RealmManager.shared.realmMessages.loadSavedData()
-                RealmManager.shared.realmGroups.loadSavedData()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.viewModel.registerWithGroup(groupId)
-                    self.viewModel.getMessageInRoom(completion: {
-                        self.scrollView?.scrollToBottom()
-                    })
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.viewModel.getMessageInRoom(completion: {
+                    self.scrollView?.scrollToBottom()
+                })
             }
         }
         .onDisappear(){
+            ChatService.shared.setOpenedGroupId(-1)
             UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
             UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
-               let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                if publication.groupType == "group" && groupId == publication.groupID && UserDefaults.standard.bool(forKey: Constants.isInChatRoom) {
-                    self.viewModel.decryptionMessage(publication: publication, completion: {
-                        self.scrollView?.scrollToBottom()
-                    })
+               let message = userInfo["message"] as? MessageModel {
+                if message.groupID == ChatService.shared.openedGroupId {
+                    self.viewModel.reloadData()
                 }
             }
         }

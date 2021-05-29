@@ -10,10 +10,10 @@ import RealmSwift
 
 /// Class should be created only once
 /// (typically, initialize in SceneDelegate and inject where needed)
-class RealmMessages: ObservableObject {
+class RealmMessages {
 
     // MARK:- Persons conformance
-    @Published var all = [MessageModel]()
+    var all = [MessageModel]()
 
 //    var allPublished: Published<[MessageModel]> { _all }
 //    var allPublisher: Published<[MessageModel]>.Publisher { $all }
@@ -22,24 +22,24 @@ class RealmMessages: ObservableObject {
         loadSavedData()
     }
 
-    func add(message: MessageModel) {
-        let realmMessage = buildRealmMessage(message: message)
-        guard write(message: realmMessage) else { return }
-            all.append(message)
-            sort()
-    }
-
-    func update(message: MessageModel) {
-        if let index = all.firstIndex(where: { $0.id  == message.id }) {
-            let realmMessage = buildRealmMessage(message: message)
-            guard write(message: realmMessage) else { return }
-            all[index] = message
-            sort()
-        }
-        else {
-            print("message not found")
-        }
-    }
+//    func add(message: MessageModel) {
+//        let realmMessage = buildRealmMessage(message: message)
+//        guard write(message: realmMessage) else { return }
+//            all.append(message)
+//            sort()
+//    }
+//
+//    func update(message: MessageModel) {
+//        if let index = all.firstIndex(where: { $0.id  == message.id }) {
+//            let realmMessage = buildRealmMessage(message: message)
+//            guard write(message: realmMessage) else { return }
+//            all[index] = message
+//            sort()
+//        }
+//        else {
+//            print("message not found")
+//        }
+//    }
 
     func remove(messageRemove: MessageModel) {
         for (index, message) in all.enumerated() {
@@ -59,24 +59,24 @@ class RealmMessages: ObservableObject {
         }
     }
     
-    func allMessageInGroup(groupId: Int64) -> [MessageModel] {
-        return all.filter{$0.groupID == groupId}
-    }
-    
-    func isExistMessage(msgId: String) -> Bool{
-        let filter = all.filter{$0.id == msgId}
-        return !filter.isEmpty
-    }
-    
-    func getTimeStampPreLastMessage(groupId: Int64) -> Int64{
-        let messageInGroup = all.filter{$0.groupID == groupId}
-        var timeStamp : Int64 = 0
-        
-        if messageInGroup.count > 1 {
-            timeStamp = messageInGroup[messageInGroup.count - 2].createdAt
-        }
-        return timeStamp
-    }
+//    func allMessageInGroup(groupId: Int64) -> [MessageModel] {
+//        return all.filter{$0.groupID == groupId}
+//    }
+//    
+//    func isExistMessage(msgId: String) -> Bool{
+//        let filter = all.filter{$0.id == msgId}
+//        return !filter.isEmpty
+//    }
+//    
+//    func getTimeStampPreLastMessage(groupId: Int64) -> Int64{
+//        let messageInGroup = all.filter{$0.groupID == groupId}
+//        var timeStamp : Int64 = 0
+//        
+//        if messageInGroup.count > 1 {
+//            timeStamp = messageInGroup[messageInGroup.count - 2].createdAt
+//        }
+//        return timeStamp
+//    }
 
     // MARK: - Private functions
     private func write(message: RealmMessage) -> Bool {

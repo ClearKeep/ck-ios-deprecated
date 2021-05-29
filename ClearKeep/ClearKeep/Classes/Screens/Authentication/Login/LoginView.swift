@@ -340,7 +340,7 @@ extension LoginView {
             UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
            
-            let address = SignalAddress(name: userID, deviceId: Int32(555))
+            let address = SignalAddress(name: userID, deviceId: Int32(Constants.encryptedDeviceId))
             hudVisible = true
             Backend.shared.authenticator.register(address: address) { (result, error) in
                 hudVisible = false

@@ -10,10 +10,10 @@ import RealmSwift
 
 /// Class should be created only once
 /// (typically, initialize in SceneDelegate and inject where needed)
-class RealmGroups: ObservableObject {
+class RealmGroups {
     
     // MARK:- Persons conformance
-    @Published var all = [GroupModel]()
+    var all = [GroupModel]()
     
     //    var allPublished: Published<[GroupModel]> { _all }
     //    var allPublisher: Published<[GroupModel]>.Publisher { $all }
@@ -22,76 +22,76 @@ class RealmGroups: ObservableObject {
         loadSavedData()
     }
     
-    func add(group: GroupModel) {
-        let realmGroup = buildRealmGroup(group: group)
-        guard write(group: realmGroup) else { return }
-        all.append(group)
-    }
+//    func add(group: GroupModel) {
+//        let realmGroup = buildRealmGroup(group: group)
+//        guard write(group: realmGroup) else { return }
+//        all.append(group)
+//    }
     
-    func update(group: GroupModel) {
-        if let index = all.firstIndex(where: { $0.groupID == group.groupID }) {
-            let realmGroup = buildRealmGroup(group: group)
-            guard write(group: realmGroup) else { return }
-            all[index] = group
-            //            sort()
-        }
-        else {
-            print("group not found")
-        }
-    }
+//    func update(group: GroupModel) {
+//        if let index = all.firstIndex(where: { $0.groupID == group.groupID }) {
+//            let realmGroup = buildRealmGroup(group: group)
+//            guard write(group: realmGroup) else { return }
+//            all[index] = group
+//            //            sort()
+//        }
+//        else {
+//            print("group not found")
+//        }
+//    }
     
-    func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64 , idLastMessage: String){
-        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
-            if var group = all.filter({$0.groupID == groupID}).first {
-                if lastMessageAt < group.lastMessageAt {
-                    return
-                }
-                
-                group.lastMessage = lastMessage
-                group.lastMessageAt = lastMessageAt
-                group.idLastMessage = idLastMessage
-                group.updatedAt = lastMessageAt
-                let realmGroup = buildRealmGroup(group: group)
-                guard write(group: realmGroup) else { return }
-                all[index] = group
-                //                sort()
-            }
-        }
-    }
+//    func updateLastMessage(groupID: Int64 ,lastMessage: Data , lastMessageAt: Int64 , idLastMessage: String){
+//        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
+//            if var group = all.filter({$0.groupID == groupID}).first {
+//                if lastMessageAt < group.lastMessageAt {
+//                    return
+//                }
+//                
+//                group.lastMessage = lastMessage
+//                group.lastMessageAt = lastMessageAt
+//                group.idLastMessage = idLastMessage
+//                group.updatedAt = lastMessageAt
+//                let realmGroup = buildRealmGroup(group: group)
+//                guard write(group: realmGroup) else { return }
+//                all[index] = group
+//                //                sort()
+//            }
+//        }
+//    }
     
-    func updateTimeSyncMessageInGroup(groupID: Int64 , lastMessageAt: Int64){
-        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
-            if var group = all.filter({$0.groupID == groupID}).first {
-                group.timeSyncMessage = lastMessageAt
-                let realmGroup = buildRealmGroup(group: group)
-                guard write(group: realmGroup) else { return }
-                all[index] = group
-            }
-        }
-    }
-    
-    func getTimeSyncInGroup(groupID: Int64) -> Int64{
-        
-        var time: Int64 = 0
-        if let group = all.filter({$0.groupID == groupID}).first {
-            time = group.timeSyncMessage
-        }
-        if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
-
-            let dateFormatter = DateFormatter()
-            dateFormatter.calendar = Calendar.current
-            dateFormatter.dateStyle = .medium
-            dateFormatter.timeStyle = .medium
-            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                        
-            let updateAt = NSDate(timeIntervalSince1970: TimeInterval(time/1000))
-            if loginDate.compare(updateAt as Date) == ComparisonResult.orderedDescending {
-                time = Int64(loginDate.timeIntervalSince1970) * 1000
-                self.updateTimeSyncMessageInGroup(groupID: groupID, lastMessageAt: time)
-            }
-        }
-        return time
-    }
+//    func updateTimeSyncMessageInGroup(groupID: Int64 , lastMessageAt: Int64){
+//        if let index = all.firstIndex(where: { $0.groupID == groupID }) {
+//            if var group = all.filter({$0.groupID == groupID}).first {
+//                group.timeSyncMessage = lastMessageAt
+//                let realmGroup = buildRealmGroup(group: group)
+//                guard write(group: realmGroup) else { return }
+//                all[index] = group
+//            }
+//        }
+//    }
+//
+//    func getTimeSyncInGroup(groupID: Int64) -> Int64{
+//
+//        var time: Int64 = 0
+//        if let group = all.filter({$0.groupID == groupID}).first {
+//            time = group.timeSyncMessage
+//        }
+//        if let loginDate = UserDefaults.standard.value(forKey: Constants.User.loginDate) as? Date {
+//
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.calendar = Calendar.current
+//            dateFormatter.dateStyle = .medium
+//            dateFormatter.timeStyle = .medium
+//            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+//
+//            let updateAt = NSDate(timeIntervalSince1970: TimeInterval(time/1000))
+//            if loginDate.compare(updateAt as Date) == ComparisonResult.orderedDescending {
+//                time = Int64(loginDate.timeIntervalSince1970) * 1000
+//                self.updateTimeSyncMessageInGroup(groupID: groupID, lastMessageAt: time)
+//            }
+//        }
+//        return time
+//    }
     
     func remove(groupRemove: GroupModel) {
         for (index, group) in all.enumerated() {
@@ -127,34 +127,34 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    func isExistGroup(groupId: Int64) -> Bool{
-        return !all.filter{$0.groupID == groupId}.isEmpty
-    }
+//    func isExistGroup(groupId: Int64) -> Bool{
+//        return !all.filter{$0.groupID == groupId}.isEmpty
+//    }
     
-    func getGroup(clientId: String, type: String = "peer") -> GroupModel? {
-        return all.filter{group in
-            if group.lstClientID.filter({$0.id == clientId}).count > 0 && group.groupType == type {
-                return true
-            }
-            return false
-        }.first
-    }
+//    func getGroup(clientId: String, type: String = "peer") -> GroupModel? {
+//        return all.filter{group in
+//            if group.lstClientID.filter({$0.id == clientId}).count > 0 && group.groupType == type {
+//                return true
+//            }
+//            return false
+//        }.first
+//    }
     
-    func filterGroup(groupId: Int64) -> GroupModel?{
-        let group = self.all.filter{$0.groupID == groupId}.first
-        return group
-    }
-    
-    func registerGroup(groupId: Int64){
-        if let index = all.firstIndex(where: { $0.groupID == groupId }) {
-            if var group = all.filter({$0.groupID == groupId}).first {
-                group.isRegistered = true
-                let realmGroup = buildRealmGroup(group: group)
-                guard write(group: realmGroup) else { return }
-                all[index] = group
-            }
-        }
-    }
+//    func filterGroup(groupId: Int64) -> GroupModel?{
+//        let group = self.all.filter{$0.groupID == groupId}.first
+//        return group
+//    }
+//    
+//    func registerGroup(groupId: Int64){
+//        if let index = all.firstIndex(where: { $0.groupID == groupId }) {
+//            if var group = all.filter({$0.groupID == groupId}).first {
+//                group.isRegistered = true
+//                let realmGroup = buildRealmGroup(group: group)
+//                guard write(group: realmGroup) else { return }
+//                all[index] = group
+//            }
+//        }
+//    }
     
     private func realmWrite(operation: (_ realm: Realm) -> Void) -> Bool {
         guard let realm = getRealm() else { return false }
@@ -197,7 +197,7 @@ class RealmGroups: ObservableObject {
         }
     }
     
-    private func buildGroup(realmGroup: RealmGroup) -> GroupModel {
+    func buildGroup(realmGroup: RealmGroup) -> GroupModel {
         
         var lstClientId = Array<GroupMember>()
         realmGroup.lstClientID.forEach { (member) in

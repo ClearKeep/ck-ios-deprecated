@@ -240,7 +240,7 @@ extension ChatService {
     }
     
     func registerWithGroup(_ groupId: Int64, completion: @escaping (Bool) -> ()) {
-        if let group = RealmManager.shared.filterGroup(groupId: groupId) {
+        if let group = RealmManager.shared.getGroup(by: groupId) {
             if !group.isRegistered && !getClientId().isEmpty{
                 if  let ourAccountEncryptMng = self.ourEncryptionManager {
                     let address = SignalAddress(name: getClientId(), deviceId: Constants.encryptedDeviceId)
@@ -254,7 +254,7 @@ extension ChatService {
                                                                    deviceId: address.deviceId,
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
                             if result {
-                                RealmManager.shared.registerGroup(groupId: groupId)
+                                RealmManager.shared.registerGroup(by: groupId)
                                 completion(true)
                             }
                             completion(false)
