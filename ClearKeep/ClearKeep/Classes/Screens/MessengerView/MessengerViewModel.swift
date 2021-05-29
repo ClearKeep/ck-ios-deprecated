@@ -114,25 +114,29 @@ class MessengerViewModel: ObservableObject, Identifiable {
     }
     
     private func getMessagePeerToPeer(completion: (() -> ())? = nil) {
-        if self.groupId != Constants.groupIdTemp {
-            Backend.shared.getMessageInRoom(self.groupId,
-                                            RealmManager.shared.getTimeSyncInGroup(groupId: self.groupId)) { (result, error) in
+        if groupId != Constants.groupIdTemp {
+            Backend.shared.getMessageInRoom(groupId,
+                                            RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
-                        DispatchQueue.main.async {
-                            RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
-                        }
+                        RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: result.lstMessage.last?.createdAt ?? 0)
                     }
+                    var newMessage = self.messages
+                    let dispatchGroup = DispatchGroup()
                     result.lstMessage.forEach { (message) in
                         if !RealmManager.shared.isExistedMessageInGroup(by: message.id, groupId: message.groupID) {
+                            dispatchGroup.enter()
                             ChatService.shared.decryptMessageFromPeer(message) { messageModel in
-                                DispatchQueue.main.async {
-                                    self.messages.append(messageModel)
-                                }
+                                newMessage.append(messageModel)
+                                dispatchGroup.leave()
                             }
                         }
                     }
-                    completion?()
+                    
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        self.messages = newMessage
+                        completion?()
+                    }
                 }
             }
         }
@@ -143,17 +147,26 @@ class MessengerViewModel: ObservableObject, Identifiable {
             Backend.shared.getMessageInRoom(groupId , RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
-                        DispatchQueue.main.async {
-                            let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
-                                return msg1.createdAt > msg2.createdAt
-                            }
-                            RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
+                        let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
+                            return msg1.createdAt > msg2.createdAt
                         }
+                        RealmManager.shared.updateTimeSyncMessageInGroup(groupId: self.groupId, lastMessageAt: listMsgSorted[0].createdAt)
                     }
+                    var newMessage = self.messages
+                    let dispatchGroup = DispatchGroup()
                     result.lstMessage.forEach { (message) in
                         if !RealmManager.shared.isExistedMessageInGroup(by: message.id, groupId: message.groupID) {
-                            ChatService.shared.decryptMessageFromGroup(message)
+                            dispatchGroup.enter()
+                            ChatService.shared.decryptMessageFromGroup(message) { messageModel in
+                                newMessage.append(messageModel)
+                                dispatchGroup.leave()
+                            }
                         }
+                    }
+                    
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        self.messages = newMessage
+                        completion?()
                     }
                 }
             }

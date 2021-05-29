@@ -81,7 +81,7 @@ extension RealmManager {
 
 // Group
 extension RealmManager {
-    func addAndUpdateGroup(group: GroupModel) {
+    func addAndUpdateGroup(group: GroupModel, completion: () -> ()) {
         write { realm in
             let realmGroup = RealmGroup()
             let listMember = List<RealmGroupMember>()
@@ -108,6 +108,7 @@ extension RealmManager {
             realmGroup.timeSyncMessage = group.timeSyncMessage
             
             realm.add(realmGroup, update: .modified)
+            completion()
         }
     }
     

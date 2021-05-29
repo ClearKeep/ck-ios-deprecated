@@ -110,7 +110,7 @@ class Backend {
     
     
     private func heard(_ clienId: String, publication: Message_MessageObjectResponse) {
-        func handleNotification(clienId:String, message: MessageModel) {
+        func handleNotification(clienId: String, message: MessageModel) {
             let userInfo: [String : Any] = ["clientId": clienId, "message": message]
             NotificationCenter.default.post(name: NSNotification.ReceiveMessage,
                                             object: nil,

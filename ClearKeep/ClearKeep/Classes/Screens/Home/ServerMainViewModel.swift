@@ -23,12 +23,14 @@ class ServerMainViewModel: ObservableObject {
     }
     
     func getJoinedGroup(){
-        print("getJoinnedGroup")
+        Debug.DLog("getJoinnedGroup")
         
         Backend.shared.getJoinnedGroup { [weak self] (result, error) in
             guard let self = self else { return }
             if let result = result {
+                let dispatchGroup = DispatchGroup()
                 result.lstGroup.forEach { (groupResponse) in
+                    dispatchGroup.enter()
                     let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
                     let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                 groupName: groupResponse.groupName,
@@ -44,10 +46,15 @@ class ServerMainViewModel: ObservableObject {
                                                 lastMessage: Data(),
                                                 idLastMessage: "",
                                                 timeSyncMessage: 0)
-                    RealmManager.shared.addAndUpdateGroup(group: groupModel)
+                    RealmManager.shared.addAndUpdateGroup(group: groupModel) {
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: DispatchQueue.main) {
+                    self.reloadData()
                 }
             }
-            self.reloadData()
         }
     }
     

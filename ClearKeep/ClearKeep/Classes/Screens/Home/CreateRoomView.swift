@@ -154,8 +154,9 @@ extension CreateRoomView {
                                                lastMessage: Data(),
                                                idLastMessage: result.lastMessage.id,
                                                timeSyncMessage: 0)
-                        RealmManager.shared.addAndUpdateGroup(group: group)
-                        self.viewRouter.recentCreatedGroupModel = group
+                        RealmManager.shared.addAndUpdateGroup(group: group) {
+                            self.viewRouter.recentCreatedGroupModel = group
+                        }
                     }
                     self.createGroupSuccess = true
                     self.isShowAlert = true
