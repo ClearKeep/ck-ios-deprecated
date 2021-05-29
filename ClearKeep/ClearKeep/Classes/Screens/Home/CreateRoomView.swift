@@ -9,22 +9,12 @@ import SwiftUI
 
 struct CreateRoomView: View {
     
-    @State var groupName: String = ""
-    @State var userName: String = ""
-    @State var isDisable = true
-    @State private var showSelectMemberView = false
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var viewRouter: ViewRouter
-    
-    @State var hudVisible = false
-    @State var isShowAlert = false
-    @State private var titleAlert = ""
-    @State private var messageAlert = ""
-    @State private var createGroupSuccess = false
+    @State private var groupName: String = ""
+    @State private var hudVisible = false
     
     private let listMembers : [People]
-    
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     init(listMembers: [People]) {
         self.listMembers = listMembers
@@ -87,16 +77,6 @@ struct CreateRoomView: View {
             .opacity(self.groupName.isEmpty ? 0.3 : 1.0)
             .disabled(self.groupName.isEmpty)
         })
-        .alert(isPresented: self.$isShowAlert, content: {
-            Alert(title: Text(self.titleAlert),
-                  message: Text(self.messageAlert),
-                  dismissButton: .default(Text("OK"), action: {
-                    if self.createGroupSuccess {
-                        //self.viewRouter.current = .tabview
-                        self.viewRouter.current = .recentCreatedGroupChat
-                    }
-                  }))
-        })
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {
             self.hideKeyboard()
@@ -106,23 +86,8 @@ struct CreateRoomView: View {
 
 extension CreateRoomView {
     
-    private func createRoom(){
-        
-        if groupName.trimmingCharacters(in: .whitespaces).isEmpty {
-            self.isShowAlert = true
-            self.titleAlert = "Create Room Error"
-            self.messageAlert = "Group name can't be empty"
-            return
-        }
-        
+    private func createRoom() {
         var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName)}
-        
-        if lstClientID.isEmpty {
-            self.isShowAlert = true
-            self.titleAlert = "Create Room Error"
-            self.messageAlert = "Group need at least 2 member"
-            return
-        }
         
         if let account = CKSignalCoordinate.shared.myAccount {
             
@@ -156,12 +121,9 @@ extension CreateRoomView {
                                                timeSyncMessage: 0)
                         RealmManager.shared.addAndUpdateGroup(group: group) {
                             self.viewRouter.recentCreatedGroupModel = group
+                            self.viewRouter.current = .recentCreatedGroupChat
                         }
                     }
-                    self.createGroupSuccess = true
-                    self.isShowAlert = true
-                    self.titleAlert = "Create Room Successfully"
-                    self.messageAlert = ""
                 }
             }
         }
