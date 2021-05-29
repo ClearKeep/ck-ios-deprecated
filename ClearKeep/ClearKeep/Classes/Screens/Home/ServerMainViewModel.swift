@@ -9,8 +9,6 @@ import SwiftUI
 
 
 class ServerMainViewModel: ObservableObject {
-    
-    @Published var selectedGroupChatId: Int64? = -1
     @Published var groups: [GroupModel] = []
     @Published var peers: [GroupModel] = []
     
@@ -23,6 +21,7 @@ class ServerMainViewModel: ObservableObject {
     }
     
     func getJoinedGroup(){
+        reloadData()
         Debug.DLog("getJoinnedGroup")
         
         Backend.shared.getJoinnedGroup { [weak self] (result, error) in
