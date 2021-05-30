@@ -8,8 +8,6 @@
 import SwiftUI
 
 class MotherViewModel: ObservableObject, Identifiable {
-    
-    
     func getUserInDatabase(clientID: String){
         if let dbConnection = CKDatabaseManager.shared.database?.newConnection(){
             dbConnection.readWrite({ (transaction) in

@@ -1,12 +1,9 @@
 
 
 import SwiftUI
-
-import SwiftUI
 import Combine
 
 struct MotherView: View {
-    
     @EnvironmentObject var viewRouter: ViewRouter
     
     var body: some View {
@@ -16,7 +13,6 @@ struct MotherView: View {
                 LoginView()
             case .home:
                 HomeMainView()
-            case .recentCreatedGroupChat: MessagerGroupView(groupName: self.viewRouter.recentCreatedGroupModel!.groupName, groupId: self.viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
             }
         }
     }
@@ -29,15 +25,12 @@ struct MotherView_Previews : PreviewProvider {
 }
 
 class ViewRouter: ObservableObject {
-    
     enum Page {
         case login
         case home
-        case recentCreatedGroupChat
     }
     
     private static func initialPage() -> Page {
-        
         return CKExtensions.getUserToken().isEmpty ? .login : .home
     }
     
@@ -51,6 +44,4 @@ class ViewRouter: ObservableObject {
             }
         }
     }
-    
-    var recentCreatedGroupModel: GroupModel? = nil
 }

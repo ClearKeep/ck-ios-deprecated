@@ -14,7 +14,8 @@ struct MessagerGroupView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
     // MARK: - Environment
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.rootPresentationMode) private var rootPresentationMode: Binding<RootPresentationMode>
     
     // MARK: - ObservedObject
     @ObservedObject var viewModel: MessengerViewModel = MessengerViewModel()
@@ -96,7 +97,7 @@ struct MessagerGroupView: View {
             createTitleView()
         }, invokeBackButton: {
             if self.isCreateGroup {
-                self.viewRouter.current = .home
+                self.rootPresentationMode.wrappedValue.dismiss()
             } else {
                 self.presentationMode.wrappedValue.dismiss()
             }

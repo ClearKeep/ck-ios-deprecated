@@ -9,19 +9,25 @@ import SwiftUI
 
 struct ServerMainView: View {
     
+    // MARK: - Environment
     @EnvironmentObject var viewRouter: ViewRouter
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+    // MARK: - ObservedObject
     @ObservedObject var viewModel: ServerMainViewModel
     
+    // MARK: - State
     @State private var searchText: String = ""
     @State private var isGroupChatExpanded: Bool = true
     @State private var isDirectMessageExpanded: Bool = true
     @State private var isShowingPeopleView = false
-
+    
+    // MARK: - Binding
     @Binding var messageData: MessagerBannerModifier.MessageData
     @Binding var isShowMessageBanner: Bool
+    @Binding var isRootActive: Bool
     
+    // MARK: - Setup
     var body: some View {
             VStack (spacing: 20) {
                 SearchBar(text: $searchText) { (changed) in
@@ -46,7 +52,7 @@ struct ServerMainView: View {
                             }
                         })
                         
-                        ListGroupView(titleSection: "Group Chat", groups: viewModel.groups, createNewGroup: InviteMemberGroup(), detail: { group in
+                        ListGroupView(isRootActive: $isRootActive, titleSection: "Group Chat", groups: viewModel.groups, createNewGroup: InviteMemberGroup(), detail: { group in
                             MessagerGroupView(groupName: group.groupName, groupId: group.groupID)
                         }, content: { group in
                             HStack {
@@ -56,7 +62,7 @@ struct ServerMainView: View {
                             }
                         })
                         
-                        ListGroupView(titleSection: "Dirrect Messages", groups: viewModel.peers, createNewGroup: PeopleView(), detail: { group in
+                        ListGroupView(isRootActive: .constant(false), titleSection: "Dirrect Messages", groups: viewModel.peers, createNewGroup: PeopleView(), detail: { group in
                             MessagerView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}), groupId: group.groupID, userName: viewModel.getPeerReceiveName(inGroup: group))
                         }, content: { group in
                             HStack {
@@ -110,6 +116,9 @@ fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View
     // MARK: - State
     @State private var isExpanded: Bool = true
     
+    // MARK: - Binding
+    @Binding var isRootActive: Bool
+    
     // MARK: - Variables
     var titleSection: String
     var groups: [GroupModel]
@@ -120,7 +129,7 @@ fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View
     // MARK: - Content view
     var body: some View {
         VStack(spacing: 16) {
-            SectionGroupView(titleSection: "\(titleSection) (\(groups.count))", destination: createNewGroup, isExpanded: $isExpanded)
+            SectionGroupView(titleSection: "\(titleSection) (\(groups.count))", destination: createNewGroup, isExpanded: $isExpanded, isRootActive: $isRootActive)
             
             if isExpanded && !groups.isEmpty {
                 ForEach(groups, id: \.groupID) { group in
@@ -142,6 +151,7 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
     
     // MARK: - Binding
     @Binding var isExpanded: Bool
+    @Binding var isRootActive: Bool
     
     // MARK: - Content view
     var body: some View {
@@ -163,7 +173,7 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
             
             Spacer()
             
-            NavigationLink(destination: destination) {
+            NavigationLink(destination: destination, isActive: $isRootActive) {
                 Image("Plus")
                     .resizable()
                     .frame(width: 20, height: 20, alignment: .center)

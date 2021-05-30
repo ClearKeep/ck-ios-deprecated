@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct HomeMainView: View {
+    // MARK: - Environment
     @Environment(\.viewController) private var viewControllerHolder: UIViewController?
     
+    // MARK: - ObservedObject
     @ObservedObject var viewModel: HomeMainViewModel = HomeMainViewModel()
     @ObservedObject var serverMainViewModel: ServerMainViewModel = ServerMainViewModel()
+    
+    // MARK: - State
     @State private var isShowingBanner = false
     @State private var messageData: MessagerBannerModifier.MessageData = MessagerBannerModifier.MessageData()
     @State private var isShowingServerDetailView = false
+    @State private var isActive : Bool = false
     
-    init() {Debug.DLog("\(self)")
-    }
-    
+    // MARK: - Setup
     var body: some View {
         NavigationView {
             ZStack(alignment: .topLeading) {
@@ -52,7 +55,7 @@ struct HomeMainView: View {
                             }
                             
                             if viewModel.selectedServer == "CK Development" {
-                                ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
+                                ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner, isRootActive: $isActive)
                             } else {
                                 JoinServerView()
                             }
@@ -88,6 +91,8 @@ struct HomeMainView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.endCall)) { (obj) in
             viewControllerHolder?.dismiss(animated: true, completion: nil)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .environment(\.rootPresentationMode, self.$isActive)
     }
 }
 
