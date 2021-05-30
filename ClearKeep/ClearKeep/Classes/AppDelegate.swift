@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         print("Device Token: \(token)")
         UserDefaults.standard.setValue(token, forKey: Constants.keySaveTokenPushNotifyAPNS)
         
-        if CKSignalCoordinate.shared.myAccount != nil {
+        if let _ = UserDefaults.standard.string(forKey: Constants.keySaveUserID) {
             Backend.shared.registerTokenDevice { (response) in }
         }
     }
