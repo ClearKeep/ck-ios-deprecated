@@ -24,6 +24,9 @@ class CallViewModel: NSObject, ObservableObject {
     @Published var isVideoRequesting = false
     @Published var callType: Constants.CallType = .audio
     
+    @Published var remotesVideoViewConfig = [String : CustomVideoViewConfig]()
+    var remotesVideoViewDict = [String : RTCMTLEAGLVideoView]()
+    
     enum RenderScaleMode {
         case scaleToFit
         case scaleToFill
@@ -46,9 +49,15 @@ class CallViewModel: NSObject, ObservableObject {
         
         if callBox.type == .audio {
             self.cameraOn = false
+            self.speakerEnable = false
         } else {
             self.cameraOn = true
+            self.speakerEnable = true
         }
+        
+        updateMicroConfig()
+        updateSpeakerConfig()
+        updateCameraConfig()
         
         updateVideoView()
 
@@ -57,6 +66,9 @@ class CallViewModel: NSObject, ObservableObject {
                 let boxStatus = self?.callBox!.status
                 if boxStatus == .answered {
                     self?.startCallTimer()
+                    if let type = self?.callBox?.type, type == .video {
+                        self?.forceEnableSpeaker()
+                    }
                 } else if self?.callStatus != .ringing, boxStatus == .ringing {
                     self?.startCallTimout()
                 } else if boxStatus == .ended {
@@ -116,19 +128,35 @@ class CallViewModel: NSObject, ObservableObject {
                 self.callGroup = isGroup
             }
             
-            print("updateVideoView >>> number remotes: \(self.callBox?.videoRoom?.remotes.count ?? 0)")
-            if let lstRemote = self.callBox?.videoRoom?.remotes.values {
-                self.remotesVideoView.removeAll()
-                if lstRemote.count > 2 {
-                    if let localVideo = self.localVideoView {
-                        self.remotesVideoView.append(localVideo)
+            self.remotesVideoView.removeAll()
+            
+            if self.callGroup {
+                let groupId = self.callBox?.roomId ?? 0
+                if let lstRemote = self.callBox?.videoRoom?.remotes.values {
+                    lstRemote.forEach { (listener) in
+                        self.remotesVideoView.append(listener.videoRenderView)
+                       
+                        if let clientId = listener.display {
+                            let keyClientId = "\(clientId)"
+                            self.remotesVideoViewDict[keyClientId] = listener.videoRenderView
+                            if self.remotesVideoViewConfig[keyClientId] == nil {
+                                self.remotesVideoViewConfig[keyClientId] = CustomVideoViewConfig(clientId: keyClientId, groupId: groupId)
+                            }
+                        }
                     }
                 }
-                lstRemote.forEach { (listener) in
-                    self.remotesVideoView.append(listener.videoRenderView)
+                
+                if let localVideo = self.localVideoView {
+                    self.remotesVideoView.append(localVideo)
+                    
+                    if let currentUserId = Backend.shared.getUserLogin()?.id {
+                        self.remotesVideoViewDict[currentUserId] = localVideo
+                        if self.remotesVideoViewConfig[currentUserId] == nil {
+                            self.remotesVideoViewConfig[currentUserId] = CustomVideoViewConfig(clientId: currentUserId, groupId: groupId)
+                        }
+                    }
                 }
             }
-            
         }
     }
     
@@ -155,18 +183,35 @@ class CallViewModel: NSObject, ObservableObject {
     
     func cameraChange() {
         cameraOn = !cameraOn
-        
-        if let callBox = self.callBox {
-            if cameraOn {
-                callBox.videoRoom?.publisher?.cameraOn()
-            } else {
-                callBox.videoRoom?.publisher?.cameraOff()
-            }
-        }
+        updateCameraConfig()
     }
     
     func speakerChange() {
         speakerEnable = !speakerEnable
+        updateSpeakerConfig()
+    }
+    
+    func forceEnableSpeaker() {
+        speakerEnable = true
+        updateSpeakerConfig()
+    }
+    
+    func microChange() {
+        microEnable = !microEnable
+        updateMicroConfig()
+    }
+    
+    func updateMicroConfig() {
+        if let callBox = self.callBox {
+            if microEnable {
+                callBox.videoRoom?.publisher?.unmuteAudio()
+            } else {
+                callBox.videoRoom?.publisher?.muteAudio()
+            }
+        }
+    }
+    
+    func updateSpeakerConfig() {
         if let callBox = self.callBox {
             if speakerEnable {
                 callBox.videoRoom?.publisher?.speakerOn()
@@ -176,13 +221,12 @@ class CallViewModel: NSObject, ObservableObject {
         }
     }
     
-    func microChange() {
-        microEnable = !microEnable
+    func updateCameraConfig() {
         if let callBox = self.callBox {
-            if microEnable {
-                callBox.videoRoom?.publisher?.unmuteAudio()
+            if cameraOn {
+                callBox.videoRoom?.publisher?.cameraOn()
             } else {
-                callBox.videoRoom?.publisher?.muteAudio()
+                callBox.videoRoom?.publisher?.cameraOff()
             }
         }
     }
@@ -279,31 +323,52 @@ class CallViewModel: NSObject, ObservableObject {
         guard let callBox = self.callBox else { return }
         Backend.shared.updateVideoCall(callBox.roomId, callType: .video) { [weak self](response, error) in
             if error == nil {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.cameraOn = true
                     self.callType = .video
                     self.callBox?.type = .video
                     self.callBox?.videoRoom?.publisher?.cameraOn()
+                    self.speakerEnable = true
+                    self.updateSpeakerConfig()
+                    print("#TEST updateCallTypeVideo >>> video type")
                 }
             }
         }
     }
     
     func didReceiveMessageGroup(userInfo: [AnyHashable : Any]?) {
+        print("#TEST didReceiveMessageGroup >>>> userInfo: \(userInfo?.debugDescription ?? "")")
         if let userInfo = userInfo,
            let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
             if publication.notifyType == "audio" ||  publication.notifyType == "video" {
                 if publication.notifyType == "video" {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.callType = .video
                         self.callBox?.type = .video
-                        self.callBox?.videoRoom?.publisher?.cameraOn()
+                        self.speakerEnable = true
+                        self.updateSpeakerConfig()
+                        //self.callBox?.videoRoom?.publisher?.cameraOn()
+                        print("#TEST didReceiveMessageGroup >>>> video type")
                     }
                 }
                 // TODO: Check audio type update
             }
         }
+    }
+}
+
+extension CallViewModel {
+    
+    func videoViewConfig(for videoView: RTCMTLEAGLVideoView) -> CustomVideoViewConfig {
+        for (key, value) in remotesVideoViewDict where value == videoView {
+            if let config = remotesVideoViewConfig[key] {
+                return config
+            }
+        }
+        
+        return CustomVideoViewConfig(clientId: "", groupId: 0)
     }
 }
 

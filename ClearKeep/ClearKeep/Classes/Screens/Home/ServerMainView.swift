@@ -32,6 +32,8 @@ struct ServerMainView: View {
     
     @Binding var isShowingServerDetailView: Bool
     @Binding var currentUserName: String
+    @Binding var messageData: MessagerBannerModifier.MessageData
+    @Binding var isShowMessageBanner: Bool
     
     let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
@@ -88,7 +90,7 @@ struct ServerMainView: View {
                 }
             })
         }
-        .padding()
+        .padding(.all, Constants.Device.isSmallScreenSize ? 10 : 16)
         .padding(.bottom, 20)
         .onTapGesture {
             self.hideKeyboard()
@@ -108,22 +110,16 @@ struct ServerMainView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage), perform: { (obj) in
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                
-                let isChatRoom = UserDefaults.standard.bool(forKey: Constants.isChatRoom)
-                let isChatGroup = UserDefaults.standard.bool(forKey: Constants.isChatGroup)
-                
+                let openGroupId = UserDefaults.standard.integer(forKey: Constants.openGroupId)
+                if openGroupId == publication.groupID { return }
                 if publication.groupType == "peer" {
-                    if !isChatRoom && !isChatGroup {
-                        self.viewModel.requestBundleRecipient(byClientId: publication
-                                                                .fromClientID) {
-                            self.didReceiveMessagePeer(userInfo: userInfo)
-                        }
+                    self.viewModel.requestBundleRecipient(byClientId: publication
+                                                            .fromClientID) {
+                        self.didReceiveMessagePeer(userInfo: userInfo)
                     }
                 } else {
-                    if !isChatRoom && !isChatGroup {
-                        self.isForceProcessKeyInGroup = true
-                        self.decryptionMessage(publication: publication)
-                    }
+                    self.isForceProcessKeyInGroup = true
+                    self.decryptionMessage(publication: publication)
                 }
             }
         })
@@ -150,12 +146,13 @@ extension ServerMainView {
     private func groupChatDestination(groupModel: GroupModel) -> some View {
         Group {
             if groupModel.groupType == "peer" {
-                MessageChatView(clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
-                                groupID : groupModel.groupID,
+                MessagerView(clientId: viewModel.getClientIdFriend(listClientID: groupModel.lstClientID.map{$0.id}),
+                                groupId : groupModel.groupID,
                                 userName: viewModel.getPeerReceiveName(inGroup: groupModel),
-                                groupType: groupModel.groupType).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+                                groupType: groupModel.groupType)
             } else {
-                GroupMessageChatView(groupModel: groupModel).environmentObject(self.groupRealms).environmentObject(self.messsagesRealms)
+//                GroupMessageChatView(groupModel: groupModel)
+                MessagerGroupView(groupName: groupModel.groupName, groupId: groupModel.groupID)
             }
         }
     }
@@ -224,7 +221,7 @@ extension ServerMainView {
     
     private func directMessageSection() -> some View {
         VStack(spacing: 16) {
-            HStack {
+            HStack(spacing: 0) {
                 Text("Direct Messages (\(filteredGroupRealm(isForPeer: true).count))")
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.gray1.color)
@@ -370,14 +367,14 @@ extension ServerMainView {
                 do {
                     let decryptedData = try ourEncryptionMng.decryptFromAddress(groupResponse.lastMessage.message,
                                                                                 name: groupResponse.lastMessage.fromClientID,
-                                                                                deviceId: UInt32(111))
+                                                                                deviceId: UInt32(555))
                     let lastMessage = groupResponse.lastMessage
                     DispatchQueue.main.async {
                         let message = MessageModel(id: lastMessage.id,
                                                    groupID: lastMessage.groupID,
                                                    groupType: lastMessage.groupType,
                                                    fromClientID: lastMessage.fromClientID,
-                                                   fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: lastMessage.fromClientID, groupID: lastMessage.groupID),
+                                                   fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: lastMessage.fromClientID, groupID: lastMessage.groupID),
                                                    clientID: lastMessage.clientID,
                                                    message: decryptedData,
                                                    createdAt: lastMessage.createdAt,
@@ -429,12 +426,18 @@ extension ServerMainView {
                                                     groupID: publication.groupID,
                                                     groupType: publication.groupType,
                                                     fromClientID: publication.fromClientID,
-                                                    fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
+                                                    fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                     clientID: publication.clientID,
                                                     message: decryptedData,
                                                     createdAt: publication.createdAt,
                                                     updatedAt: publication.updatedAt)
                             self.messsagesRealms.add(message: post)
+                            self.messageData = MessagerBannerModifier.MessageData(
+                                groupName: RealmManager.shared.getGroupName(by: publication.groupID),
+                                senderName: post.fromDisplayName,
+                                userIcon: nil,
+                                message: messageDecryption ?? "")
+                            self.isShowMessageBanner = true
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
                             self.reloadData()
@@ -448,7 +451,7 @@ extension ServerMainView {
                     requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
                 }
             } catch {
-                print("Decryption message error: \(error)")
+                Debug.DLog("Decryption message error: \(error)")
                 requestKeyInGroup(byGroupId: publication.groupID, publication: publication)
             }
         }
@@ -491,7 +494,7 @@ extension ServerMainView {
             Backend.shared.authenticator.requestKeyGroup(byClientId: publication.fromClientID,
                                                          groupId: groupId) {(result, error, response) in
                 guard let groupResponse = response else {
-                    print("Request prekey \(groupId) fail")
+                    Debug.DLog("Request prekey \(groupId) fail")
                     return
                 }
                 self.processSenderKey(byGroupId: groupResponse.groupID,
@@ -554,12 +557,14 @@ extension ServerMainView {
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
-                                                fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
+                                                fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: decryptedData,
                                                 createdAt: publication.createdAt,
                                                 updatedAt: publication.updatedAt)
                         DispatchQueue.main.async {
+                            self.messageData = MessagerBannerModifier.MessageData(senderName: post.fromDisplayName, userIcon: nil, message: messageDecryption ?? "")
+                            self.isShowMessageBanner = true
                             self.messsagesRealms.add(message: post)
                             self.groupRealms.updateLastMessage(groupID: publication.groupID, lastMessage: decryptedData, lastMessageAt: publication.createdAt, idLastMessage: publication.id)
                             self.groupRealms.sort()
@@ -586,7 +591,7 @@ extension ServerMainView {
                                                 groupID: publication.groupID,
                                                 groupType: publication.groupType,
                                                 fromClientID: publication.fromClientID,
-                                                fromDisplayName: self.groupRealms.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
+                                                fromDisplayName: RealmManager.shared.getDisplayNameSenderMessage(fromClientId: publication.fromClientID, groupID: publication.groupID),
                                                 clientID: publication.clientID,
                                                 message: messageError,
                                                 createdAt: publication.createdAt,
@@ -596,7 +601,7 @@ extension ServerMainView {
                         self.groupRealms.sort()
                         self.reloadData()
                     }
-                    print("Decryption message error: \(error)")
+                    Debug.DLog("Decryption message error: \(error)")
                 }
             }
         }
@@ -605,6 +610,12 @@ extension ServerMainView {
 
 struct ServerMainView_Previews: PreviewProvider {
     static var previews: some View {
-        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
+        ServerMainView(isShowingServerDetailView: .constant(true), currentUserName: .constant("Alex"), messageData: .constant(MessagerBannerModifier.MessageData()), isShowMessageBanner: .constant(true))
+            .environmentObject(RealmManager.shared.realmGroups)
+            .environmentObject(RealmManager.shared.realmMessages)
+            .environmentObject(HomeMainViewModel())
+            .environmentObject(ServerMainViewModel())
+            .environmentObject(ViewRouter())
+            .padding(.leading, 64)
     }
 }

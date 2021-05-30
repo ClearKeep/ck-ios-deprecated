@@ -25,8 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func show(_ scene: UIScene) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let contentView = MotherView()
-            .environmentObject(RealmGroups())
-            .environmentObject(RealmMessages())
+            .environmentObject(RealmManager.shared.realmGroups)
+            .environmentObject(RealmManager.shared.realmMessages)
             .environmentObject(appDelegate.viewRouter)
             .environmentObject(HomeMainViewModel())
             .environmentObject(ServerMainViewModel())
@@ -49,6 +49,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        Debug.DLog("------------ become app")
+        NotificationCenter.default.post(name: NSNotification.AppBecomeActive,
+                                        object: nil,
+                                        userInfo: nil)
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -59,12 +63,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        Debug.DLog("------------ enter foreground app")
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.notificationSubscrible(clientId: myAccount.username)
+            Backend.shared.signalSubscrible(clientId: myAccount.username)
+        }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+        Debug.DLog("------------ enter background app")
+        if let myAccount = CKSignalCoordinate.shared.myAccount {
+            Backend.shared.signalUnsubcrible(clientId: myAccount.username)
+            Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
+        }
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

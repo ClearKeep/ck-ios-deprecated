@@ -35,6 +35,7 @@ class JanusRoleListen: JanusRole {
         if let videoCode = dict["video_codec"] as? String,
             let id = dict["id"] as? Int {
             publish.id = id
+            // TODO: send client ID here, then use it to fetch username from group info.
             publish.display = dict["display"] as? String
             publish.audioCode = dict["audio_codec"] as? String
             publish.videoCode = videoCode

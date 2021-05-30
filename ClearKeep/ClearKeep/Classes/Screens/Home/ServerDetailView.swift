@@ -34,7 +34,7 @@ struct ServerDetailView: View {
             
             HStack {
                 Spacer()
-                    .frame(width: 108)
+                    .frame(width: Constants.Size.leftBannerWidth + 16)
                 
                 VStack {
                     Spacer()
@@ -231,6 +231,10 @@ struct ServerDetailView: View {
             guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
             connectionDb.readWrite { (transaction) in
                 CKAccount.removeAllAccounts(in: transaction)
+            }
+            if let myAccount = CKSignalCoordinate.shared.myAccount {
+                Backend.shared.signalUnsubcrible(clientId: myAccount.username)
+                Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
             }
             CKSignalCoordinate.shared.myAccount = nil
             self.realmMessages.removeAll()
