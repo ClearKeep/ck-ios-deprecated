@@ -269,11 +269,6 @@ extension CallManager: CXProviderDelegate {
         // instead, we have to pre-heat the AVAudioSession by configuring as early as possible, didActivate do not get called otherwise
         // please look for  * pre-heat the AVAudioSession *
         configureAudioSession()
-
-        
-//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-//            appDelegate.viewRouter.current = .callVideo
-//        }
         
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: NSNotification.receiveCall, object: nil)
