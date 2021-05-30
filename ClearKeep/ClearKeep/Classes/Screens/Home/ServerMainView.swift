@@ -25,7 +25,6 @@ struct ServerMainView: View {
     // MARK: - Binding
     @Binding var messageData: MessagerBannerModifier.MessageData
     @Binding var isShowMessageBanner: Bool
-    @Binding var isRootActive: Bool
     
     // MARK: - Setup
     var body: some View {
@@ -52,7 +51,7 @@ struct ServerMainView: View {
                             }
                         })
                         
-                        ListGroupView(isRootActive: $isRootActive, titleSection: "Group Chat", groups: viewModel.groups, createNewGroup: InviteMemberGroup(), detail: { group in
+                        ListGroupView(titleSection: "Group Chat", groups: viewModel.groups, createNewGroup: InviteMemberGroup(), detail: { group in
                             MessagerGroupView(groupName: group.groupName, groupId: group.groupID)
                         }, content: { group in
                             HStack {
@@ -62,7 +61,7 @@ struct ServerMainView: View {
                             }
                         })
                         
-                        ListGroupView(isRootActive: .constant(false), titleSection: "Dirrect Messages", groups: viewModel.peers, createNewGroup: PeopleView(), detail: { group in
+                        ListGroupView(titleSection: "Dirrect Messages", groups: viewModel.peers, createNewGroup: PeopleView(), detail: { group in
                             MessagerView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}), groupId: group.groupID, userName: viewModel.getPeerReceiveName(inGroup: group))
                         }, content: { group in
                             HStack {
@@ -117,7 +116,6 @@ fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View
     @State private var isExpanded: Bool = true
     
     // MARK: - Binding
-    @Binding var isRootActive: Bool
     
     // MARK: - Variables
     var titleSection: String
@@ -129,7 +127,7 @@ fileprivate struct ListGroupView<CreateNewGroupView, Destination, Content>: View
     // MARK: - Content view
     var body: some View {
         VStack(spacing: 16) {
-            SectionGroupView(titleSection: "\(titleSection) (\(groups.count))", destination: createNewGroup, isExpanded: $isExpanded, isRootActive: $isRootActive)
+            SectionGroupView(titleSection: "\(titleSection) (\(groups.count))", destination: createNewGroup, isExpanded: $isExpanded)
             
             if isExpanded && !groups.isEmpty {
                 ForEach(groups, id: \.groupID) { group in
@@ -151,7 +149,6 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
     
     // MARK: - Binding
     @Binding var isExpanded: Bool
-    @Binding var isRootActive: Bool
     
     // MARK: - Content view
     var body: some View {
@@ -173,7 +170,7 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
             
             Spacer()
             
-            NavigationLink(destination: destination, isActive: $isRootActive) {
+            NavigationLink(destination: destination) {
                 Image("Plus")
                     .resizable()
                     .frame(width: 20, height: 20, alignment: .center)

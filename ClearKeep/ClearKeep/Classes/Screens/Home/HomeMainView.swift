@@ -19,7 +19,6 @@ struct HomeMainView: View {
     @State private var isShowingBanner = false
     @State private var messageData: MessagerBannerModifier.MessageData = MessagerBannerModifier.MessageData()
     @State private var isShowingServerDetailView = false
-    @State private var isActive : Bool = false
     
     // MARK: - Setup
     var body: some View {
@@ -55,7 +54,7 @@ struct HomeMainView: View {
                             }
                             
                             if viewModel.selectedServer == "CK Development" {
-                                ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner, isRootActive: $isActive)
+                                ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
                             } else {
                                 JoinServerView()
                             }
@@ -92,7 +91,6 @@ struct HomeMainView: View {
             viewControllerHolder?.dismiss(animated: true, completion: nil)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .environment(\.rootPresentationMode, self.$isActive)
     }
 }
 

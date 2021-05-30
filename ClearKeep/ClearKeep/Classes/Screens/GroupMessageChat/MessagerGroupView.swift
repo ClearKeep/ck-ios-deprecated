@@ -15,7 +15,6 @@ struct MessagerGroupView: View {
     
     // MARK: - Environment
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-    @Environment(\.rootPresentationMode) private var rootPresentationMode: Binding<RootPresentationMode>
     
     // MARK: - ObservedObject
     @ObservedObject var viewModel: MessengerViewModel = MessengerViewModel()
@@ -24,6 +23,7 @@ struct MessagerGroupView: View {
     @State private var hudVisible = false
     @State private var alertVisible = false
     @State private var scrollView: UIScrollView?
+    @State private var navigationController: UINavigationController?
     
     // MARK: - Variables
     private var userName: String = ""
@@ -93,11 +93,14 @@ struct MessagerGroupView: View {
             })
             
         }
+        .introspectNavigationController(customize: { navigationController in
+            self.navigationController = navigationController
+        })
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
         }, invokeBackButton: {
             if self.isCreateGroup {
-                self.rootPresentationMode.wrappedValue.dismiss()
+                self.navigationController?.popToRootViewController(animated: true)
             } else {
                 self.presentationMode.wrappedValue.dismiss()
             }
