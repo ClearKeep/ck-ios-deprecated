@@ -9,7 +9,15 @@
 #import "CKBuddy.h"
 #import "CKAccount.h"
 #import "CKDevice.h"
+
+#if DEVELOPMENT
+#import "ClearKeep_Development-Swift.h"
+#elif STAGING
+#import "ClearKeep_Staging-Swift.h"
+#else
 #import "ClearKeep-Swift.h"
+#endif
+
 @import YapDatabase;
 
 @implementation CKBuddy

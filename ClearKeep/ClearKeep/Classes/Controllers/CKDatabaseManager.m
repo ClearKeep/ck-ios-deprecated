@@ -7,10 +7,19 @@
 //
 
 #import "CKDatabaseManager.h"
-#import "ClearKeep-Swift.h"
-@import YapDatabase;
 
+#if DEVELOPMENT
+#import "ClearKeep_Development-Swift.h"
+#elif STAGING
+#import "ClearKeep_Staging-Swift.h"
+#else
+#import "ClearKeep-Swift.h"
+#endif
+
+@import YapDatabase;
 #import "CKSignalSession.h"
+
+
 
 NSString *const CKYapDatabaseName = @"CKYap.sqlite";
 
