@@ -23,6 +23,9 @@ struct Debug {
 }
 
 struct Constants {
+    static let groupIdTemp = -1
+    static let encryptedDeviceId =  Int32(555)
+    static let decryptedDeviceId = Int32(444)
     static let keySaveUser = "keySaveUser"
     static let openGroupId = "openGroupId"
     static let isInChatRoom = "isInChatRoom"

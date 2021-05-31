@@ -269,10 +269,9 @@ extension CallManager: CXProviderDelegate {
         // instead, we have to pre-heat the AVAudioSession by configuring as early as possible, didActivate do not get called otherwise
         // please look for  * pre-heat the AVAudioSession *
         configureAudioSession()
-
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.viewRouter.current = .callVideo
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: NSNotification.receiveCall, object: nil)
         }
         // Signal to the system that the action has been successfully performed.
         action.fulfill()
@@ -388,9 +387,7 @@ extension CallManager: CXProviderDelegate {
         answerCall?.answerCall(withAudioSession: audioSession) { success in
             if success {
                 DispatchQueue.main.async {
-                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                        appDelegate.viewRouter.current = .callVideo
-                    }
+                    NotificationCenter.default.post(name: NSNotification.receiveCall, object: nil)
                 }
                 self.answerCall?.startJoinRoom()
             }
@@ -415,9 +412,7 @@ extension CallManager: CXProviderDelegate {
             self.answerCall?.endCall()
             self.answerCall = nil
             self.removeAllCalls()
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.viewRouter.current = .tabview
-            }
+            NotificationCenter.default.post(name: NSNotification.endCall, object: nil)
         }
     }
 }

@@ -7,46 +7,69 @@
 
 import SwiftUI
 
-enum HomeMainContentType: String {
-    case currentServerInfo
-    case joinNewServer
-}
-
 struct HomeMainView: View {
+    // MARK: - Environment
+    @Environment(\.viewController) private var viewControllerHolder: UIViewController?
     
-    @EnvironmentObject var mainViewModel: HomeMainViewModel
-    @State private var isShowingServerDetailView = false
+    // MARK: - ObservedObject
+    @ObservedObject var viewModel: HomeMainViewModel = HomeMainViewModel()
+    @ObservedObject var serverMainViewModel: ServerMainViewModel = ServerMainViewModel()
+    
+    // MARK: - State
     @State private var isShowingBanner = false
     @State private var messageData: MessagerBannerModifier.MessageData = MessagerBannerModifier.MessageData()
+    @State private var isShowingServerDetailView = false
     
-    @State var currentUserName: String = ""
-    
+    // MARK: - Setup
     var body: some View {
         NavigationView {
             ZStack(alignment: .topLeading) {
                 GeometryReader { geometry in
                     HStack(alignment: .top, spacing: 0) {
-                        
-                        LeftMainMenuView(leftMenuStatus: mainViewModel.menuItems,
+                        LeftMainMenuView(leftMenuStatus: viewModel.menuItems,
                                          joinServerHandler: {
-                                            self.mainViewModel.homeMainContentType = .joinNewServer
+                                            viewModel.selectedServer = "Joined server"
                                          },
                                          manageContactHandler: {})
-                        
-                        switch self.mainViewModel.homeMainContentType {
-                        case .currentServerInfo: ServerMainView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
-                        case .joinNewServer: JoinServerView()
+                        VStack {
+                            Spacer()
+                                .frame(height: 4)
+                            
+                            HStack {
+                                Text(viewModel.selectedServer)
+                                    .font(AppTheme.fonts.displaySmallBold.font)
+                                    .foregroundColor(AppTheme.colors.black.color)
+                                Spacer()
+                                Button(action: {
+                                    withAnimation {
+                                        isShowingServerDetailView = true
+                                    }
+                                }, label: {
+                                    Image("Hamburger")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24, alignment: .center)
+                                        .foregroundColor(AppTheme.colors.gray1.color)
+                                })
+                            }
+                            
+                            if viewModel.selectedServer == "CK Development" {
+                                ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
+                            } else {
+                                JoinServerView()
+                            }
                         }
+                        .padding(.all, Constants.Device.isSmallScreenSize ? 10 : 16)
                     }
                     .padding(.top, 45)
                     .plainColorBackground(color: AppTheme.colors.offWhite.color)
                 }
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
-                .blur(radius: isShowingServerDetailView ? 10 : 0.0)
+                .blur(radius: isShowingServerDetailView ? 5 : 0)
                 
                 if isShowingServerDetailView {
-                    ServerDetailView(isShowingServerDetailView: $isShowingServerDetailView, currentUserName: $currentUserName)
+                    ServerDetailView(showDetail: $isShowingServerDetailView).transition(.identity)
                 }
             }
         }
@@ -54,21 +77,26 @@ struct HomeMainView: View {
         .onAppear(){
             do {
                 let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
-                mainViewModel.getUserInDatabase(clientID: userLogin.id)
+                viewModel.getUserInDatabase(clientID: userLogin.id)
             } catch {
                 print("get user login error")
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.receiveCall)) { (obj) in
+            viewControllerHolder?.present(style: .overFullScreen, builder: {
+                CallView()
+            })
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.endCall)) { (obj) in
+            viewControllerHolder?.dismiss(animated: true, completion: nil)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 struct HomeMainView_Previews: PreviewProvider {
     static var previews: some View {
         HomeMainView()
-            .environmentObject(RealmManager.shared.realmGroups)
-            .environmentObject(RealmManager.shared.realmMessages)
-            .environmentObject(HomeMainViewModel())
-            .environmentObject(ServerMainViewModel())
             .environmentObject(ViewRouter())
     }
 }
@@ -76,12 +104,12 @@ struct HomeMainView_Previews: PreviewProvider {
 class HomeMainViewModel: ObservableObject {
     
     @Published var menuItems: LeftMenuStatus = LeftMenuStatus(items: [])
-    @Published var homeMainContentType: HomeMainContentType = .currentServerInfo
+    @Published var selectedServer: String = "CK Development"
     
     init() {
         menuItems = LeftMenuStatus(items: [
             LeftMenuItemStatus(serverID: "ck_default_1", imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: {
-                self.homeMainContentType = .currentServerInfo
+                self.selectedServer = "CK Development"
             })
         ])
     }
@@ -103,7 +131,6 @@ class HomeMainViewModel: ObservableObject {
                     CKSignalCoordinate.shared.myAccount = account
                 }
             })
-            
         }
     }
 }

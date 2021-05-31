@@ -8,7 +8,7 @@ import GRPC
 import SignalProtocolObjC
 import NIOHPACK
 
-class Backend: ObservableObject {
+class Backend {
     
     static let shared = Backend()
     
@@ -40,12 +40,7 @@ class Backend: ObservableObject {
     
     private var queueHandShake: [String: String] = [:]
     
-    
-    @Published var messages: [PostModel] = []
-    @Published var rooms = [RoomModel]()
-    
-    
-    init(host: String = AppConfig.buildEnvironment.grpc, port: Int = AppConfig.buildEnvironment.grpc_port) {
+    private init(host: String = AppConfig.buildEnvironment.grpc, port: Int = AppConfig.buildEnvironment.grpc_port) {
 //    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
 //    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
 //    init(host: String = "172.16.6.34", port: Int = 25000) { // dev server 2
@@ -115,11 +110,21 @@ class Backend: ObservableObject {
     
     
     private func heard(_ clienId: String, publication: Message_MessageObjectResponse) {
-        let userInfo: [String : Any] = ["clientId": clienId, "publication": publication]
-
-        NotificationCenter.default.post(name: NSNotification.ReceiveMessage,
-                                        object: nil,
-                                        userInfo: userInfo)
+        func handleNotification(clienId: String, message: MessageModel) {
+            let userInfo: [String : Any] = ["clientId": clienId, "message": message]
+            NotificationCenter.default.post(name: NSNotification.ReceiveMessage,
+                                            object: nil,
+                                            userInfo: userInfo)
+        }
+        if publication.groupType == "peer" {
+            ChatService.shared.decryptMessageFromPeer(publication, completion: { message in
+                handleNotification(clienId: clienId, message: message)
+            })
+        } else {
+            ChatService.shared.decryptMessageFromGroup(publication, completion: { message in
+                handleNotification(clienId: clienId, message: message)
+            })
+        }
     }
     
     func notificationSubscrible(clientId: String) -> Void{

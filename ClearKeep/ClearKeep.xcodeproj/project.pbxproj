@@ -74,7 +74,6 @@
 		10EDAA24261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */; };
 		1604993625355B4F0071E651 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1604993525355B4F0071E651 /* MotherView.swift */; };
 		160A08B0253D36CF0030D28E /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
-		16208E62252D7906000A6CE7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16208E61252D7906000A6CE7 /* HomeView.swift */; };
 		1655502F252F02F3008E66D0 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1655502E252F02F3008E66D0 /* Backend.swift */; };
 		16555034252F0B20008E66D0 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16555033252F0B20008E66D0 /* Authenticator.swift */; };
 		1664F1B5252C6B4700FF37AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664F1B4252C6B4700FF37AD /* AppDelegate.swift */; };
@@ -323,7 +322,6 @@
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
 		160A08AF253D36CF0030D28E /* SignalStoreInMemoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalStoreInMemoryStorage.h; sourceTree = "<group>"; };
-		16208E61252D7906000A6CE7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1655502E252F02F3008E66D0 /* Backend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
 		16555033252F0B20008E66D0 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		1664F1B1252C6B4700FF37AD /* ClearKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -769,7 +767,6 @@
 			isa = PBXGroup;
 			children = (
 				10237DAA262EBB7E005183C4 /* HomeMainView.swift */,
-				16208E61252D7906000A6CE7 /* HomeView.swift */,
 				689247A2256283E200EAD2B7 /* PeopleView.swift */,
 				689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */,
 				689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */,
@@ -1538,7 +1535,6 @@
 				16555034252F0B20008E66D0 /* Authenticator.swift in Sources */,
 				1604993625355B4F0071E651 /* MotherView.swift in Sources */,
 				6880CF5525F9C1C100F3DECE /* user.grpc.swift in Sources */,
-				16208E62252D7906000A6CE7 /* HomeView.swift in Sources */,
 				56694AD925B53C8A008E8EC5 /* CircularProgressShape.swift in Sources */,
 				6880CF5925F9C1C100F3DECE /* group.pb.swift in Sources */,
 				6887F46A257895D900ACB377 /* NotificationService.swift in Sources */,
@@ -1905,7 +1901,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
@@ -1953,7 +1949,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "clearkeep3-adhoc";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3_distribute;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

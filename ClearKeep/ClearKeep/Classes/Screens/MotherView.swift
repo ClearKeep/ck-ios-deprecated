@@ -1,12 +1,9 @@
 
 
 import SwiftUI
-
-import SwiftUI
 import Combine
 
 struct MotherView: View {
-    
     @EnvironmentObject var viewRouter: ViewRouter
     
     var body: some View {
@@ -14,10 +11,8 @@ struct MotherView: View {
             switch viewRouter.current {
             case .login:
                 LoginView()
-            case .tabview:
-                HomeMainView().transition(.move(edge: .trailing))
-            case .callVideo: CallView()
-            case .recentCreatedGroupChat: MessagerGroupView(groupName: self.viewRouter.recentCreatedGroupModel!.groupName, groupId: self.viewRouter.recentCreatedGroupModel!.groupID, isCreateGroup: true)
+            case .home:
+                HomeMainView()
             }
         }
     }
@@ -30,17 +25,13 @@ struct MotherView_Previews : PreviewProvider {
 }
 
 class ViewRouter: ObservableObject {
-    
     enum Page {
         case login
-        case tabview
-        case callVideo
-        case recentCreatedGroupChat
+        case home
     }
     
     private static func initialPage() -> Page {
-        
-        return CKExtensions.getUserToken().isEmpty ? .login : .tabview
+        return CKExtensions.getUserToken().isEmpty ? .login : .home
     }
     
     let objectWillChange = PassthroughSubject<ViewRouter,Never>()
@@ -53,6 +44,4 @@ class ViewRouter: ObservableObject {
             }
         }
     }
-    
-    var recentCreatedGroupModel: GroupModel? = nil
 }

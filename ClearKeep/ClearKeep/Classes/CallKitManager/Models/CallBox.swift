@@ -145,9 +145,7 @@ final class CallBox: NSObject {
         if videoRoom == nil {
             videoRoom = JanusVideoRoom(delegate: self, token: groupToken)
         }
-//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-//            appDelegate.viewRouter.current = .callVideo
-//        }
+        
         canAnswerCall = completion
         
         hasStartedConnecting = true

@@ -11,25 +11,6 @@ struct JoinServerView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false, content: {
             VStack(spacing: 20) {
-                Spacer()
-                    .frame(height: 4)
-                
-                HStack {
-                    Text("Join Server")
-                        .font(AppTheme.fonts.displaySmallBold.font)
-                        .foregroundColor(AppTheme.colors.black.color)
-                    Spacer()
-                    Button(action: {}, label: {
-                        Image("Hamburger")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24, alignment: .center)
-                            .foregroundColor(AppTheme.colors.gray1.color)
-                    })
-                }
-                
-                Spacer()
-                
                 HStack {
                     Spacer()
                     Text("To be implemented")
