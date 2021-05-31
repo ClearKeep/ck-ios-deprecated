@@ -8,7 +8,14 @@
 
 #import "CKSignalSignedPreKey.h"
 #import "CKAccount.h"
+
+#if DEVELOPMENT
+#import "ClearKeep_Development-Swift.h"
+#elif STAGING
+#import "ClearKeep_Staging-Swift.h"
+#else
 #import "ClearKeep-Swift.h"
+#endif
 
 @implementation CKSignalSignedPreKey
 
