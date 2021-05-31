@@ -25,6 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>com.googleusercontent.apps.1092685949059-8kjgudv4i1vejhbm0v0nov6kbu2pog9e</string>
 				<string>com.googleusercontent.apps.1092685949059-gfkapttahq1tuagf85lk3osr3d5i0bsg</string>
 				<string>fb2535496880092217</string>
 			</array>
@@ -34,7 +35,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>msauth.com.telred.clearkeep3.ios.dev</string>
+				<string>msauth.com.telred.clearkeep3.ios.development</string>
 			</array>
 		</dict>
 	</array>

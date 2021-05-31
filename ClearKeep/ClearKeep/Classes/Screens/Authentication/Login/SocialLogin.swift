@@ -25,10 +25,17 @@ class SocialLogin {
     let ggSignInBtn: GIDSignInButton = GIDSignInButton()
     
     // MSAL params
+    #if DEVELOPMENT
+    let kRedirectUri = "msauth.com.telred.clearkeep3.ios.development://auth"
+    #elseif STAGING
+    let kRedirectUri = "msauth.com.telred.clearkeep3.ios.staging://auth"
+    #else
+    let kRedirectUri = "msauth.com.telred.clearkeep3.ios.dev://auth"
+    #endif
+    
     let kClientID = "8227879c-ae85-4f7b-8175-49ae0b2b6323"
     let kGraphEndpoint = "https://graph.microsoft.com/"
     let kAuthority = "https://login.microsoftonline.com/common"
-    let kRedirectUri = "msauth.com.telred.clearkeep3.ios.dev://auth"
     let kScopes: [String] = ["user.read"]
 
     var applicationContext : MSALPublicClientApplication?

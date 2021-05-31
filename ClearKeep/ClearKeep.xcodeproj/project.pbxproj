@@ -44,13 +44,15 @@
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
+		108AA7512664F0C100440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA7502664F0C100440138 /* credentials.plist */; };
+		108AA7582664F0D300440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA7572664F0D300440138 /* credentials.plist */; };
+		108AA75F2664F0E200440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA75E2664F0E200440138 /* credentials.plist */; };
 		108C55B92664E3930020B901 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108C55B82664E3930020B901 /* GoogleService-Info.plist */; };
 		108C55BB2664E3A60020B901 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108C55BA2664E3A60020B901 /* GoogleService-Info.plist */; };
 		108C55C22664E3B90020B901 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108C55C12664E3B90020B901 /* GoogleService-Info.plist */; };
 		108C7EC72616AF01003B6936 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
 		108D3455265E3BBF00A4EE1F /* CustomVideoViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */; };
 		108D3496265F48D900A4EE1F /* Devices+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D3495265F48D900A4EE1F /* Devices+Size.swift */; };
-		109715502614146C0045FE63 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10971560261417B10045FE63 /* SocialLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1097155F261417B10045FE63 /* SocialLogin.swift */; };
 		1098A327264A320600B26F2F /* AdvanceServerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */; };
 		10AA457A26423C6A000EB6E1 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA457926423C6A000EB6E1 /* Binding+Extension.swift */; };
@@ -271,7 +273,6 @@
 		10B70C312664B9F10066C752 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */; };
 		10B70C322664B9F10066C752 /* add_dependency.png in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB625B53C88008E8EC5 /* add_dependency.png */; };
 		10B70C332664B9F10066C752 /* navigator.png in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB825B53C88008E8EC5 /* navigator.png */; };
-		10B70C342664B9F10066C752 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10B70C352664B9F10066C752 /* Indicators.gif in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB725B53C88008E8EC5 /* Indicators.gif */; };
 		10B70C362664B9F10066C752 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1664F1BD252C6B4900FF37AD /* Preview Assets.xcassets */; };
 		10B70C372664B9F10066C752 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
@@ -491,7 +492,6 @@
 		10B70D482664BE040066C752 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B494B2625766800EDD89B /* SF-Pro-Text-Bold.otf */; };
 		10B70D492664BE040066C752 /* add_dependency.png in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB625B53C88008E8EC5 /* add_dependency.png */; };
 		10B70D4A2664BE040066C752 /* navigator.png in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB825B53C88008E8EC5 /* navigator.png */; };
-		10B70D4B2664BE040066C752 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1097154F2614146C0045FE63 /* credentials.plist */; };
 		10B70D4C2664BE040066C752 /* Indicators.gif in Resources */ = {isa = PBXBuildFile; fileRef = 56694AB725B53C88008E8EC5 /* Indicators.gif */; };
 		10B70D4D2664BE040066C752 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1664F1BD252C6B4900FF37AD /* Preview Assets.xcassets */; };
 		10B70D4E2664BE040066C752 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 103B4943262575EC00EDD89B /* SF-Pro-Text-Regular.otf */; };
@@ -736,6 +736,9 @@
 		106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatAddMember.swift; sourceTree = "<group>"; };
 		106AD549260B366D005F9691 /* LetterAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterAvatarView.swift; sourceTree = "<group>"; };
 		10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
+		108AA7502664F0C100440138 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
+		108AA7572664F0D300440138 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
+		108AA75E2664F0E200440138 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		108C55B82664E3930020B901 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		108C55BA2664E3A60020B901 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		108C55C12664E3B90020B901 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -744,7 +747,6 @@
 		108C7EC62616AF01003B6936 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		108D3454265E3BBF00A4EE1F /* CustomVideoViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoViewConfig.swift; sourceTree = "<group>"; };
 		108D3495265F48D900A4EE1F /* Devices+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Devices+Size.swift"; sourceTree = "<group>"; };
-		1097154F2614146C0045FE63 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		1097155F261417B10045FE63 /* SocialLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLogin.swift; sourceTree = "<group>"; };
 		1098A326264A320600B26F2F /* AdvanceServerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceServerSettingsView.swift; sourceTree = "<group>"; };
 		10AA457926423C6A000EB6E1 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
@@ -766,6 +768,8 @@
 		10D650D52626D2A60018528B /* UX+WrappedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UX+WrappedTextField.swift"; sourceTree = "<group>"; };
 		10D650DD2626F4F30018528B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		10D7E31F26316EB600478957 /* ServerMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerMainView.swift; sourceTree = "<group>"; };
+		10D9986E2665C7DE006A38AD /* ClearKeepStaging.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ClearKeepStaging.entitlements; sourceTree = "<group>"; };
+		10D9986F2665C7E4006A38AD /* ClearKeepDevelopment.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ClearKeepDevelopment.entitlements; sourceTree = "<group>"; };
 		10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
@@ -1072,6 +1076,8 @@
 		108C55B02664E2F80020B901 /* Development */ = {
 			isa = PBXGroup;
 			children = (
+				10D9986F2665C7E4006A38AD /* ClearKeepDevelopment.entitlements */,
+				108AA75E2664F0E200440138 /* credentials.plist */,
 				108C55E72664E9F40020B901 /* ClearKeep Development-Info.plist */,
 				108C55C12664E3B90020B901 /* GoogleService-Info.plist */,
 			);
@@ -1081,6 +1087,8 @@
 		108C55B12664E3020020B901 /* Staging */ = {
 			isa = PBXGroup;
 			children = (
+				10D9986E2665C7DE006A38AD /* ClearKeepStaging.entitlements */,
+				108AA7572664F0D300440138 /* credentials.plist */,
 				108C55E62664E9DB0020B901 /* ClearKeep Staging-Info.plist */,
 				108C55BA2664E3A60020B901 /* GoogleService-Info.plist */,
 			);
@@ -1090,6 +1098,8 @@
 		108C55B22664E30A0020B901 /* Production */ = {
 			isa = PBXGroup;
 			children = (
+				68CBC69A25942FD600997D93 /* ClearKeep.entitlements */,
+				108AA7502664F0C100440138 /* credentials.plist */,
 				1664F1C2252C6B4900FF37AD /* Info.plist */,
 				108C55B82664E3930020B901 /* GoogleService-Info.plist */,
 			);
@@ -1152,7 +1162,6 @@
 				108C55B12664E3020020B901 /* Staging */,
 				108C55B02664E2F80020B901 /* Development */,
 				103B4942262575C900EDD89B /* Fonts */,
-				1097154F2614146C0045FE63 /* credentials.plist */,
 				1664F1BA252C6B4900FF37AD /* Assets.xcassets */,
 				1664F1BF252C6B4900FF37AD /* LaunchScreen.storyboard */,
 			);
@@ -1324,7 +1333,6 @@
 		1664F1B3252C6B4700FF37AD /* ClearKeep */ = {
 			isa = PBXGroup;
 			children = (
-				68CBC69A25942FD600997D93 /* ClearKeep.entitlements */,
 				16208E2F252D63B6000A6CE7 /* Classes */,
 				16208E2E252D6351000A6CE7 /* Resources */,
 				32DAD5BF25D2422100FAC889 /* protobuf */,
@@ -1964,11 +1972,11 @@
 				10B70C312664B9F10066C752 /* SF-Pro-Text-Bold.otf in Resources */,
 				10B70C322664B9F10066C752 /* add_dependency.png in Resources */,
 				10B70C332664B9F10066C752 /* navigator.png in Resources */,
-				10B70C342664B9F10066C752 /* credentials.plist in Resources */,
 				10B70C352664B9F10066C752 /* Indicators.gif in Resources */,
 				10B70C362664B9F10066C752 /* Preview Assets.xcassets in Resources */,
 				10B70C372664B9F10066C752 /* SF-Pro-Text-Regular.otf in Resources */,
 				108C55C22664E3B90020B901 /* GoogleService-Info.plist in Resources */,
+				108AA75F2664F0E200440138 /* credentials.plist in Resources */,
 				10B70C382664B9F10066C752 /* add_package.png in Resources */,
 				10B70C392664B9F10066C752 /* Assets.xcassets in Resources */,
 				10B70C3B2664B9F10066C752 /* basetextalignment.png in Resources */,
@@ -1987,11 +1995,11 @@
 				10B70D482664BE040066C752 /* SF-Pro-Text-Bold.otf in Resources */,
 				10B70D492664BE040066C752 /* add_dependency.png in Resources */,
 				10B70D4A2664BE040066C752 /* navigator.png in Resources */,
-				10B70D4B2664BE040066C752 /* credentials.plist in Resources */,
 				10B70D4C2664BE040066C752 /* Indicators.gif in Resources */,
 				10B70D4D2664BE040066C752 /* Preview Assets.xcassets in Resources */,
 				10B70D4E2664BE040066C752 /* SF-Pro-Text-Regular.otf in Resources */,
 				108C55BB2664E3A60020B901 /* GoogleService-Info.plist in Resources */,
+				108AA7582664F0D300440138 /* credentials.plist in Resources */,
 				10B70D4F2664BE040066C752 /* add_package.png in Resources */,
 				10B70D502664BE040066C752 /* Assets.xcassets in Resources */,
 				10B70D522664BE040066C752 /* basetextalignment.png in Resources */,
@@ -2010,11 +2018,11 @@
 				103B494F2625766800EDD89B /* SF-Pro-Text-Bold.otf in Resources */,
 				56694AD225B53C8A008E8EC5 /* add_dependency.png in Resources */,
 				56694AD425B53C8A008E8EC5 /* navigator.png in Resources */,
-				109715502614146C0045FE63 /* credentials.plist in Resources */,
 				56694AD325B53C8A008E8EC5 /* Indicators.gif in Resources */,
 				1664F1BE252C6B4900FF37AD /* Preview Assets.xcassets in Resources */,
 				103B4944262575EC00EDD89B /* SF-Pro-Text-Regular.otf in Resources */,
 				108C55B92664E3930020B901 /* GoogleService-Info.plist in Resources */,
+				108AA7512664F0C100440138 /* credentials.plist in Resources */,
 				56694AD125B53C8A008E8EC5 /* add_package.png in Resources */,
 				1664F1BB252C6B4900FF37AD /* Assets.xcassets in Resources */,
 				56694AD525B53C8A008E8EC5 /* basetextalignment.png in Resources */,
@@ -2882,7 +2890,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Development";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Development/ClearKeepDevelopment.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
@@ -2942,8 +2950,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Development";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Development/ClearKeepDevelopment.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
@@ -3001,9 +3009,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Staging";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Staging/ClearKeepStaging.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
@@ -3044,7 +3052,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D STAGING";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.staging;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "clearkeep3_staging-develop";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG STAGING";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
@@ -3061,7 +3069,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Staging";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Staging/ClearKeepStaging.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
@@ -3236,8 +3244,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development: Yusuf Saib (3LS4HBVFFU)";
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Production/ClearKeep.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
@@ -3268,7 +3276,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeep.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Production/ClearKeep.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: TEL.RED, LLC (H4C7478UQW)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
