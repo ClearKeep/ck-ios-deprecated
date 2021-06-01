@@ -25,13 +25,15 @@ struct MessagerView: View {
     @State private var scrollView: UIScrollView?
     
     // MARK: - Variables
+    private var isFromPeopleList: Bool = false
     
     // MARK: - Init
     private init() {
     }
     
-    init(clientId: String, groupId: Int64, userName: String) {
+    init(clientId: String, groupId: Int64, userName: String, isFromPeopleList: Bool = false) {
         self.init()
+        self.isFromPeopleList = isFromPeopleList
         viewModel.setup(receiveId: clientId, groupId: groupId, username: userName, groupType: "peer")
     }
     
@@ -81,8 +83,12 @@ struct MessagerView: View {
         }
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
-        }, invokeBackButton: {
-            self.presentationMode.wrappedValue.dismiss()
+        }, invokeBackButton: { navigationController in
+            if isFromPeopleList {
+                navigationController?.popToRootViewController(animated: true)
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
         }, invokeCallButton: { callType in
             call(callType: callType)
         })

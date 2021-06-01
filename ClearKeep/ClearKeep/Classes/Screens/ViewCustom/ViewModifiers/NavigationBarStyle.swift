@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Introspect
 
 fileprivate func globalSafeAreaInsets() -> UIEdgeInsets {
     return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.safeAreaInsets ?? UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -85,14 +86,15 @@ struct NavigationBarPlainStyle<L,R>: ViewModifier where L: View, R: View {
 
 struct NavigationBarChatStyle<T>: ViewModifier where T: View {
     var titleView: (() -> T)
-    var invokeBackButton: () -> ()
+    var invokeBackButton: (UINavigationController?) -> ()
     var invokeCallButton: (Constants.CallType) -> ()
+    @State private var navigationController: UINavigationController?
     
     func body(content: Content) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Button(action: {
-                    invokeBackButton()
+                    invokeBackButton(navigationController)
                 }, label: {
                     Image("ic_back")
                         .frame(width: 24, height: 24, alignment: .leading)
@@ -123,6 +125,9 @@ struct NavigationBarChatStyle<T>: ViewModifier where T: View {
             .frame(width: UIScreen.main.bounds.width, height: 60 + globalSafeAreaInsets().top)
             content
         }
+        .introspectNavigationController(customize: { navigationController in
+            self.navigationController = navigationController
+        })
         .navigationBarHidden(true)
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarBackButtonHidden(true)
@@ -173,7 +178,7 @@ extension View {
         self.modifier(NavigationBarPlainStyle(title: title, isGradientHeader: true, titleFont: AppTheme.fonts.textMedium.font, titleColor: AppTheme.colors.offWhite.color, leftBarItems: leftBarItems, rightBarItems: rightBarItems))
     }
     
-    func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping (() -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {
+    func applyNavigationBarChatStyle<T>(titleView: @escaping (() -> T), invokeBackButton: @escaping ((UINavigationController?) -> ()), invokeCallButton: @escaping ((Constants.CallType) -> ())) -> some View where T: View {
         self.modifier(NavigationBarChatStyle(titleView: titleView, invokeBackButton: invokeBackButton, invokeCallButton: invokeCallButton))
     }
     

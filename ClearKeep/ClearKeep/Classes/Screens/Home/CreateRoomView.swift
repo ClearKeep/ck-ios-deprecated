@@ -29,7 +29,7 @@ struct CreateRoomView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            NavigationLink(destination: MessagerGroupView(groupName: groupName, groupId: groupId, isCreateGroup: true), isActive: .constant(groupId != 0), label: { EmptyView() })
+            NavigationLink(destination: MessagerGroupView(groupName: groupName, groupId: groupId, isFromCreateGroup: true), isActive: .constant(groupId != 0), label: { EmptyView() })
             Text("Group Name")
                 .font(AppTheme.fonts.textSmall.font)
                 .foregroundColor(AppTheme.colors.gray1.color)
