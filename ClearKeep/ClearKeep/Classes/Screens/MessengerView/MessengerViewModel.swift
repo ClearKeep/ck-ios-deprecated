@@ -14,7 +14,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     private let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
     // MARK: - Variables
-    private(set) var groupId: Int64 = 0
+    private(set) var groupId: Int64 = Constants.groupIdTemp
     private(set) var receiveId: String = ""
     private(set) var username: String = ""
     private(set) var groupType: String = "peer"
@@ -35,7 +35,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     func setup(receiveId: String, groupId: Int64, username: String, groupType: String) {
         self.receiveId = receiveId
         self.username = username
-        self.groupId = RealmManager.shared.getGroup(by: receiveId, type: groupType)?.groupId ?? 0
+        self.groupId = RealmManager.shared.getGroup(by: receiveId, type: groupType)?.groupId ?? Constants.groupIdTemp
         self.groupType = groupType
         isGroup = false
         DispatchQueue.main.async {

@@ -117,9 +117,9 @@ extension RealmManager {
     }
     
     func getGroup(by clientId: String, type: String) -> RealmGroup? {
-        let allGroups = getAllGroups()
-        let group = allGroups.filter{group in
-            if group.lstClientID.filter({$0.id == clientId}).count > 0 && group.groupType == type {
+        let groups = load(listOf: RealmGroup.self, filter: NSPredicate(format: "groupType == %@", type))
+        let group = groups.filter { group in
+            if group.lstClientID.filter({$0.id == clientId}).count > 0 {
                 return true
             }
             return false
