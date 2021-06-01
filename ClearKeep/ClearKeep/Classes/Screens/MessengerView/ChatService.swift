@@ -17,13 +17,9 @@ final class ChatService {
     
     // MARK: - Variables
     private(set) var openedGroupId: Int64 = 0
-    private(set) var ourEncryptionManager: CKAccountSignalEncryptionManager?
-//    private(set) var recipientDeviceId: UInt32 = 0
  
     // MARK: - Init & Setter
-    private init() {
-        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-    }
+    private init() { }
     
     func setOpenedGroupId(_ groupId: Int64) {
         openedGroupId = groupId
@@ -48,7 +44,7 @@ extension ChatService {
         }
         
         do {
-            guard let encryptedData = try ourEncryptionManager?.encryptToAddress(messageData,
+            guard let encryptedData = try CKSignalCoordinate.shared.ourEncryptionManager?.encryptToAddress(messageData,
                                                                                  name: toClientId) else
             { return }
             
@@ -64,9 +60,9 @@ extension ChatService {
     
     func decryptMessageFromPeer(_ publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())? = nil) {
         do {
-            if let ourEncryptionMng = self.ourEncryptionManager {
+            if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
                 let messageDecrypted = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                               name: publication.fromClientID)
+                                                                               name: publication.clientID)
                 completion?(saveNewMessage(publication: publication, message: messageDecrypted))
             } else {
                 completion?(saveNewMessage(publication: publication, message: getUnableErrorMessage(message: nil)))
@@ -128,7 +124,7 @@ extension ChatService {
     }
     
     private func processKeyStoreHasPrivateKey(recipientResponse: Signal_PeerGetClientKeyResponse) {
-        if let ourEncryptionMng = self.ourEncryptionManager {
+        if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
             do {
                 let remotePrekey = try SignalPreKey(serializedData: recipientResponse.preKey)
                 let remoteSignedPrekey = try SignalSignedPreKey(serializedData: recipientResponse.signedPreKey)
@@ -198,7 +194,7 @@ extension ChatService {
     func sendMessageToGroup(groupId: Int64, messageData: Data,completion: ((MessageModel) -> ())?) {
         do {
             let fromClientId = getClientId()
-            guard let encryptedData = try ourEncryptionManager?.encryptToGroup(messageData,
+            guard let encryptedData = try CKSignalCoordinate.shared.ourEncryptionManager?.encryptToGroup(messageData,
                                                                                groupId: groupId,
                                                                                name: fromClientId) else { return }
             Backend.shared.send(encryptedData.data, fromClientId: fromClientId, groupId: groupId, groupType: "group") { (publication) in
@@ -213,7 +209,7 @@ extension ChatService {
     
     func decryptMessageFromGroup(_ publication: Message_MessageObjectResponse, completion: ((MessageModel) -> ())? = nil) {
         do {
-            if let ourEncryptionMng = self.ourEncryptionManager,
+            if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager,
                ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientID, deviceId: Constants.decryptedDeviceId, groupId: publication.groupID) {
                 let messageDecrypted = try ourEncryptionMng.decryptFromGroup(publication.message,
                                                                              groupId: publication.groupID,
@@ -242,7 +238,7 @@ extension ChatService {
     func registerWithGroup(_ groupId: Int64, completion: @escaping (Bool) -> ()) {
         if let group = RealmManager.shared.getGroup(by: groupId) {
             if !group.isRegistered && !getClientId().isEmpty{
-                if  let ourAccountEncryptMng = self.ourEncryptionManager {
+                if  let ourAccountEncryptMng = CKSignalCoordinate.shared.ourEncryptionManager {
                     let address = SignalAddress(name: getClientId(), deviceId: Constants.encryptedDeviceId)
                     let groupSessionBuilder = SignalGroupSessionBuilder(context: ourAccountEncryptMng.signalContext)
                     let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
@@ -288,7 +284,7 @@ extension ChatService {
     
     private func processSenderKey(byGroupId groupId: Int64,
                           responseSenderKey: Signal_GroupClientKeyObject) {
-        if let ourEncryptionMng = self.ourEncryptionManager,
+        if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager,
            let connectionDb = self.connectionDb {
             // save account infor
             connectionDb.readWrite { (transaction) in

@@ -14,7 +14,6 @@ class MessengerViewModel: ObservableObject, Identifiable {
     private let connectionDb = CKDatabaseManager.shared.database?.newConnection()
     
     // MARK: - Variables
-    private(set) var ourEncryptionManager: CKAccountSignalEncryptionManager?
     private(set) var groupId: Int64 = 0
     private(set) var receiveId: String = ""
     private(set) var username: String = ""
@@ -27,9 +26,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     @Published var messages: [MessageModel] = []
     
     // MARK: - Init & Deinit
-    init() {
-        ourEncryptionManager = CKSignalCoordinate.shared.ourEncryptionManager
-    }
+    init() { }
     
     deinit {
         Debug.DLog("Deinit \(self)")
