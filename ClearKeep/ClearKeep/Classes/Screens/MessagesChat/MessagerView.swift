@@ -52,11 +52,6 @@ struct MessagerView: View {
                         .onAppear(perform: {
                             reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                         })
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
-                            }
-                        }
                     }
                 } else {
                     MessagerListView(messages: viewModel.messages) { msg in
@@ -71,13 +66,11 @@ struct MessagerView: View {
                     .onAppear(perform: {
                         self.scrollView?.scrollToBottom()
                     })
-                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollView?.scrollToBottom()
-                        }
-                    }
                 }
             })
+            .onTapGesture {
+                self.hideKeyboard()
+            }
             
             MessagerToolBar(sendAction: { message in
                 self.viewModel.sendMessage(messageStr: message) {
@@ -95,9 +88,6 @@ struct MessagerView: View {
         })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
-        .onTapGesture {
-            self.hideKeyboard()
-        }
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),

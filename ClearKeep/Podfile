@@ -20,8 +20,6 @@ target 'ClearKeep' do
   pod 'Firebase/Auth'
   pod 'MSAL'
   
-  pod 'IQKeyboardManagerSwift', '6.3.0'
-  
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
   pod 'Introspect'

@@ -12,8 +12,6 @@ import CallKit
 import GoogleSignIn
 import Firebase
 import MSAL
-
-import IQKeyboardManagerSwift
 import FBSDKCoreKit
 
 //@main
