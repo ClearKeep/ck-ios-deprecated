@@ -11,7 +11,6 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
     
     // MARK: - Variables
     private(set) var listMembers: [People] = []
-    private(set) var group: GroupModel?
     
     // MARK: - Init & Setup
     
@@ -20,7 +19,7 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
     }
     
     // MARK: - API
-    func createRoom(groupName: String, completion: ((Bool) -> ())? = nil) {
+    func createRoom(groupName: String, completion: ((Int64) -> ())? = nil) {
         var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName)}
         
         if let account = CKSignalCoordinate.shared.myAccount {
@@ -32,11 +31,7 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
             req.createdByClientID = account.username
             req.lstClientID = lstClientID.map{$0.id}
             
-            Backend.shared.createRoom(req) { [weak self] (result , error) in
-                guard let self = self else {
-                    completion?(false)
-                    return
-                }
+            Backend.shared.createRoom(req) { (result , error) in
                 if let result = result {
                     DispatchQueue.main.async {
                         let group = GroupModel(groupID: result.groupID,
@@ -54,12 +49,11 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
                                                idLastMessage: result.lastMessage.id,
                                                timeSyncMessage: 0)
                         RealmManager.shared.addAndUpdateGroup(group: group) {
-                            self.group = group
-                            completion?(true)
+                            completion?(result.groupID)
                         }
                     }
                 }
-                completion?(false)
+                completion?(0)
             }
         }
     }

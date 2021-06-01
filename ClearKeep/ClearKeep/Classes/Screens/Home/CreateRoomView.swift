@@ -18,6 +18,7 @@ struct CreateRoomView: View {
     
     // MARK: - State
     @State private var groupName: String = ""
+    @State private var groupId: Int64 = 0
     @State private var hudVisible = false
     @State private var isActive = false
     
@@ -28,9 +29,7 @@ struct CreateRoomView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            if let group = viewModel.group {
-                NavigationLink(destination: MessagerGroupView(groupName: group.groupName, groupId: group.groupID, isCreateGroup: true), isActive: $isActive, label: { EmptyView() })
-            }
+            NavigationLink(destination: MessagerGroupView(groupName: groupName, groupId: groupId, isCreateGroup: true), isActive: .constant(groupId != 0), label: { EmptyView() })
             Text("Group Name")
                 .font(AppTheme.fonts.textSmall.font)
                 .foregroundColor(AppTheme.colors.gray1.color)
@@ -78,9 +77,9 @@ struct CreateRoomView: View {
         }, rightBarItems: {
             Button {
                 hudVisible = true
-                viewModel.createRoom(groupName: groupName, completion: { isSuccess in
+                viewModel.createRoom(groupName: groupName, completion: { groupId in
                     hudVisible = false
-                    isActive = isSuccess
+                    self.groupId = groupId
                 })
             } label: {
                 Text("Create")
@@ -95,10 +94,4 @@ struct CreateRoomView: View {
             self.hideKeyboard()
         }
     }
-}
-
-extension CreateRoomView {
-    
-    
-    
 }

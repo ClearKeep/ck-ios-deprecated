@@ -26,10 +26,8 @@ struct MessagerGroupView: View {
     @State private var navigationController: UINavigationController?
     
     // MARK: - Variables
-    private var userName: String = ""
     private var groupName: String = ""
     private var clientId: String = ""
-    private var groupId: Int64 = 0
     private var isCreateGroup: Bool = false
     
     // MARK: - Init
@@ -39,7 +37,6 @@ struct MessagerGroupView: View {
     init(groupName: String, groupId: Int64, isCreateGroup: Bool = false) {
         self.init()
         self.groupName = groupName
-        self.groupId = groupId
         self.isCreateGroup = isCreateGroup
         self.viewModel.setup(groupId: groupId, username: groupName, groupType: "group")
     }
@@ -111,9 +108,7 @@ struct MessagerGroupView: View {
                    secondaryButton: .default(Text("Cancel")))
         })
         .onAppear() {
-            ChatService.shared.setOpenedGroupId(groupId)
-            UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
+            ChatService.shared.setOpenedGroupId(viewModel.groupId)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.viewModel.getMessageInRoom(completion: {
                     self.scrollView?.scrollToBottom()
@@ -122,8 +117,6 @@ struct MessagerGroupView: View {
         }
         .onDisappear(){
             ChatService.shared.setOpenedGroupId(-1)
-            UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,

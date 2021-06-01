@@ -98,8 +98,6 @@ struct MessagerView: View {
         })
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
-            UserDefaults.standard.setValue(viewModel.groupId, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
             
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
@@ -107,8 +105,6 @@ struct MessagerView: View {
         }
         .onDisappear(){
             ChatService.shared.setOpenedGroupId(-1)
-            UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
