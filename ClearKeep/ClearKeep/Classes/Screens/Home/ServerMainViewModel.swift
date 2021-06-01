@@ -28,6 +28,8 @@ class ServerMainViewModel: ObservableObject {
             guard let self = self else { return }
             if let result = result {
                 let dispatchGroup = DispatchGroup()
+                var groups: [GroupModel] = []
+                var peers: [GroupModel] = []
                 result.lstGroup.forEach { (groupResponse) in
                     dispatchGroup.enter()
                     let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
@@ -46,12 +48,18 @@ class ServerMainViewModel: ObservableObject {
                                                 idLastMessage: "",
                                                 timeSyncMessage: 0)
                     RealmManager.shared.addAndUpdateGroup(group: groupModel) {
+                        if groupModel.groupType == "peer" {
+                            peers.append(groupModel)
+                        } else {
+                            groups.append(groupModel)
+                        }
                         dispatchGroup.leave()
                     }
                 }
                 
                 dispatchGroup.notify(queue: DispatchQueue.main) {
-                    self.reloadData()
+                    self.groups = self.sorted(groups: groups)
+                    self.peers = self.sorted(groups: peers)
                 }
             }
         }
@@ -126,13 +134,15 @@ class ServerMainViewModel: ObservableObject {
                 convertedGroups.append(group)
             }
         }
-        let convertedAndSortedPeers = convertedPeers.sorted { (gr1, gr2) -> Bool in
-            return gr1.updatedAt > gr2.updatedAt
-        }
-        let convertedAndSortedGroups = convertedGroups.sorted { (gr1, gr2) -> Bool in
-            return gr1.updatedAt > gr2.updatedAt
-        }
+        let convertedAndSortedPeers = sorted(groups: convertedPeers)
+        let convertedAndSortedGroups = sorted(groups: convertedGroups)
         return (convertedAndSortedGroups, convertedAndSortedPeers)
+    }
+    
+    private func sorted(groups: [GroupModel]) -> [GroupModel] {
+        return groups.sorted { (gr1, gr2) -> Bool in
+            return gr1.updatedAt > gr2.updatedAt
+        }
     }
 }
 
