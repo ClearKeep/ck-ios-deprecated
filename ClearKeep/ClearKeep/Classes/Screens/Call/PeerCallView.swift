@@ -122,7 +122,9 @@ struct SingleVideoCallInfoView: View {
                     .padding(.horizontal, 16)
             } else {
                 HStack(alignment: .top, spacing: 0) {
-                    Button(action: {}, label: {
+                    Button(action: {
+                        viewModel.backHandler?()
+                    }, label: {
                         Image("ic_back")
                             .frame(width: 24, height: 24, alignment: .leading)
                             .foregroundColor(AppTheme.colors.offWhite.color)

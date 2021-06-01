@@ -27,7 +27,7 @@ extension EnvironmentValues {
 }
 
 extension UIViewController {
-    func present<Content: View>(style: UIModalPresentationStyle = .automatic, @ViewBuilder builder: () -> Content) {
+    func present<Content: View>(style: UIModalPresentationStyle = .automatic, @ViewBuilder builder: () -> Content, completion: (() ->())? = nil) {
         let toPresent = UIHostingController(rootView: AnyView(EmptyView()))
         toPresent.modalPresentationStyle = style
         toPresent.rootView = AnyView(
@@ -37,7 +37,7 @@ extension UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: "dismissModal"), object: nil, queue: nil) { [weak toPresent] _ in
             toPresent?.dismiss(animated: true, completion: nil)
         }
-        self.present(toPresent, animated: true, completion: nil)
+        self.present(toPresent, animated: true, completion: completion)
     }
 }
 

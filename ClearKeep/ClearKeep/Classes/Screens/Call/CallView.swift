@@ -2,8 +2,7 @@
 import SwiftUI
 
 struct CallView: View {
-    //    @Binding var isShowCall: Bool
-    @ObservedObject var viewModel = CallViewModel()
+    @ObservedObject var viewModel: CallViewModel
     
     var body: some View {
         Group {
@@ -28,6 +27,6 @@ struct CallView: View {
 
 struct CallView_Previews: PreviewProvider {
     static var previews: some View {
-        CallView()
+        CallView(viewModel: CallViewModel())
     }
 }
