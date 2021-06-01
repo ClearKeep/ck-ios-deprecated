@@ -105,7 +105,7 @@ struct HomeMainView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             
             if isInCall {
-                InCallView(senderName: callViewModel.getUserName(), callTime: callViewModel.timeCall).onTapGesture {
+                InCallView(senderName: callViewModel.getUserName(), callTime: callViewModel.timeCall, isGroupCall: callViewModel.callGroup).onTapGesture {
                     callViewModel.backHandler = {
                         viewControllerHolder?.dismiss(animated: true, completion: nil)
                     }
@@ -164,12 +164,15 @@ struct InCallView: View {
     var senderName: String
     var avatarIcon: Image?
     var callTime: String
+    var isGroupCall: Bool
     
     var body: some View {
         HStack(alignment: .bottom) {
-            ChannelUserAvatar(avatarSize: 34, text: senderName, image: avatarIcon, status: .none, gradientBackgroundType: .primary)
-                .padding(.trailing, 16)
-                .padding(.leading, 24)
+            if !isGroupCall {
+                ChannelUserAvatar(avatarSize: 34, text: senderName, image: avatarIcon, status: .none, gradientBackgroundType: .primary)
+                    .padding(.trailing, 16)
+                    .padding(.leading, 24)
+            }
             VStack (alignment: .leading) {
                 Spacer()
                 Text(senderName)
