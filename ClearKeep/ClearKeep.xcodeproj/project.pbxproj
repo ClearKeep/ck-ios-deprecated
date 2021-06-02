@@ -44,6 +44,10 @@
 		106AD543260B2F4C005F9691 /* GroupChatAddMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD542260B2F4C005F9691 /* GroupChatAddMember.swift */; };
 		106AD54A260B366D005F9691 /* LetterAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106AD549260B366D005F9691 /* LetterAvatarView.swift */; };
 		10754DA5261AE58A0019A7D4 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10754DA4261AE58A0019A7D4 /* SocialSignInButton.swift */; };
+		108450512667848C00FAA9D8 /* HomeMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */; };
+		108450772667848D00FAA9D8 /* HomeMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */; };
+		1084507D266784D100FAA9D8 /* InCallModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41AB72667456E00D3CC1F /* InCallModifier.swift */; };
+		1084507E266784D100FAA9D8 /* InCallModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41AB72667456E00D3CC1F /* InCallModifier.swift */; };
 		108AA7512664F0C100440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA7502664F0C100440138 /* credentials.plist */; };
 		108AA7582664F0D300440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA7572664F0D300440138 /* credentials.plist */; };
 		108AA75F2664F0E200440138 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 108AA75E2664F0E200440138 /* credentials.plist */; };
@@ -534,6 +538,7 @@
 		16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC6425253B59C400A4E20C /* CKClientStore.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
 		328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */; };
+		4F733FE86B6299B8774B6F58 /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */; };
 		5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603463B25B145BA00F57ED6 /* MessageBubble.swift */; };
 		56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AE825A2B72B00B39D07 /* CallManager.swift */; };
 		56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 56205AEE25A2BB8500B39D07 /* SwiftyJSON */; };
@@ -802,6 +807,7 @@
 		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
 		328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
 		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
+		43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5603463B25B145BA00F57ED6 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		56205AE825A2B72B00B39D07 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
 		56205AF325A2C35C00B39D07 /* JanusVideoRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusVideoRoom.swift; sourceTree = "<group>"; };
@@ -953,13 +959,9 @@
 		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
 		CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerBannerModifier.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		CBC41AB72667456E00D3CC1F /* InCallModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallModifier.swift; sourceTree = "<group>"; };
 		CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainViewModel.swift; sourceTree = "<group>"; };
-		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
-=======
 		E19DB3940CB3E73411EB3A72 /* Pods-ClearKeep Development.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.debug.xcconfig"; sourceTree = "<group>"; };
->>>>>>> 0ce605a... add new targets: development & staging
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1002,6 +1004,7 @@
 				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
 				16C83CB425300887002E3115 /* GRPC in Frameworks */,
 				AC529548DA751A76E4523F9D /* (null) in Frameworks */,
+				4F733FE86B6299B8774B6F58 /* Pods_ClearKeep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1736,6 +1739,7 @@
 				68CBC6B325944AC100997D93 /* PushKit.framework */,
 				5BB18E469AF6EA4884635366 /* Pods_ClearKeep_Development.framework */,
 				11E642D2ABCD68398AC525E5 /* Pods_ClearKeep_Staging.framework */,
+				43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2361,9 +2365,11 @@
 				10B70BE52664B9F10066C752 /* YapDatabaseTransaction+Extension.swift in Sources */,
 				10B70BE62664B9F10066C752 /* JanusVideoRoom.swift in Sources */,
 				10B70BE72664B9F10066C752 /* signal.pb.swift in Sources */,
+				1084507D266784D100FAA9D8 /* InCallModifier.swift in Sources */,
 				10B70BE82664B9F10066C752 /* CameraSession.swift in Sources */,
 				10B70BE92664B9F10066C752 /* CKSignalObject.m in Sources */,
 				10B70BEA2664B9F10066C752 /* CallVoiceActionView.swift in Sources */,
+				108450512667848C00FAA9D8 /* HomeMainViewModel.swift in Sources */,
 				10B70BEB2664B9F10066C752 /* User.swift in Sources */,
 				10B70BEC2664B9F10066C752 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				10B70BED2664B9F10066C752 /* MotherViewModel.swift in Sources */,
@@ -2567,9 +2573,11 @@
 				10B70CFC2664BE040066C752 /* YapDatabaseTransaction+Extension.swift in Sources */,
 				10B70CFD2664BE040066C752 /* JanusVideoRoom.swift in Sources */,
 				10B70CFE2664BE040066C752 /* signal.pb.swift in Sources */,
+				1084507E266784D100FAA9D8 /* InCallModifier.swift in Sources */,
 				10B70CFF2664BE040066C752 /* CameraSession.swift in Sources */,
 				10B70D002664BE040066C752 /* CKSignalObject.m in Sources */,
 				10B70D012664BE040066C752 /* CallVoiceActionView.swift in Sources */,
+				108450772667848D00FAA9D8 /* HomeMainViewModel.swift in Sources */,
 				10B70D022664BE040066C752 /* User.swift in Sources */,
 				10B70D032664BE040066C752 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				10B70D042664BE040066C752 /* MotherViewModel.swift in Sources */,
