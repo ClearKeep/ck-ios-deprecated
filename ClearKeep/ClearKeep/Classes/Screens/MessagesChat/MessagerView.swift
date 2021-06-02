@@ -104,7 +104,7 @@ struct MessagerView: View {
         })
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
-            
+            self.viewModel.reloadData()
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
@@ -132,11 +132,11 @@ struct MessagerView: View {
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
-            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
-                if isNetWork {
-                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
-                }
-            }
+//            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
+//                if isNetWork {
+//                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
+//                }
+//            }
         })
     }
     

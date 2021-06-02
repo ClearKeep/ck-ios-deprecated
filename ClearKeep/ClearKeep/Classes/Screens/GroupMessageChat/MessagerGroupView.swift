@@ -102,11 +102,10 @@ struct MessagerGroupView: View {
         })
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.viewModel.getMessageInRoom(completion: {
-                    self.scrollView?.scrollToBottom()
-                })
-            }
+            self.viewModel.reloadData()
+            self.viewModel.getMessageInRoom(completion: {
+                self.scrollView?.scrollToBottom()
+            })
         }
         .onDisappear(){
             ChatService.shared.setOpenedGroupId(-1)
