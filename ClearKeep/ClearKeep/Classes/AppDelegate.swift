@@ -154,8 +154,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         GIDSignIn.sharedInstance().clientID = Constants.googleSignInClientId
         GIDSignIn.sharedInstance().delegate = self
         
-        let a = AppConfig.buildEnvironment
-        
         FirebaseApp.configure()
         
         MSALGlobalConfig.loggerConfig.setLogCallback { (logLevel, message, containsPII) in
