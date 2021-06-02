@@ -23,21 +23,17 @@ struct MessagerGroupView: View {
     @State private var hudVisible = false
     @State private var alertVisible = false
     @State private var scrollView: UIScrollView?
-    @State private var navigationController: UINavigationController?
     
     // MARK: - Variables
-    private var groupName: String = ""
-    private var clientId: String = ""
-    private var isCreateGroup: Bool = false
+    private var isFromCreateGroup: Bool = false
     
     // MARK: - Init
     private init() {
     }
     
-    init(groupName: String, groupId: Int64, isCreateGroup: Bool = false) {
+    init(groupName: String, groupId: Int64, isFromCreateGroup: Bool = false) {
         self.init()
-        self.groupName = groupName
-        self.isCreateGroup = isCreateGroup
+        self.isFromCreateGroup = isFromCreateGroup
         self.viewModel.setup(groupId: groupId, username: groupName, groupType: "group")
     }
     
@@ -83,16 +79,13 @@ struct MessagerGroupView: View {
             })
             
         }
-        .introspectNavigationController(customize: { navigationController in
-            self.navigationController = navigationController
-        })
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
-        }, invokeBackButton: {
-            if self.isCreateGroup {
-                self.navigationController?.popToRootViewController(animated: true)
+        }, invokeBackButton: { navigationController in
+            if isFromCreateGroup {
+                navigationController?.popToRootViewController(animated: true)
             } else {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }
         }, invokeCallButton: { callType in
             call(callType: callType)
@@ -109,11 +102,10 @@ struct MessagerGroupView: View {
         })
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.viewModel.getMessageInRoom(completion: {
-                    self.scrollView?.scrollToBottom()
-                })
-            }
+            self.viewModel.reloadData()
+            self.viewModel.getMessageInRoom(completion: {
+                self.scrollView?.scrollToBottom()
+            })
         }
         .onDisappear(){
             ChatService.shared.setOpenedGroupId(-1)
@@ -137,7 +129,7 @@ struct MessagerGroupView: View {
         NavigationLink(
             destination: GroupChatDetailView(groupModel: viewModel.getGroupModel()),
             label: {
-                Text(groupName)
+                Text(viewModel.username)
                     .foregroundColor(AppTheme.colors.offWhite.color)
                     .font(AppTheme.fonts.textLarge.font)
                     .fontWeight(.medium)

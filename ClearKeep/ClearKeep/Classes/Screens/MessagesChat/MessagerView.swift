@@ -25,13 +25,15 @@ struct MessagerView: View {
     @State private var scrollView: UIScrollView?
     
     // MARK: - Variables
+    private var isFromPeopleList: Bool = false
     
     // MARK: - Init
     private init() {
     }
     
-    init(clientId: String, groupId: Int64, userName: String) {
+    init(clientId: String, groupId: Int64, userName: String, isFromPeopleList: Bool = false) {
         self.init()
+        self.isFromPeopleList = isFromPeopleList
         viewModel.setup(receiveId: clientId, groupId: groupId, username: userName, groupType: "peer")
     }
     
@@ -81,8 +83,12 @@ struct MessagerView: View {
         }
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
-        }, invokeBackButton: {
-            self.presentationMode.wrappedValue.dismiss()
+        }, invokeBackButton: { navigationController in
+            if isFromPeopleList {
+                navigationController?.popToRootViewController(animated: true)
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
         }, invokeCallButton: { callType in
             call(callType: callType)
         })
@@ -98,7 +104,7 @@ struct MessagerView: View {
         })
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
-            
+            self.viewModel.reloadData()
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
@@ -126,11 +132,11 @@ struct MessagerView: View {
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
-            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
-                if isNetWork {
-                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
-                }
-            }
+//            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
+//                if isNetWork {
+//                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
+//                }
+//            }
         })
     }
     

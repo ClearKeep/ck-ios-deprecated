@@ -233,6 +233,8 @@
 		CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
 		CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */; };
 		CB99D6C9265E05A4000C59D6 /* MessagerBannerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */; };
+		CBC41AB82667456E00D3CC1F /* InCallModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41AB72667456E00D3CC1F /* InCallModifier.swift */; };
+		CBC41ABB2667459B00D3CC1F /* HomeMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -500,6 +502,8 @@
 		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
 		CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerBannerModifier.swift; sourceTree = "<group>"; };
+		CBC41AB72667456E00D3CC1F /* InCallModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallModifier.swift; sourceTree = "<group>"; };
+		CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainViewModel.swift; sourceTree = "<group>"; };
 		EF4B28756B92567FFDA748B7 /* Pods-ClearKeepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeepTests.release.xcconfig"; path = "Target Support Files/Pods-ClearKeepTests/Pods-ClearKeepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -632,6 +636,7 @@
 				1027ECCC2627F09A00731BFE /* KeyboardAdaptive.swift */,
 				1059C49E262D7BFC00ED4878 /* NavigationBarStyle.swift */,
 				10AA45B626429DBC000EB6E1 /* View+Shake.swift */,
+				CBC41AB72667456E00D3CC1F /* InCallModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -720,9 +725,7 @@
 				56BDA86D254C02F300B72317 /* MessagesChat */,
 				16208E41252D72EB000A6CE7 /* Authentication */,
 				16208E42252D732C000A6CE7 /* Home */,
-				1604993525355B4F0071E651 /* MotherView.swift */,
-				68CFA4B825677E0B00109725 /* MotherViewModel.swift */,
-				16E32C772538338D007ED99A /* ProfileView.swift */,
+				CBC41ABF266745F500D3CC1F /* RootView */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -766,19 +769,11 @@
 		16208E42252D732C000A6CE7 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				10237DAA262EBB7E005183C4 /* HomeMainView.swift */,
-				689247A2256283E200EAD2B7 /* PeopleView.swift */,
-				689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */,
-				689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */,
-				689247B6256510A900EAD2B7 /* SearchPeopleViewModel.swift */,
-				68CFA512256C9F3600109725 /* CreateRoomView.swift */,
-				68CFA517256CA23300109725 /* CreateRoomViewModel.swift */,
-				68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */,
-				68CFA521256CF04600109725 /* InviteMemberViewModel.swift */,
-				10D7E31F26316EB600478957 /* ServerMainView.swift */,
-				1063815A2636BB16000ED2D1 /* ServerMainViewModel.swift */,
+				CBC41ABE266745DB00D3CC1F /* CreateGroup */,
+				CBC41ABD266745C900D3CC1F /* People */,
+				CBC41ABC266745B600D3CC1F /* ServerMain */,
+				CBC41AB92667458800D3CC1F /* HomeMain */,
 				100D33632637C55400344D36 /* JoinServerView.swift */,
-				10417A82263913AB003FF6F2 /* ServerDetailView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1231,6 +1226,57 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CBC41AB92667458800D3CC1F /* HomeMain */ = {
+			isa = PBXGroup;
+			children = (
+				10237DAA262EBB7E005183C4 /* HomeMainView.swift */,
+				CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */,
+				10417A82263913AB003FF6F2 /* ServerDetailView.swift */,
+				16E32C772538338D007ED99A /* ProfileView.swift */,
+			);
+			path = HomeMain;
+			sourceTree = "<group>";
+		};
+		CBC41ABC266745B600D3CC1F /* ServerMain */ = {
+			isa = PBXGroup;
+			children = (
+				10D7E31F26316EB600478957 /* ServerMainView.swift */,
+				1063815A2636BB16000ED2D1 /* ServerMainViewModel.swift */,
+			);
+			path = ServerMain;
+			sourceTree = "<group>";
+		};
+		CBC41ABD266745C900D3CC1F /* People */ = {
+			isa = PBXGroup;
+			children = (
+				689247A2256283E200EAD2B7 /* PeopleView.swift */,
+				689247A72563B1BF00EAD2B7 /* PeopleViewModel.swift */,
+				689247B12564CD6800EAD2B7 /* SearchPeopleView.swift */,
+				689247B6256510A900EAD2B7 /* SearchPeopleViewModel.swift */,
+			);
+			path = People;
+			sourceTree = "<group>";
+		};
+		CBC41ABE266745DB00D3CC1F /* CreateGroup */ = {
+			isa = PBXGroup;
+			children = (
+				68CFA512256C9F3600109725 /* CreateRoomView.swift */,
+				68CFA517256CA23300109725 /* CreateRoomViewModel.swift */,
+				68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */,
+				68CFA521256CF04600109725 /* InviteMemberViewModel.swift */,
+			);
+			path = CreateGroup;
+			sourceTree = "<group>";
+		};
+		CBC41ABF266745F500D3CC1F /* RootView */ = {
+			isa = PBXGroup;
+			children = (
+				1604993525355B4F0071E651 /* MotherView.swift */,
+				68CFA4B825677E0B00109725 /* MotherViewModel.swift */,
+			);
+			path = RootView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1586,6 +1632,7 @@
 				1015C4512625543700407C35 /* DefaultColors.swift in Sources */,
 				102770942615A7D00001BBC6 /* UIViewControllerExtension.swift in Sources */,
 				5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */,
+				CBC41ABB2667459B00D3CC1F /* HomeMainViewModel.swift in Sources */,
 				56C7F349254AC55800737C5F /* CKBundle.swift in Sources */,
 				569FFBC1254BE94E00C487F5 /* CKDatabaseManager.m in Sources */,
 				56694AE625B53C8A008E8EC5 /* LinearWaitingShape.swift in Sources */,
@@ -1597,6 +1644,7 @@
 				56205B1825A2C36D00B39D07 /* RTCCanvas.swift in Sources */,
 				103AECBA2609A0FE001EEF78 /* GroupChatMemberView.swift in Sources */,
 				566CF16A25B17EB800DE2A3F /* ListScrollingProxy.swift in Sources */,
+				CBC41AB82667456E00D3CC1F /* InCallModifier.swift in Sources */,
 				1015C4562625544C00407C35 /* AppTheme.swift in Sources */,
 				56205B1A25A2C36D00B39D07 /* RTCSimluatorVideoEncoderFactory.swift in Sources */,
 				6880CF5A25F9C1C100F3DECE /* auth.grpc.swift in Sources */,
@@ -1949,7 +1997,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = clearkeep3_distribute;
+				PROVISIONING_PROFILE_SPECIFIER = "clearkeep3-adhoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

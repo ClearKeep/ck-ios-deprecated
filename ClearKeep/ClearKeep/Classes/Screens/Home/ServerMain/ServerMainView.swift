@@ -77,7 +77,6 @@ struct ServerMainView: View {
                     }
                 })
         }
-        .padding(.bottom, 20)
         .onTapGesture {
             self.hideKeyboard()
         }

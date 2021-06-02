@@ -14,11 +14,13 @@ struct HomeMainView: View {
     // MARK: - ObservedObject
     @ObservedObject var viewModel: HomeMainViewModel = HomeMainViewModel()
     @ObservedObject var serverMainViewModel: ServerMainViewModel = ServerMainViewModel()
+    @ObservedObject var callViewModel: CallViewModel = CallViewModel()
     
     // MARK: - State
     @State private var isShowingBanner = false
     @State private var messageData: MessagerBannerModifier.MessageData = MessagerBannerModifier.MessageData()
     @State private var isShowingServerDetailView = false
+    @State private var isInCall = false
     
     // MARK: - Setup
     var body: some View {
@@ -61,7 +63,7 @@ struct HomeMainView: View {
                         }
                         .padding(.all, Constants.Device.isSmallScreenSize ? 10 : 16)
                     }
-                    .padding(.top, 45)
+                    .padding(.top, globalSafeAreaInsets().top)
                     .plainColorBackground(color: AppTheme.colors.offWhite.color)
                 }
                 .navigationBarTitle("")
@@ -73,6 +75,7 @@ struct HomeMainView: View {
                 }
             }
         }
+        .inCallModifier(callViewModel: callViewModel, isInCall: $isInCall)
         .messagerBannerModifier(data: $messageData, show: $isShowingBanner)
         .onAppear(){
             do {
@@ -82,14 +85,6 @@ struct HomeMainView: View {
                 print("get user login error")
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.receiveCall)) { (obj) in
-            viewControllerHolder?.present(style: .overFullScreen, builder: {
-                CallView()
-            })
-        }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.endCall)) { (obj) in
-            viewControllerHolder?.dismiss(animated: true, completion: nil)
-        }
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }
@@ -98,39 +93,5 @@ struct HomeMainView_Previews: PreviewProvider {
     static var previews: some View {
         HomeMainView()
             .environmentObject(ViewRouter())
-    }
-}
-
-class HomeMainViewModel: ObservableObject {
-    
-    @Published var menuItems: LeftMenuStatus = LeftMenuStatus(items: [])
-    @Published var selectedServer: String = "CK Development"
-    
-    init() {
-        menuItems = LeftMenuStatus(items: [
-            LeftMenuItemStatus(serverID: "ck_default_1", imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: {
-                self.selectedServer = "CK Development"
-            })
-        ])
-    }
-    
-    func getUserInDatabase(clientID: String){
-        if let dbConnection = CKDatabaseManager.shared.database?.newConnection(){
-            dbConnection.readWrite({ (transaction) in
-                let accounts = CKAccount.allAccounts(withUsername: clientID,
-                                                     transaction: transaction)
-                if let account = accounts.first {
-                    
-                    do {
-                        let ourEncryptionManager = try CKAccountSignalEncryptionManager(accountKey: account.uniqueId,
-                                                                                        databaseConnection: dbConnection)
-                        CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
-                    } catch {
-                        
-                    }
-                    CKSignalCoordinate.shared.myAccount = account
-                }
-            })
-        }
     }
 }
