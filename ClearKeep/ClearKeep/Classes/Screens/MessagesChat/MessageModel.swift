@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum MessageCallType {
+    case ended
+    case missed
+    case rejoin
+    case declined
+}
+
 struct MessageModel: Identifiable {
     
     var id: String = String()
@@ -48,6 +55,22 @@ struct MessageModel: Identifiable {
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             myMsg = myAccount.username == fromClientID
         }
+    }
+    
+    func getSentTime() -> String {
+        let date = NSDate(timeIntervalSince1970: TimeInterval(createdAt/1000))
+        let formatDate = DateFormatter()
+        formatDate.dateFormat = "HH:mm"
+        return formatDate.string(from: date as Date)
+    }
+    
+    func getMessage() -> String {
+        let str = String(data: message, encoding: .utf8) ?? "x"
+        return str
+    }
+    
+    func getSenderName() -> String {
+        return RealmManager.shared.getSenderName(fromClientId: fromClientID, groupId: groupID)
     }
 }
 
