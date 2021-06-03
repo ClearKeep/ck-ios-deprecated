@@ -8,9 +8,14 @@
 import Foundation
 
 enum AppConfig {
-    
+
+    #if DEVELOPMENT
     static let buildEnvironment: Constants.Mode = .development
-//    static let buildEnvironment: Constants.Mode = .stagging
-//    static let buildEnvironment: Constants.Mode = .production
+    #elseif STAGING
+    static let buildEnvironment: Constants.Mode = .stagging
+    #else
+    static let buildEnvironment: Constants.Mode = .production
+    #endif
+
 //    static let buildEnvironment: Constants.Mode = .debugServerLocal
 }
