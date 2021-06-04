@@ -336,3 +336,68 @@ extension ChatService {
         return CKSignalCoordinate.shared.myAccount?.username ?? ""
     }
 }
+
+// Notification
+extension ChatService {
+    struct PublicationNotification: Codable {
+        let id: String
+        let clientId: String
+        let fromClientId: String
+        let groupId: Int64
+        let groupType: String
+        let message: Data
+        let createdAt: Int64
+        
+        enum CodingKeys: String, CodingKey {
+            case id = "id"
+            case clientId = "client_id"
+            case fromClientId = "from_client_id"
+            case groupId = "group_id"
+            case groupType = "group_type"
+            case message = "message"
+            case createdAt = "created_at"
+        }
+    }
+    
+    func decryptMessageFromPeer(_ publication: PublicationNotification, completion: ((String) -> ())? = nil) {
+        do {
+            if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
+                let messageDecrypted = try ourEncryptionMng.decryptFromAddress(publication.message,
+                                                                               name: publication.clientId)
+                completion?(String(data: messageDecrypted, encoding: .utf8) ?? "x")
+            } else {
+                completion?("Unknown Error")
+            }
+        } catch {
+            completion?(error.localizedDescription)
+        }
+    }
+    
+    func decryptMessageFromGroup(_ publication: PublicationNotification, completion: ((String) -> ())? = nil) {
+        do {
+            if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager,
+               ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientId, deviceId: Constants.decryptedDeviceId, groupId: publication.groupId) {
+                let messageDecrypted = try ourEncryptionMng.decryptFromGroup(publication.message,
+                                                                             groupId: publication.groupId,
+                                                                             name: publication.fromClientId)
+                completion?(String(data: messageDecrypted, encoding: .utf8) ?? "x")
+            } else {
+                requestKeyInGroup(byGroupId: publication.groupId, fromClientId: publication.fromClientId) { isSuccess in
+                    if isSuccess {
+                        self.decryptMessageFromGroup(publication, completion: completion)
+                    } else {
+                        completion?("Unknown Error")
+                    }
+                }
+            }
+        } catch {
+            requestKeyInGroup(byGroupId: publication.groupId, fromClientId: publication.fromClientId) { isSuccess in
+                if isSuccess {
+                    self.decryptMessageFromGroup(publication, completion: completion)
+                } else {
+                    completion?(error.localizedDescription)
+                }
+            }
+        }
+    }
+}

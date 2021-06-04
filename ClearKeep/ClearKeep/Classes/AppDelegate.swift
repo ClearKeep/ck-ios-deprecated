@@ -58,6 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
                                     @escaping () -> Void) {
         
         // Always call the completion handler when done.
+        let userInfo = response.notification.request.content.userInfo
+        if let publication = userInfo["publication"] as? Message_MessageObjectResponse {
+            if publication.groupType == "peer" {
+            } else {
+            }
+        }
         completionHandler()
     }
     
