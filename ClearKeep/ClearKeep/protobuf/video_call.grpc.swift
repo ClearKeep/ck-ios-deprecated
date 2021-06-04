@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate VideoCall_VideoCallClient, then call methods of this protocol to make API calls.
+/// Usage: instantiate `VideoCall_VideoCallClient`, then call methods of this protocol to make API calls.
 internal protocol VideoCall_VideoCallClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol? { get }
+
   func video_call(
     _ request: VideoCall_VideoCallRequest,
     callOptions: CallOptions?
@@ -37,14 +40,31 @@ internal protocol VideoCall_VideoCallClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
 
+  func miss_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
+
+  func decline_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
+
+  func end_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
+
   func update_call(
     _ request: VideoCall_UpdateCallRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>
-
 }
 
 extension VideoCall_VideoCallClientProtocol {
+  internal var serviceName: String {
+    return "video_call.VideoCall"
+  }
 
   /// Unary call to video_call
   ///
@@ -59,7 +79,8 @@ extension VideoCall_VideoCallClientProtocol {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/video_call",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makevideo_callInterceptors() ?? []
     )
   }
 
@@ -76,7 +97,62 @@ extension VideoCall_VideoCallClientProtocol {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/cancel_request_call",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makecancel_request_callInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to miss_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to miss_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func miss_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/miss_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makemiss_callInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to decline_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to decline_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func decline_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/decline_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makedecline_callInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to end_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to end_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func end_call(
+    _ request: VideoCall_VideoCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/end_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeend_callInterceptors() ?? []
     )
   }
 
@@ -93,30 +169,69 @@ extension VideoCall_VideoCallClientProtocol {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/update_call",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupdate_callInterceptors() ?? []
     )
   }
+}
+
+internal protocol VideoCall_VideoCallClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'video_call'.
+  func makevideo_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'cancel_request_call'.
+  func makecancel_request_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'miss_call'.
+  func makemiss_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'decline_call'.
+  func makedecline_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'end_call'.
+  func makeend_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'update_call'.
+  func makeupdate_callInterceptors() -> [ClientInterceptor<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>]
 }
 
 internal final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtocol {
   internal let channel: GRPCChannel
   internal var defaultCallOptions: CallOptions
+  internal var interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol?
 
   /// Creates a client for the video_call.VideoCall service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  internal init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
 internal protocol VideoCall_VideoCallProvider: CallHandlerProvider {
+  var interceptors: VideoCall_VideoCallServerInterceptorFactoryProtocol? { get }
+
   func video_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_ServerResponse>
+
   func cancel_request_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
+  func miss_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
+  func decline_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
+  func end_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
   func update_call(request: VideoCall_UpdateCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
 }
 
@@ -125,31 +240,94 @@ extension VideoCall_VideoCallProvider {
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  internal func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "video_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.video_call(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_ServerResponse>(),
+        interceptors: self.interceptors?.makevideo_callInterceptors() ?? [],
+        userFunction: self.video_call(request:context:)
+      )
 
     case "cancel_request_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.cancel_request_call(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makecancel_request_callInterceptors() ?? [],
+        userFunction: self.cancel_request_call(request:context:)
+      )
+
+    case "miss_call":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makemiss_callInterceptors() ?? [],
+        userFunction: self.miss_call(request:context:)
+      )
+
+    case "decline_call":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makedecline_callInterceptors() ?? [],
+        userFunction: self.decline_call(request:context:)
+      )
+
+    case "end_call":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makeend_callInterceptors() ?? [],
+        userFunction: self.end_call(request:context:)
+      )
 
     case "update_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.update_call(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_UpdateCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makeupdate_callInterceptors() ?? [],
+        userFunction: self.update_call(request:context:)
+      )
 
-    default: return nil
+    default:
+      return nil
     }
   }
 }
 
+internal protocol VideoCall_VideoCallServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'video_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makevideo_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'cancel_request_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makecancel_request_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'miss_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makemiss_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'decline_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makedecline_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'end_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeend_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'update_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupdate_callInterceptors() -> [ServerInterceptor<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>]
+}
