@@ -11,8 +11,9 @@ struct InCallModifier: ViewModifier {
     // MARK: - Environment
     @Environment(\.viewController) private var viewControllerHolder: UIViewController?
     
+    @State var isInMinimizeMode: Bool = false
     @Binding var isInCall: Bool
-    var callViewModel: CallViewModel
+    @ObservedObject var callViewModel: CallViewModel
     
     func body(content: Content) -> some View {
         ZStack(alignment: .topLeading) {
@@ -54,52 +55,62 @@ struct InCallModifier: ViewModifier {
                 .onTapGesture {
                     callViewModel.backHandler = {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissModal"), object: nil)
+                        withAnimation {
+                            isInMinimizeMode = true
+                            isInCall = true
+                        }
                     }
+                    
+                    isInMinimizeMode = false
+                    
                     self.viewControllerHolder?.present(style: .overFullScreen, builder: {
                         CallView(viewModel: callViewModel)
                     }, completion: {
-                        withAnimation {
-                            isInCall = true
-                        }
                     })
                 }
                 .transition(.move(edge: .top))
                 
-                VStack {
-                    Spacer()
-                    HStack(alignment: .top) {
+                if isInMinimizeMode {
+                    VStack {
                         Spacer()
-                        if let videoView = callViewModel.remoteVideoView {
-                            VideoView(rtcVideoView: videoView)
-                                .frame(width: 120,
-                                       height: 180,
-                                       alignment: .center)
-                                .clipShape(Rectangle())
-                                .cornerRadius(10)
-                                .padding(.trailing, 16)
-                                .padding(.bottom, 68)
-                                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                                .animation(.easeInOut(duration: 0.6))
+                        HStack(alignment: .top) {
+                            Spacer()
+                            if let videoView = callViewModel.remoteVideoView {
+                                VideoView(rtcVideoView: videoView)
+                                    .frame(width: 120,
+                                           height: 180,
+                                           alignment: .center)
+                                    .background(Color.black)
+                                    .clipShape(Rectangle())
+                                    .cornerRadius(10)
+                                    .padding(.trailing, 16)
+                                    .padding(.bottom, 68)
+                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                                    .animation(.easeInOut(duration: 0.6))
+                            }
                         }
-                    }
-                }.padding(.trailing, 16)
+                    }.padding(.trailing, 16)
+                }
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.receiveCall)) { (obj) in
             callViewModel.backHandler = {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissModal"), object: nil)
+                
+                withAnimation {
+                    isInCall = true
+                    isInMinimizeMode = true
+                }
             }
             self.viewControllerHolder?.present(style: .overFullScreen, builder: {
                 CallView(viewModel: callViewModel)
             }, completion: {
-                withAnimation {
-                    isInCall = true
-                }
             })
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.endCall)) { (obj) in
             withAnimation {
                 isInCall = false
+                isInMinimizeMode = false
             }
             NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissModal"), object: nil)
         }
