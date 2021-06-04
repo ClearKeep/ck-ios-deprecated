@@ -84,6 +84,8 @@ struct P2PVideoContainerView: View {
                                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                                     .animation(.easeInOut(duration: 0.6))
                             }
+                            
+                            .padding(.trailing, 16)
                         }
                     } else {
                         let width = reader.frame(in: .global).width
