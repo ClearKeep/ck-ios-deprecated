@@ -1,5 +1,5 @@
 //
-//  NotificationService.swift
+//  NotificationServices.swift
 //  ClearKeep
 //
 //  Created by Seoul on 12/3/20.
@@ -13,7 +13,7 @@ import SwiftProtobuf
 import NIO
 import GRPC
 
-class NotificationService {
+class NotificationServices {
     
     fileprivate let clientSignal: Notification_NotifyClientProtocol
     
@@ -22,7 +22,7 @@ class NotificationService {
     }
 }
 
-extension NotificationService {
+extension NotificationServices {
         
     func listen(clientId: String, heard: @escaping ((Notification_NotifyObjectResponse) -> Void)) {
         let request: Notification_ListenRequest = .with {

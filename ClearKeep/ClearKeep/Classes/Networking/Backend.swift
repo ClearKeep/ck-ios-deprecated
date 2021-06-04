@@ -36,7 +36,7 @@ class Backend {
     
     var signalService: SignalService?
     
-    var notificationService: NotificationService?
+    var notificationServices: NotificationServices?
     
     private var queueHandShake: [String: String] = [:]
     
@@ -68,7 +68,7 @@ class Backend {
         
         clientNotify = Notification_NotifyClient(channel: connection)
         
-        notificationService = NotificationService(clientNotify)
+        notificationServices = NotificationServices(clientNotify)
         
         clientNotifyPush = NotifyPush_NotifyPushClient(channel: connection)
         
@@ -104,7 +104,7 @@ class Backend {
     }
     
     func notificationUnSubscrible(clientId: String) -> Void {
-        notificationService?.unsubscribe(clientId: clientId, completion: {
+        notificationServices?.unsubscribe(clientId: clientId, completion: {
         })
     }
     
@@ -129,8 +129,8 @@ class Backend {
     
     func notificationSubscrible(clientId: String) -> Void{
 //        notificationService?.unsubscribe(clientId: clientId, completion: { [weak self] in
-            self.notificationService?.subscribe(clientId: clientId, completion: { [weak self] in
-                self?.notificationService?.listen(clientId: clientId, heard: self!.heardNotification)
+            self.notificationServices?.subscribe(clientId: clientId, completion: { [weak self] in
+                self?.notificationServices?.listen(clientId: clientId, heard: self!.heardNotification)
             })
 //        })
     }
