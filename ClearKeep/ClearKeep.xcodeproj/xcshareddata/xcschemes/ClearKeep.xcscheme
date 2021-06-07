@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1664F1C6252C6B4900FF37AD"
+               BuildableName = "ClearKeepTests.xctest"
+               BlueprintName = "ClearKeepTests"
+               ReferencedContainer = "container:ClearKeep.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1664F1D1252C6B4900FF37AD"
+               BuildableName = "ClearKeepUITests.xctest"
+               BlueprintName = "ClearKeepUITests"
+               ReferencedContainer = "container:ClearKeep.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

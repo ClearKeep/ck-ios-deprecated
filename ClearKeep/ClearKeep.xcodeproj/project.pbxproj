@@ -538,7 +538,7 @@
 		16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC6425253B59C400A4E20C /* CKClientStore.swift */; };
 		16E32C782538338D007ED99A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E32C772538338D007ED99A /* ProfileView.swift */; };
 		328896DC25FBBCA4000FDEF7 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */; };
-		4F733FE86B6299B8774B6F58 /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */; };
+		539BBE9914CE296E5B41A470 /* Pods_ClearKeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B11EABDF571722EB62268B /* Pods_ClearKeep.framework */; };
 		5603463C25B145BA00F57ED6 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603463B25B145BA00F57ED6 /* MessageBubble.swift */; };
 		56205AE925A2B72B00B39D07 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205AE825A2B72B00B39D07 /* CallManager.swift */; };
 		56205AEF25A2BB8500B39D07 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 56205AEE25A2BB8500B39D07 /* SwiftyJSON */; };
@@ -565,6 +565,7 @@
 		56205B3E25A2F57F00B39D07 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B3D25A2F57F00B39D07 /* VideoView.swift */; };
 		56205B4425A2FB9100B39D07 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B4325A2FB9100B39D07 /* GridView.swift */; };
 		56205B4C25A316F400B39D07 /* ShapeCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56205B4B25A316F400B39D07 /* ShapeCustom.swift */; };
+		56555811DD1020D490E49F59 /* Pods_ClearKeep_Development.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5CDADFF832EC5B49E6AF07D /* Pods_ClearKeep_Development.framework */; };
 		56694AA525B53C39008E8EC5 /* HUDConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56694A9F25B53C38008E8EC5 /* HUDConfiguration.swift */; };
 		56694AA625B53C39008E8EC5 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56694AA025B53C38008E8EC5 /* ViewExtension.swift */; };
 		56694AA725B53C39008E8EC5 /* HUDModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56694AA125B53C38008E8EC5 /* HUDModifier.swift */; };
@@ -670,9 +671,7 @@
 		68CFA51D256CAF7E00109725 /* InviteMemberGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */; };
 		68CFA522256CF04600109725 /* InviteMemberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CFA521256CF04600109725 /* InviteMemberViewModel.swift */; };
 		68DE38C725B1445500554555 /* ChatBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DE38C625B1445500554555 /* ChatBubbleView.swift */; };
-		86ECD6354779F72FC988FD5F /* Pods_ClearKeep_Development.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB18E469AF6EA4884635366 /* Pods_ClearKeep_Development.framework */; };
-		ABAE4E5BD2F700C7159DD908 /* Pods_ClearKeep_Staging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E642D2ABCD68398AC525E5 /* Pods_ClearKeep_Staging.framework */; };
-		AC529548DA751A76E4523F9D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		C42FD3212070270E237C6F14 /* Pods_ClearKeep_Staging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24D92F45AA08E550BDB8E081 /* Pods_ClearKeep_Staging.framework */; };
 		CB6EFFE5265BC4CF00945DB7 /* MessagerCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */; };
 		CB6EFFE7265BC5FC00945DB7 /* MessagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */; };
 		CB6EFFE9265BC83200945DB7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */; };
@@ -680,8 +679,80 @@
 		CB6EFFED265BCABC00945DB7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
 		CB6EFFEF265C738E00945DB7 /* MessagerGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */; };
 		CB99D6C9265E05A4000C59D6 /* MessagerBannerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */; };
+		CBACEF33266A23B900245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CBACEF38266A538C00245DC1 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEC265BCABC00945DB7 /* ChatService.swift */; };
+		CBACEF39266A54E500245DC1 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA87E254C0ADC00B72317 /* MessageModel.swift */; };
+		CBACEF3A266A550100245DC1 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25F4255E774600953C5E /* Constant.swift */; };
+		CBACEF3B266A550600245DC1 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1655502E252F02F3008E66D0 /* Backend.swift */; };
+		CBACEF3C266A551700245DC1 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6EFFEA265BC8DD00945DB7 /* RealmManager.swift */; };
+		CBACEF3D266A551D00245DC1 /* RealmMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0AF912574E3AD0018F5D5 /* RealmMessage.swift */; };
+		CBACEF3E266A552300245DC1 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689248002566123A00EAD2B7 /* Group.swift */; };
+		CBACEF3F266A552D00245DC1 /* RealmGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688B67DB2570F7ED00B95235 /* RealmGroup.swift */; };
+		CBACEF4A266A5BAD00245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CBACEF4E266A5BB100245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CBACEF53266A5CAF00245DC1 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CBACEF52266A5CAF00245DC1 /* KeychainAccess */; };
+		CBACEF55266A5CB500245DC1 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = CBACEF54266A5CB500245DC1 /* CGRPCZlib */; };
+		CBACEF57266A5CB500245DC1 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = CBACEF56266A5CB500245DC1 /* GRPC */; };
+		CBACEF59266A5CBC00245DC1 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = CBACEF58266A5CBC00245DC1 /* SwiftProtobuf */; };
+		CBACEF5B266A5CBC00245DC1 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = CBACEF5A266A5CBC00245DC1 /* SwiftyJSON */; };
+		CBACEF5C266A5F2C00245DC1 /* group.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4425F9C1C100F3DECE /* group.grpc.swift */; };
+		CBACEF5D266A5F2C00245DC1 /* signal.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4525F9C1C100F3DECE /* signal.pb.swift */; };
+		CBACEF5E266A5F2C00245DC1 /* auth.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF5125F9C1C100F3DECE /* auth.pb.swift */; };
+		CBACEF5F266A5F2C00245DC1 /* user.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4D25F9C1C100F3DECE /* user.pb.swift */; };
+		CBACEF60266A5F2C00245DC1 /* group.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4725F9C1C100F3DECE /* group.pb.swift */; };
+		CBACEF61266A5F2C00245DC1 /* notify_push.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4A25F9C1C100F3DECE /* notify_push.grpc.swift */; };
+		CBACEF62266A5F2C00245DC1 /* notify_push.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF5225F9C1C100F3DECE /* notify_push.pb.swift */; };
+		CBACEF63266A5F2C00245DC1 /* notify.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4925F9C1C100F3DECE /* notify.pb.swift */; };
+		CBACEF64266A5F2C00245DC1 /* message.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF5025F9C1C100F3DECE /* message.pb.swift */; };
+		CBACEF65266A5F2C00245DC1 /* server_info.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4C25F9C1C100F3DECE /* server_info.pb.swift */; };
+		CBACEF66266A5F2C00245DC1 /* video_call.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4625F9C1C100F3DECE /* video_call.pb.swift */; };
+		CBACEF67266A5F2C00245DC1 /* signal.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4125F9C1C100F3DECE /* signal.grpc.swift */; };
+		CBACEF68266A5F2C00245DC1 /* server_info.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4B25F9C1C100F3DECE /* server_info.grpc.swift */; };
+		CBACEF69266A5F2C00245DC1 /* user.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4325F9C1C100F3DECE /* user.grpc.swift */; };
+		CBACEF6A266A5F2C00245DC1 /* auth.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4825F9C1C100F3DECE /* auth.grpc.swift */; };
+		CBACEF6B266A5F2C00245DC1 /* notify.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4225F9C1C100F3DECE /* notify.grpc.swift */; };
+		CBACEF6C266A5F2C00245DC1 /* message.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4F25F9C1C100F3DECE /* message.grpc.swift */; };
+		CBACEF6D266A5F2C00245DC1 /* video_call.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6880CF4E25F9C1C100F3DECE /* video_call.grpc.swift */; };
+		CBACEF6E266A5F5300245DC1 /* YapDatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBCE254BEDB500C487F5 /* YapDatabaseConstants.swift */; };
+		CBACEF6F266A5F5300245DC1 /* YapDatabaseTransaction+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBB6254BD02F00C487F5 /* YapDatabaseTransaction+Extension.swift */; };
+		CBACEF70266A5F5300245DC1 /* YapDatabase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CD025510B920012E831 /* YapDatabase+Extension.swift */; };
+		CBACEF71266A5F5A00245DC1 /* SecondaryIndexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC9254BEC0D00C487F5 /* SecondaryIndexes.swift */; };
+		CBACEF72266A5F5A00245DC1 /* CKSignalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F33E254ABE4100737C5F /* CKSignalStorageManager.swift */; };
+		CBACEF73266A5F5A00245DC1 /* CKDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBC0254BE94E00C487F5 /* CKDatabaseManager.m */; };
+		CBACEF74266A5F5A00245DC1 /* CKAccountSignalEncryptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FFBBB254BE73600C487F5 /* CKAccountSignalEncryptionManager.swift */; };
+		CBACEF75266A5F5A00245DC1 /* CKBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F348254AC55800737C5F /* CKBundle.swift */; };
+		CBACEF76266A5F5A00245DC1 /* CKSignalCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BDA883254C1D7C00B72317 /* CKSignalCoordinate.swift */; };
+		CBACEF78266A604400245DC1 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16555033252F0B20008E66D0 /* Authenticator.swift */; };
+		CBACEF79266A604800245DC1 /* SignalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C83CC425303F20002E3115 /* SignalService.swift */; };
+		CBACEF7A266A604C00245DC1 /* NotificationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887F469257895D900ACB377 /* NotificationServices.swift */; };
+		CBACEF7B266A605100245DC1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C7EC62616AF01003B6936 /* AppConfig.swift */; };
+		CBACEF7C266A605A00245DC1 /* CKExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25E6255E748E00953C5E /* CKExtensions.swift */; };
+		CBACEF7D266A608D00245DC1 /* CKSignalSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB89254BCB1C00C487F5 /* CKSignalSession.m */; };
+		CBACEF7E266A60A600245DC1 /* CKClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC6425253B59C400A4E20C /* CKClientStore.swift */; };
 		CBC41AB82667456E00D3CC1F /* InCallModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41AB72667456E00D3CC1F /* InCallModifier.swift */; };
 		CBC41ABB2667459B00D3CC1F /* HomeMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */; };
+		CBF66E2A266A64FD00794E44 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686F25EE255E766E00953C5E /* User.swift */; };
+		CBF66E2B266A655000794E44 /* CKSignalPreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8B254BCB1D00C487F5 /* CKSignalPreKey.m */; };
+		CBF66E2C266A656100794E44 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4552625544C00407C35 /* AppTheme.swift */; };
+		CBF66E2D266A656900794E44 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4462625540500407C35 /* AppColors.swift */; };
+		CBF66E2E266A657100794E44 /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C44B2625542B00407C35 /* DefaultFonts.swift */; };
+		CBF66E2F266A657500794E44 /* DefaultColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C4502625543700407C35 /* DefaultColors.swift */; };
+		CBF66E30266A657F00794E44 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689247AC2563B67A00EAD2B7 /* People.swift */; };
+		CBF66E31266A66CD00794E44 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E83D2E262404A4002D7B10 /* UIColor+Hex.swift */; };
+		CBF66E32266A66DA00794E44 /* CKSignedPreKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F35D254ACCC600737C5F /* CKSignedPreKey.swift */; };
+		CBF66E33266A66E100794E44 /* CKPreKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F358254ACC5B00737C5F /* CKPreKey.swift */; };
+		CBF66E34266A66F600794E44 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015C43E262553F900407C35 /* AppFonts.swift */; };
+		CBF66E35266A671A00794E44 /* CKSignalSignedPreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8A254BCB1C00C487F5 /* CKSignalSignedPreKey.m */; };
+		CBF66E36266A675200794E44 /* CKAccountSignalIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8E254BCB1D00C487F5 /* CKAccountSignalIdentity.m */; };
+		CBF66E37266A676600794E44 /* CKSignalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8C254BCB1D00C487F5 /* CKSignalObject.m */; };
+		CBF66E38266A676C00794E44 /* CKSignalSenderKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB8D254BCB1D00C487F5 /* CKSignalSenderKey.m */; };
+		CBF66E3A266A692200794E44 /* CKDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CBE2550FF270012E831 /* CKDevice.m */; };
+		CBF66E3B266A692200794E44 /* CKAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CC72551060A0012E831 /* CKAccount.m */; };
+		CBF66E3C266A692500794E44 /* CKBuddy.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF0CD8255147310012E831 /* CKBuddy.m */; };
+		CBF66E3D266A693C00794E44 /* CKYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FFB6F254BC39300C487F5 /* CKYapDatabaseObject.m */; };
+		CBF66E3E266A695000794E44 /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
+		CBF66E42266A9F0800794E44 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBACEF2E266A23B900245DC1 /* NotificationService.swift */; };
+		DCA7A16CC53FEC8C75417DDB /* Pods_NotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064A2171437A9CCF78191D50 /* Pods_NotificationServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -699,11 +770,68 @@
 			remoteGlobalIDString = 1664F1B0252C6B4700FF37AD;
 			remoteInfo = ClearKeep;
 		};
+		CBACEF31266A23B900245DC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1664F1A9252C6B4700FF37AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBACEF2B266A23B800245DC1;
+			remoteInfo = NotificationServiceExtension;
+		};
+		CBACEF4B266A5BAD00245DC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1664F1A9252C6B4700FF37AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBACEF2B266A23B800245DC1;
+			remoteInfo = NotificationServiceExtension;
+		};
+		CBACEF4F266A5BB100245DC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1664F1A9252C6B4700FF37AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBACEF2B266A23B800245DC1;
+			remoteInfo = NotificationServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CBACEF37266A23B900245DC1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CBACEF33266A23B900245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBACEF4D266A5BAD00245DC1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CBACEF4A266A5BAD00245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBACEF51266A5BB100245DC1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CBACEF4E266A5BB100245DC1 /* NotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		029C4C72EAF635553E2CC923 /* Pods-ClearKeep Staging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Staging.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging.release.xcconfig"; sourceTree = "<group>"; };
-		08E226745C27BB014C2CC59A /* Pods-ClearKeep Staging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Staging.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging.debug.xcconfig"; sourceTree = "<group>"; };
+		04B11EABDF571722EB62268B /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		064A2171437A9CCF78191D50 /* Pods_NotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10011A0D26539B9F009EAFB3 /* CallVideoActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVideoActionView.swift; sourceTree = "<group>"; };
 		10011A122653ABF6009EAFB3 /* CallVoiceActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVoiceActionView.swift; sourceTree = "<group>"; };
 		10011A172653ADAE009EAFB3 /* CallActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallActionButtonView.swift; sourceTree = "<group>"; };
@@ -779,13 +907,13 @@
 		10E83D3F262405E7002D7B10 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		10EDAA1E261C1DB100D2E7A7 /* SocialLogin+Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+Google.swift"; sourceTree = "<group>"; };
 		10EDAA23261C1DCD00D2E7A7 /* SocialLogin+MSAL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SocialLogin+MSAL.swift"; sourceTree = "<group>"; };
-		11E642D2ABCD68398AC525E5 /* Pods_ClearKeep_Staging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_Staging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1604993525355B4F0071E651 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
 		160A08AD253D36CE0030D28E /* ClearKeep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClearKeep-Bridging-Header.h"; sourceTree = "<group>"; };
 		160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalStoreInMemoryStorage.m; sourceTree = "<group>"; };
 		160A08AF253D36CF0030D28E /* SignalStoreInMemoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalStoreInMemoryStorage.h; sourceTree = "<group>"; };
 		1655502E252F02F3008E66D0 /* Backend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
 		16555033252F0B20008E66D0 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		166383D6F46C35E8D2AF4918 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
 		1664F1B1252C6B4700FF37AD /* ClearKeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClearKeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1664F1B4252C6B4700FF37AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1664F1B6252C6B4700FF37AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -804,10 +932,9 @@
 		16C83CC425303F20002E3115 /* SignalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalService.swift; sourceTree = "<group>"; };
 		16CC6425253B59C400A4E20C /* CKClientStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKClientStore.swift; sourceTree = "<group>"; };
 		16E32C772538338D007ED99A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
+		24D92F45AA08E550BDB8E081 /* Pods_ClearKeep_Staging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_Staging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3066A6DFC605187E9DAEC1F8 /* Pods-ClearKeep Staging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Staging.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging.release.xcconfig"; sourceTree = "<group>"; };
 		328896DB25FBBCA4000FDEF7 /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
-		392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.release.xcconfig"; sourceTree = "<group>"; };
-		43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5603463B25B145BA00F57ED6 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		56205AE825A2B72B00B39D07 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
 		56205AF325A2C35C00B39D07 /* JanusVideoRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JanusVideoRoom.swift; sourceTree = "<group>"; };
@@ -897,8 +1024,7 @@
 		56C7F358254ACC5B00737C5F /* CKPreKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKPreKey.swift; sourceTree = "<group>"; };
 		56C7F35D254ACCC600737C5F /* CKSignedPreKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSignedPreKey.swift; sourceTree = "<group>"; };
 		56E7EE5D255A3D5D0060C146 /* MessengerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerViewModel.swift; sourceTree = "<group>"; };
-		5BB18E469AF6EA4884635366 /* Pods_ClearKeep_Development.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_Development.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		68649FE0E7B4DA70BF04C146 /* Pods-ClearKeep Development.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.release.xcconfig"; sourceTree = "<group>"; };
+		605DBCC018A547C92E0BB401 /* Pods-ClearKeep Development.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.release.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.release.xcconfig"; sourceTree = "<group>"; };
 		686F25CC255CE81400953C5E /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		686F25E6255E748E00953C5E /* CKExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKExtensions.swift; sourceTree = "<group>"; };
 		686F25EE255E766E00953C5E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -952,6 +1078,13 @@
 		68CFA51C256CAF7E00109725 /* InviteMemberGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteMemberGroup.swift; sourceTree = "<group>"; };
 		68CFA521256CF04600109725 /* InviteMemberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteMemberViewModel.swift; sourceTree = "<group>"; };
 		68DE38C625B1445500554555 /* ChatBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleView.swift; sourceTree = "<group>"; };
+		7BECAB0E42AAB470232264EB /* Pods-ClearKeep Staging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Staging.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging.debug.xcconfig"; sourceTree = "<group>"; };
+		836EE51EAD26FD7A6816B429 /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		A560F45A55A23004245B4062 /* Pods-ClearKeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep/Pods-ClearKeep.debug.xcconfig"; sourceTree = "<group>"; };
+		ACF349258EA5DE8D33571F29 /* Pods-NotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		B5CDADFF832EC5B49E6AF07D /* Pods_ClearKeep_Development.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClearKeep_Development.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB328343266E2CEC00D21768 /* ClearKeepRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClearKeepRelease.entitlements; sourceTree = "<group>"; };
+		CB328344266E2D1400D21768 /* ClearKeep DevelopmentRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ClearKeep DevelopmentRelease.entitlements"; sourceTree = "<group>"; };
 		CB6EFFE4265BC4CF00945DB7 /* MessagerCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerCommonView.swift; sourceTree = "<group>"; };
 		CB6EFFE6265BC5FC00945DB7 /* MessagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerView.swift; sourceTree = "<group>"; };
 		CB6EFFE8265BC83200945DB7 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -959,9 +1092,15 @@
 		CB6EFFEC265BCABC00945DB7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		CB6EFFEE265C738E00945DB7 /* MessagerGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerGroupView.swift; sourceTree = "<group>"; };
 		CB99D6C8265E05A4000C59D6 /* MessagerBannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerBannerModifier.swift; sourceTree = "<group>"; };
+		CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBACEF2E266A23B900245DC1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		CBACEF30266A23B900245DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBC41AB72667456E00D3CC1F /* InCallModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallModifier.swift; sourceTree = "<group>"; };
 		CBC41ABA2667459B00D3CC1F /* HomeMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMainViewModel.swift; sourceTree = "<group>"; };
-		E19DB3940CB3E73411EB3A72 /* Pods-ClearKeep Development.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.debug.xcconfig"; sourceTree = "<group>"; };
+		CBF66E44266BCDA700794E44 /* NotificationServiceExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionDebug.entitlements; sourceTree = "<group>"; };
+		CBF66E45266BCE6800794E44 /* ClearKeep StagingDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ClearKeep StagingDebug.entitlements"; sourceTree = "<group>"; };
+		CBF66E47266BE8A300794E44 /* NotificationServiceExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionRelease.entitlements; sourceTree = "<group>"; };
+		E19E5287A8E112878409B496 /* Pods-ClearKeep Development.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -975,7 +1114,7 @@
 				10B70C2A2664B9F10066C752 /* KeychainAccess in Frameworks */,
 				10B70C2B2664B9F10066C752 /* CGRPCZlib in Frameworks */,
 				10B70C2C2664B9F10066C752 /* GRPC in Frameworks */,
-				86ECD6354779F72FC988FD5F /* Pods_ClearKeep_Development.framework in Frameworks */,
+				56555811DD1020D490E49F59 /* Pods_ClearKeep_Development.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -989,7 +1128,7 @@
 				10B70D412664BE040066C752 /* KeychainAccess in Frameworks */,
 				10B70D422664BE040066C752 /* CGRPCZlib in Frameworks */,
 				10B70D432664BE040066C752 /* GRPC in Frameworks */,
-				ABAE4E5BD2F700C7159DD908 /* Pods_ClearKeep_Staging.framework in Frameworks */,
+				C42FD3212070270E237C6F14 /* Pods_ClearKeep_Staging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,8 +1142,7 @@
 				6881DBCC25DF5B00009EDA73 /* KeychainAccess in Frameworks */,
 				16C83CB625300887002E3115 /* CGRPCZlib in Frameworks */,
 				16C83CB425300887002E3115 /* GRPC in Frameworks */,
-				AC529548DA751A76E4523F9D /* (null) in Frameworks */,
-				4F733FE86B6299B8774B6F58 /* Pods_ClearKeep.framework in Frameworks */,
+				539BBE9914CE296E5B41A470 /* Pods_ClearKeep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1157,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBACEF29266A23B800245DC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBACEF5B266A5CBC00245DC1 /* SwiftyJSON in Frameworks */,
+				CBACEF57266A5CB500245DC1 /* GRPC in Frameworks */,
+				CBACEF53266A5CAF00245DC1 /* KeychainAccess in Frameworks */,
+				CBACEF59266A5CBC00245DC1 /* SwiftProtobuf in Frameworks */,
+				CBACEF55266A5CB500245DC1 /* CGRPCZlib in Frameworks */,
+				DCA7A16CC53FEC8C75417DDB /* Pods_NotificationServiceExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1312,9 +1463,12 @@
 		1664F1A8252C6B4700FF37AD = {
 			isa = PBXGroup;
 			children = (
+				CB328344266E2D1400D21768 /* ClearKeep DevelopmentRelease.entitlements */,
+				CBF66E45266BCE6800794E44 /* ClearKeep StagingDebug.entitlements */,
 				1664F1B3252C6B4700FF37AD /* ClearKeep */,
 				1664F1CA252C6B4900FF37AD /* ClearKeepTests */,
 				1664F1D5252C6B4900FF37AD /* ClearKeepUITests */,
+				CBACEF2D266A23B900245DC1 /* NotificationServiceExtension */,
 				1664F1B2252C6B4700FF37AD /* Products */,
 				4D5008D40039CDE8F00309F5 /* Pods */,
 				7510310A1AC48EF5487B6EBC /* Frameworks */,
@@ -1329,6 +1483,7 @@
 				1664F1D2252C6B4900FF37AD /* ClearKeepUITests.xctest */,
 				10B70C442664B9F10066C752 /* ClearKeep Development.app */,
 				10B70D5B2664BE040066C752 /* ClearKeep Staging.app */,
+				CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1336,6 +1491,7 @@
 		1664F1B3252C6B4700FF37AD /* ClearKeep */ = {
 			isa = PBXGroup;
 			children = (
+				CB328343266E2CEC00D21768 /* ClearKeepRelease.entitlements */,
 				16208E2F252D63B6000A6CE7 /* Classes */,
 				16208E2E252D6351000A6CE7 /* Resources */,
 				32DAD5BF25D2422100FAC889 /* protobuf */,
@@ -1398,12 +1554,14 @@
 		4D5008D40039CDE8F00309F5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */,
-				392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */,
-				E19DB3940CB3E73411EB3A72 /* Pods-ClearKeep Development.debug.xcconfig */,
-				68649FE0E7B4DA70BF04C146 /* Pods-ClearKeep Development.release.xcconfig */,
-				08E226745C27BB014C2CC59A /* Pods-ClearKeep Staging.debug.xcconfig */,
-				029C4C72EAF635553E2CC923 /* Pods-ClearKeep Staging.release.xcconfig */,
+				A560F45A55A23004245B4062 /* Pods-ClearKeep.debug.xcconfig */,
+				166383D6F46C35E8D2AF4918 /* Pods-ClearKeep.release.xcconfig */,
+				E19E5287A8E112878409B496 /* Pods-ClearKeep Development.debug.xcconfig */,
+				605DBCC018A547C92E0BB401 /* Pods-ClearKeep Development.release.xcconfig */,
+				7BECAB0E42AAB470232264EB /* Pods-ClearKeep Staging.debug.xcconfig */,
+				3066A6DFC605187E9DAEC1F8 /* Pods-ClearKeep Staging.release.xcconfig */,
+				ACF349258EA5DE8D33571F29 /* Pods-NotificationServiceExtension.debug.xcconfig */,
+				836EE51EAD26FD7A6816B429 /* Pods-NotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1737,11 +1895,23 @@
 			isa = PBXGroup;
 			children = (
 				68CBC6B325944AC100997D93 /* PushKit.framework */,
-				5BB18E469AF6EA4884635366 /* Pods_ClearKeep_Development.framework */,
-				11E642D2ABCD68398AC525E5 /* Pods_ClearKeep_Staging.framework */,
-				43AE8B1FADB6706EFC6B3A0D /* Pods_ClearKeep.framework */,
+				04B11EABDF571722EB62268B /* Pods_ClearKeep.framework */,
+				B5CDADFF832EC5B49E6AF07D /* Pods_ClearKeep_Development.framework */,
+				24D92F45AA08E550BDB8E081 /* Pods_ClearKeep_Staging.framework */,
+				064A2171437A9CCF78191D50 /* Pods_NotificationServiceExtension.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CBACEF2D266A23B900245DC1 /* NotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				CBF66E47266BE8A300794E44 /* NotificationServiceExtensionRelease.entitlements */,
+				CBF66E44266BCDA700794E44 /* NotificationServiceExtensionDebug.entitlements */,
+				CBACEF2E266A23B900245DC1 /* NotificationService.swift */,
+				CBACEF30266A23B900245DC1 /* Info.plist */,
+			);
+			path = NotificationServiceExtension;
 			sourceTree = "<group>";
 		};
 		CBC41AB92667458800D3CC1F /* HomeMain */ = {
@@ -1802,16 +1972,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 10B70C412664B9F10066C752 /* Build configuration list for PBXNativeTarget "ClearKeep Development" */;
 			buildPhases = (
-				10B70B5D2664B9F10066C752 /* [CP] Check Pods Manifest.lock */,
+				09C13EEDD356B096EB7E8B61 /* [CP] Check Pods Manifest.lock */,
 				10B70B5E2664B9F10066C752 /* Sources */,
 				10B70C262664B9F10066C752 /* Frameworks */,
 				10B70C2E2664B9F10066C752 /* Resources */,
-				10B70C3F2664B9F10066C752 /* [CP] Embed Pods Frameworks */,
-				10B70C402664B9F10066C752 /* [CP] Copy Pods Resources */,
+				CBACEF4D266A5BAD00245DC1 /* Embed App Extensions */,
+				3297277ECFAD1626DA07832E /* [CP] Embed Pods Frameworks */,
+				5B542D3A874C23872CECD762 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CBACEF4C266A5BAD00245DC1 /* PBXTargetDependency */,
 			);
 			name = "ClearKeep Development";
 			packageProductDependencies = (
@@ -1829,16 +2001,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 10B70D582664BE040066C752 /* Build configuration list for PBXNativeTarget "ClearKeep Staging" */;
 			buildPhases = (
-				10B70C742664BE040066C752 /* [CP] Check Pods Manifest.lock */,
+				58A5140152692A3E94151793 /* [CP] Check Pods Manifest.lock */,
 				10B70C752664BE040066C752 /* Sources */,
 				10B70D3D2664BE040066C752 /* Frameworks */,
 				10B70D452664BE040066C752 /* Resources */,
-				10B70D562664BE040066C752 /* [CP] Embed Pods Frameworks */,
-				10B70D572664BE040066C752 /* [CP] Copy Pods Resources */,
+				CBACEF37266A23B900245DC1 /* Embed App Extensions */,
+				E670DAA302944AEB79CC5818 /* [CP] Embed Pods Frameworks */,
+				698B22BBCD286FF5434343E2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CBACEF32266A23B900245DC1 /* PBXTargetDependency */,
 			);
 			name = "ClearKeep Staging";
 			packageProductDependencies = (
@@ -1856,16 +2030,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1664F1DB252C6B4900FF37AD /* Build configuration list for PBXNativeTarget "ClearKeep" */;
 			buildPhases = (
-				FD23404F680BD854CEA0C599 /* [CP] Check Pods Manifest.lock */,
+				79127D586AA98D38C6C607DA /* [CP] Check Pods Manifest.lock */,
 				1664F1AD252C6B4700FF37AD /* Sources */,
 				1664F1AE252C6B4700FF37AD /* Frameworks */,
 				1664F1AF252C6B4700FF37AD /* Resources */,
-				2EBC82F81F29CC2E67D442B1 /* [CP] Embed Pods Frameworks */,
-				D0EF5368E0D8C149AA98B776 /* [CP] Copy Pods Resources */,
+				CBACEF51266A5BB100245DC1 /* Embed App Extensions */,
+				585E82A533E88F6B54CDCDE6 /* [CP] Embed Pods Frameworks */,
+				FC091F1C27824A16B5B5E882 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CBACEF50266A5BB100245DC1 /* PBXTargetDependency */,
 			);
 			name = ClearKeep;
 			packageProductDependencies = (
@@ -1915,13 +2091,38 @@
 			productReference = 1664F1D2252C6B4900FF37AD /* ClearKeepUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		CBACEF2B266A23B800245DC1 /* NotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBACEF34266A23B900245DC1 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
+			buildPhases = (
+				E257A8ABE8A3498F2806AB9D /* [CP] Check Pods Manifest.lock */,
+				CBACEF28266A23B800245DC1 /* Sources */,
+				CBACEF29266A23B800245DC1 /* Frameworks */,
+				CBACEF2A266A23B800245DC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationServiceExtension;
+			packageProductDependencies = (
+				CBACEF52266A5CAF00245DC1 /* KeychainAccess */,
+				CBACEF54266A5CB500245DC1 /* CGRPCZlib */,
+				CBACEF56266A5CB500245DC1 /* GRPC */,
+				CBACEF58266A5CBC00245DC1 /* SwiftProtobuf */,
+				CBACEF5A266A5CBC00245DC1 /* SwiftyJSON */,
+			);
+			productName = NotificationServiceExtension;
+			productReference = CBACEF2C266A23B800245DC1 /* NotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		1664F1A9252C6B4700FF37AD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					1664F1B0252C6B4700FF37AD = {
@@ -1935,6 +2136,9 @@
 					1664F1D1252C6B4900FF37AD = {
 						CreatedOnToolsVersion = 12.0.1;
 						TestTargetID = 1664F1B0252C6B4700FF37AD;
+					};
+					CBACEF2B266A23B800245DC1 = {
+						CreatedOnToolsVersion = 12.5;
 					};
 				};
 			};
@@ -1962,6 +2166,7 @@
 				10B70C6A2664BE040066C752 /* ClearKeep Staging */,
 				1664F1C6252C6B4900FF37AD /* ClearKeepTests */,
 				1664F1D1252C6B4900FF37AD /* ClearKeepUITests */,
+				CBACEF2B266A23B800245DC1 /* NotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -2050,10 +2255,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CBACEF2A266A23B800245DC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		10B70B5D2664B9F10066C752 /* [CP] Check Pods Manifest.lock */ = {
+		09C13EEDD356B096EB7E8B61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2075,7 +2287,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		10B70C3F2664B9F10066C752 /* [CP] Embed Pods Frameworks */ = {
+		3297277ECFAD1626DA07832E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2092,24 +2304,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		10B70C402664B9F10066C752 /* [CP] Copy Pods Resources */ = {
+		585E82A533E88F6B54CDCDE6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		10B70C742664BE040066C752 /* [CP] Check Pods Manifest.lock */ = {
+		58A5140152692A3E94151793 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2131,24 +2343,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		10B70D562664BE040066C752 /* [CP] Embed Pods Frameworks */ = {
+		5B542D3A874C23872CECD762 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		10B70D572664BE040066C752 /* [CP] Copy Pods Resources */ = {
+		698B22BBCD286FF5434343E2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2165,41 +2377,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2EBC82F81F29CC2E67D442B1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D0EF5368E0D8C149AA98B776 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FD23404F680BD854CEA0C599 /* [CP] Check Pods Manifest.lock */ = {
+		79127D586AA98D38C6C607DA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2219,6 +2397,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E257A8ABE8A3498F2806AB9D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E670DAA302944AEB79CC5818 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep Staging/Pods-ClearKeep Staging-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FC091F1C27824A16B5B5E882 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ClearKeep/Pods-ClearKeep-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2864,6 +3098,76 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CBACEF28266A23B800245DC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBACEF64266A5F2C00245DC1 /* message.pb.swift in Sources */,
+				CBACEF78266A604400245DC1 /* Authenticator.swift in Sources */,
+				CBACEF60266A5F2C00245DC1 /* group.pb.swift in Sources */,
+				CBACEF7C266A605A00245DC1 /* CKExtensions.swift in Sources */,
+				CBACEF7B266A605100245DC1 /* AppConfig.swift in Sources */,
+				CBF66E3C266A692500794E44 /* CKBuddy.m in Sources */,
+				CBACEF65266A5F2C00245DC1 /* server_info.pb.swift in Sources */,
+				CBACEF5C266A5F2C00245DC1 /* group.grpc.swift in Sources */,
+				CBACEF75266A5F5A00245DC1 /* CKBundle.swift in Sources */,
+				CBF66E31266A66CD00794E44 /* UIColor+Hex.swift in Sources */,
+				CBF66E32266A66DA00794E44 /* CKSignedPreKey.swift in Sources */,
+				CBF66E33266A66E100794E44 /* CKPreKey.swift in Sources */,
+				CBACEF73266A5F5A00245DC1 /* CKDatabaseManager.m in Sources */,
+				CBF66E3B266A692200794E44 /* CKAccount.m in Sources */,
+				CBACEF6D266A5F2C00245DC1 /* video_call.grpc.swift in Sources */,
+				CBF66E36266A675200794E44 /* CKAccountSignalIdentity.m in Sources */,
+				CBACEF7D266A608D00245DC1 /* CKSignalSession.m in Sources */,
+				CBF66E38266A676C00794E44 /* CKSignalSenderKey.m in Sources */,
+				CBACEF5E266A5F2C00245DC1 /* auth.pb.swift in Sources */,
+				CBF66E34266A66F600794E44 /* AppFonts.swift in Sources */,
+				CBACEF61266A5F2C00245DC1 /* notify_push.grpc.swift in Sources */,
+				CBACEF68266A5F2C00245DC1 /* server_info.grpc.swift in Sources */,
+				CBF66E2F266A657500794E44 /* DefaultColors.swift in Sources */,
+				CBF66E30266A657F00794E44 /* People.swift in Sources */,
+				CBACEF39266A54E500245DC1 /* MessageModel.swift in Sources */,
+				CBF66E2E266A657100794E44 /* DefaultFonts.swift in Sources */,
+				CBF66E35266A671A00794E44 /* CKSignalSignedPreKey.m in Sources */,
+				CBACEF67266A5F2C00245DC1 /* signal.grpc.swift in Sources */,
+				CBACEF74266A5F5A00245DC1 /* CKAccountSignalEncryptionManager.swift in Sources */,
+				CBF66E37266A676600794E44 /* CKSignalObject.m in Sources */,
+				CBACEF66266A5F2C00245DC1 /* video_call.pb.swift in Sources */,
+				CBACEF5D266A5F2C00245DC1 /* signal.pb.swift in Sources */,
+				CBACEF6C266A5F2C00245DC1 /* message.grpc.swift in Sources */,
+				CBACEF62266A5F2C00245DC1 /* notify_push.pb.swift in Sources */,
+				CBF66E2A266A64FD00794E44 /* User.swift in Sources */,
+				CBACEF69266A5F2C00245DC1 /* user.grpc.swift in Sources */,
+				CBACEF7E266A60A600245DC1 /* CKClientStore.swift in Sources */,
+				CBACEF38266A538C00245DC1 /* ChatService.swift in Sources */,
+				CBACEF6B266A5F2C00245DC1 /* notify.grpc.swift in Sources */,
+				CBACEF3F266A552D00245DC1 /* RealmGroup.swift in Sources */,
+				CBACEF7A266A604C00245DC1 /* NotificationServices.swift in Sources */,
+				CBACEF72266A5F5A00245DC1 /* CKSignalStorageManager.swift in Sources */,
+				CBACEF3E266A552300245DC1 /* Group.swift in Sources */,
+				CBF66E2C266A656100794E44 /* AppTheme.swift in Sources */,
+				CBACEF71266A5F5A00245DC1 /* SecondaryIndexes.swift in Sources */,
+				CBACEF6F266A5F5300245DC1 /* YapDatabaseTransaction+Extension.swift in Sources */,
+				CBACEF3A266A550100245DC1 /* Constant.swift in Sources */,
+				CBF66E3A266A692200794E44 /* CKDevice.m in Sources */,
+				CBACEF6E266A5F5300245DC1 /* YapDatabaseConstants.swift in Sources */,
+				CBACEF79266A604800245DC1 /* SignalService.swift in Sources */,
+				CBACEF3B266A550600245DC1 /* Backend.swift in Sources */,
+				CBF66E3E266A695000794E44 /* SignalStoreInMemoryStorage.m in Sources */,
+				CBF66E3D266A693C00794E44 /* CKYapDatabaseObject.m in Sources */,
+				CBACEF3C266A551700245DC1 /* RealmManager.swift in Sources */,
+				CBF66E2B266A655000794E44 /* CKSignalPreKey.m in Sources */,
+				CBACEF63266A5F2C00245DC1 /* notify.pb.swift in Sources */,
+				CBACEF76266A5F5A00245DC1 /* CKSignalCoordinate.swift in Sources */,
+				CBACEF3D266A551D00245DC1 /* RealmMessage.swift in Sources */,
+				CBF66E42266A9F0800794E44 /* NotificationService.swift in Sources */,
+				CBACEF70266A5F5300245DC1 /* YapDatabase+Extension.swift in Sources */,
+				CBF66E2D266A656900794E44 /* AppColors.swift in Sources */,
+				CBACEF6A266A5F2C00245DC1 /* auth.grpc.swift in Sources */,
+				CBACEF5F266A5F2C00245DC1 /* user.pb.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2876,6 +3180,21 @@
 			isa = PBXTargetDependency;
 			target = 1664F1B0252C6B4700FF37AD /* ClearKeep */;
 			targetProxy = 1664F1D3252C6B4900FF37AD /* PBXContainerItemProxy */;
+		};
+		CBACEF32266A23B900245DC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBACEF2B266A23B800245DC1 /* NotificationServiceExtension */;
+			targetProxy = CBACEF31266A23B900245DC1 /* PBXContainerItemProxy */;
+		};
+		CBACEF4C266A5BAD00245DC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBACEF2B266A23B800245DC1 /* NotificationServiceExtension */;
+			targetProxy = CBACEF4B266A5BAD00245DC1 /* PBXContainerItemProxy */;
+		};
+		CBACEF50266A5BB100245DC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBACEF2B266A23B800245DC1 /* NotificationServiceExtension */;
+			targetProxy = CBACEF4F266A5BB100245DC1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2893,7 +3212,7 @@
 /* Begin XCBuildConfiguration section */
 		10B70C422664B9F10066C752 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E19DB3940CB3E73411EB3A72 /* Pods-ClearKeep Development.debug.xcconfig */;
+			baseConfigurationReference = E19E5287A8E112878409B496 /* Pods-ClearKeep Development.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Development";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2953,12 +3272,12 @@
 		};
 		10B70C432664B9F10066C752 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 68649FE0E7B4DA70BF04C146 /* Pods-ClearKeep Development.release.xcconfig */;
+			baseConfigurationReference = 605DBCC018A547C92E0BB401 /* Pods-ClearKeep Development.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Development";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Development/ClearKeepDevelopment.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "ClearKeep DevelopmentRelease.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
@@ -3012,14 +3331,15 @@
 		};
 		10B70D592664BE040066C752 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 08E226745C27BB014C2CC59A /* Pods-ClearKeep Staging.debug.xcconfig */;
+			baseConfigurationReference = 7BECAB0E42AAB470232264EB /* Pods-ClearKeep Staging.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Staging";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Staging/ClearKeepStaging.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = "ClearKeep StagingDebug.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
@@ -3060,7 +3380,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D STAGING";
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.staging;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "clearkeep3_staging-develop";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG STAGING";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(PROJECT_NAME)-Swift.h";
@@ -3072,8 +3392,9 @@
 		};
 		10B70D5A2664BE040066C752 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 029C4C72EAF635553E2CC923 /* Pods-ClearKeep Staging.release.xcconfig */;
+			baseConfigurationReference = 3066A6DFC605187E9DAEC1F8 /* Pods-ClearKeep Staging.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon Staging";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -3247,14 +3568,14 @@
 		};
 		1664F1DC252C6B4900FF37AD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 313E887A7B8A6CE4393F5CCC /* Pods-ClearKeep.debug.xcconfig */;
+			baseConfigurationReference = A560F45A55A23004245B4062 /* Pods-ClearKeep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Production/ClearKeep.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_ASSET_PATHS = "\"ClearKeep/Preview Content\"";
 				DEVELOPMENT_TEAM = H4C7478UQW;
@@ -3269,7 +3590,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = clearkeep3;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(PROJECT_NAME)-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3280,12 +3601,12 @@
 		};
 		1664F1DD252C6B4900FF37AD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 392B85EED48981C5A5092FD7 /* Pods-ClearKeep.release.xcconfig */;
+			baseConfigurationReference = 166383D6F46C35E8D2AF4918 /* Pods-ClearKeep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ClearKeep/Resources/Production/ClearKeep.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ClearKeep/ClearKeepRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: TEL.RED, LLC (H4C7478UQW)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 32;
@@ -3302,7 +3623,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "clearkeep3-adhoc";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3_distribute;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(PROJECT_NAME)-Swift.h";
 				SWIFT_VERSION = 5.0;
@@ -3394,6 +3715,58 @@
 			};
 			name = Release;
 		};
+		CBACEF35266A23B900245DC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACF349258EA5DE8D33571F29 /* Pods-NotificationServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtensionDebug.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = H4C7478UQW;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.development.notificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3_notification_extension_development;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(PROJECT_NAME)-Swift.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CBACEF36266A23B900245DC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 836EE51EAD26FD7A6816B429 /* Pods-NotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationServiceExtension/NotificationServiceExtensionRelease.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = H4C7478UQW;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.telred.clearkeep3.ios.staging.notificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = clearkeep3_notification_extension_staging;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ClearKeep/Classes/Helpers/ClearKeep-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(PROJECT_NAME)-Swift.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3447,6 +3820,15 @@
 			buildConfigurations = (
 				1664F1E2252C6B4900FF37AD /* Debug */,
 				1664F1E3252C6B4900FF37AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CBACEF34266A23B900245DC1 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBACEF35266A23B900245DC1 /* Debug */,
+				CBACEF36266A23B900245DC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -3627,6 +4009,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		CBACEF52266A5CAF00245DC1 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6881DBCA25DF5B00009EDA73 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		CBACEF54266A5CB500245DC1 /* CGRPCZlib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = CGRPCZlib;
+		};
+		CBACEF56266A5CB500245DC1 /* GRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16C83CB225300887002E3115 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPC;
+		};
+		CBACEF58266A5CBC00245DC1 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1664F229252C7CBF00FF37AD /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		CBACEF5A266A5CBC00245DC1 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56205AED25A2BB8500B39D07 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
