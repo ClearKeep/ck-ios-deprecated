@@ -88,7 +88,7 @@ class ServerMainViewModel: ObservableObject {
     }
     
     func getPeerReceiveName(inGroup group: GroupModel) -> String {
-        let userLoginID = UserDefaults.standard.string(forKey: Constants.keySaveUserID) ?? ""
+        let userLoginID = SharedDataAppGroup.sharedUserDefaults?.string(forKey: Constants.keySaveUserID) ?? ""
         if let member = group.lstClientID.filter({$0.id != userLoginID}).first {
             return member.username
         }

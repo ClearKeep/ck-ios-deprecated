@@ -36,11 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param databaseName the name of the database. The media storage with be databaseName-media
  @return whether setup was successful
  */
-- (BOOL)setupDatabaseWithName:(NSString*)databaseName;
-- (BOOL)setupDatabaseWithName:(NSString*)databaseName withMediaStorage:(BOOL)withMediaStorage;
+- (BOOL)setupDatabaseWithName:(NSString*)databaseName
+                     directory:(nullable NSString*)directory;
 - (BOOL)setupDatabaseWithName:(NSString*)databaseName
                     directory:(nullable NSString*)directory
-                  withMediaStorage:(BOOL)withMediaStorage;
+             withMediaStorage:(BOOL)withMediaStorage;
 
 /** Checks for database at default path */
 + (BOOL)existsYapDatabase;

@@ -222,7 +222,7 @@ struct ServerDetailView: View {
             hudVisible = false
             // clear data user default
             UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-            UserDefaults.standard.removeObject(forKey: Constants.keySaveUserID)
+            SharedDataAppGroup.sharedUserDefaults?.removeObject(forKey: Constants.keySaveUserID)
             
             // clear data user in database
             guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }

@@ -16,7 +16,7 @@ import FBSDKCoreKit
 
 //@main
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, GIDSignInDelegate, UNUserNotificationCenterDelegate {
     let viewRouter = ViewRouter()
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         print("Device Token: \(token)")
         UserDefaults.standard.setValue(token, forKey: Constants.keySaveTokenPushNotifyAPNS)
         
-        if let _ = UserDefaults.standard.string(forKey: Constants.keySaveUserID) {
+        if let _ = SharedDataAppGroup.sharedUserDefaults?.string(forKey: Constants.keySaveUserID) {
             Backend.shared.registerTokenDevice { (response) in }
         }
     }
@@ -142,7 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite")
+        CKDatabaseManager.shared.setupDatabase(withName: "CKDatabase.sqlite", directory: SharedDataAppGroup.sharedDirectoryPath())
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         // cheating fix callkit request failure in the first time
@@ -287,4 +287,3 @@ extension AppDelegate : CXProviderDelegate {
     
     
 }
-

@@ -34,12 +34,9 @@ NSString *const CKYapDatabaseName = @"CKYap.sqlite";
     return self;
 }
 
-- (BOOL) setupDatabaseWithName:(NSString*)databaseName {
-    return [self setupDatabaseWithName:databaseName withMediaStorage:YES];
-}
-
-- (BOOL) setupDatabaseWithName:(NSString*)databaseName withMediaStorage:(BOOL)withMediaStorage {
-    return [self setupDatabaseWithName:databaseName directory:nil withMediaStorage:withMediaStorage];
+- (BOOL) setupDatabaseWithName:(NSString*)databaseName
+                     directory:(nullable NSString*)directory {
+    return [self setupDatabaseWithName:databaseName directory: directory withMediaStorage:YES];
 }
 
 - (BOOL)setupDatabaseWithName:(NSString*)databaseName

@@ -47,7 +47,7 @@ extension ChatService {
             guard let encryptedData = try CKSignalCoordinate.shared.ourEncryptionManager?.encryptToAddress(messageData,
                                                                                  name: toClientId) else
             { return }
-            
+            print(String(decoding: encryptedData.data.base64EncodedData(), as: UTF8.self))
             Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: toClientId , groupId: groupId , groupType: "peer") { (publication) in
                 if let publication = publication {
                     completion?(self.saveNewMessage(publication: publication, message: messageData))
@@ -339,14 +339,14 @@ extension ChatService {
 
 // Notification
 extension ChatService {
-    struct PublicationNotification: Codable {
-        let id: String
-        let clientId: String
-        let fromClientId: String
-        let groupId: Int64
-        let groupType: String
-        let message: Data
-        let createdAt: Int64
+    class PublicationNotification: Codable {
+        var id: String
+        var clientId: String
+        var fromClientId: String
+        var groupId: Int64
+        var groupType: String
+        var message: Data
+        var createdAt: Int64
         
         enum CodingKeys: String, CodingKey {
             case id = "id"
@@ -356,6 +356,17 @@ extension ChatService {
             case groupType = "group_type"
             case message = "message"
             case createdAt = "created_at"
+        }
+        
+        required init(from decoder: Decoder) throws {
+           let container = try decoder.container(keyedBy: CodingKeys.self)
+            id = try container.decode(String.self, forKey: .id)
+            clientId = try container.decode(String.self, forKey: .clientId)
+            fromClientId = try container.decode(String.self, forKey: .fromClientId)
+            groupId = try container.decode(Int64.self, forKey: .groupId)
+            groupType = try container.decode(String.self, forKey: .groupType)
+            message = try Data(base64Encoded: container.decode(String.self, forKey: .message).data(using: .utf8) ?? Data()) ?? Data()
+            createdAt = try container.decode(Int64.self, forKey: .createdAt)
         }
     }
     
