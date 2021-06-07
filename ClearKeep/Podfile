@@ -40,7 +40,7 @@ end
 target 'NotificationServiceExtension' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-  
+
   pod 'SignalProtocolObjC', :git =>'https://github.com/nohtbook/SignalProtocol-ObjC.git'
   pod 'YapDatabase/SQLCipher', '~> 4.0'
   pod 'Mantle', '~> 2.1.6'
