@@ -337,7 +337,7 @@ extension LoginView {
             user.id = userID
             user.displayName = displayName
             user.email = email
-            UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
+            SharedDataAppGroup.sharedUserDefaults?.setValue(user.id, forKey: Constants.keySaveUserID)
             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
            
             let address = SignalAddress(name: userID, deviceId: Int32(Constants.encryptedDeviceId))

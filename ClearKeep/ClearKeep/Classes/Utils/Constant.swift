@@ -22,6 +22,22 @@ struct Debug {
    }
 }
 
+struct SharedDataAppGroup {
+    static private let kAppGroupName = "group.telred.clearkeep3.ios.staging"
+    static let sharedUserDefaults = UserDefaults(suiteName: kAppGroupName)
+    
+    static func sharedDirectoryPath() -> String? {
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: kAppGroupName)?.path
+    }
+    
+    static func sharedDatabasePath(database: String) -> URL? {
+        let sharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: kAppGroupName)
+        return sharedDirectoryURL?.appendingPathComponent(database)
+    }
+    
+    static var database: YapDatabase?
+}
+
 struct Constants {
     static let groupIdTemp = Int64(0)
     static let encryptedDeviceId =  Int32(555)
