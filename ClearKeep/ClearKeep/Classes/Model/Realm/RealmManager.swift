@@ -11,13 +11,13 @@ class RealmManager {
     
     // MARK: - Singleton
     static let shared = RealmManager()
-//    private(set) var realmGroups: RealmGroups
-//    private(set) var realmMessages: RealmMessages
+    
+    // MARK: - Variables
+    private var configuration = Realm.Configuration()
     
     // MARK: - Init
     private init() {
-//        realmGroups = RealmGroups()
-//        realmMessages = RealmMessages()
+        configuration.fileURL = SharedDataAppGroup.sharedDatabasePath(database: "db.realm")
     }
 }
 
@@ -176,7 +176,7 @@ extension RealmManager {
 extension RealmManager {
     private func write(_ handler: ((_ realm: Realm) -> Void)) {
         do {
-            let realm = try Realm()
+            let realm = try Realm(configuration: configuration)
             try realm.write {
                 handler(realm)
             }
@@ -185,7 +185,7 @@ extension RealmManager {
     
     private func load<T: Object>(listOf: T.Type, filter: NSPredicate? = nil) -> [T] {
         do {
-            var objects = try Realm().objects(T.self)
+            var objects = try Realm(configuration: configuration).objects(T.self)
             if let filter = filter {
                 objects = objects.filter(filter)
             }
