@@ -62,7 +62,7 @@ extension ChatService {
         do {
             if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
                 let messageDecrypted = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                               name: publication.clientID)
+                                                                               name: publication.fromClientID)
                 completion?(saveNewMessage(publication: publication, message: messageDecrypted))
             } else {
                 completion?(saveNewMessage(publication: publication, message: getUnableErrorMessage(message: nil)))
@@ -374,7 +374,7 @@ extension ChatService {
         do {
             if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
                 let messageDecrypted = try ourEncryptionMng.decryptFromAddress(publication.message,
-                                                                               name: publication.clientId)
+                                                                               name: publication.fromClientId)
                 completion?(saveNewMessage(publication: publication, message: messageDecrypted))
             } else {
                 completion?(self.saveNewMessage(publication: publication, message: getUnableErrorMessage(message: nil)))
