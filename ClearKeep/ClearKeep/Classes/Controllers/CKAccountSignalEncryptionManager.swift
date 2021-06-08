@@ -160,7 +160,7 @@ extension CKAccountSignalEncryptionManager {
     public func decryptFromAddress(_ data: Data, name: String, deviceId: Int32 = Constants.decryptedDeviceId) throws -> Data {
         let address = SignalAddress(name: name.lowercased(), deviceId: deviceId)
         let sessionCipher = SignalSessionCipher(address: address, context: self.signalContext)
-        let cipherText = SignalCiphertext(data: data, type: .unknown)
+        let cipherText = SignalCiphertext(data: data, type: .preKeyMessage)
         return try sessionCipher.decryptCiphertext(cipherText)
     }
 }
@@ -189,7 +189,7 @@ extension CKAccountSignalEncryptionManager {
         let senderKeyName = SignalSenderKeyName(groupId: String(groupId), address: address)
         
         let groupCipher = SignalGroupCipher(senderKeyName: senderKeyName, context: self.signalContext)
-        let cipherText = SignalCiphertext(data: data, type: .unknown)
+        let cipherText = SignalCiphertext(data: data, type: .senderKeyMessage)
         return try groupCipher.decryptCiphertext(cipherText)
     }
 }
