@@ -370,34 +370,34 @@ extension ChatService {
         }
     }
     
-    func decryptMessageFromPeer(_ publication: PublicationNotification, completion: ((String) -> ())? = nil) {
+    func decryptMessageFromPeer(_ publication: PublicationNotification, completion: ((MessageModel) -> ())? = nil) {
         do {
             if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager {
                 let messageDecrypted = try ourEncryptionMng.decryptFromAddress(publication.message,
                                                                                name: publication.clientId)
-                completion?(String(data: messageDecrypted, encoding: .utf8) ?? "x")
+                completion?(saveNewMessage(publication: publication, message: messageDecrypted))
             } else {
-                completion?("Unknown Error")
+                completion?(self.saveNewMessage(publication: publication, message: getUnableErrorMessage(message: nil)))
             }
         } catch {
-            completion?(error.localizedDescription)
+            completion?(self.saveNewMessage(publication: publication, message: getUnableErrorMessage(message: error.localizedDescription)))
         }
     }
     
-    func decryptMessageFromGroup(_ publication: PublicationNotification, completion: ((String) -> ())? = nil) {
+    func decryptMessageFromGroup(_ publication: PublicationNotification, completion: ((MessageModel) -> ())? = nil) {
         do {
             if let ourEncryptionMng = CKSignalCoordinate.shared.ourEncryptionManager,
                ourEncryptionMng.senderKeyExistsForUsername(publication.fromClientId, deviceId: Constants.decryptedDeviceId, groupId: publication.groupId) {
                 let messageDecrypted = try ourEncryptionMng.decryptFromGroup(publication.message,
                                                                              groupId: publication.groupId,
                                                                              name: publication.fromClientId)
-                completion?(String(data: messageDecrypted, encoding: .utf8) ?? "x")
+                completion?(saveNewMessage(publication: publication, message: messageDecrypted))
             } else {
                 requestKeyInGroup(byGroupId: publication.groupId, fromClientId: publication.fromClientId) { isSuccess in
                     if isSuccess {
                         self.decryptMessageFromGroup(publication, completion: completion)
                     } else {
-                        completion?("Unknown Error")
+                        completion?(self.saveNewMessage(publication: publication, message: self.getUnableErrorMessage(message: nil)))
                     }
                 }
             }
@@ -406,9 +406,23 @@ extension ChatService {
                 if isSuccess {
                     self.decryptMessageFromGroup(publication, completion: completion)
                 } else {
-                    completion?(error.localizedDescription)
+                    completion?(self.saveNewMessage(publication: publication, message: self.getUnableErrorMessage(message: error.localizedDescription)))
                 }
             }
         }
+    }
+    
+    private func saveNewMessage(publication: PublicationNotification, message: Data) -> MessageModel {
+        let messageRecord = MessageModel(id: publication.id,
+                                groupID: publication.groupId,
+                                groupType: publication.groupType,
+                                fromClientID: publication.fromClientId,
+                                clientID: publication.clientId,
+                                message: message,
+                                createdAt: publication.createdAt,
+                                updatedAt: publication.createdAt)
+        RealmManager.shared.updateLastMessage(messageRecord)
+        
+        return messageRecord
     }
 }
