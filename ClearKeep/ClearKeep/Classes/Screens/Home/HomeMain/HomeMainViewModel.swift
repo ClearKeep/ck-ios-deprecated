@@ -1,14 +1,24 @@
 //
-//  MotherViewModel.swift
+//  HomeMainViewModel.swift
 //  ClearKeep
 //
-//  Created by Seoul on 11/20/20.
+//  Created by Nguyễn Nam on 6/2/21.
 //
 
 import SwiftUI
 
-class MotherViewModel: ObservableObject, Identifiable {
+class HomeMainViewModel: ObservableObject {
     
+    @Published var menuItems: LeftMenuStatus = LeftMenuStatus(items: [])
+    @Published var selectedServer: String = "CK Development"
+    
+    init() {
+        menuItems = LeftMenuStatus(items: [
+            LeftMenuItemStatus(serverID: "ck_default_1", imageName: "ic_app_new", hasNewMessage: true, onSelectCompletion: {
+                self.selectedServer = "CK Development"
+            })
+        ])
+    }
     
     func getUserInDatabase(clientID: String){
         if let dbConnection = CKDatabaseManager.shared.database?.newConnection(){
@@ -27,7 +37,6 @@ class MotherViewModel: ObservableObject, Identifiable {
                     CKSignalCoordinate.shared.myAccount = account
                 }
             })
-            
         }
     }
 }

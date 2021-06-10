@@ -14,7 +14,7 @@ struct MessagerGroupView: View {
     @EnvironmentObject var viewRouter: ViewRouter
     
     // MARK: - Environment
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
     // MARK: - ObservedObject
     @ObservedObject var viewModel: MessengerViewModel = MessengerViewModel()
@@ -25,24 +25,16 @@ struct MessagerGroupView: View {
     @State private var scrollView: UIScrollView?
     
     // MARK: - Variables
-    private var userName: String = ""
-    private var groupName: String = ""
-    private var groupType: String = "peer"
-    private var clientId: String = ""
-    private var groupId: Int64 = 0
-    private var isCreateGroup: Bool = false
+    private var isFromCreateGroup: Bool = false
     
     // MARK: - Init
     private init() {
     }
     
-    init(groupName: String, groupId: Int64, isCreateGroup: Bool = false) {
+    init(groupName: String, groupId: Int64, isFromCreateGroup: Bool = false) {
         self.init()
-        self.groupName = groupName
-        self.groupType = "group"
-        self.groupId = groupId
-        self.isCreateGroup = isCreateGroup
-        self.viewModel.setup(groupId: groupId, username: groupName, groupType: groupType)
+        self.isFromCreateGroup = isFromCreateGroup
+        self.viewModel.setup(groupId: groupId, username: groupName, groupType: "group")
     }
     
     var body: some View {
@@ -62,11 +54,6 @@ struct MessagerGroupView: View {
                         .onAppear(perform: {
                             reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                         })
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
-                            }
-                        }
                     }
                 } else {
                     MessagerListView(messages: viewModel.messages) { msg in
@@ -81,13 +68,11 @@ struct MessagerGroupView: View {
                     .onAppear(perform: {
                         self.scrollView?.scrollToBottom()
                     })
-                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollView?.scrollToBottom()
-                        }
-                    }
                 }
             })
+            .onTapGesture {
+                self.hideKeyboard()
+            }
             
             MessagerToolBar(sendAction: { message in
                 self.viewModel.sendMessage(messageStr: message)
@@ -96,20 +81,17 @@ struct MessagerGroupView: View {
         }
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
-        }, invokeBackButton: {
-            if self.isCreateGroup {
-                self.viewRouter.current = .tabview
+        }, invokeBackButton: { navigationController in
+            if isFromCreateGroup {
+                navigationController?.popToRootViewController(animated: true)
             } else {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }
         }, invokeCallButton: { callType in
             call(callType: callType)
         })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
-        .onTapGesture {
-            self.hideKeyboard()
-        }
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),
@@ -119,31 +101,20 @@ struct MessagerGroupView: View {
                    secondaryButton: .default(Text("Cancel")))
         })
         .onAppear() {
-            UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
-            DispatchQueue.main.async {
-                RealmManager.shared.realmMessages.loadSavedData()
-                RealmManager.shared.realmGroups.loadSavedData()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.viewModel.registerWithGroup(groupId)
-                    self.viewModel.getMessageInRoom(completion: {
-                        self.scrollView?.scrollToBottom()
-                    })
-                }
-            }
+            ChatService.shared.setOpenedGroupId(viewModel.groupId)
+            self.viewModel.reloadData()
+            self.viewModel.getMessageInRoom(completion: {
+                self.scrollView?.scrollToBottom()
+            })
         }
         .onDisappear(){
-            UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
+            ChatService.shared.setOpenedGroupId(-1)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
-               let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                if publication.groupType == "group" && groupId == publication.groupID && UserDefaults.standard.bool(forKey: Constants.isInChatRoom) {
-                    self.viewModel.decryptionMessage(publication: publication, completion: {
-                        self.scrollView?.scrollToBottom()
-                    })
+               let message = userInfo["message"] as? MessageModel {
+                if message.groupID == ChatService.shared.openedGroupId {
+                    self.viewModel.reloadData()
                 }
             }
         }
@@ -158,7 +129,7 @@ struct MessagerGroupView: View {
         NavigationLink(
             destination: GroupChatDetailView(groupModel: viewModel.getGroupModel()),
             label: {
-                Text(groupName)
+                Text(viewModel.username)
                     .foregroundColor(AppTheme.colors.offWhite.color)
                     .font(AppTheme.fonts.textLarge.font)
                     .fontWeight(.medium)

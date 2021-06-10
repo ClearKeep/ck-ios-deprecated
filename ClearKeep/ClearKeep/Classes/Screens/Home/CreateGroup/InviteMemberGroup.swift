@@ -54,7 +54,7 @@ struct InviteMemberGroup: View {
                     .foregroundColor(AppTheme.colors.gray1.color)
             }
         }, rightBarItems: {
-            NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0}).environmentObject(RealmGroups())) {
+            NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0})) {
                 Text("Next")
                     .font(AppTheme.fonts.linkMedium.font)
                     .foregroundColor(AppTheme.colors.primary.color)

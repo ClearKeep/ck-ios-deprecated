@@ -26,6 +26,7 @@ class CallViewModel: NSObject, ObservableObject {
     
     @Published var remotesVideoViewConfig = [String : CustomVideoViewConfig]()
     var remotesVideoViewDict = [String : RTCMTLEAGLVideoView]()
+    var backHandler: (() -> ())? = nil
     
     enum RenderScaleMode {
         case scaleToFit

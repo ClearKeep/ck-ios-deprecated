@@ -25,11 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func show(_ scene: UIScene) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let contentView = MotherView()
-            .environmentObject(RealmManager.shared.realmGroups)
-            .environmentObject(RealmManager.shared.realmMessages)
             .environmentObject(appDelegate.viewRouter)
-            .environmentObject(HomeMainViewModel())
-            .environmentObject(ServerMainViewModel())
 
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -64,9 +60,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
         Debug.DLog("------------ enter foreground app")
-        if let myAccount = CKSignalCoordinate.shared.myAccount {
-            Backend.shared.notificationSubscrible(clientId: myAccount.username)
-            Backend.shared.signalSubscrible(clientId: myAccount.username)
+        if let clientId = UserDefaults.standard.string(forKey: Constants.keySaveUserID) {
+            Backend.shared.notificationSubscrible(clientId: clientId)
+            Backend.shared.signalSubscrible(clientId: clientId)
         }
     }
 
@@ -75,9 +71,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
         Debug.DLog("------------ enter background app")
-        if let myAccount = CKSignalCoordinate.shared.myAccount {
-            Backend.shared.signalUnsubcrible(clientId: myAccount.username)
-            Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
+        if let clientId = UserDefaults.standard.string(forKey: Constants.keySaveUserID) {
+            Backend.shared.signalUnsubcrible(clientId: clientId)
+            Backend.shared.notificationUnSubscrible(clientId: clientId)
         }
     }
 

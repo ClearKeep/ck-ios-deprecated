@@ -9,9 +9,6 @@ import SwiftUI
 
 struct PeopleView: View {
     
-    @EnvironmentObject var groupRealms : RealmGroups
-    @EnvironmentObject var messsagesRealms : RealmMessages
-    
     @State private var searchText: String = ""
     @ObservedObject var viewModel = PeopleViewModel()
     
@@ -41,7 +38,7 @@ struct PeopleView: View {
                         HStack {
                             VStack(alignment:.leading , spacing: 16) {
                                 ForEach(self.peoples , id: \.id) { user in
-                                    NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName)) {
+                                    NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName, isFromPeopleList: true)) {
                                         ContactView(people: user)
                                     }
                                 }

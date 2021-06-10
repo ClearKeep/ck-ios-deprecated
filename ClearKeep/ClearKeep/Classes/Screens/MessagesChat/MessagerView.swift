@@ -25,27 +25,16 @@ struct MessagerView: View {
     @State private var scrollView: UIScrollView?
     
     // MARK: - Variables
-    private var userName: String = ""
-    private var groupName: String = ""
-    private var groupType: String = "peer"
-    private var clientId: String = ""
-    private var groupId: Int64 = 0
-    private var isCreateGroup: Bool = false
+    private var isFromPeopleList: Bool = false
+    
     // MARK: - Init
     private init() {
     }
     
-    init(clientId: String, groupId: Int64, userName: String, groupType: String = "peer") {
+    init(clientId: String, groupId: Int64, userName: String, isFromPeopleList: Bool = false) {
         self.init()
-        self.userName = userName
-        self.clientId = clientId
-        self.groupType = groupType
-        if groupId == 0, let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId, type: groupType) {
-            self.groupId = group.groupID
-        } else {
-            self.groupId = groupId
-        }
-        viewModel.setup(clientId: clientId, groupId: self.groupId, username: userName, groupType: groupType)
+        self.isFromPeopleList = isFromPeopleList
+        viewModel.setup(receiveId: clientId, groupId: groupId, username: userName, groupType: "peer")
     }
     
     var body: some View {
@@ -65,11 +54,6 @@ struct MessagerView: View {
                         .onAppear(perform: {
                             reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
                         })
-                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                reader.scrollTo(self.viewModel.getIdLastItem(), anchor: .bottom)
-                            }
-                        }
                     }
                 } else {
                     MessagerListView(messages: viewModel.messages) { msg in
@@ -84,13 +68,11 @@ struct MessagerView: View {
                     .onAppear(perform: {
                         self.scrollView?.scrollToBottom()
                     })
-                    .onReceive(NotificationCenter.default.publisher(for: NSNotification.keyBoardWillShow)) { (data) in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.scrollView?.scrollToBottom()
-                        }
-                    }
                 }
             })
+            .onTapGesture {
+                self.hideKeyboard()
+            }
             
             MessagerToolBar(sendAction: { message in
                 self.viewModel.sendMessage(messageStr: message) {
@@ -101,20 +83,17 @@ struct MessagerView: View {
         }
         .applyNavigationBarChatStyle(titleView: {
             createTitleView()
-        }, invokeBackButton: {
-            if isCreateGroup {
-                self.viewRouter.current = .tabview
+        }, invokeBackButton: { navigationController in
+            if isFromPeopleList {
+                navigationController?.popToRootViewController(animated: true)
             } else {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }
         }, invokeCallButton: { callType in
             call(callType: callType)
         })
         .keyboardManagment()
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
-        .onTapGesture {
-            self.hideKeyboard()
-        }
         .alert(isPresented: $alertVisible, content: {
             Alert (title: Text("Need camera and microphone permissions"),
                    message: Text("Go to Settings?"),
@@ -124,29 +103,20 @@ struct MessagerView: View {
                    secondaryButton: .default(Text("Cancel")))
         })
         .onAppear() {
-            UserDefaults.standard.setValue(groupId, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(true, forKey: Constants.isInChatRoom)
-            
-            self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
-            DispatchQueue.main.async {
-                RealmManager.shared.realmMessages.loadSavedData()
-                RealmManager.shared.realmGroups.loadSavedData()
-            }
+            ChatService.shared.setOpenedGroupId(viewModel.groupId)
+            self.viewModel.reloadData()
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
         }
         .onDisappear(){
-            UserDefaults.standard.setValue(-1, forKey: Constants.openGroupId)
-            UserDefaults.standard.setValue(false, forKey: Constants.isInChatRoom)
+            ChatService.shared.setOpenedGroupId(-1)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.ReceiveMessage)) { (obj) in
             if let userInfo = obj.userInfo,
-               let publication = userInfo["publication"] as? Message_MessageObjectResponse {
-                if publication.groupType == "peer" && groupId == publication.groupID && UserDefaults.standard.bool(forKey: Constants.isInChatRoom) {
-                    self.viewModel.didReceiveMessage(userInfo: obj.userInfo, completion: {
-                        self.scrollView?.scrollToBottom()
-                    })
+               let message = userInfo["message"] as? MessageModel {
+                if message.groupID == ChatService.shared.openedGroupId {
+                    self.viewModel.reloadData()
                 }
             }
         }
@@ -154,7 +124,7 @@ struct MessagerView: View {
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
                 if publication.notifyType == "peer-update-key" {
-                    self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
+                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
                 }
             }
         })
@@ -162,19 +132,19 @@ struct MessagerView: View {
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
-            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
-                if isNetWork {
-                    self.viewModel.requestBundleRecipient(byClientId: self.clientId){}
-                }
-            }
+//            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
+//                if isNetWork {
+//                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
+//                }
+//            }
         })
     }
     
     private func createTitleView() -> some View {
         HStack {
-            ChannelUserAvatar(avatarSize: 36, text: userName)
+            ChannelUserAvatar(avatarSize: 36, text: viewModel.username)
             
-            Text(userName)
+            Text(viewModel.username)
                 .foregroundColor(AppTheme.colors.offWhite.color)
                 .font(AppTheme.fonts.textLarge.font)
                 .fontWeight(.medium)
@@ -190,16 +160,8 @@ extension MessagerView {
                 if status == .alreadyAuthorized || status == .justAuthorized {
                     hudVisible = true
                     // CallManager call
-                    if let group = RealmManager.shared.realmGroups.getGroup(clientId: clientId, type: groupType) {
-                        viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
-                            hudVisible = false
-                        }
-                    } else {
-                        viewModel.createGroup(username: self.userName, clientId: self.clientId) { (group) in
-                            viewModel.callPeerToPeer(group: group, clientId: clientId, callType: type) {
-                                hudVisible = false
-                            }
-                        }
+                    viewModel.callPeerToPeer(clientId: viewModel.receiveId, callType: type) {
+                        hudVisible = false
                     }
                 } else {
                     self.alertVisible = true
@@ -208,9 +170,3 @@ extension MessagerView {
         })
     }
 }
-
-//struct MessagerView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MessagerView()
-//    }
-//}

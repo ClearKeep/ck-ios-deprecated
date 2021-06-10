@@ -33,16 +33,18 @@ struct GroupCallView: View {
             })
             .if(viewModel.callStatus == .answered, transform: { view in
                 view.applyNavigationBarCallStyle(title: viewModel.getUserName(), leftBarItems: {
-                                Button(action: {}, label: {
-                                    Image("ic_back")
-                                        .frame(width: 24, height: 24, alignment: .leading)
-                                        .foregroundColor(AppTheme.colors.offWhite.color)
-                                })
-                            }, rightBarItems: {
-                                Text(viewModel.timeCall)
-                                    .font(AppTheme.fonts.displaySmall.font)
-                                    .foregroundColor(AppTheme.colors.offWhite.color)
-                            })
+                    Button(action: {
+                        viewModel.backHandler?()
+                    }, label: {
+                        Image("ic_back")
+                            .frame(width: 24, height: 24, alignment: .leading)
+                            .foregroundColor(AppTheme.colors.offWhite.color)
+                    })
+                }, rightBarItems: {
+                    Text(viewModel.timeCall)
+                        .font(AppTheme.fonts.displaySmall.font)
+                        .foregroundColor(AppTheme.colors.offWhite.color)
+                })
             })
             .onAppear(perform: {
                 if let callBox = CallManager.shared.calls.first {

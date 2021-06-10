@@ -3,7 +3,7 @@
 
 use_modular_headers!
 
-target 'ClearKeep' do
+def shared_pods
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -20,19 +20,19 @@ target 'ClearKeep' do
   pod 'Firebase/Auth'
   pod 'MSAL'
   
-  pod 'IQKeyboardManagerSwift', '6.3.0'
-  
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
   pod 'Introspect'
-  
-  target 'ClearKeepTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+end
 
-  target 'ClearKeepUITests' do
-    # Pods for testing
-  end
+target 'ClearKeep' do
+  shared_pods
+end
 
+target 'ClearKeep Development' do
+  shared_pods
+end
+
+target 'ClearKeep Staging' do
+  shared_pods
 end

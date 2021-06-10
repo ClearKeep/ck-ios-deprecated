@@ -340,7 +340,7 @@ extension LoginView {
             UserDefaults.standard.setValue(user.id, forKey: Constants.keySaveUserID)
             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
            
-            let address = SignalAddress(name: userID, deviceId: Int32(555))
+            let address = SignalAddress(name: userID, deviceId: Int32(Constants.encryptedDeviceId))
             hudVisible = true
             Backend.shared.authenticator.register(address: address) { (result, error) in
                 hudVisible = false
@@ -393,7 +393,7 @@ extension LoginView {
                         Backend.shared.registerTokenDevice { (response) in
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
-                                self.viewRouter.current = .tabview
+                                self.viewRouter.current = .home
                                 
                                 DispatchQueue.main.async {
                                     let appDelegate: AppDelegate? = UIApplication.shared.delegate as? AppDelegate
@@ -434,7 +434,7 @@ extension LoginView {
                 Backend.shared.registerTokenDevice { (response) in
                     if response {
                         hudVisible = false
-                        self.viewRouter.current = .tabview
+                        self.viewRouter.current = .home
                     }
                 }
             }

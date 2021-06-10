@@ -22,7 +22,7 @@ class RealmGroup: Object {
     @objc dynamic var updatedByClientID: String = ""
     @objc dynamic var updatedAt: Int64 = 0
     @objc dynamic var idLastMsg: String = ""
-    @objc dynamic var isRegister: Bool = false
+    @objc dynamic var isRegistered: Bool = false
     @objc dynamic var timeSyncMessage: Int64 = 0
     
     override class func primaryKey() -> String? {
