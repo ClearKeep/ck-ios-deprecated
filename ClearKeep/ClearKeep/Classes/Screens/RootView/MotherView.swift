@@ -10,7 +10,7 @@ struct MotherView: View {
         VStack {
             switch viewRouter.current {
             case .login:
-                LoginView()
+                LoginView(dismissAlert: .constant(true), joinServer: false)
             case .home:
                 HomeMainView()
             }

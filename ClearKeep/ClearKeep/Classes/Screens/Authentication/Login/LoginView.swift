@@ -32,6 +32,9 @@ struct LoginView: View {
     
     @ObservedObject var loginViewModel = LoginViewModel()
     
+    @Binding var dismissAlert: Bool
+    var joinServer: Bool
+
     var body: some View {
         NavigationView {
             VStack {
@@ -41,7 +44,7 @@ struct LoginView: View {
                             LogoIconView()
                                 .padding(.top, 20)
                             
-                            if loginViewModel.isUseCustomServer {
+                            if loginViewModel.usedCustomServer() || joinServer {
                                 HStack(spacing: 4) {
                                     Image("Alert")
                                         .renderingMode(.template)
@@ -67,11 +70,13 @@ struct LoginView: View {
                                 }
                                 
                                 HStack {
-                                    NavigationLink(destination: AdvanceServerSettingsView(isUseCustomServer: $loginViewModel.isUseCustomServer, customServerURL: $loginViewModel.customServerURL, customServerPort: $loginViewModel.customServerPort)) {
-                                        Text("Advanced Server Settings")
-                                            .font(AppTheme.fonts.linkXSmall.font)
-                                            .foregroundColor(AppTheme.colors.offWhite.color)
-                                            .frame(height: 30)
+                                    if !joinServer {
+                                        NavigationLink(destination: AdvanceServerSettingsView(isUseCustomServer: $loginViewModel.isUseCustomServer, customServerURL: $loginViewModel.customServerURL)) {
+                                            Text("Advanced Server Settings")
+                                                .font(AppTheme.fonts.linkXSmall.font)
+                                                .foregroundColor(AppTheme.colors.offWhite.color)
+                                                .frame(height: 30)
+                                        }
                                     }
                                     
                                     Spacer()
@@ -344,6 +349,7 @@ extension LoginView {
             hudVisible = true
             Backend.shared.authenticator.register(address: address) { (result, error) in
                 hudVisible = false
+                dismissAlert = false
                 if result {
                     loginForUser(clientID: userID)
                     SocialLogin.shared.saveSignInType(signInType)
@@ -447,6 +453,6 @@ extension LoginView {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(dismissAlert: .constant(true), joinServer: false)
     }
 }

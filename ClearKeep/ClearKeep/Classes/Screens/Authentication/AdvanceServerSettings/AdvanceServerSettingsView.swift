@@ -13,7 +13,8 @@ struct AdvanceServerSettingsView: View {
     
     @Binding var isUseCustomServer: Bool
     @Binding var customServerURL: String
-    @Binding var customServerPort: String
+    
+    @State var isShowAlert = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -37,16 +38,18 @@ struct AdvanceServerSettingsView: View {
             .padding(.top, 10)
             
             if isUseCustomServer {
-                Text("Please enter your server URL and Port to enter custom server")
+                Text("Please enter your server URL to enter custom server")
                     .fontWeight(.medium)
                     .font(AppTheme.fonts.textSmall.font)
                     .foregroundColor(AppTheme.colors.background.color)
                 
-                HStack(spacing: 16) {
-                    TextFieldProfile("Server URL", keyboardType: .URL, text: $customServerURL, onEditingChanged: {_ in })
-                    TextFieldProfile("Port", keyboardType: .numberPad, text: $customServerPort, onEditingChanged: {_ in })
-                        .frame(width: 76)
+                    TextFieldProfile("Server URL", keyboardType: .URL, text: $customServerURL, onEditingChanged: {_ in
+                    })
+                
+                DisableButton("Submit", disable: customServerURL.isEmpty) {
+                    useCustomServer()
                 }
+                .disabled(customServerURL.isEmpty)
             }
             
             Spacer()
@@ -65,14 +68,34 @@ struct AdvanceServerSettingsView: View {
             Spacer()
         })
         .grandientBackground()
+        .alert(isPresented: self.$isShowAlert, content: {
+            Alert(title: Text("Login Error"),
+                  message: Text("Wrong server URL. Please try again"),
+                  dismissButton: .default(Text("OK")))
+        })
         .onTapGesture {
             self.hideKeyboard()
         }       
+    }
+    
+    private func useCustomServer() {
+        guard let first = customServerURL.components(separatedBy: ":").first,
+              let last = customServerURL.components(separatedBy: ":").last else {
+            isShowAlert = true
+            return
+        }
+        
+        let validated = first.textFieldValidatorURL() && (first != last) && customServerURL.last! != ":"
+        isShowAlert = !validated
+        
+        if validated {
+
+        }
     }
 }
 
 struct AdvanceServerSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        AdvanceServerSettingsView(isUseCustomServer: .constant(false), customServerURL: .constant(""), customServerPort: .constant(""))
+        AdvanceServerSettingsView(isUseCustomServer: .constant(false), customServerURL: .constant(""))
     }
 }

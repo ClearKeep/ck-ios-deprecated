@@ -60,7 +60,7 @@ struct ChannelUserAvatar: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        ZStack(alignment: .topTrailing) {
             Group {
                 if let loadedImage = image {
                     loadedImage

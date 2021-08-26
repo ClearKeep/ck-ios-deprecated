@@ -15,6 +15,7 @@ struct ServerDetailView: View {
     @State private var hudVisible = false
     @State private var showActionSheet = false
     @State private var currentUserName: String = ""
+    @State private var currentWorkspaceDomain: String = ""
     
     @Binding var showDetail: Bool
     
@@ -60,13 +61,9 @@ struct ServerDetailView: View {
                             
                             Divider()
                             currentServerInfoSection()
-                            Divider()
-                            generalInfoSection()
                             Spacer()
-                            Text(self.getVersionApp())
-                                .fontWeight(.light)
-                                .font(.footnote)
-                                .multilineTextAlignment(.center)
+                            generalInfoSection()
+
                         }
                     })
                     .padding(.horizontal, 16)
@@ -85,9 +82,16 @@ struct ServerDetailView: View {
                 self.currentUserName = userName
             }
         }
-        .actionSheet(isPresented: $showActionSheet) {
-            self.confirmationSheet
-        }
+        .alert(isPresented: $showActionSheet, content: {
+            Alert(title: Text("Warning"),
+                  message: Text("Are you sure you want to sign out from server?"),
+                  primaryButton: .default(Text("Cancel"), action: {
+                    
+                  }),
+                  secondaryButton: .default(Text("Sign out"), action: {
+                    logout()
+                  }))
+        })
     }
 
     private func settingItemView(imageName: String, title: String, foregroundColor: Color = AppTheme.colors.gray1.color) -> some View {
@@ -133,6 +137,20 @@ struct ServerDetailView: View {
                     }
                 })
                 
+                HStack(alignment: .center, spacing: 5) {
+                    Text("\(currentWorkspaceDomain)")
+                        .font(AppTheme.fonts.textXSmall.font)
+                        .foregroundColor(AppTheme.colors.gray3.color)
+                        .lineLimit(1)
+                    Spacer()
+                    Button(action: copy) {
+                        Image("copy")
+                            .resizable()
+                            .frame(width: 24, height: 24, alignment: .center)
+                            
+                    }
+                }
+                
                 Spacer()
             }
             
@@ -142,30 +160,26 @@ struct ServerDetailView: View {
     
     private func currentServerInfoSection() -> some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Text("CK Develop")
-                    .font(AppTheme.fonts.linkMedium.font)
-                    .foregroundColor(AppTheme.colors.black.color)
-                Spacer()
+            NavigationLink(destination: ProfileView()) {
+                settingItemView(imageName: "user", title: "Profile")
             }
-            
-            NavigationLink(destination: Text("Server Settings")) {
-                settingItemView(imageName: "Adjustment", title: "Server Settings")
+
+            NavigationLink(destination: Text("Server")) {
+                settingItemView(imageName: "Adjustment", title: "Server")
             }
             .disabled(true)
             
-            NavigationLink(destination: Text("Invite other")) {
-                settingItemView(imageName: "user-plus", title: "Invite other")
+            NavigationLink(destination: Text("Notification")) {
+                settingItemView(imageName: "Notification", title: "Notification")
+            }.disabled(true)
+            
+            NavigationLink(destination: Text("Invite")) {
+                settingItemView(imageName: "user-plus", title: "Invite")
             }
             .disabled(true)
             
-            NavigationLink(destination: Text("Banned users")) {
-                settingItemView(imageName: "user-off", title: "Banned users")
-            }
-            .disabled(true)
-            
-            Button(action: {}) {
-                settingItemView(imageName: "Logout", title: "Leave CK Development", foregroundColor: AppTheme.colors.error.color)
+            NavigationLink(destination: Text("Banned")) {
+                settingItemView(imageName: "user-off", title: "Blocked")
             }
             .disabled(true)
         }
@@ -173,22 +187,6 @@ struct ServerDetailView: View {
     
     private func generalInfoSection() -> some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Text("General")
-                    .font(AppTheme.fonts.linkMedium.font)
-                    .foregroundColor(AppTheme.colors.black.color)
-                Spacer()
-            }
-            
-            NavigationLink(destination: ProfileView()) {
-                settingItemView(imageName: "user", title: "Account Settings")
-            }
-            
-            NavigationLink(destination: Text("Application Settings")) {
-                settingItemView(imageName: "Gear", title: "Application Settings")
-            }
-            .disabled(true)
-            
             Button(action: { self.confirmLogout() }) {
                 settingItemView(imageName: "Logout", title: "Logout", foregroundColor: AppTheme.colors.error.color)
             }
@@ -258,21 +256,15 @@ struct ServerDetailView: View {
             SocialLogin.shared.signOutFacebookAccount()
         }
     }
+    
+    private func copy() {
+        UIPasteboard.general.string = currentWorkspaceDomain
+    }
+
 }
 
-extension ServerDetailView {
-    func getVersionApp() -> String {
-        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        let buildVerSion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-        let nameEnv = AppConfig.buildEnvironment.nameEnvironment
-        let version = "Version \(appVersion) \n Build Version: \(buildVerSion) \n Environment: \(nameEnv)"
-        return version
+struct ServerDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        ServerDetailView(showDetail: .constant(true))
     }
 }
-
-
-//struct ServerDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ServerDetailView(isShowingServerDetailView: .constant(true), currentUserName: .constant("User"))
-//    }
-//}
