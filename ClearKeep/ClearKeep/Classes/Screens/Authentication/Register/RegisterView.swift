@@ -42,10 +42,11 @@ struct RegisterView: View {
                                 
                                 Spacer()
                                 
-                                RoundedGradientButton("Sign up", fixedWidth: 120, action: {
+                                RoundedGradientButton("Sign up", fixedWidth: 120, disable: validate(), action: {
                                     UIApplication.shared.endEditing()
                                     self.viewModel.register()
                                 })
+                                    .disabled(validate())
                             }
                             .padding(.top, 10)
                         }
@@ -75,6 +76,13 @@ struct RegisterView: View {
         .keyboardAdaptive()
         .grandientBackground()
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    private func validate() -> Bool {
+        return viewModel.email.isEmpty ||
+            viewModel.userName.isEmpty ||
+            viewModel.passWord.isEmpty ||
+            viewModel.passWordConfirm.isEmpty
     }
 }
 

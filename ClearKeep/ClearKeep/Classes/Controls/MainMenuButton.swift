@@ -19,11 +19,10 @@ struct MainMenuItemView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 32, height: 32, alignment: .center)
-                .clipShape(Circle())
-                .padding(.all, 8)
-                .clipShape(Circle())
+                .clipShape(RoundedRectangle(cornerRadius: 5.0))
+                .padding(.all, 3)
                 .overlay(
-                    Circle().stroke(isSelected ? AppTheme.colors.primary.color : Color.clear, lineWidth: 1.5)
+                    RoundedRectangle(cornerRadius: 5.0).stroke(isSelected ? AppTheme.colors.black.color : Color.clear, lineWidth: 1.0)
                 )
             
             if hasNewMessage {

@@ -22,6 +22,9 @@ struct HomeMainView: View {
     @State private var isShowingServerDetailView = false
     @State private var isInCall = false
     
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showingSheet = false
+
     // MARK: - Setup
     var body: some View {
         NavigationView {
@@ -58,7 +61,10 @@ struct HomeMainView: View {
                             if viewModel.selectedServer == "CK Development" {
                                 ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
                             } else {
-                                JoinServerView()
+                                JoinServerView(action: { text in
+                                    guard let text = text as? String else {return}
+                                    showingSheet.toggle()
+                                })
                             }
                         }
                         .padding(.all, Constants.Device.isSmallScreenSize ? 10 : 16)
@@ -86,6 +92,10 @@ struct HomeMainView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .compatibleFullScreen(isPresented: $showingSheet) {
+            LoginView(dismissAlert: $showingSheet, joinServer: true)
+        }
+
     }
 }
 

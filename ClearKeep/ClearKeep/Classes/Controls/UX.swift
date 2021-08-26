@@ -130,6 +130,31 @@ struct ButtonAuth: View {
     }
 }
 
+struct DisableButton: View {
+    
+    private var title: String
+    private var action: () -> Void
+    
+    private var disable: Bool = true
+    
+    init(_ title: String, disable: Bool, action: @escaping() -> Void) {
+        self.title = title
+        self.action = action
+        self.disable = disable
+    }
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(AppTheme.fonts.linkSmall.font)
+                .foregroundColor(disable ? AppTheme.colors.primaryLight.color : AppTheme.colors.primary.color)
+                .frame(minWidth: 0, maxWidth: .infinity , minHeight: 40, idealHeight: 40)
+                .background(disable ? AppTheme.colors.gray4.color : AppTheme.colors.offWhite.color)
+        }
+        .cornerRadius(20)
+    }
+}
+
 struct ButtonSettingApp: View {
     private var imageName: String
     private var title: String
@@ -187,10 +212,13 @@ struct RoundedGradientButton: View {
     private var fixedWidth: CGFloat?
     private var action: () -> Void
     
-    init(_ title: String, fixedWidth: CGFloat?, action: @escaping() -> Void) {
+    private var disable: Bool = true
+    
+    init(_ title: String, fixedWidth: CGFloat?, disable: Bool = false, action: @escaping() -> Void) {
         self.title = title
         self.action = action
         self.fixedWidth = fixedWidth
+        self.disable = disable
     }
     
     var body: some View {
@@ -201,9 +229,11 @@ struct RoundedGradientButton: View {
                 .overlay(
                     Text(title)
                         .font(AppTheme.fonts.linkSmall.font)
-                        .foregroundColor(AppTheme.colors.offWhite.color)
+                        .foregroundColor(disable ? AppTheme.colors.gray4.color : AppTheme.colors.offWhite.color)
                         
                 )
+                .opacity(disable ? 0.7 : 1.0)
+
         }
         .cornerRadius(20)
     }

@@ -79,35 +79,18 @@ struct LeftMainMenuView: View {
                         Image("Plus_white")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 24, height: 24, alignment: .center)
+                            .frame(width: 28, height: 28, alignment: .center)
                             .padding(.all, 2)
                             .foregroundColor(.white)
                             .gradientHeader()
-                            .clipShape(Circle())
+                            .clipShape(RoundedRectangle(cornerRadius: 5.0))
                             .padding(.all, 8)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle().stroke(self.leftMenuStatus.selectedServerID == LeftMainMenuView.joinServerItemID ? AppTheme.colors.primary.color : Color.clear, lineWidth: 1.5)
-                            )
                     })
                     
                     Spacer()
                      
                     AppTheme.colors.offWhite.color
                         .frame(height: 0.5)
-                    
-                    Button(action: {
-                        self.leftMenuStatus.selectedServerID = LeftMainMenuView.manageContactItemID
-                        self.manageContactHandler()
-                    }, label: {
-                        Image("user")
-                            .renderingMode(.template)
-                            .foregroundColor(.white)
-                            .frame(width: 40, height: 40, alignment: .center)
-                            .background(AppTheme.colors.primary.color)
-                            .clipShape(Circle())
-                    })
-                    .padding(.bottom, 40)
                 }
                 .frame(width: Constants.Size.leftBannerWidth, alignment: .leading)
                 .cornerRadius(24)
