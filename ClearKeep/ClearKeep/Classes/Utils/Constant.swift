@@ -67,6 +67,10 @@ struct Constants {
 }
 
 extension Constants {
+    static let disableOpacityButton = 0.7
+}
+
+extension Constants {
     
     enum Mode {
         case development
