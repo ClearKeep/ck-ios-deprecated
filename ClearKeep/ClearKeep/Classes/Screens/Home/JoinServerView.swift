@@ -12,7 +12,7 @@ struct JoinServerView: View {
     @State private var errorMessage = ""
     
     var action: ObjectCompletion? = nil
-    @State var isShowAlert = false
+    @State private var isShowAlert = false
 
     init(action: ObjectCompletion?) {
         self.action = action
@@ -26,12 +26,11 @@ struct JoinServerView: View {
                     .font(AppTheme.fonts.textMedium.font)
                 WrappedTextFieldWithLeftIcon("Server URL", text: $text, errorMessage: $errorMessage)
                 
-                RoundedGradientButton("Join", fixedWidth: nil, disable: text.isEmpty, action: {
+                RoundedGradientButton("Join", fixedWidth: nil, disable: .constant(text.isEmpty), action: {
                     if validate() {
                         action?(text)
                     }
                 })
-                .disabled(text.isEmpty)
                 
                 Text("Tip: Ask your server admin to get the url to the server")
                     .font(AppTheme.fonts.textSmall.font)

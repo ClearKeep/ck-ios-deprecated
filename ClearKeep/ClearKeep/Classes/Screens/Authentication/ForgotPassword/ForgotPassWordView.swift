@@ -30,10 +30,9 @@ struct ForgotPassWordView: View {
             TextFieldWithLeftIcon("Email", leftIconName: "Mail", text: $email) { _ in  }
                 .padding(.top, 16)
             
-            DisableButton("Reset password", disable: email.isEmpty) {
+            DisableButton("Reset password", disable: .constant(email.isEmpty)) {
                 forgotPassword()
             }.padding(.top, 24)
-            .disabled(email.isEmpty)
             
             Spacer()
         }

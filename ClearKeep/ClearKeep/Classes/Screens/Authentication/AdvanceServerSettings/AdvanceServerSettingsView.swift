@@ -14,7 +14,7 @@ struct AdvanceServerSettingsView: View {
     @Binding var isUseCustomServer: Bool
     @Binding var customServerURL: String
     
-    @State var isShowAlert = false
+    @State private var isShowAlert = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -46,10 +46,9 @@ struct AdvanceServerSettingsView: View {
                     TextFieldProfile("Server URL", keyboardType: .URL, text: $customServerURL, onEditingChanged: {_ in
                     })
                 
-                DisableButton("Submit", disable: customServerURL.isEmpty) {
+                DisableButton("Submit", disable: .constant(customServerURL.isEmpty)) {
                     useCustomServer()
                 }
-                .disabled(customServerURL.isEmpty)
             }
             
             Spacer()
