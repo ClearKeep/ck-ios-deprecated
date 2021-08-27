@@ -147,13 +147,10 @@ struct ServerDetailView: View {
                         Image("copy")
                             .resizable()
                             .frame(width: 24, height: 24, alignment: .center)
-                            
                     }
                 }
-                
                 Spacer()
             }
-            
             Spacer()
         }
     }
