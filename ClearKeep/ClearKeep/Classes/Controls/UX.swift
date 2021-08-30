@@ -233,7 +233,7 @@ struct RoundedGradientButton: View {
                         .foregroundColor(disable ? AppTheme.colors.gray4.color : AppTheme.colors.offWhite.color)
                         
                 )
-                .opacity(disable ? Constants.disableOpacityButton : 1.0)
+                .opacity(disable ? Constants.disableButtonOpacity : 1.0)
 
         }
         .cornerRadius(20)

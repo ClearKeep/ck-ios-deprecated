@@ -48,8 +48,8 @@ class CustomVideoViewConfig: ObservableObject {
         self.clientId = clientId
         self.groupId = groupId
         
-        if let myClientId = Backend.shared.getUserLogin()?.id, myClientId == clientId {
-            self.userName = Backend.shared.getUserLogin()?.displayName ?? ""
+        if let myClientId = Multiserver.instance.currentServer.getUserLogin()?.id, myClientId == clientId {
+            self.userName = Multiserver.instance.currentServer.getUserLogin()?.displayName ?? ""
         } else {
             fetchLocalUserName()
         }

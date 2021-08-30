@@ -24,6 +24,7 @@ struct RegisterView: View {
                         
                         VStack(alignment: .leading, spacing: 16) {
                             Text("Please fill in the information below to complete your sign up")
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                                 .font(AppTheme.fonts.textMedium.font)
                                 .foregroundColor(AppTheme.colors.black.color)
                             
@@ -68,6 +69,7 @@ struct RegisterView: View {
                   message: Text(self.viewModel.messageAlert),
                   dismissButton: .default(Text("OK"), action: {
                     if viewModel.isRegisterSuccess {
+                        viewModel.reset()
                         self.presentationMode.wrappedValue.dismiss()
                     }
                   }))
@@ -78,10 +80,10 @@ struct RegisterView: View {
     }
     
     private func isNotValid() -> Bool {
-        return viewModel.email.isEmpty ||
-            viewModel.userName.isEmpty ||
-            viewModel.passWord.isEmpty ||
-            viewModel.passWordConfirm.isEmpty
+        return (viewModel.email.isEmpty || !viewModel.isEmailValid) ||
+            (viewModel.userName.isEmpty || !viewModel.isDisplayNameValid) ||
+            (viewModel.passWord.isEmpty || !viewModel.isPasswordValid) ||
+            (viewModel.passWordConfirm.isEmpty || !viewModel.isConfirmPasswordValid)
     }
 }
 

@@ -48,7 +48,7 @@ extension ChatService {
                                                                                  name: toClientId) else
             { return }
             print(String(decoding: encryptedData.data.base64EncodedData(), as: UTF8.self))
-            Backend.shared.send(encryptedData.data, fromClientId: fromClientId, toClientId: toClientId , groupId: groupId , groupType: "peer") { (publication) in
+            Multiserver.instance.currentServer.send(encryptedData.data, fromClientId: fromClientId, toClientId: toClientId , groupId: groupId , groupType: "peer") { (publication) in
                 if let publication = publication {
                     completion?(self.saveNewMessage(publication: publication, message: messageData))
                 }
@@ -73,7 +73,7 @@ extension ChatService {
     }
     
     func requestKeyPeer(byClientId clientId: String, completion: @escaping (Bool) -> Void) {
-        Backend.shared.authenticator
+        Multiserver.instance.currentServer.authenticator
             .requestKey(byClientId: clientId) { [weak self] (result, error, response) in
                 
                 guard let recipientResponse = response else {
@@ -152,8 +152,8 @@ extension ChatService {
         }
     }
     
-    func createPeerGroup(receiveId: String, completion: ((GroupModel) -> ())?) {
-        guard let user = Backend.shared.getUserLogin() else {
+    func createPeerGroup(receiveId: String, username: String, completion: ((GroupModel) -> ())?) {
+        guard let user = Multiserver.instance.currentServer.getUserLogin() else {
             Debug.DLog("My Account is nil")
             return
         }
@@ -161,9 +161,20 @@ extension ChatService {
         req.groupName = "\(user.displayName)-\(user.id)"
         req.groupType = "peer"
         req.createdByClientID = user.id
-        req.lstClientID = [user.id , receiveId]
         
-        Backend.shared.createRoom(req) { (result , error)  in
+        var userGroup = Group_ClientInGroupObject()
+        userGroup.id = user.id
+        userGroup.displayName = user.displayName
+        userGroup.workspaceDomain = user.workspace_domain.workspace_domain
+        
+        var receiveGroup = Group_ClientInGroupObject()
+        receiveGroup.id = receiveId
+        receiveGroup.displayName = username
+        receiveGroup.workspaceDomain = user.workspace_domain.workspace_domain
+        
+        req.lstClient = [userGroup, receiveGroup]
+        
+        Multiserver.instance.currentServer.createRoom(req) { (result , error)  in
             if let result = result {
                 let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
                 
@@ -182,7 +193,10 @@ extension ChatService {
                                            lastMessage: Data(),
                                            idLastMessage: result.lastMessage.id,
                                            timeSyncMessage: 0)
-                    completion?(group)
+                    RealmManager.shared.addAndUpdateGroup(group: group) {
+                        completion?(group)
+                    }
+                    
                 }
             }
         }
@@ -197,7 +211,7 @@ extension ChatService {
             guard let encryptedData = try CKSignalCoordinate.shared.ourEncryptionManager?.encryptToGroup(messageData,
                                                                                groupId: groupId,
                                                                                name: fromClientId) else { return }
-            Backend.shared.send(encryptedData.data, fromClientId: fromClientId, groupId: groupId, groupType: "group") { (publication) in
+            Multiserver.instance.currentServer.send(encryptedData.data, fromClientId: fromClientId, groupId: groupId, groupType: "group") { (publication) in
                 if let publication = publication {
                     completion?(self.saveNewMessage(publication: publication, message: messageData))
                 }
@@ -245,7 +259,7 @@ extension ChatService {
                     
                     do {
                         let signalSKDM = try groupSessionBuilder.createSession(with: senderKeyName)
-                        Backend.shared.authenticator.registerGroup(byGroupId: groupId,
+                        Multiserver.instance.currentServer.authenticator.registerGroup(byGroupId: groupId,
                                                                    clientId: address.name,
                                                                    deviceId: address.deviceId,
                                                                    senderKeyData: signalSKDM.serializedData()) { (result, error) in
@@ -268,7 +282,7 @@ extension ChatService {
     
     // Request key group
     func requestKeyInGroup(byGroupId groupId: Int64, fromClientId: String, completion: @escaping ((Bool) -> ())) {
-        Backend.shared.authenticator.requestKeyGroup(byClientId: fromClientId,
+        Multiserver.instance.currentServer.authenticator.requestKeyGroup(byClientId: fromClientId,
                                                      groupId: groupId) {(result, error, response) in
             guard let groupResponse = response else {
                 Debug.DLog("Request prekey \(groupId) fail")

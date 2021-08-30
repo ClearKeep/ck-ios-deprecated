@@ -73,7 +73,7 @@ extension ForgotPassWordView {
         }
         hudVisible = true
         
-        Backend.shared.forgotPassword(email: self.email) { (result, isSuccess) in
+        Multiserver.instance.currentServer.forgotPassword(email: self.email) { (result, isSuccess) in
             hudVisible = false
             if isSuccess {
                 if let result = result {
@@ -83,7 +83,7 @@ extension ForgotPassWordView {
                         self.isShowAlert = true
                     } else {
                         self.titleAlert = "Forgot Pasword Error"
-                        self.messageAlert = result.errors.message
+                        self.messageAlert = result.error.message
                         self.isShowAlert = true
                     }
                 }

@@ -50,10 +50,10 @@ class JanusVideoRoom: NSObject {
     init(delegate: JanusVideoRoomDelegate? = nil, token: String?) {
         super.init()
 //        let server = URL(string: "ws://54.235.68.160:8188/janus") // staging server
-//        let server = URL(string: "ws://54.235.68.160:18188/janus") // dev server
+        let server = URL(string: "ws://54.235.68.160:18188/janus") // dev server
 //        let server = URL(string: "ws://10.0.255.82:8188/janus") // Local server
         
-        let server = URL(string: AppConfig.buildEnvironment.webrtc)
+//        let server = URL(string: AppConfig.buildEnvironment.webrtc)
         
         let janus = Janus(withServer: server!, token: token)
         publisher = JanusRolePublish(withJanus: janus, delegate: self)

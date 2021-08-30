@@ -41,6 +41,8 @@ struct LeftMainMenuView: View {
     @ObservedObject var leftMenuStatus: LeftMenuStatus
     
     var joinServerHandler: VoidCompletion
+    var selectedServerHandler: ObjectCompletion?
+
     var manageContactHandler: VoidCompletion
     
     static let joinServerItemID = "joinServerItemID#270421"
@@ -66,7 +68,8 @@ struct LeftMainMenuView: View {
                     ForEach(leftMenuStatus.items, id:\.serverID) { item in
                         Button(action: {
                             self.leftMenuStatus.selectedServerID = item.serverID
-                            item.onSelectCompletion?()
+                            item.onSelectCompletion?()                            
+                            self.selectedServerHandler?(item)
                         }, label: {
                             MainMenuItemView(isSelected: item.serverID == leftMenuStatus.selectedServerID, hasNewMessage: item.hasNewMessage)
                         })

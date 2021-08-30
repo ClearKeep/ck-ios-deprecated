@@ -16,6 +16,17 @@ extension String {
         let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
         return emailPredicate.evaluate(with: self)
     }
+    
+    func textFieldValidatorURL() -> Bool {
+        if self.count > 20 {
+            return false
+        }
+        
+        let urlFormat = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+        
+        let urlPredicate = NSPredicate(format:"SELF MATCHES %@", urlFormat)
+        return urlPredicate.evaluate(with: self)
+    }
 
     /// Returns the first element of the collection of string. If a collection
     /// is empty, returns nil.

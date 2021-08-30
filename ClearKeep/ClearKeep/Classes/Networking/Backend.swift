@@ -9,9 +9,7 @@ import SignalProtocolObjC
 import NIOHPACK
 
 class Backend {
-    
-    static let shared = Backend()
-    
+        
     private let group: MultiThreadedEventLoopGroup
     
     private let clientSignal: Signal_SignalKeyDistributionClient
@@ -40,14 +38,16 @@ class Backend {
     
     private var queueHandShake: [String: String] = [:]
     
-    private init(host: String = AppConfig.buildEnvironment.grpc, port: Int = AppConfig.buildEnvironment.grpc_port) {
-//    init(host: String = "54.235.68.160", port: Int = 5000) { // staging server
-//    init(host: String = "54.235.68.160", port: Int = 15000) { // dev server
-//    init(host: String = "172.16.6.34", port: Int = 25000) { // dev server 2
-//    init(host: String = "172.16.6.232", port: Int = 15000) { // dev server 3
+    var workspace_domain: WorkspaceDomain
+    
+    public init(workspace_domain: WorkspaceDomain = WorkspaceDomain(workspace_domain: "54.235.68.160:25000", workspace_name: "Development Server")) {
+        
+        self.workspace_domain = workspace_domain
 
         group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         
+        let host = workspace_domain.grpc
+        let port = workspace_domain.grpc_port
         let configuration = ClientConnection.Configuration.init(target: .hostAndPort(host, port), eventLoopGroup: group)
         
         connection = ClientConnection(configuration: configuration)
@@ -155,7 +155,7 @@ class Backend {
                 $0.clientID = receiveId
                 $0.fromClientID = senderId
                 $0.message = message
-                $0.groupType = groupType
+//                $0.groupType = groupType
                 $0.groupID = groupId
             }
             
@@ -425,14 +425,14 @@ class Backend {
             var req = VideoCall_VideoCallRequest()
             req.clientID = clientID
             req.groupID = groupID
-            clientVideoCall.cancel_request_call(req, callOptions: header).response.whenComplete { (result) in
-                switch result {
-                case .success(let response):
-                    completion(response , nil)
-                case .failure(let error):
-                    completion(nil , error)
-                }
-            }
+//            clientVideoCall.cancel_request_call(req, callOptions: header).response.whenComplete { (result) in
+//                switch result {
+//                case .success(let response):
+//                    completion(response , nil)
+//                case .failure(let error):
+//                    completion(nil , error)
+//                }
+//            }
         }
     }
     

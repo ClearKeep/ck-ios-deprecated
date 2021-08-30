@@ -33,17 +33,25 @@ struct HomeMainView: View {
                     HStack(alignment: .top, spacing: 0) {
                         LeftMainMenuView(leftMenuStatus: viewModel.menuItems,
                                          joinServerHandler: {
-                                            viewModel.selectedServer = "Joined server"
+                                            viewModel.selectedServer = Multiserver.instance.servers.count
                                          },
-                                         manageContactHandler: {})
+                                         selectedServerHandler: { item in
+                                            serverMainViewModel.getJoinedGroup()
+                                         }, manageContactHandler: {})
                         VStack {
                             Spacer()
                                 .frame(height: 4)
                             
                             HStack {
-                                Text(viewModel.selectedServer)
-                                    .font(AppTheme.fonts.displaySmallBold.font)
-                                    .foregroundColor(AppTheme.colors.black.color)
+                                if viewModel.selectedServer < Multiserver.instance.getDomains().count {
+                                    Text("\(Multiserver.instance.getDomains()[viewModel.selectedServer].workspace_name)")
+                                        .font(AppTheme.fonts.displaySmallBold.font)
+                                        .foregroundColor(AppTheme.colors.black.color)
+                                } else {
+                                    Text("Joined server")
+                                        .font(AppTheme.fonts.displaySmallBold.font)
+                                        .foregroundColor(AppTheme.colors.black.color)
+                                }
                                 Spacer()
                                 Button(action: {
                                     withAnimation {
@@ -58,11 +66,16 @@ struct HomeMainView: View {
                                 })
                             }
                             
-                            if viewModel.selectedServer == "CK Development" {
+                            if viewModel.selectedServer == Multiserver.instance.currentIndex {
                                 ServerMainView(viewModel: serverMainViewModel, messageData: $messageData, isShowMessageBanner: $isShowingBanner)
-                            } else {
-                                JoinServerView(action: { text in
-                                    guard let text = text as? String else {return}
+                            } else if viewModel.selectedServer == Multiserver.instance.servers.count {
+                                JoinServerView(action: { url in
+                                    guard let url = url as? String else {return}
+                                    let _url = url.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    let backend = Backend(workspace_domain: WorkspaceDomain(workspace_domain: _url, workspace_name: ""))
+                                    Multiserver.instance.servers.append(backend)
+                                    Multiserver.instance.domains.append(WorkspaceDomain(workspace_domain: _url, workspace_name: ""))
+                                    Multiserver.instance.currentIndex += 1
                                     showingSheet.toggle()
                                 })
                             }
@@ -77,7 +90,14 @@ struct HomeMainView: View {
                 .blur(radius: isShowingServerDetailView ? 5 : 0)
                 
                 if isShowingServerDetailView {
-                    ServerDetailView(showDetail: $isShowingServerDetailView).transition(.identity)
+                    ServerDetailView(showDetail: $isShowingServerDetailView, callback: {
+                        do {
+                            let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
+                            viewModel.getUserInDatabase(clientID: userLogin.id)
+                        } catch {
+                            print("get user login error")
+                        }
+                    }).transition(.identity)
                 }
             }
         }
@@ -92,7 +112,7 @@ struct HomeMainView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .compatibleFullScreen(isPresented: $showingSheet) {
+        .compatibleFullScreen(isPresented: showingSheet) {
             LoginView(dismissAlert: $showingSheet, joinServer: true)
         }
 

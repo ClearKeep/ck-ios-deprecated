@@ -109,7 +109,7 @@ extension InviteMemberGroup {
     
     func getListUser(){
         self.hudVisible = true
-        Backend.shared.getListUser { (result, error) in
+        Multiserver.instance.currentServer.getListUser { (result, error) in
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {
@@ -121,7 +121,7 @@ extension InviteMemberGroup {
     
     func searchUser(_ keySearch: String){
         self.hudVisible = true
-        Backend.shared.searchUser(keySearch.trimmingCharacters(in: .whitespaces).lowercased()) { (result, error) in
+        Multiserver.instance.currentServer.searchUser(keySearch.trimmingCharacters(in: .whitespaces).lowercased()) { (result, error) in
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {

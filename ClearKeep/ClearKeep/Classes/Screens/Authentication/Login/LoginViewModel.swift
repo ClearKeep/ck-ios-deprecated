@@ -17,7 +17,17 @@ struct UserLoginResponseInfo {
 class LoginViewModel: ObservableObject {
     @Published var isUseCustomServer = false
     @Published var customServerURL = ""
-    @Published var customServerPort = ""
     
     var userLoginResponseInfo = UserLoginResponseInfo(userId: "", userDisplayName: "", userEmail: "", signInType: .email)
+    
+    func usedCustomServer() -> Bool {
+        guard let first = customServerURL.components(separatedBy: ":").first,
+              let last = customServerURL.components(separatedBy: ":").last else {
+            return false
+        }
+        
+        let validated = first.textFieldValidatorURL() && (first != last) && customServerURL.last! != ":"
+
+        return validated
+    }
 }

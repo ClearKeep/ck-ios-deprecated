@@ -25,26 +25,36 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate VideoCall_VideoCallClient, then call methods of this protocol to make API calls.
-internal protocol VideoCall_VideoCallClientProtocol: GRPCClient {
+/// Usage: instantiate `VideoCall_VideoCallClient`, then call methods of this protocol to make API calls.
+public protocol VideoCall_VideoCallClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol? { get }
+
   func video_call(
     _ request: VideoCall_VideoCallRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_ServerResponse>
-
-  func cancel_request_call(
-    _ request: VideoCall_VideoCallRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse>
 
   func update_call(
     _ request: VideoCall_UpdateCallRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>
 
+  func workspace_video_call(
+    _ request: VideoCall_WorkspaceVideoCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_WorkspaceVideoCallRequest, VideoCall_ServerResponse>
+
+  func workspace_update_call(
+    _ request: VideoCall_WorkspaceUpdateCallRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<VideoCall_WorkspaceUpdateCallRequest, VideoCall_BaseResponse>
 }
 
 extension VideoCall_VideoCallClientProtocol {
+  public var serviceName: String {
+    return "video_call.VideoCall"
+  }
 
   /// Unary call to video_call
   ///
@@ -52,31 +62,15 @@ extension VideoCall_VideoCallClientProtocol {
   ///   - request: Request to send to video_call.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func video_call(
+  public func video_call(
     _ request: VideoCall_VideoCallRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_ServerResponse> {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/video_call",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
-  /// Unary call to cancel_request_call
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to cancel_request_call.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func cancel_request_call(
-    _ request: VideoCall_VideoCallRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<VideoCall_VideoCallRequest, VideoCall_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/video_call.VideoCall/cancel_request_call",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makevideo_callInterceptors() ?? []
     )
   }
 
@@ -86,70 +80,172 @@ extension VideoCall_VideoCallClientProtocol {
   ///   - request: Request to send to update_call.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func update_call(
+  public func update_call(
     _ request: VideoCall_UpdateCallRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<VideoCall_UpdateCallRequest, VideoCall_BaseResponse> {
     return self.makeUnaryCall(
       path: "/video_call.VideoCall/update_call",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupdate_callInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to workspace_video_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to workspace_video_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func workspace_video_call(
+    _ request: VideoCall_WorkspaceVideoCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_WorkspaceVideoCallRequest, VideoCall_ServerResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/workspace_video_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeworkspace_video_callInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to workspace_update_call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to workspace_update_call.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func workspace_update_call(
+    _ request: VideoCall_WorkspaceUpdateCallRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<VideoCall_WorkspaceUpdateCallRequest, VideoCall_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/video_call.VideoCall/workspace_update_call",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeworkspace_update_callInterceptors() ?? []
     )
   }
 }
 
-internal final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol VideoCall_VideoCallClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'video_call'.
+  func makevideo_callInterceptors() -> [ClientInterceptor<VideoCall_VideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'update_call'.
+  func makeupdate_callInterceptors() -> [ClientInterceptor<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'workspace_video_call'.
+  func makeworkspace_video_callInterceptors() -> [ClientInterceptor<VideoCall_WorkspaceVideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'workspace_update_call'.
+  func makeworkspace_update_callInterceptors() -> [ClientInterceptor<VideoCall_WorkspaceUpdateCallRequest, VideoCall_BaseResponse>]
+}
+
+public final class VideoCall_VideoCallClient: VideoCall_VideoCallClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol?
 
   /// Creates a client for the video_call.VideoCall service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: VideoCall_VideoCallClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol VideoCall_VideoCallProvider: CallHandlerProvider {
+public protocol VideoCall_VideoCallProvider: CallHandlerProvider {
+  var interceptors: VideoCall_VideoCallServerInterceptorFactoryProtocol? { get }
+
   func video_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_ServerResponse>
-  func cancel_request_call(request: VideoCall_VideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
   func update_call(request: VideoCall_UpdateCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
+
+  func workspace_video_call(request: VideoCall_WorkspaceVideoCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_ServerResponse>
+
+  func workspace_update_call(request: VideoCall_WorkspaceUpdateCallRequest, context: StatusOnlyCallContext) -> EventLoopFuture<VideoCall_BaseResponse>
 }
 
 extension VideoCall_VideoCallProvider {
-  internal var serviceName: Substring { return "video_call.VideoCall" }
+  public var serviceName: Substring { return "video_call.VideoCall" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "video_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.video_call(request: request, context: context)
-        }
-      }
-
-    case "cancel_request_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.cancel_request_call(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_VideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_ServerResponse>(),
+        interceptors: self.interceptors?.makevideo_callInterceptors() ?? [],
+        userFunction: self.video_call(request:context:)
+      )
 
     case "update_call":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.update_call(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_UpdateCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makeupdate_callInterceptors() ?? [],
+        userFunction: self.update_call(request:context:)
+      )
 
-    default: return nil
+    case "workspace_video_call":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_WorkspaceVideoCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_ServerResponse>(),
+        interceptors: self.interceptors?.makeworkspace_video_callInterceptors() ?? [],
+        userFunction: self.workspace_video_call(request:context:)
+      )
+
+    case "workspace_update_call":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<VideoCall_WorkspaceUpdateCallRequest>(),
+        responseSerializer: ProtobufSerializer<VideoCall_BaseResponse>(),
+        interceptors: self.interceptors?.makeworkspace_update_callInterceptors() ?? [],
+        userFunction: self.workspace_update_call(request:context:)
+      )
+
+    default:
+      return nil
     }
   }
 }
 
+public protocol VideoCall_VideoCallServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'video_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makevideo_callInterceptors() -> [ServerInterceptor<VideoCall_VideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'update_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupdate_callInterceptors() -> [ServerInterceptor<VideoCall_UpdateCallRequest, VideoCall_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'workspace_video_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeworkspace_video_callInterceptors() -> [ServerInterceptor<VideoCall_WorkspaceVideoCallRequest, VideoCall_ServerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'workspace_update_call'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeworkspace_update_callInterceptors() -> [ServerInterceptor<VideoCall_WorkspaceUpdateCallRequest, VideoCall_BaseResponse>]
+}

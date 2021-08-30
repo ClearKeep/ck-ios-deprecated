@@ -150,7 +150,7 @@ class CallViewModel: NSObject, ObservableObject {
                 if let localVideo = self.localVideoView {
                     self.remotesVideoView.append(localVideo)
                     
-                    if let currentUserId = Backend.shared.getUserLogin()?.id {
+                    if let currentUserId = Multiserver.instance.currentServer.getUserLogin()?.id {
                         self.remotesVideoViewDict[currentUserId] = localVideo
                         if self.remotesVideoViewConfig[currentUserId] == nil {
                             self.remotesVideoViewConfig[currentUserId] = CustomVideoViewConfig(clientId: currentUserId, groupId: groupId)
@@ -168,7 +168,7 @@ class CallViewModel: NSObject, ObservableObject {
     func endCall() {
         if let callBox = self.callBox {
             if !callBox.isCallGroup {
-                Backend.shared.cancelRequestCall(callBox.clientId, callBox.roomId) { (result, error) in
+                Multiserver.instance.currentServer.cancelRequestCall(callBox.clientId, callBox.roomId) { (result, error) in
                 }
             }
             CallManager.shared.end(call: callBox)
@@ -322,7 +322,7 @@ class CallViewModel: NSObject, ObservableObject {
     
     func updateCallTypeVideo() {
         guard let callBox = self.callBox else { return }
-        Backend.shared.updateVideoCall(callBox.roomId, callType: .video) { [weak self](response, error) in
+        Multiserver.instance.currentServer.updateVideoCall(callBox.roomId, callType: .video) { [weak self](response, error) in
             if error == nil {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }

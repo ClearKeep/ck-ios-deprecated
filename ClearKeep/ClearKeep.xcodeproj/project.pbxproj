@@ -753,6 +753,14 @@
 		CBF66E3E266A695000794E44 /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
 		CBF66E42266A9F0800794E44 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBACEF2E266A23B900245DC1 /* NotificationService.swift */; };
 		DCA7A16CC53FEC8C75417DDB /* Pods_NotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064A2171437A9CCF78191D50 /* Pods_NotificationServiceExtension.framework */; };
+		DF6294EF26D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
+		DF6294F026D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
+		DF6294F126D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
+		DF62951F26D4F8C5000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
+		DF6EE36926D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */; };
+		DF6EE36A26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */; };
+		DF6EE36B26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */; };
+		DF6EE36C26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1100,6 +1108,8 @@
 		CBF66E44266BCDA700794E44 /* NotificationServiceExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionDebug.entitlements; sourceTree = "<group>"; };
 		CBF66E45266BCE6800794E44 /* ClearKeep StagingDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ClearKeep StagingDebug.entitlements"; sourceTree = "<group>"; };
 		CBF66E47266BE8A300794E44 /* NotificationServiceExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionRelease.entitlements; sourceTree = "<group>"; };
+		DF6294EE26D4F4EF000A7162 /* Multiserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Multiserver.swift; sourceTree = "<group>"; };
+		DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsUsers.swift; sourceTree = "<group>"; };
 		E19E5287A8E112878409B496 /* Pods-ClearKeep Development.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1360,6 +1370,7 @@
 		16208E34252D63EB000A6CE7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DF6EE35626D8D5AB000A2080 /* UserDefault */,
 				688B67DA2570F79900B95235 /* Realm */,
 				688B67D12570F4BA00B95235 /* File */,
 				56BF0CE12551571E0012E831 /* CK_Storage */,
@@ -1376,6 +1387,7 @@
 		16208E35252D63F1000A6CE7 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				DF6294EE26D4F4EF000A7162 /* Multiserver.swift */,
 				16555033252F0B20008E66D0 /* Authenticator.swift */,
 				1655502E252F02F3008E66D0 /* Backend.swift */,
 			);
@@ -1963,6 +1975,14 @@
 				68CFA4B825677E0B00109725 /* MotherViewModel.swift */,
 			);
 			path = RootView;
+			sourceTree = "<group>";
+		};
+		DF6EE35626D8D5AB000A2080 /* UserDefault */ = {
+			isa = PBXGroup;
+			children = (
+				DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */,
+			);
+			path = UserDefault;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2578,6 +2598,7 @@
 				10B70BD02664B9F10066C752 /* GroupChatDetailView.swift in Sources */,
 				10B70BD12664B9F10066C752 /* Constant.swift in Sources */,
 				10B70BD22664B9F10066C752 /* YapDatabaseConstants.swift in Sources */,
+				DF6294F026D4F4EF000A7162 /* Multiserver.swift in Sources */,
 				10B70BD32664B9F10066C752 /* CircularProgressIndicator.swift in Sources */,
 				10B70BD42664B9F10066C752 /* ForgotPassWordView.swift in Sources */,
 				10B70BD52664B9F10066C752 /* video_call.pb.swift in Sources */,
@@ -2633,6 +2654,7 @@
 				10B70C052664B9F10066C752 /* Tools.m in Sources */,
 				10B70C062664B9F10066C752 /* JanusRolePublish+Control.swift in Sources */,
 				10B70C072664B9F10066C752 /* Group.swift in Sources */,
+				DF6EE36A26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */,
 				10B70C082664B9F10066C752 /* JanusMediaConstraints.swift in Sources */,
 				10B70C092664B9F10066C752 /* SuccessIndicator.swift in Sources */,
 				10B70C0A2664B9F10066C752 /* CKSignalSession.m in Sources */,
@@ -2786,6 +2808,7 @@
 				10B70CE72664BE040066C752 /* GroupChatDetailView.swift in Sources */,
 				10B70CE82664BE040066C752 /* Constant.swift in Sources */,
 				10B70CE92664BE040066C752 /* YapDatabaseConstants.swift in Sources */,
+				DF6294F126D4F4EF000A7162 /* Multiserver.swift in Sources */,
 				10B70CEA2664BE040066C752 /* CircularProgressIndicator.swift in Sources */,
 				10B70CEB2664BE040066C752 /* ForgotPassWordView.swift in Sources */,
 				10B70CEC2664BE040066C752 /* video_call.pb.swift in Sources */,
@@ -2841,6 +2864,7 @@
 				10B70D1C2664BE040066C752 /* Tools.m in Sources */,
 				10B70D1D2664BE040066C752 /* JanusRolePublish+Control.swift in Sources */,
 				10B70D1E2664BE040066C752 /* Group.swift in Sources */,
+				DF6EE36B26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */,
 				10B70D1F2664BE040066C752 /* JanusMediaConstraints.swift in Sources */,
 				10B70D202664BE040066C752 /* SuccessIndicator.swift in Sources */,
 				10B70D212664BE040066C752 /* CKSignalSession.m in Sources */,
@@ -2994,6 +3018,7 @@
 				16CC6426253B59C400A4E20C /* CKClientStore.swift in Sources */,
 				1655502F252F02F3008E66D0 /* Backend.swift in Sources */,
 				1013C95C2608A66B0081C135 /* GroupChatDetailView.swift in Sources */,
+				DF6294EF26D4F4EF000A7162 /* Multiserver.swift in Sources */,
 				686F25F5255E774600953C5E /* Constant.swift in Sources */,
 				569FFBCF254BEDB600C487F5 /* YapDatabaseConstants.swift in Sources */,
 				56694ADB25B53C8A008E8EC5 /* CircularProgressIndicator.swift in Sources */,
@@ -3049,6 +3074,7 @@
 				56694AF625B56A52008E8EC5 /* Tools.m in Sources */,
 				56205B1125A2C36D00B39D07 /* JanusRolePublish+Control.swift in Sources */,
 				689248012566123A00EAD2B7 /* Group.swift in Sources */,
+				DF6EE36926D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */,
 				56205B0D25A2C36D00B39D07 /* JanusMediaConstraints.swift in Sources */,
 				56694AD725B53C8A008E8EC5 /* SuccessIndicator.swift in Sources */,
 				569FFB8F254BCB1D00C487F5 /* CKSignalSession.m in Sources */,
@@ -3116,6 +3142,7 @@
 				CBF66E33266A66E100794E44 /* CKPreKey.swift in Sources */,
 				CBACEF73266A5F5A00245DC1 /* CKDatabaseManager.m in Sources */,
 				CBF66E3B266A692200794E44 /* CKAccount.m in Sources */,
+				DF62951F26D4F8C5000A7162 /* Multiserver.swift in Sources */,
 				CBACEF6D266A5F2C00245DC1 /* video_call.grpc.swift in Sources */,
 				CBF66E36266A675200794E44 /* CKAccountSignalIdentity.m in Sources */,
 				CBACEF7D266A608D00245DC1 /* CKSignalSession.m in Sources */,
@@ -3130,6 +3157,7 @@
 				CBF66E2E266A657100794E44 /* DefaultFonts.swift in Sources */,
 				CBF66E35266A671A00794E44 /* CKSignalSignedPreKey.m in Sources */,
 				CBACEF67266A5F2C00245DC1 /* signal.grpc.swift in Sources */,
+				DF6EE36C26D8D61D000A2080 /* UserDefaultsUsers.swift in Sources */,
 				CBACEF74266A5F5A00245DC1 /* CKAccountSignalEncryptionManager.swift in Sources */,
 				CBF66E37266A676600794E44 /* CKSignalObject.m in Sources */,
 				CBACEF66266A5F2C00245DC1 /* video_call.pb.swift in Sources */,

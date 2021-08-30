@@ -52,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSUInteger)removeAllAccountsInTransaction:(YapDatabaseReadWriteTransaction *)transaction;
 + (NSUInteger)removeAllAccountsOfType:(CKAccountType)accountType inTransaction:(YapDatabaseReadWriteTransaction *)transaction;
++ (NSInteger)removeAllAccountsWithUsername:(NSString *)username transaction:(YapDatabaseReadWriteTransaction*)transaction;
 
 @end
 NS_ASSUME_NONNULL_END

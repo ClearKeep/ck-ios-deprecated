@@ -21,91 +21,91 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 }
 
 ///errors response
-struct UploadFile_ErrorRes {
+public struct UploadFile_ErrorRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var code: Int64 = 0
+  public var code: Int64 = 0
 
-  var message: String = String()
+  public var message: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct UploadFile_BaseResponse {
+public struct UploadFile_BaseResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  public var success: Bool = false
 
-  var errors: UploadFile_ErrorRes {
+  public var errors: UploadFile_ErrorRes {
     get {return _errors ?? UploadFile_ErrorRes()}
     set {_errors = newValue}
   }
   /// Returns true if `errors` has been explicitly set.
-  var hasErrors: Bool {return self._errors != nil}
+  public var hasErrors: Bool {return self._errors != nil}
   /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  mutating func clearErrors() {self._errors = nil}
+  public mutating func clearErrors() {self._errors = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _errors: UploadFile_ErrorRes? = nil
 }
 
-struct UploadFile_FileUploadRequest {
+public struct UploadFile_FileUploadRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var fileName: String = String()
+  public var fileName: String = String()
 
-  var fileContentType: String = String()
+  public var fileContentType: String = String()
 
-  var fileData: Data = SwiftProtobuf.Internal.emptyData
+  public var fileData: Data = Data()
 
-  var fileHash: String = String()
+  public var fileHash: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct UploadFile_FileDataBlockRequest {
+public struct UploadFile_FileDataBlockRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var fileName: String = String()
+  public var fileName: String = String()
 
-  var fileContentType: String = String()
+  public var fileContentType: String = String()
 
-  var fileDataBlock: Data = SwiftProtobuf.Internal.emptyData
+  public var fileDataBlock: Data = Data()
 
-  var fileDataBlockHash: String = String()
+  public var fileDataBlockHash: String = String()
 
-  var fileHash: String = String()
+  public var fileHash: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct UploadFile_UploadFilesResponse {
+public struct UploadFile_UploadFilesResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var fileURL: String = String()
+  public var fileURL: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -113,23 +113,26 @@ struct UploadFile_UploadFilesResponse {
 fileprivate let _protobuf_package = "upload_file"
 
 extension UploadFile_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ErrorRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ErrorRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "code"),
     2: .same(proto: "message"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.code != 0 {
       try visitor.visitSingularInt64Field(value: self.code, fieldNumber: 1)
     }
@@ -139,7 +142,7 @@ extension UploadFile_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: UploadFile_ErrorRes, rhs: UploadFile_ErrorRes) -> Bool {
+  public static func ==(lhs: UploadFile_ErrorRes, rhs: UploadFile_ErrorRes) -> Bool {
     if lhs.code != rhs.code {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -148,23 +151,26 @@ extension UploadFile_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension UploadFile_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".BaseResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".BaseResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
     2: .same(proto: "errors"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
@@ -174,7 +180,7 @@ extension UploadFile_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._Message
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: UploadFile_BaseResponse, rhs: UploadFile_BaseResponse) -> Bool {
+  public static func ==(lhs: UploadFile_BaseResponse, rhs: UploadFile_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
     if lhs._errors != rhs._errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -183,27 +189,30 @@ extension UploadFile_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._Message
 }
 
 extension UploadFile_FileUploadRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FileUploadRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".FileUploadRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "file_name"),
     2: .standard(proto: "file_content_type"),
     3: .standard(proto: "file_data"),
     4: .standard(proto: "file_hash"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.fileName)
-      case 2: try decoder.decodeSingularStringField(value: &self.fileContentType)
-      case 3: try decoder.decodeSingularBytesField(value: &self.fileData)
-      case 4: try decoder.decodeSingularStringField(value: &self.fileHash)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fileName) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.fileContentType) }()
+      case 3: try { try decoder.decodeSingularBytesField(value: &self.fileData) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.fileHash) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.fileName.isEmpty {
       try visitor.visitSingularStringField(value: self.fileName, fieldNumber: 1)
     }
@@ -219,7 +228,7 @@ extension UploadFile_FileUploadRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: UploadFile_FileUploadRequest, rhs: UploadFile_FileUploadRequest) -> Bool {
+  public static func ==(lhs: UploadFile_FileUploadRequest, rhs: UploadFile_FileUploadRequest) -> Bool {
     if lhs.fileName != rhs.fileName {return false}
     if lhs.fileContentType != rhs.fileContentType {return false}
     if lhs.fileData != rhs.fileData {return false}
@@ -230,8 +239,8 @@ extension UploadFile_FileUploadRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
 }
 
 extension UploadFile_FileDataBlockRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FileDataBlockRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".FileDataBlockRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "file_name"),
     2: .standard(proto: "file_content_type"),
     3: .standard(proto: "file_data_block"),
@@ -239,20 +248,23 @@ extension UploadFile_FileDataBlockRequest: SwiftProtobuf.Message, SwiftProtobuf.
     5: .standard(proto: "file_hash"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.fileName)
-      case 2: try decoder.decodeSingularStringField(value: &self.fileContentType)
-      case 3: try decoder.decodeSingularBytesField(value: &self.fileDataBlock)
-      case 4: try decoder.decodeSingularStringField(value: &self.fileDataBlockHash)
-      case 5: try decoder.decodeSingularStringField(value: &self.fileHash)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fileName) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.fileContentType) }()
+      case 3: try { try decoder.decodeSingularBytesField(value: &self.fileDataBlock) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.fileDataBlockHash) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.fileHash) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.fileName.isEmpty {
       try visitor.visitSingularStringField(value: self.fileName, fieldNumber: 1)
     }
@@ -271,7 +283,7 @@ extension UploadFile_FileDataBlockRequest: SwiftProtobuf.Message, SwiftProtobuf.
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: UploadFile_FileDataBlockRequest, rhs: UploadFile_FileDataBlockRequest) -> Bool {
+  public static func ==(lhs: UploadFile_FileDataBlockRequest, rhs: UploadFile_FileDataBlockRequest) -> Bool {
     if lhs.fileName != rhs.fileName {return false}
     if lhs.fileContentType != rhs.fileContentType {return false}
     if lhs.fileDataBlock != rhs.fileDataBlock {return false}
@@ -283,28 +295,31 @@ extension UploadFile_FileDataBlockRequest: SwiftProtobuf.Message, SwiftProtobuf.
 }
 
 extension UploadFile_UploadFilesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".UploadFilesResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".UploadFilesResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "file_url"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.fileURL)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fileURL) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.fileURL.isEmpty {
       try visitor.visitSingularStringField(value: self.fileURL, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: UploadFile_UploadFilesResponse, rhs: UploadFile_UploadFilesResponse) -> Bool {
+  public static func ==(lhs: UploadFile_UploadFilesResponse, rhs: UploadFile_UploadFilesResponse) -> Bool {
     if lhs.fileURL != rhs.fileURL {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

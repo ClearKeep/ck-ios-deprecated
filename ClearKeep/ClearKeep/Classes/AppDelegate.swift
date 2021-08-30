@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
         UserDefaults.standard.setValue(token, forKey: Constants.keySaveTokenPushNotifyAPNS)
         
         if let _ = SharedDataAppGroup.sharedUserDefaults?.string(forKey: Constants.keySaveUserID) {
-            Backend.shared.registerTokenDevice { (response) in }
+            Multiserver.instance.currentServer.registerTokenDevice { (response) in }
         }
     }
     
@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , PKPushRegistryDelegate, 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         // TODO: to check with backend for this key
-        if let currentUserId = userInfo["client_id"] as? String, let savedCurrentUserId = Backend.shared.getUserLogin()?.id, currentUserId != savedCurrentUserId {
+        if let currentUserId = userInfo["client_id"] as? String, let savedCurrentUserId = Multiserver.instance.currentServer.getUserLogin()?.id, currentUserId != savedCurrentUserId {
             print("This notification is not belong to me")
             print("\(currentUserId) # \(savedCurrentUserId)")
             return

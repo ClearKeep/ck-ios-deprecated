@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate ServerInfo_ServerInfoClient, then call methods of this protocol to make API calls.
-internal protocol ServerInfo_ServerInfoClientProtocol: GRPCClient {
+/// Usage: instantiate `ServerInfo_ServerInfoClient`, then call methods of this protocol to make API calls.
+public protocol ServerInfo_ServerInfoClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: ServerInfo_ServerInfoClientInterceptorFactoryProtocol? { get }
+
   func update_nts(
     _ request: ServerInfo_UpdateNTSReq,
     callOptions: CallOptions?
@@ -36,10 +39,12 @@ internal protocol ServerInfo_ServerInfoClientProtocol: GRPCClient {
     _ request: ServerInfo_Empty,
     callOptions: CallOptions?
   ) -> UnaryCall<ServerInfo_Empty, ServerInfo_GetThreadResponse>
-
 }
 
 extension ServerInfo_ServerInfoClientProtocol {
+  public var serviceName: String {
+    return "server_info.ServerInfo"
+  }
 
   /// Unary call to update_nts
   ///
@@ -47,14 +52,15 @@ extension ServerInfo_ServerInfoClientProtocol {
   ///   - request: Request to send to update_nts.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func update_nts(
+  public func update_nts(
     _ request: ServerInfo_UpdateNTSReq,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<ServerInfo_UpdateNTSReq, ServerInfo_BaseResponse> {
     return self.makeUnaryCall(
       path: "/server_info.ServerInfo/update_nts",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupdate_ntsInterceptors() ?? []
     )
   }
 
@@ -64,62 +70,100 @@ extension ServerInfo_ServerInfoClientProtocol {
   ///   - request: Request to send to total_thread.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func total_thread(
+  public func total_thread(
     _ request: ServerInfo_Empty,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<ServerInfo_Empty, ServerInfo_GetThreadResponse> {
     return self.makeUnaryCall(
       path: "/server_info.ServerInfo/total_thread",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.maketotal_threadInterceptors() ?? []
     )
   }
 }
 
-internal final class ServerInfo_ServerInfoClient: ServerInfo_ServerInfoClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol ServerInfo_ServerInfoClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'update_nts'.
+  func makeupdate_ntsInterceptors() -> [ClientInterceptor<ServerInfo_UpdateNTSReq, ServerInfo_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'total_thread'.
+  func maketotal_threadInterceptors() -> [ClientInterceptor<ServerInfo_Empty, ServerInfo_GetThreadResponse>]
+}
+
+public final class ServerInfo_ServerInfoClient: ServerInfo_ServerInfoClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: ServerInfo_ServerInfoClientInterceptorFactoryProtocol?
 
   /// Creates a client for the server_info.ServerInfo service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: ServerInfo_ServerInfoClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol ServerInfo_ServerInfoProvider: CallHandlerProvider {
+public protocol ServerInfo_ServerInfoProvider: CallHandlerProvider {
+  var interceptors: ServerInfo_ServerInfoServerInterceptorFactoryProtocol? { get }
+
   func update_nts(request: ServerInfo_UpdateNTSReq, context: StatusOnlyCallContext) -> EventLoopFuture<ServerInfo_BaseResponse>
+
   func total_thread(request: ServerInfo_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<ServerInfo_GetThreadResponse>
 }
 
 extension ServerInfo_ServerInfoProvider {
-  internal var serviceName: Substring { return "server_info.ServerInfo" }
+  public var serviceName: Substring { return "server_info.ServerInfo" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "update_nts":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.update_nts(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<ServerInfo_UpdateNTSReq>(),
+        responseSerializer: ProtobufSerializer<ServerInfo_BaseResponse>(),
+        interceptors: self.interceptors?.makeupdate_ntsInterceptors() ?? [],
+        userFunction: self.update_nts(request:context:)
+      )
 
     case "total_thread":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.total_thread(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<ServerInfo_Empty>(),
+        responseSerializer: ProtobufSerializer<ServerInfo_GetThreadResponse>(),
+        interceptors: self.interceptors?.maketotal_threadInterceptors() ?? [],
+        userFunction: self.total_thread(request:context:)
+      )
 
-    default: return nil
+    default:
+      return nil
     }
   }
 }
 
+public protocol ServerInfo_ServerInfoServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'update_nts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupdate_ntsInterceptors() -> [ServerInterceptor<ServerInfo_UpdateNTSReq, ServerInfo_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'total_thread'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func maketotal_threadInterceptors() -> [ServerInterceptor<ServerInfo_Empty, ServerInfo_GetThreadResponse>]
+}

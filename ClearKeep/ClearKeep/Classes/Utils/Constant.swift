@@ -54,6 +54,9 @@ struct Constants {
     static let keyChainUUID = "keyChainUUID"
     static let userDefaultUUID = "userDefaultUUID"
     
+    static let keySaveUsers = "keySaveUsers"
+    static let keySaveRefreshTokens = "keySaveRefreshTokens"
+    
     struct User {
         static let loginDate = "loginDateTime"
     }
@@ -67,7 +70,7 @@ struct Constants {
 }
 
 extension Constants {
-    static let disableOpacityButton = 0.7
+    static let disableButtonOpacity = 0.7
 }
 
 extension Constants {
@@ -77,44 +80,6 @@ extension Constants {
         case stagging
         case production
         case debugServerLocal
-        
-        var grpc: String {
-            switch self {
-            case .development: return "54.235.68.160"
-            case .stagging: return "54.235.68.160"
-            case .production: return "54.235.68.160"
-//            case .debugServerLocal: return "172.16.6.34"
-            case .debugServerLocal: return "172.18.1.57"
-            }
-        }
-        
-        var grpc_port: Int {
-            switch self {
-            case .development: return 25000
-            case .stagging: return 15000
-            case .production: return 5000
-//            case .debugServerLocal: return 25000
-            case .debugServerLocal: return 15000
-            }
-        }
-
-        var webrtc: String {
-            switch self {
-            case .development: return "ws://54.235.68.160:28188/janus"
-            case .stagging: return "ws://54.235.68.160:18188/janus"
-            case .production: return "ws://54.235.68.160:8188/janus"
-            case .debugServerLocal: return "ws://172.16.6.34:28188/janus"
-            }
-        }
-        
-        var nameEnvironment: String {
-            switch self {
-            case .development: return "Development"
-            case .stagging: return "Stagging"
-            case .production: return "Production"
-            case .debugServerLocal: return "LocalDebugServer"
-            }
-        }
     }
 }
 

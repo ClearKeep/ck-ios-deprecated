@@ -24,7 +24,7 @@ class ServerMainViewModel: ObservableObject {
         reloadData()
         Debug.DLog("getJoinnedGroup")
         
-        Backend.shared.getJoinnedGroup { [weak self] (result, error) in
+        Multiserver.instance.currentServer.getJoinnedGroup { [weak self] (result, error) in
             guard let self = self else { return }
             if let result = result {
                 let dispatchGroup = DispatchGroup()

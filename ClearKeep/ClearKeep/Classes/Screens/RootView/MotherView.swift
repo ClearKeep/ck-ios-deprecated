@@ -44,4 +44,14 @@ class ViewRouter: ObservableObject {
             }
         }
     }
+    
+    var reload: Bool = false {
+        didSet {
+            withAnimation() {
+                DispatchQueue.main.async {
+                    self.objectWillChange.send(self)
+                }
+            }
+        }
+    }
 }

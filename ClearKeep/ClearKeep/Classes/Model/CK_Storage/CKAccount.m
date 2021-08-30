@@ -131,6 +131,22 @@
     return [keys count];
 }
 
++ (NSInteger)removeAllAccountsWithUsername:(NSString *)username transaction:(YapDatabaseReadWriteTransaction*)transaction {
+    NSMutableArray *keys = [NSMutableArray array];
+    [transaction enumerateKeysAndObjectsInCollection:[self collection] usingBlock:^(NSString *key, id object, BOOL *stop) {
+        if ([object isKindOfClass:[self class]]) {
+            CKAccount *account = (CKAccount *)object;
+            
+            if ([account.username isEqualToString:username]) {
+                [keys addObject:account.uniqueId];
+            }
+        }
+    }];
+
+    [transaction removeObjectsForKeys:keys inCollection:[self collection]];
+    return [keys count];
+}
+
 
 // See MTLModel+NSCoding.h
 // This helps enforce that only the properties keys that we
