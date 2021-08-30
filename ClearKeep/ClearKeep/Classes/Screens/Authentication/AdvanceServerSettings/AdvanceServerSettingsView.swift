@@ -92,7 +92,6 @@ struct AdvanceServerSettingsView: View {
             Multiserver.instance.servers = [Backend(workspace_domain: WorkspaceDomain(workspace_domain: url, workspace_name: ""))]
             Multiserver.instance.domains.append(WorkspaceDomain(workspace_domain: url, workspace_name: ""))
             Multiserver.instance.currentIndex = 0
-
         }
     }
 }

@@ -83,18 +83,3 @@ extension Constants {
     }
 }
 
-//development:
-//grpc: 54.235.68.160:25000
-//webrtc: ws://54.235.68.160:28188/janus
-//
-//stagging:
-//grpc: 54.235.68.160:15000
-//webrtc: ws://54.235.68.160:18188/janus
-//
-//production:
-//grpc: 54.235.68.160:5000
-//webrtc: ws://54.235.68.160:8188/janus
-//
-//debugServerLocal on Phuong's PC:
-//grpc: 172.16.6.34:25000
-//
