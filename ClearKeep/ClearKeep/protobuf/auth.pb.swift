@@ -20,206 +20,264 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-///errors response
-struct Auth_ErrorRes {
+///error response
+public struct Auth_ErrorRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var code: Int64 = 0
+  public var code: Int64 = 0
 
-  var message: String = String()
+  public var message: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct Auth_BaseResponse {
+public struct Auth_BaseResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  public var success: Bool = false
 
-  var errors: Auth_ErrorRes {
-    get {return _errors ?? Auth_ErrorRes()}
-    set {_errors = newValue}
+  public var error: Auth_ErrorRes {
+    get {return _error ?? Auth_ErrorRes()}
+    set {_error = newValue}
   }
-  /// Returns true if `errors` has been explicitly set.
-  var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  mutating func clearErrors() {self._errors = nil}
+  /// Returns true if `error` has been explicitly set.
+  public var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  public mutating func clearError() {self._error = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
-  fileprivate var _errors: Auth_ErrorRes? = nil
+  fileprivate var _error: Auth_ErrorRes? = nil
 }
 
 ///Login message struct
-struct Auth_AuthReq {
+public struct Auth_AuthReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var email: String = String()
+  public var workspaceDomain: String = String()
 
-  var password: String = String()
+  public var email: String = String()
 
-  var authType: Int64 = 0
+  public var password: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var authType: Int64 = 0
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
-struct Auth_LogoutReq {
+public struct Auth_LogoutReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var deviceID: String = String()
+  public var deviceID: String = String()
 
-  var refreshToken: String = String()
+  public var refreshToken: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// fogot password
-struct Auth_FogotPassWord {
+public struct Auth_FogotPassWord {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var email: String = String()
+  public var email: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct Auth_AuthRes {
+public struct Auth_AuthRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accessToken: String = String()
+  public var workspaceDomain: String = String()
 
-  var expiresIn: Int64 = 0
+  public var workspaceName: String = String()
 
-  var refreshExpiresIn: Int64 = 0
+  public var accessToken: String = String()
 
-  var refreshToken: String = String()
+  public var expiresIn: Int64 = 0
 
-  var tokenType: String = String()
+  public var refreshExpiresIn: Int64 = 0
 
-  var sessionState: String = String()
+  public var refreshToken: String = String()
 
-  var scope: String = String()
+  public var tokenType: String = String()
 
-  var hashKey: String = String()
+  public var sessionState: String = String()
 
-  var baseResponse: Auth_BaseResponse {
-    get {return _baseResponse ?? Auth_BaseResponse()}
-    set {_baseResponse = newValue}
-  }
-  /// Returns true if `baseResponse` has been explicitly set.
-  var hasBaseResponse: Bool {return self._baseResponse != nil}
-  /// Clears the value of `baseResponse`. Subsequent reads from it will return its default value.
-  mutating func clearBaseResponse() {self._baseResponse = nil}
+  public var scope: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var hashKey: String = String()
 
-  init() {}
+  public var sub: String = String()
 
-  fileprivate var _baseResponse: Auth_BaseResponse? = nil
+  public var otpHash: String = String()
+
+  public var requireAction: String = String()
+
+  public var error: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 ///Register message struct
-struct Auth_RegisterReq {
+public struct Auth_RegisterReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var email: String = String()
+  public var workspaceDomain: String = String()
 
-  var displayName: String = String()
+  public var email: String = String()
 
-  var password: String = String()
+  public var displayName: String = String()
 
-  var authType: Int64 = 0
+  public var password: String = String()
 
-  var firstName: String = String()
+  public var authType: Int64 = 0
 
-  var lastName: String = String()
+  public var firstName: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var lastName: String = String()
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
-struct Auth_RegisterRes {
+public struct Auth_RegisterRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var baseResponse: Auth_BaseResponse {
+  public var baseResponse: Auth_BaseResponse {
     get {return _baseResponse ?? Auth_BaseResponse()}
     set {_baseResponse = newValue}
   }
   /// Returns true if `baseResponse` has been explicitly set.
-  var hasBaseResponse: Bool {return self._baseResponse != nil}
+  public var hasBaseResponse: Bool {return self._baseResponse != nil}
   /// Clears the value of `baseResponse`. Subsequent reads from it will return its default value.
-  mutating func clearBaseResponse() {self._baseResponse = nil}
+  public mutating func clearBaseResponse() {self._baseResponse = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _baseResponse: Auth_BaseResponse? = nil
 }
 
 ///Login Google message struct
-struct Auth_GoogleLoginReq {
+public struct Auth_GoogleLoginReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var idToken: String = String()
+  public var workspaceDomain: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var idToken: String = String()
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 ///Login Office365 message struct
-struct Auth_OfficeLoginReq {
+public struct Auth_OfficeLoginReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accessToken: String = String()
+  public var workspaceDomain: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var accessToken: String = String()
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 ///Login Facebook message struct
-struct Auth_FacebookLoginReq {
+public struct Auth_FacebookLoginReq {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var accessToken: String = String()
+  public var workspaceDomain: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var accessToken: String = String()
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Auth_MfaValidateOtpRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var otpCode: String = String()
+
+  public var userID: String = String()
+
+  public var otpHash: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// we still need user_id and otp_hash for author and authen user
+public struct Auth_MfaResendOtpReq {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userID: String = String()
+
+  public var otpHash: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Auth_MfaResendOtpRes {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var otpHash: String = String()
+
+  public var success: Bool = false
+
+  public var error: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -227,23 +285,26 @@ struct Auth_FacebookLoginReq {
 fileprivate let _protobuf_package = "auth"
 
 extension Auth_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ErrorRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ErrorRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "code"),
     2: .same(proto: "message"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.code != 0 {
       try visitor.visitSingularInt64Field(value: self.code, fieldNumber: 1)
     }
@@ -253,7 +314,7 @@ extension Auth_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_ErrorRes, rhs: Auth_ErrorRes) -> Bool {
+  public static func ==(lhs: Auth_ErrorRes, rhs: Auth_ErrorRes) -> Bool {
     if lhs.code != rhs.code {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -262,73 +323,85 @@ extension Auth_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
 }
 
 extension Auth_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".BaseResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".BaseResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
-    2: .same(proto: "errors"),
+    2: .same(proto: "error"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._error) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
+    if let v = self._error {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_BaseResponse, rhs: Auth_BaseResponse) -> Bool {
+  public static func ==(lhs: Auth_BaseResponse, rhs: Auth_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
 extension Auth_AuthReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AuthReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "email"),
-    2: .same(proto: "password"),
-    3: .standard(proto: "auth_type"),
+  public static let protoMessageName: String = _protobuf_package + ".AuthReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .same(proto: "email"),
+    3: .same(proto: "password"),
+    4: .standard(proto: "auth_type"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.email)
-      case 2: try decoder.decodeSingularStringField(value: &self.password)
-      case 3: try decoder.decodeSingularInt64Field(value: &self.authType)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.email) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.password) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.authType) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
     if !self.email.isEmpty {
-      try visitor.visitSingularStringField(value: self.email, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.email, fieldNumber: 2)
     }
     if !self.password.isEmpty {
-      try visitor.visitSingularStringField(value: self.password, fieldNumber: 2)
+      try visitor.visitSingularStringField(value: self.password, fieldNumber: 3)
     }
     if self.authType != 0 {
-      try visitor.visitSingularInt64Field(value: self.authType, fieldNumber: 3)
+      try visitor.visitSingularInt64Field(value: self.authType, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_AuthReq, rhs: Auth_AuthReq) -> Bool {
+  public static func ==(lhs: Auth_AuthReq, rhs: Auth_AuthReq) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
     if lhs.email != rhs.email {return false}
     if lhs.password != rhs.password {return false}
     if lhs.authType != rhs.authType {return false}
@@ -338,23 +411,26 @@ extension Auth_AuthReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 }
 
 extension Auth_LogoutReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".LogoutReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".LogoutReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "device_id"),
     2: .standard(proto: "refresh_token"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.deviceID)
-      case 2: try decoder.decodeSingularStringField(value: &self.refreshToken)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.deviceID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.refreshToken) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.deviceID.isEmpty {
       try visitor.visitSingularStringField(value: self.deviceID, fieldNumber: 1)
     }
@@ -364,7 +440,7 @@ extension Auth_LogoutReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_LogoutReq, rhs: Auth_LogoutReq) -> Bool {
+  public static func ==(lhs: Auth_LogoutReq, rhs: Auth_LogoutReq) -> Bool {
     if lhs.deviceID != rhs.deviceID {return false}
     if lhs.refreshToken != rhs.refreshToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -373,28 +449,31 @@ extension Auth_LogoutReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
 }
 
 extension Auth_FogotPassWord: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FogotPassWord"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".FogotPassWord"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "email"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.email)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.email) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.email.isEmpty {
       try visitor.visitSingularStringField(value: self.email, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_FogotPassWord, rhs: Auth_FogotPassWord) -> Bool {
+  public static func ==(lhs: Auth_FogotPassWord, rhs: Auth_FogotPassWord) -> Bool {
     if lhs.email != rhs.email {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -402,68 +481,98 @@ extension Auth_FogotPassWord: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 }
 
 extension Auth_AuthRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AuthRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "access_token"),
-    2: .standard(proto: "expires_in"),
-    3: .standard(proto: "refresh_expires_in"),
-    4: .standard(proto: "refresh_token"),
-    5: .standard(proto: "token_type"),
-    6: .standard(proto: "session_state"),
-    7: .same(proto: "scope"),
-    8: .standard(proto: "hash_key"),
-    9: .standard(proto: "base_response"),
+  public static let protoMessageName: String = _protobuf_package + ".AuthRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .standard(proto: "workspace_name"),
+    3: .standard(proto: "access_token"),
+    4: .standard(proto: "expires_in"),
+    5: .standard(proto: "refresh_expires_in"),
+    6: .standard(proto: "refresh_token"),
+    7: .standard(proto: "token_type"),
+    8: .standard(proto: "session_state"),
+    9: .same(proto: "scope"),
+    10: .standard(proto: "hash_key"),
+    11: .same(proto: "sub"),
+    12: .standard(proto: "otp_hash"),
+    13: .standard(proto: "require_action"),
+    14: .same(proto: "error"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.accessToken)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.expiresIn)
-      case 3: try decoder.decodeSingularInt64Field(value: &self.refreshExpiresIn)
-      case 4: try decoder.decodeSingularStringField(value: &self.refreshToken)
-      case 5: try decoder.decodeSingularStringField(value: &self.tokenType)
-      case 6: try decoder.decodeSingularStringField(value: &self.sessionState)
-      case 7: try decoder.decodeSingularStringField(value: &self.scope)
-      case 8: try decoder.decodeSingularStringField(value: &self.hashKey)
-      case 9: try decoder.decodeSingularMessageField(value: &self._baseResponse)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.workspaceName) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.accessToken) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.expiresIn) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.refreshExpiresIn) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.refreshToken) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.tokenType) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.sessionState) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.scope) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self.hashKey) }()
+      case 11: try { try decoder.decodeSingularStringField(value: &self.sub) }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.otpHash) }()
+      case 13: try { try decoder.decodeSingularStringField(value: &self.requireAction) }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.error) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
+    if !self.workspaceName.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceName, fieldNumber: 2)
+    }
     if !self.accessToken.isEmpty {
-      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 3)
     }
     if self.expiresIn != 0 {
-      try visitor.visitSingularInt64Field(value: self.expiresIn, fieldNumber: 2)
+      try visitor.visitSingularInt64Field(value: self.expiresIn, fieldNumber: 4)
     }
     if self.refreshExpiresIn != 0 {
-      try visitor.visitSingularInt64Field(value: self.refreshExpiresIn, fieldNumber: 3)
+      try visitor.visitSingularInt64Field(value: self.refreshExpiresIn, fieldNumber: 5)
     }
     if !self.refreshToken.isEmpty {
-      try visitor.visitSingularStringField(value: self.refreshToken, fieldNumber: 4)
+      try visitor.visitSingularStringField(value: self.refreshToken, fieldNumber: 6)
     }
     if !self.tokenType.isEmpty {
-      try visitor.visitSingularStringField(value: self.tokenType, fieldNumber: 5)
+      try visitor.visitSingularStringField(value: self.tokenType, fieldNumber: 7)
     }
     if !self.sessionState.isEmpty {
-      try visitor.visitSingularStringField(value: self.sessionState, fieldNumber: 6)
+      try visitor.visitSingularStringField(value: self.sessionState, fieldNumber: 8)
     }
     if !self.scope.isEmpty {
-      try visitor.visitSingularStringField(value: self.scope, fieldNumber: 7)
+      try visitor.visitSingularStringField(value: self.scope, fieldNumber: 9)
     }
     if !self.hashKey.isEmpty {
-      try visitor.visitSingularStringField(value: self.hashKey, fieldNumber: 8)
+      try visitor.visitSingularStringField(value: self.hashKey, fieldNumber: 10)
     }
-    if let v = self._baseResponse {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    if !self.sub.isEmpty {
+      try visitor.visitSingularStringField(value: self.sub, fieldNumber: 11)
+    }
+    if !self.otpHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.otpHash, fieldNumber: 12)
+    }
+    if !self.requireAction.isEmpty {
+      try visitor.visitSingularStringField(value: self.requireAction, fieldNumber: 13)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 14)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_AuthRes, rhs: Auth_AuthRes) -> Bool {
+  public static func ==(lhs: Auth_AuthRes, rhs: Auth_AuthRes) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
+    if lhs.workspaceName != rhs.workspaceName {return false}
     if lhs.accessToken != rhs.accessToken {return false}
     if lhs.expiresIn != rhs.expiresIn {return false}
     if lhs.refreshExpiresIn != rhs.refreshExpiresIn {return false}
@@ -472,60 +581,72 @@ extension Auth_AuthRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
     if lhs.sessionState != rhs.sessionState {return false}
     if lhs.scope != rhs.scope {return false}
     if lhs.hashKey != rhs.hashKey {return false}
-    if lhs._baseResponse != rhs._baseResponse {return false}
+    if lhs.sub != rhs.sub {return false}
+    if lhs.otpHash != rhs.otpHash {return false}
+    if lhs.requireAction != rhs.requireAction {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
 extension Auth_RegisterReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".RegisterReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "email"),
-    2: .standard(proto: "display_name"),
-    3: .same(proto: "password"),
-    4: .standard(proto: "auth_type"),
-    5: .standard(proto: "first_name"),
-    6: .standard(proto: "last_name"),
+  public static let protoMessageName: String = _protobuf_package + ".RegisterReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .same(proto: "email"),
+    3: .standard(proto: "display_name"),
+    4: .same(proto: "password"),
+    5: .standard(proto: "auth_type"),
+    6: .standard(proto: "first_name"),
+    7: .standard(proto: "last_name"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.email)
-      case 2: try decoder.decodeSingularStringField(value: &self.displayName)
-      case 3: try decoder.decodeSingularStringField(value: &self.password)
-      case 4: try decoder.decodeSingularInt64Field(value: &self.authType)
-      case 5: try decoder.decodeSingularStringField(value: &self.firstName)
-      case 6: try decoder.decodeSingularStringField(value: &self.lastName)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.email) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.displayName) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.password) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.authType) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.firstName) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.lastName) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
     if !self.email.isEmpty {
-      try visitor.visitSingularStringField(value: self.email, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.email, fieldNumber: 2)
     }
     if !self.displayName.isEmpty {
-      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 2)
+      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 3)
     }
     if !self.password.isEmpty {
-      try visitor.visitSingularStringField(value: self.password, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.password, fieldNumber: 4)
     }
     if self.authType != 0 {
-      try visitor.visitSingularInt64Field(value: self.authType, fieldNumber: 4)
+      try visitor.visitSingularInt64Field(value: self.authType, fieldNumber: 5)
     }
     if !self.firstName.isEmpty {
-      try visitor.visitSingularStringField(value: self.firstName, fieldNumber: 5)
+      try visitor.visitSingularStringField(value: self.firstName, fieldNumber: 6)
     }
     if !self.lastName.isEmpty {
-      try visitor.visitSingularStringField(value: self.lastName, fieldNumber: 6)
+      try visitor.visitSingularStringField(value: self.lastName, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_RegisterReq, rhs: Auth_RegisterReq) -> Bool {
+  public static func ==(lhs: Auth_RegisterReq, rhs: Auth_RegisterReq) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
     if lhs.email != rhs.email {return false}
     if lhs.displayName != rhs.displayName {return false}
     if lhs.password != rhs.password {return false}
@@ -538,28 +659,31 @@ extension Auth_RegisterReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 }
 
 extension Auth_RegisterRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".RegisterRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".RegisterRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "base_response"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._baseResponse)
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._baseResponse) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if let v = self._baseResponse {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_RegisterRes, rhs: Auth_RegisterRes) -> Bool {
+  public static func ==(lhs: Auth_RegisterRes, rhs: Auth_RegisterRes) -> Bool {
     if lhs._baseResponse != rhs._baseResponse {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -567,28 +691,37 @@ extension Auth_RegisterRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 }
 
 extension Auth_GoogleLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GoogleLoginReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "id_token"),
+  public static let protoMessageName: String = _protobuf_package + ".GoogleLoginReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .standard(proto: "id_token"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.idToken)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.idToken) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
     if !self.idToken.isEmpty {
-      try visitor.visitSingularStringField(value: self.idToken, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.idToken, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_GoogleLoginReq, rhs: Auth_GoogleLoginReq) -> Bool {
+  public static func ==(lhs: Auth_GoogleLoginReq, rhs: Auth_GoogleLoginReq) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
     if lhs.idToken != rhs.idToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -596,28 +729,37 @@ extension Auth_GoogleLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension Auth_OfficeLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OfficeLoginReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "access_token"),
+  public static let protoMessageName: String = _protobuf_package + ".OfficeLoginReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .standard(proto: "access_token"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.accessToken)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.accessToken) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
     if !self.accessToken.isEmpty {
-      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_OfficeLoginReq, rhs: Auth_OfficeLoginReq) -> Bool {
+  public static func ==(lhs: Auth_OfficeLoginReq, rhs: Auth_OfficeLoginReq) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
     if lhs.accessToken != rhs.accessToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -625,29 +767,164 @@ extension Auth_OfficeLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension Auth_FacebookLoginReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FacebookLoginReq"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "access_token"),
+  public static let protoMessageName: String = _protobuf_package + ".FacebookLoginReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "workspace_domain"),
+    2: .standard(proto: "access_token"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.accessToken)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.accessToken) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
+    }
     if !self.accessToken.isEmpty {
-      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Auth_FacebookLoginReq, rhs: Auth_FacebookLoginReq) -> Bool {
+  public static func ==(lhs: Auth_FacebookLoginReq, rhs: Auth_FacebookLoginReq) -> Bool {
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
     if lhs.accessToken != rhs.accessToken {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Auth_MfaValidateOtpRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaValidateOtpRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "otp_code"),
+    2: .standard(proto: "user_id"),
+    3: .standard(proto: "otp_hash"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.otpCode) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.userID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.otpHash) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.otpCode.isEmpty {
+      try visitor.visitSingularStringField(value: self.otpCode, fieldNumber: 1)
+    }
+    if !self.userID.isEmpty {
+      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 2)
+    }
+    if !self.otpHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.otpHash, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Auth_MfaValidateOtpRequest, rhs: Auth_MfaValidateOtpRequest) -> Bool {
+    if lhs.otpCode != rhs.otpCode {return false}
+    if lhs.userID != rhs.userID {return false}
+    if lhs.otpHash != rhs.otpHash {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Auth_MfaResendOtpReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaResendOtpReq"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_id"),
+    2: .standard(proto: "otp_hash"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.userID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.otpHash) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.userID.isEmpty {
+      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 1)
+    }
+    if !self.otpHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.otpHash, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Auth_MfaResendOtpReq, rhs: Auth_MfaResendOtpReq) -> Bool {
+    if lhs.userID != rhs.userID {return false}
+    if lhs.otpHash != rhs.otpHash {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Auth_MfaResendOtpRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaResendOtpRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "otp_hash"),
+    2: .same(proto: "success"),
+    3: .same(proto: "error"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.otpHash) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.error) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.otpHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.otpHash, fieldNumber: 1)
+    }
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 2)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Auth_MfaResendOtpRes, rhs: Auth_MfaResendOtpRes) -> Bool {
+    if lhs.otpHash != rhs.otpHash {return false}
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

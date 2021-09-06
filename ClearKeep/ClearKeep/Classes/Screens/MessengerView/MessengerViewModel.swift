@@ -112,7 +112,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     
     private func getMessagePeerToPeer(completion: (() -> ())? = nil) {
         if groupId != Constants.groupIdTemp {
-            Backend.shared.getMessageInRoom(groupId,
+            Multiserver.instance.currentServer.getMessageInRoom(groupId,
                                             RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
@@ -141,7 +141,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     
     private func getMessageGroup(completion: (() -> ())? = nil) {
         if groupId != Constants.groupIdTemp {
-            Backend.shared.getMessageInRoom(groupId , RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
+            Multiserver.instance.currentServer.getMessageInRoom(groupId , RealmManager.shared.getTimeSyncInGroup(groupId: groupId)) { (result, error) in
                 if let result = result {
                     if !result.lstMessage.isEmpty {
                         let listMsgSorted = result.lstMessage.sorted { (msg1, msg2) -> Bool in
@@ -202,7 +202,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
             }
         } else {
             if groupId == Constants.groupIdTemp {
-                ChatService.shared.createPeerGroup(receiveId: receiveId) { [weak self] groupModel in
+                ChatService.shared.createPeerGroup(receiveId: receiveId, username: username) { [weak self] groupModel in
                     guard let self = self else { return }
                     self.setGroupId(groupModel.groupID)
                     
@@ -226,7 +226,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     
     func callPeerToPeer(clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
         if groupId == Constants.groupIdTemp {
-            ChatService.shared.createPeerGroup(receiveId: receiveId) { [weak self] groupModel in
+            ChatService.shared.createPeerGroup(receiveId: receiveId, username: username) { [weak self] groupModel in
                 guard let self = self else { return }
                 self.setGroupId(groupModel.groupID)
                 
@@ -248,7 +248,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     }
     
     private func requestVideoCall(isCallGroup: Bool ,clientId: String, groupId: Int64, callType type: Constants.CallType = .audio, completion: (() -> ())?) {
-        Backend.shared.videoCall(clientId, groupId, callType: type) { (response, error) in
+        Multiserver.instance.currentServer.videoCall(clientId, groupId, callType: type) { (response, error) in
             self.isRequesting = false
             completion?()
             if let response = response {

@@ -19,6 +19,8 @@ struct ServerDetailView: View {
     
     @Binding var showDetail: Bool
     
+    var callback: VoidCompletion?
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             LinearGradient(gradient: Gradient(colors: [AppTheme.colors.gradientPrimaryDark.color, AppTheme.colors.gradientPrimaryLight.color]), startPoint: .leading, endPoint: .trailing)
@@ -77,9 +79,11 @@ struct ServerDetailView: View {
         }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onAppear(){
-            let userLogin = Backend.shared.getUserLogin()
-            if let userName = userLogin?.displayName {
+            let userLogin = Multiserver.instance.currentServer.getUserLogin()
+            if let userName = userLogin?.displayName,
+               let workspaceDomain = userLogin?.workspace_domain {
                 self.currentUserName = userName
+                self.currentWorkspaceDomain = workspaceDomain.workspace_domain
             }
         }
         .alert(isPresented: $showActionSheet, content: {
@@ -210,27 +214,78 @@ struct ServerDetailView: View {
     private func logout() {
         hudVisible = true
         
-        Backend.shared.logout { (result) in
+        Multiserver.instance.currentServer.logout { (result) in
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             hudVisible = false
             // clear data user default
-            UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-            SharedDataAppGroup.sharedUserDefaults?.removeObject(forKey: Constants.keySaveUserID)
             
-            // clear data user in database
-            guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
-            connectionDb.readWrite { (transaction) in
-                CKAccount.removeAllAccounts(in: transaction)
+            do {
+                var users = UserDefaultsUsers().users
+                let userLogin = try UserDefaults.standard.getObject(forKey: Constants.keySaveUser, castTo: User.self)
+                
+                if let index = users.firstIndex(where: { $0.id == userLogin.id }) {
+                    Multiserver.instance.servers.remove(at: index)
+                    Multiserver.instance.domains.remove(at: index)
+                    users.remove(at: index)
+                }
+                                
+                if users.count == 0 {
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+                    SharedDataAppGroup.sharedUserDefaults?.removeObject(forKey: Constants.keySaveUserID)
+                    UserDefaults.standard.removeObject(forKey: Constants.keySaveUsers)
+                    
+                    Multiserver.instance.servers = [Backend(workspace_domain: WorkspaceDomain.default)]
+                    Multiserver.instance.domains = [WorkspaceDomain.default]
+                    Multiserver.instance.currentIndex = 0
+
+                    // clear data user in database
+                    guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
+                    connectionDb.readWrite { (transaction) in
+                        CKAccount.removeAllAccounts(in: transaction)
+                    }
+                    if let myAccount = CKSignalCoordinate.shared.myAccount {
+                        Multiserver.instance.currentServer.signalUnsubcrible(clientId: myAccount.username)
+                        Multiserver.instance.currentServer.notificationUnSubscrible(clientId: myAccount.username)
+                    }
+                    CKSignalCoordinate.shared.myAccount = nil
+                    RealmManager.shared.removeAll()
+                    self.viewRouter.current = .login
+                } else {
+                    UserDefaultsUsers().saveUsers(users: users)
+                    
+                    let newUserLogin = users.first!
+                    Multiserver.instance.currentIndex = 0
+                    try UserDefaults.standard.setObject(newUserLogin, forKey: Constants.keySaveUser)
+                    
+                    var refreshTokens = UserDefaultsUsers().refreshTokens
+                    let refreshToken = UserDefaults.standard.string(forKey: Constants.keySaveRefreshToken)
+                    
+                    if let indexx = refreshTokens.firstIndex(where: { $0 == refreshToken }) {
+                        refreshTokens.remove(at: indexx)
+                    }
+                    
+                    UserDefaultsUsers().saveRefreshTokens(refreshTokens: refreshTokens)
+                    UserDefaults.standard.setValue(refreshTokens.first!, forKey: Constants.keySaveRefreshToken)
+
+                    SharedDataAppGroup.sharedUserDefaults?.setValue(newUserLogin.id, forKey: Constants.keySaveUserID)
+                    
+                    // clear data user in database
+                    guard let connectionDb = CKDatabaseManager.shared.database?.newConnection() else { return }
+                    connectionDb.readWrite { (transaction) in
+                        CKAccount.removeAllAccounts(withUsername: userLogin.id, transaction: transaction)
+                    }
+                          
+                    callback?()
+                    self.viewRouter.reload = !self.viewRouter.reload
+                    showDetail = false
+
+                }
+            } catch {
+                
             }
-            if let myAccount = CKSignalCoordinate.shared.myAccount {
-                Backend.shared.signalUnsubcrible(clientId: myAccount.username)
-                Backend.shared.notificationUnSubscrible(clientId: myAccount.username)
-            }
-            CKSignalCoordinate.shared.myAccount = nil
-            RealmManager.shared.removeAll()
-            self.viewRouter.current = .login
+            
         }
         
         DispatchQueue.main.async {

@@ -128,7 +128,7 @@ final class CallManager: NSObject {
     private func removeCall(_ call: CallBox) {
 //        calls = calls.filter {$0 === call}
         if !call.isCallGroup {
-            Backend.shared.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
+            Multiserver.instance.currentServer.cancelRequestCall(call.clientId, call.roomId) { (result, error) in
             }
         }
         self.postCallsChangedNotification(userInfo: ["action": Call.end.rawValue])
@@ -147,7 +147,7 @@ final class CallManager: NSObject {
     func handleIncomingPushEvent(payload: PKPushPayload, completion: ((NSError?) -> Void)? = nil) {
         let jsonData = JSON(payload.dictionaryPayload)
         print("Payload: \(payload.dictionaryPayload)")
-        if let currentUserId = jsonData["client_id"].string, let savedCurrentUserId = Backend.shared.getUserLogin()?.id, currentUserId != savedCurrentUserId {
+        if let currentUserId = jsonData["client_id"].string, let savedCurrentUserId = Multiserver.instance.currentServer.getUserLogin()?.id, currentUserId != savedCurrentUserId {
             print("This call is not belong to me")
             print("\(currentUserId) # \(savedCurrentUserId)")
             return

@@ -78,17 +78,20 @@ struct AdvanceServerSettingsView: View {
     }
     
     private func useCustomServer() {
-        guard let first = customServerURL.components(separatedBy: ":").first,
-              let last = customServerURL.components(separatedBy: ":").last else {
+        let url = customServerURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let first = url.components(separatedBy: ":").first,
+              let last = url.components(separatedBy: ":").last else {
             isShowAlert = true
             return
         }
         
-        let validated = first.textFieldValidatorURL() && (first != last) && customServerURL.last! != ":"
+        let validated = first.textFieldValidatorURL() && (first != last) && url.last! != ":"
         isShowAlert = !validated
         
         if validated {
-
+            Multiserver.instance.servers = [Backend(workspace_domain: WorkspaceDomain(workspace_domain: url, workspace_name: ""))]
+            Multiserver.instance.domains.append(WorkspaceDomain(workspace_domain: url, workspace_name: ""))
+            Multiserver.instance.currentIndex = 0
         }
     }
 }

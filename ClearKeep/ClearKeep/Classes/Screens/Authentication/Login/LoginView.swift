@@ -214,7 +214,7 @@ extension LoginView {
         request.idToken = gooleUser.authentication.idToken
         
         hudVisible = true
-        Backend.shared.loginWithGoogleAccount(request) { (result, error) in
+        Multiserver.instance.currentServer.loginWithGoogleAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .google)
         }
         SocialLogin.shared.signOutGoogleAccount()
@@ -231,7 +231,7 @@ extension LoginView {
         request.accessToken = accessToken
         
         hudVisible = true
-        Backend.shared.loginWithMicrosoftAccount(request) { (result, error) in
+        Multiserver.instance.currentServer.loginWithMicrosoftAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .microsoft)
         }
         SocialLogin.shared.signOutO365()
@@ -247,7 +247,7 @@ extension LoginView {
         request.accessToken = accessToken
         
         hudVisible = true
-        Backend.shared.loginWithFacebookAccount(request) { (result, error) in
+        Multiserver.instance.currentServer.loginWithFacebookAccount(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .facebook)
         }
         SocialLogin.shared.signOutFacebookAccount()
@@ -281,20 +281,23 @@ extension LoginView {
         request.authType = 1    // Which values could be set here?
         
         hudVisible = true
-        Backend.shared.login(request) { (result, error) in
+        Multiserver.instance.currentServer.login(request) { (result, error) in
             self.didReceiveLoginResponse(result: result, error: error, signInType: .email)
         }
     }
     
     private func didReceiveLoginResponse(result: Auth_AuthRes?, error: Error?, signInType: SocialLogin.SignInType) {
          if let result = result {
-            if result.baseResponse.success {
                 do {
-                    let user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email)
+                    let user = User(id: "", token: result.accessToken, hash: result.hashKey,displayName: "" , email: self.email, workspace_domain: WorkspaceDomain(workspace_domain: result.workspaceDomain, workspace_name: result.workspaceName))
                     UserDefaults.standard.setValue(result.refreshToken, forKey: Constants.keySaveRefreshToken)
+                    
+                    var refreshTokens = UserDefaultsUsers().refreshTokens
+                    refreshTokens.append(result.refreshToken)
+                    UserDefaultsUsers().saveRefreshTokens(refreshTokens: refreshTokens)
                     try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
                     
-                    Backend.shared.getLoginUserID { (userID, displayName, email) in
+                    Multiserver.instance.currentServer.getLoginUserID { (userID, displayName, email) in
                         if userID.isEmpty {
                             print("getLoginUserID Empty")
                             UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
@@ -324,11 +327,6 @@ extension LoginView {
                     self.messageAlert = "Something went wrong"
                     self.isShowAlert = true
                 }
-            } else {
-                hudVisible = false
-                self.isShowAlert = true
-                self.messageAlert = result.baseResponse.errors.message
-            }
         } else if let error = error {
             hudVisible = false
             print(error)
@@ -344,10 +342,14 @@ extension LoginView {
             user.email = email
             SharedDataAppGroup.sharedUserDefaults?.setValue(user.id, forKey: Constants.keySaveUserID)
             try UserDefaults.standard.setObject(user, forKey: Constants.keySaveUser)
+            
+            var users = UserDefaultsUsers().users
+            users.append(user)
+            UserDefaultsUsers().saveUsers(users: users)
            
             let address = SignalAddress(name: userID, deviceId: Int32(Constants.encryptedDeviceId))
             hudVisible = true
-            Backend.shared.authenticator.register(address: address) { (result, error) in
+            Multiserver.instance.currentServer.authenticator.register(address: address) { (result, error) in
                 hudVisible = false
                 dismissAlert = false
                 if result {
@@ -370,7 +372,7 @@ extension LoginView {
     
     private func loginForUser(clientID : String) {
         hudVisible = true
-        Backend.shared.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
+        Multiserver.instance.currentServer.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
             hudVisible = false
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {
@@ -392,11 +394,12 @@ extension LoginView {
                         
                         CKSignalCoordinate.shared.myAccount = account
                         CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
-                        Backend.shared.signalSubscrible(clientId: account.username)
-                        Backend.shared.notificationSubscrible(clientId: account.username)
+
+                        Multiserver.instance.unListenServers()
+                        Multiserver.instance.listenServers()
                     }
                     if result {
-                        Backend.shared.registerTokenDevice { (response) in
+                        Multiserver.instance.currentServer.registerTokenDevice { (response) in
                             if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
                                 self.viewRouter.current = .home
@@ -437,7 +440,7 @@ extension LoginView {
                 CKSignalCoordinate.shared.myAccount = myAccount
                 CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
                 
-                Backend.shared.registerTokenDevice { (response) in
+                Multiserver.instance.currentServer.registerTokenDevice { (response) in
                     if response {
                         hudVisible = false
                         self.viewRouter.current = .home

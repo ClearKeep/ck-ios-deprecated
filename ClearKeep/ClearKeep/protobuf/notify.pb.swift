@@ -20,147 +20,153 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct Notification_NotifyObjectResponse {
+public struct Notification_NotifyObjectResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var id: Int64 = 0
+  public var id: Int64 = 0
 
-  var clientID: String = String()
+  public var clientID: String = String()
 
-  var refClientID: String = String()
+  public var clientWorkspaceDomain: String = String()
 
-  var refGroupID: Int64 = 0
+  public var refClientID: String = String()
 
-  var notifyType: String = String()
+  public var refWorkspaceDomain: String = String()
 
-  var notifyImage: String = String()
+  public var refSubjectName: String = String()
 
-  var notifyTitle: String = String()
+  public var refGroupID: Int64 = 0
 
-  var notifyContent: String = String()
+  public var notifyType: String = String()
 
-  var readFlg: Bool = false
+  public var notifyImage: String = String()
 
-  var createdAt: Int64 = 0
+  public var notifyTitle: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var notifyContent: String = String()
 
-  init() {}
+  public var readFlg: Bool = false
+
+  public var createdAt: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 ///errors response
-struct Notification_ErrorRes {
+public struct Notification_ErrorRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var code: Int64 = 0
+  public var code: Int64 = 0
 
-  var message: String = String()
+  public var message: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct Notification_BaseResponse {
+public struct Notification_BaseResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  public var success: Bool = false
 
-  var errors: Notification_ErrorRes {
+  public var errors: Notification_ErrorRes {
     get {return _errors ?? Notification_ErrorRes()}
     set {_errors = newValue}
   }
   /// Returns true if `errors` has been explicitly set.
-  var hasErrors: Bool {return self._errors != nil}
+  public var hasErrors: Bool {return self._errors != nil}
   /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  mutating func clearErrors() {self._errors = nil}
+  public mutating func clearErrors() {self._errors = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _errors: Notification_ErrorRes? = nil
 }
 
 /// Request: get list notify
-struct Notification_Empty {
+public struct Notification_Empty {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// Response: GetNotifiesResponse
-struct Notification_GetNotifiesResponse {
+public struct Notification_GetNotifiesResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var lstNotify: [Notification_NotifyObjectResponse] = []
+  public var lstNotify: [Notification_NotifyObjectResponse] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// Request: subcribe
-struct Notification_SubscribeRequest {
+public struct Notification_SubscribeRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var clientID: String = String()
+  public var clientID: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// Request: un-subcribe
-struct Notification_UnSubscribeRequest {
+public struct Notification_UnSubscribeRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var clientID: String = String()
+  public var clientID: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// Request: listen
-struct Notification_ListenRequest {
+public struct Notification_ListenRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var clientID: String = String()
+  public var clientID: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct Notification_ReadNotifyRequest {
+public struct Notification_ReadNotifyRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var notifyID: String = String()
+  public var notifyID: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -168,76 +174,97 @@ struct Notification_ReadNotifyRequest {
 fileprivate let _protobuf_package = "notification"
 
 extension Notification_NotifyObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".NotifyObjectResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".NotifyObjectResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .standard(proto: "client_id"),
+    3: .standard(proto: "client_workspace_domain"),
     4: .standard(proto: "ref_client_id"),
-    5: .standard(proto: "ref_group_id"),
-    6: .standard(proto: "notify_type"),
-    7: .standard(proto: "notify_image"),
-    8: .standard(proto: "notify_title"),
-    9: .standard(proto: "notify_content"),
-    11: .standard(proto: "read_flg"),
-    12: .standard(proto: "created_at"),
+    5: .standard(proto: "ref_workspace_domain"),
+    6: .standard(proto: "ref_subject_name"),
+    7: .standard(proto: "ref_group_id"),
+    8: .standard(proto: "notify_type"),
+    9: .standard(proto: "notify_image"),
+    10: .standard(proto: "notify_title"),
+    11: .standard(proto: "notify_content"),
+    12: .standard(proto: "read_flg"),
+    13: .standard(proto: "created_at"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.id)
-      case 2: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 4: try decoder.decodeSingularStringField(value: &self.refClientID)
-      case 5: try decoder.decodeSingularInt64Field(value: &self.refGroupID)
-      case 6: try decoder.decodeSingularStringField(value: &self.notifyType)
-      case 7: try decoder.decodeSingularStringField(value: &self.notifyImage)
-      case 8: try decoder.decodeSingularStringField(value: &self.notifyTitle)
-      case 9: try decoder.decodeSingularStringField(value: &self.notifyContent)
-      case 11: try decoder.decodeSingularBoolField(value: &self.readFlg)
-      case 12: try decoder.decodeSingularInt64Field(value: &self.createdAt)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.clientWorkspaceDomain) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.refClientID) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.refWorkspaceDomain) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.refSubjectName) }()
+      case 7: try { try decoder.decodeSingularInt64Field(value: &self.refGroupID) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.notifyType) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.notifyImage) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self.notifyTitle) }()
+      case 11: try { try decoder.decodeSingularStringField(value: &self.notifyContent) }()
+      case 12: try { try decoder.decodeSingularBoolField(value: &self.readFlg) }()
+      case 13: try { try decoder.decodeSingularInt64Field(value: &self.createdAt) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.id != 0 {
       try visitor.visitSingularInt64Field(value: self.id, fieldNumber: 1)
     }
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 2)
     }
+    if !self.clientWorkspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientWorkspaceDomain, fieldNumber: 3)
+    }
     if !self.refClientID.isEmpty {
       try visitor.visitSingularStringField(value: self.refClientID, fieldNumber: 4)
     }
+    if !self.refWorkspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.refWorkspaceDomain, fieldNumber: 5)
+    }
+    if !self.refSubjectName.isEmpty {
+      try visitor.visitSingularStringField(value: self.refSubjectName, fieldNumber: 6)
+    }
     if self.refGroupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.refGroupID, fieldNumber: 5)
+      try visitor.visitSingularInt64Field(value: self.refGroupID, fieldNumber: 7)
     }
     if !self.notifyType.isEmpty {
-      try visitor.visitSingularStringField(value: self.notifyType, fieldNumber: 6)
+      try visitor.visitSingularStringField(value: self.notifyType, fieldNumber: 8)
     }
     if !self.notifyImage.isEmpty {
-      try visitor.visitSingularStringField(value: self.notifyImage, fieldNumber: 7)
+      try visitor.visitSingularStringField(value: self.notifyImage, fieldNumber: 9)
     }
     if !self.notifyTitle.isEmpty {
-      try visitor.visitSingularStringField(value: self.notifyTitle, fieldNumber: 8)
+      try visitor.visitSingularStringField(value: self.notifyTitle, fieldNumber: 10)
     }
     if !self.notifyContent.isEmpty {
-      try visitor.visitSingularStringField(value: self.notifyContent, fieldNumber: 9)
+      try visitor.visitSingularStringField(value: self.notifyContent, fieldNumber: 11)
     }
     if self.readFlg != false {
-      try visitor.visitSingularBoolField(value: self.readFlg, fieldNumber: 11)
+      try visitor.visitSingularBoolField(value: self.readFlg, fieldNumber: 12)
     }
     if self.createdAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 12)
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 13)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_NotifyObjectResponse, rhs: Notification_NotifyObjectResponse) -> Bool {
+  public static func ==(lhs: Notification_NotifyObjectResponse, rhs: Notification_NotifyObjectResponse) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.clientID != rhs.clientID {return false}
+    if lhs.clientWorkspaceDomain != rhs.clientWorkspaceDomain {return false}
     if lhs.refClientID != rhs.refClientID {return false}
+    if lhs.refWorkspaceDomain != rhs.refWorkspaceDomain {return false}
+    if lhs.refSubjectName != rhs.refSubjectName {return false}
     if lhs.refGroupID != rhs.refGroupID {return false}
     if lhs.notifyType != rhs.notifyType {return false}
     if lhs.notifyImage != rhs.notifyImage {return false}
@@ -251,23 +278,26 @@ extension Notification_NotifyObjectResponse: SwiftProtobuf.Message, SwiftProtobu
 }
 
 extension Notification_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ErrorRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ErrorRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "code"),
     2: .same(proto: "message"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.code != 0 {
       try visitor.visitSingularInt64Field(value: self.code, fieldNumber: 1)
     }
@@ -277,7 +307,7 @@ extension Notification_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_ErrorRes, rhs: Notification_ErrorRes) -> Bool {
+  public static func ==(lhs: Notification_ErrorRes, rhs: Notification_ErrorRes) -> Bool {
     if lhs.code != rhs.code {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -286,23 +316,26 @@ extension Notification_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension Notification_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".BaseResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".BaseResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
     2: .same(proto: "errors"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
@@ -312,7 +345,7 @@ extension Notification_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_BaseResponse, rhs: Notification_BaseResponse) -> Bool {
+  public static func ==(lhs: Notification_BaseResponse, rhs: Notification_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
     if lhs._errors != rhs._errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -321,47 +354,50 @@ extension Notification_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
 }
 
 extension Notification_Empty: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Empty"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  public static let protoMessageName: String = _protobuf_package + ".Empty"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let _ = try decoder.nextFieldNumber() {
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_Empty, rhs: Notification_Empty) -> Bool {
+  public static func ==(lhs: Notification_Empty, rhs: Notification_Empty) -> Bool {
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
 extension Notification_GetNotifiesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetNotifiesResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".GetNotifiesResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "lst_notify"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeRepeatedMessageField(value: &self.lstNotify)
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.lstNotify) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.lstNotify.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.lstNotify, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_GetNotifiesResponse, rhs: Notification_GetNotifiesResponse) -> Bool {
+  public static func ==(lhs: Notification_GetNotifiesResponse, rhs: Notification_GetNotifiesResponse) -> Bool {
     if lhs.lstNotify != rhs.lstNotify {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -369,28 +405,31 @@ extension Notification_GetNotifiesResponse: SwiftProtobuf.Message, SwiftProtobuf
 }
 
 extension Notification_SubscribeRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SubscribeRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".SubscribeRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_SubscribeRequest, rhs: Notification_SubscribeRequest) -> Bool {
+  public static func ==(lhs: Notification_SubscribeRequest, rhs: Notification_SubscribeRequest) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -398,28 +437,31 @@ extension Notification_SubscribeRequest: SwiftProtobuf.Message, SwiftProtobuf._M
 }
 
 extension Notification_UnSubscribeRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".UnSubscribeRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".UnSubscribeRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_UnSubscribeRequest, rhs: Notification_UnSubscribeRequest) -> Bool {
+  public static func ==(lhs: Notification_UnSubscribeRequest, rhs: Notification_UnSubscribeRequest) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -427,28 +469,31 @@ extension Notification_UnSubscribeRequest: SwiftProtobuf.Message, SwiftProtobuf.
 }
 
 extension Notification_ListenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ListenRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ListenRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_ListenRequest, rhs: Notification_ListenRequest) -> Bool {
+  public static func ==(lhs: Notification_ListenRequest, rhs: Notification_ListenRequest) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -456,28 +501,31 @@ extension Notification_ListenRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 }
 
 extension Notification_ReadNotifyRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ReadNotifyRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ReadNotifyRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "notify_id"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.notifyID)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.notifyID) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.notifyID.isEmpty {
       try visitor.visitSingularStringField(value: self.notifyID, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Notification_ReadNotifyRequest, rhs: Notification_ReadNotifyRequest) -> Bool {
+  public static func ==(lhs: Notification_ReadNotifyRequest, rhs: Notification_ReadNotifyRequest) -> Bool {
     if lhs.notifyID != rhs.notifyID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

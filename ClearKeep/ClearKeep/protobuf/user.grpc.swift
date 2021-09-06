@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate User_UserClient, then call methods of this protocol to make API calls.
-internal protocol User_UserClientProtocol: GRPCClient {
+/// Usage: instantiate `User_UserClient`, then call methods of this protocol to make API calls.
+public protocol User_UserClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: User_UserClientInterceptorFactoryProtocol? { get }
+
   func get_profile(
     _ request: User_Empty,
     callOptions: CallOptions?
@@ -56,10 +59,12 @@ internal protocol User_UserClientProtocol: GRPCClient {
     _ request: User_Empty,
     callOptions: CallOptions?
   ) -> UnaryCall<User_Empty, User_GetUsersResponse>
-
 }
 
 extension User_UserClientProtocol {
+  public var serviceName: String {
+    return "user.User"
+  }
 
   ///----- FROM MY ACCOUNT -----
   ///
@@ -67,14 +72,15 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to get_profile.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func get_profile(
+  public func get_profile(
     _ request: User_Empty,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_Empty, User_UserProfileResponse> {
     return self.makeUnaryCall(
       path: "/user.User/get_profile",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_profileInterceptors() ?? []
     )
   }
 
@@ -84,14 +90,15 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to update_profile.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func update_profile(
+  public func update_profile(
     _ request: User_UpdateProfileRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_UpdateProfileRequest, User_BaseResponse> {
     return self.makeUnaryCall(
       path: "/user.User/update_profile",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupdate_profileInterceptors() ?? []
     )
   }
 
@@ -101,14 +108,15 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to change_password.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func change_password(
+  public func change_password(
     _ request: User_ChangePasswordRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_ChangePasswordRequest, User_BaseResponse> {
     return self.makeUnaryCall(
       path: "/user.User/change_password",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makechange_passwordInterceptors() ?? []
     )
   }
 
@@ -118,14 +126,15 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to get_user_info.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func get_user_info(
+  public func get_user_info(
     _ request: User_GetUserRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_GetUserRequest, User_UserInfoResponse> {
     return self.makeUnaryCall(
       path: "/user.User/get_user_info",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_user_infoInterceptors() ?? []
     )
   }
 
@@ -135,14 +144,15 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to search_user.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func search_user(
+  public func search_user(
     _ request: User_SearchUserRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_SearchUserRequest, User_SearchUserResponse> {
     return self.makeUnaryCall(
       path: "/user.User/search_user",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makesearch_userInterceptors() ?? []
     )
   }
 
@@ -152,96 +162,174 @@ extension User_UserClientProtocol {
   ///   - request: Request to send to get_users.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func get_users(
+  public func get_users(
     _ request: User_Empty,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<User_Empty, User_GetUsersResponse> {
     return self.makeUnaryCall(
       path: "/user.User/get_users",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_usersInterceptors() ?? []
     )
   }
 }
 
-internal final class User_UserClient: User_UserClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol User_UserClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'get_profile'.
+  func makeget_profileInterceptors() -> [ClientInterceptor<User_Empty, User_UserProfileResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'update_profile'.
+  func makeupdate_profileInterceptors() -> [ClientInterceptor<User_UpdateProfileRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'change_password'.
+  func makechange_passwordInterceptors() -> [ClientInterceptor<User_ChangePasswordRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_user_info'.
+  func makeget_user_infoInterceptors() -> [ClientInterceptor<User_GetUserRequest, User_UserInfoResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'search_user'.
+  func makesearch_userInterceptors() -> [ClientInterceptor<User_SearchUserRequest, User_SearchUserResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_users'.
+  func makeget_usersInterceptors() -> [ClientInterceptor<User_Empty, User_GetUsersResponse>]
+}
+
+public final class User_UserClient: User_UserClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: User_UserClientInterceptorFactoryProtocol?
 
   /// Creates a client for the user.User service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: User_UserClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol User_UserProvider: CallHandlerProvider {
+public protocol User_UserProvider: CallHandlerProvider {
+  var interceptors: User_UserServerInterceptorFactoryProtocol? { get }
+
   ///----- FROM MY ACCOUNT -----
   func get_profile(request: User_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<User_UserProfileResponse>
+
   func update_profile(request: User_UpdateProfileRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
+
   func change_password(request: User_ChangePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
+
   ///----- FROM OTHER ACCOUNT -----
   func get_user_info(request: User_GetUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_UserInfoResponse>
+
   func search_user(request: User_SearchUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_SearchUserResponse>
+
   func get_users(request: User_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<User_GetUsersResponse>
 }
 
 extension User_UserProvider {
-  internal var serviceName: Substring { return "user.User" }
+  public var serviceName: Substring { return "user.User" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "get_profile":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.get_profile(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_Empty>(),
+        responseSerializer: ProtobufSerializer<User_UserProfileResponse>(),
+        interceptors: self.interceptors?.makeget_profileInterceptors() ?? [],
+        userFunction: self.get_profile(request:context:)
+      )
 
     case "update_profile":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.update_profile(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_UpdateProfileRequest>(),
+        responseSerializer: ProtobufSerializer<User_BaseResponse>(),
+        interceptors: self.interceptors?.makeupdate_profileInterceptors() ?? [],
+        userFunction: self.update_profile(request:context:)
+      )
 
     case "change_password":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.change_password(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_ChangePasswordRequest>(),
+        responseSerializer: ProtobufSerializer<User_BaseResponse>(),
+        interceptors: self.interceptors?.makechange_passwordInterceptors() ?? [],
+        userFunction: self.change_password(request:context:)
+      )
 
     case "get_user_info":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.get_user_info(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_GetUserRequest>(),
+        responseSerializer: ProtobufSerializer<User_UserInfoResponse>(),
+        interceptors: self.interceptors?.makeget_user_infoInterceptors() ?? [],
+        userFunction: self.get_user_info(request:context:)
+      )
 
     case "search_user":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.search_user(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_SearchUserRequest>(),
+        responseSerializer: ProtobufSerializer<User_SearchUserResponse>(),
+        interceptors: self.interceptors?.makesearch_userInterceptors() ?? [],
+        userFunction: self.search_user(request:context:)
+      )
 
     case "get_users":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.get_users(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_Empty>(),
+        responseSerializer: ProtobufSerializer<User_GetUsersResponse>(),
+        interceptors: self.interceptors?.makeget_usersInterceptors() ?? [],
+        userFunction: self.get_users(request:context:)
+      )
 
-    default: return nil
+    default:
+      return nil
     }
   }
 }
 
+public protocol User_UserServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'get_profile'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_profileInterceptors() -> [ServerInterceptor<User_Empty, User_UserProfileResponse>]
+
+  /// - Returns: Interceptors to use when handling 'update_profile'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupdate_profileInterceptors() -> [ServerInterceptor<User_UpdateProfileRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'change_password'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makechange_passwordInterceptors() -> [ServerInterceptor<User_ChangePasswordRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_user_info'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_user_infoInterceptors() -> [ServerInterceptor<User_GetUserRequest, User_UserInfoResponse>]
+
+  /// - Returns: Interceptors to use when handling 'search_user'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makesearch_userInterceptors() -> [ServerInterceptor<User_SearchUserRequest, User_SearchUserResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_users'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_usersInterceptors() -> [ServerInterceptor<User_Empty, User_GetUsersResponse>]
+}

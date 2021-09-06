@@ -25,12 +25,22 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate Group_GroupClient, then call methods of this protocol to make API calls.
-internal protocol Group_GroupClientProtocol: GRPCClient {
+/// Method
+///
+/// Usage: instantiate `Group_GroupClient`, then call methods of this protocol to make API calls.
+public protocol Group_GroupClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: Group_GroupClientInterceptorFactoryProtocol? { get }
+
   func create_group(
     _ request: Group_CreateGroupRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Group_CreateGroupRequest, Group_GroupObjectResponse>
+
+  func create_group_workspace(
+    _ request: Group_CreateGroupWorkspaceRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_CreateGroupWorkspaceRequest, Group_CreateGroupWorkspaceResponse>
 
   func get_group(
     _ request: Group_GetGroupRequest,
@@ -47,19 +57,41 @@ internal protocol Group_GroupClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Group_GetJoinedGroupsRequest, Group_GetJoinedGroupsResponse>
 
-  func invite_to_group(
-    _ request: Group_InviteToGroupRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Group_InviteToGroupRequest, Group_BaseResponse>
-
   func join_group(
     _ request: Group_JoinGroupRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Group_JoinGroupRequest, Group_BaseResponse>
 
+  func add_member(
+    _ request: Group_AddMemberRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_AddMemberRequest, Group_BaseResponse>
+
+  func remove_member(
+    _ request: Group_RemoveMemberRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_RemoveMemberRequest, Group_BaseResponse>
+
+  func leave_group(
+    _ request: Group_LeaveGroupRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_LeaveGroupRequest, Group_GroupObjectResponse2>
+
+  func workspace_add_member(
+    _ request: Group_AddMemberWorkspaceRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>
+
+  func remove_member_workspace(
+    _ request: Group_RemoveMemberWorkspaceRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>
 }
 
 extension Group_GroupClientProtocol {
+  public var serviceName: String {
+    return "group.Group"
+  }
 
   /// Unary call to create_group
   ///
@@ -67,14 +99,33 @@ extension Group_GroupClientProtocol {
   ///   - request: Request to send to create_group.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func create_group(
+  public func create_group(
     _ request: Group_CreateGroupRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Group_CreateGroupRequest, Group_GroupObjectResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/create_group",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makecreate_groupInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to create_group_workspace
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to create_group_workspace.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func create_group_workspace(
+    _ request: Group_CreateGroupWorkspaceRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_CreateGroupWorkspaceRequest, Group_CreateGroupWorkspaceResponse> {
+    return self.makeUnaryCall(
+      path: "/group.Group/create_group_workspace",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makecreate_group_workspaceInterceptors() ?? []
     )
   }
 
@@ -84,14 +135,15 @@ extension Group_GroupClientProtocol {
   ///   - request: Request to send to get_group.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func get_group(
+  public func get_group(
     _ request: Group_GetGroupRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Group_GetGroupRequest, Group_GroupObjectResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/get_group",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_groupInterceptors() ?? []
     )
   }
 
@@ -101,14 +153,15 @@ extension Group_GroupClientProtocol {
   ///   - request: Request to send to search_groups.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func search_groups(
+  public func search_groups(
     _ request: Group_SearchGroupsRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Group_SearchGroupsRequest, Group_SearchGroupsResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/search_groups",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makesearch_groupsInterceptors() ?? []
     )
   }
 
@@ -118,31 +171,15 @@ extension Group_GroupClientProtocol {
   ///   - request: Request to send to get_joined_groups.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func get_joined_groups(
+  public func get_joined_groups(
     _ request: Group_GetJoinedGroupsRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Group_GetJoinedGroupsRequest, Group_GetJoinedGroupsResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/get_joined_groups",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
-  /// Unary call to invite_to_group
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to invite_to_group.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func invite_to_group(
-    _ request: Group_InviteToGroupRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Group_InviteToGroupRequest, Group_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/group.Group/invite_to_group",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_joined_groupsInterceptors() ?? []
     )
   }
 
@@ -152,94 +189,355 @@ extension Group_GroupClientProtocol {
   ///   - request: Request to send to join_group.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func join_group(
+  public func join_group(
     _ request: Group_JoinGroupRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Group_JoinGroupRequest, Group_BaseResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/join_group",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makejoin_groupInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to add_member
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to add_member.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func add_member(
+    _ request: Group_AddMemberRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_AddMemberRequest, Group_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/group.Group/add_member",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeadd_memberInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to remove_member
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to remove_member.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func remove_member(
+    _ request: Group_RemoveMemberRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_RemoveMemberRequest, Group_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/group.Group/remove_member",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeremove_memberInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to leave_group
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to leave_group.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func leave_group(
+    _ request: Group_LeaveGroupRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_LeaveGroupRequest, Group_GroupObjectResponse2> {
+    return self.makeUnaryCall(
+      path: "/group.Group/leave_group",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeleave_groupInterceptors() ?? []
+    )
+  }
+
+  ///workspace call
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to workspace_add_member.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func workspace_add_member(
+    _ request: Group_AddMemberWorkspaceRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse> {
+    return self.makeUnaryCall(
+      path: "/group.Group/workspace_add_member",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeworkspace_add_memberInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to remove_member_workspace
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to remove_member_workspace.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func remove_member_workspace(
+    _ request: Group_RemoveMemberWorkspaceRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/group.Group/remove_member_workspace",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeremove_member_workspaceInterceptors() ?? []
     )
   }
 }
 
-internal final class Group_GroupClient: Group_GroupClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol Group_GroupClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'create_group'.
+  func makecreate_groupInterceptors() -> [ClientInterceptor<Group_CreateGroupRequest, Group_GroupObjectResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'create_group_workspace'.
+  func makecreate_group_workspaceInterceptors() -> [ClientInterceptor<Group_CreateGroupWorkspaceRequest, Group_CreateGroupWorkspaceResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_group'.
+  func makeget_groupInterceptors() -> [ClientInterceptor<Group_GetGroupRequest, Group_GroupObjectResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'search_groups'.
+  func makesearch_groupsInterceptors() -> [ClientInterceptor<Group_SearchGroupsRequest, Group_SearchGroupsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_joined_groups'.
+  func makeget_joined_groupsInterceptors() -> [ClientInterceptor<Group_GetJoinedGroupsRequest, Group_GetJoinedGroupsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'join_group'.
+  func makejoin_groupInterceptors() -> [ClientInterceptor<Group_JoinGroupRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'add_member'.
+  func makeadd_memberInterceptors() -> [ClientInterceptor<Group_AddMemberRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'remove_member'.
+  func makeremove_memberInterceptors() -> [ClientInterceptor<Group_RemoveMemberRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'leave_group'.
+  func makeleave_groupInterceptors() -> [ClientInterceptor<Group_LeaveGroupRequest, Group_GroupObjectResponse2>]
+
+  /// - Returns: Interceptors to use when invoking 'workspace_add_member'.
+  func makeworkspace_add_memberInterceptors() -> [ClientInterceptor<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'remove_member_workspace'.
+  func makeremove_member_workspaceInterceptors() -> [ClientInterceptor<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>]
+}
+
+public final class Group_GroupClient: Group_GroupClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Group_GroupClientInterceptorFactoryProtocol?
 
   /// Creates a client for the group.Group service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: Group_GroupClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
+/// Method
+///
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol Group_GroupProvider: CallHandlerProvider {
+public protocol Group_GroupProvider: CallHandlerProvider {
+  var interceptors: Group_GroupServerInterceptorFactoryProtocol? { get }
+
   func create_group(request: Group_CreateGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_GroupObjectResponse>
+
+  func create_group_workspace(request: Group_CreateGroupWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_CreateGroupWorkspaceResponse>
+
   func get_group(request: Group_GetGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_GroupObjectResponse>
+
   func search_groups(request: Group_SearchGroupsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_SearchGroupsResponse>
+
   func get_joined_groups(request: Group_GetJoinedGroupsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_GetJoinedGroupsResponse>
-  func invite_to_group(request: Group_InviteToGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
+
   func join_group(request: Group_JoinGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
+
+  func add_member(request: Group_AddMemberRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
+
+  func remove_member(request: Group_RemoveMemberRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
+
+  func leave_group(request: Group_LeaveGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_GroupObjectResponse2>
+
+  ///workspace call
+  func workspace_add_member(request: Group_AddMemberWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_AddMemberWorkspaceResponse>
+
+  func remove_member_workspace(request: Group_RemoveMemberWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
 }
 
 extension Group_GroupProvider {
-  internal var serviceName: Substring { return "group.Group" }
+  public var serviceName: Substring { return "group.Group" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "create_group":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.create_group(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_CreateGroupRequest>(),
+        responseSerializer: ProtobufSerializer<Group_GroupObjectResponse>(),
+        interceptors: self.interceptors?.makecreate_groupInterceptors() ?? [],
+        userFunction: self.create_group(request:context:)
+      )
+
+    case "create_group_workspace":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_CreateGroupWorkspaceRequest>(),
+        responseSerializer: ProtobufSerializer<Group_CreateGroupWorkspaceResponse>(),
+        interceptors: self.interceptors?.makecreate_group_workspaceInterceptors() ?? [],
+        userFunction: self.create_group_workspace(request:context:)
+      )
 
     case "get_group":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.get_group(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_GetGroupRequest>(),
+        responseSerializer: ProtobufSerializer<Group_GroupObjectResponse>(),
+        interceptors: self.interceptors?.makeget_groupInterceptors() ?? [],
+        userFunction: self.get_group(request:context:)
+      )
 
     case "search_groups":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.search_groups(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_SearchGroupsRequest>(),
+        responseSerializer: ProtobufSerializer<Group_SearchGroupsResponse>(),
+        interceptors: self.interceptors?.makesearch_groupsInterceptors() ?? [],
+        userFunction: self.search_groups(request:context:)
+      )
 
     case "get_joined_groups":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.get_joined_groups(request: request, context: context)
-        }
-      }
-
-    case "invite_to_group":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.invite_to_group(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_GetJoinedGroupsRequest>(),
+        responseSerializer: ProtobufSerializer<Group_GetJoinedGroupsResponse>(),
+        interceptors: self.interceptors?.makeget_joined_groupsInterceptors() ?? [],
+        userFunction: self.get_joined_groups(request:context:)
+      )
 
     case "join_group":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.join_group(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_JoinGroupRequest>(),
+        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
+        interceptors: self.interceptors?.makejoin_groupInterceptors() ?? [],
+        userFunction: self.join_group(request:context:)
+      )
 
-    default: return nil
+    case "add_member":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_AddMemberRequest>(),
+        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
+        interceptors: self.interceptors?.makeadd_memberInterceptors() ?? [],
+        userFunction: self.add_member(request:context:)
+      )
+
+    case "remove_member":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_RemoveMemberRequest>(),
+        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
+        interceptors: self.interceptors?.makeremove_memberInterceptors() ?? [],
+        userFunction: self.remove_member(request:context:)
+      )
+
+    case "leave_group":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_LeaveGroupRequest>(),
+        responseSerializer: ProtobufSerializer<Group_GroupObjectResponse2>(),
+        interceptors: self.interceptors?.makeleave_groupInterceptors() ?? [],
+        userFunction: self.leave_group(request:context:)
+      )
+
+    case "workspace_add_member":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_AddMemberWorkspaceRequest>(),
+        responseSerializer: ProtobufSerializer<Group_AddMemberWorkspaceResponse>(),
+        interceptors: self.interceptors?.makeworkspace_add_memberInterceptors() ?? [],
+        userFunction: self.workspace_add_member(request:context:)
+      )
+
+    case "remove_member_workspace":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Group_RemoveMemberWorkspaceRequest>(),
+        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
+        interceptors: self.interceptors?.makeremove_member_workspaceInterceptors() ?? [],
+        userFunction: self.remove_member_workspace(request:context:)
+      )
+
+    default:
+      return nil
     }
   }
 }
 
+public protocol Group_GroupServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'create_group'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makecreate_groupInterceptors() -> [ServerInterceptor<Group_CreateGroupRequest, Group_GroupObjectResponse>]
+
+  /// - Returns: Interceptors to use when handling 'create_group_workspace'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makecreate_group_workspaceInterceptors() -> [ServerInterceptor<Group_CreateGroupWorkspaceRequest, Group_CreateGroupWorkspaceResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_group'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_groupInterceptors() -> [ServerInterceptor<Group_GetGroupRequest, Group_GroupObjectResponse>]
+
+  /// - Returns: Interceptors to use when handling 'search_groups'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makesearch_groupsInterceptors() -> [ServerInterceptor<Group_SearchGroupsRequest, Group_SearchGroupsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_joined_groups'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_joined_groupsInterceptors() -> [ServerInterceptor<Group_GetJoinedGroupsRequest, Group_GetJoinedGroupsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'join_group'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makejoin_groupInterceptors() -> [ServerInterceptor<Group_JoinGroupRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'add_member'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeadd_memberInterceptors() -> [ServerInterceptor<Group_AddMemberRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'remove_member'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeremove_memberInterceptors() -> [ServerInterceptor<Group_RemoveMemberRequest, Group_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'leave_group'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeleave_groupInterceptors() -> [ServerInterceptor<Group_LeaveGroupRequest, Group_GroupObjectResponse2>]
+
+  /// - Returns: Interceptors to use when handling 'workspace_add_member'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeworkspace_add_memberInterceptors() -> [ServerInterceptor<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>]
+
+  /// - Returns: Interceptors to use when handling 'remove_member_workspace'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeremove_member_workspaceInterceptors() -> [ServerInterceptor<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>]
+}

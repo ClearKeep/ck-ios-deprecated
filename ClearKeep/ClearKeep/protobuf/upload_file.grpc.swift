@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate UploadFile_UploadFileClient, then call methods of this protocol to make API calls.
-internal protocol UploadFile_UploadFileClientProtocol: GRPCClient {
+/// Usage: instantiate `UploadFile_UploadFileClient`, then call methods of this protocol to make API calls.
+public protocol UploadFile_UploadFileClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: UploadFile_UploadFileClientInterceptorFactoryProtocol? { get }
+
   func upload_image(
     _ request: UploadFile_FileUploadRequest,
     callOptions: CallOptions?
@@ -40,10 +43,12 @@ internal protocol UploadFile_UploadFileClientProtocol: GRPCClient {
   func upload_chunked_file(
     callOptions: CallOptions?
   ) -> ClientStreamingCall<UploadFile_FileDataBlockRequest, UploadFile_UploadFilesResponse>
-
 }
 
 extension UploadFile_UploadFileClientProtocol {
+  public var serviceName: String {
+    return "upload_file.UploadFile"
+  }
 
   /// Unary call to upload_image
   ///
@@ -51,14 +56,15 @@ extension UploadFile_UploadFileClientProtocol {
   ///   - request: Request to send to upload_image.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func upload_image(
+  public func upload_image(
     _ request: UploadFile_FileUploadRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse> {
     return self.makeUnaryCall(
       path: "/upload_file.UploadFile/upload_image",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupload_imageInterceptors() ?? []
     )
   }
 
@@ -68,14 +74,15 @@ extension UploadFile_UploadFileClientProtocol {
   ///   - request: Request to send to upload_file.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func upload_file(
+  public func upload_file(
     _ request: UploadFile_FileUploadRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse> {
     return self.makeUnaryCall(
       path: "/upload_file.UploadFile/upload_file",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupload_fileInterceptors() ?? []
     )
   }
 
@@ -87,66 +94,116 @@ extension UploadFile_UploadFileClientProtocol {
   /// - Parameters:
   ///   - callOptions: Call options.
   /// - Returns: A `ClientStreamingCall` with futures for the metadata, status and response.
-  internal func upload_chunked_file(
+  public func upload_chunked_file(
     callOptions: CallOptions? = nil
   ) -> ClientStreamingCall<UploadFile_FileDataBlockRequest, UploadFile_UploadFilesResponse> {
     return self.makeClientStreamingCall(
       path: "/upload_file.UploadFile/upload_chunked_file",
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupload_chunked_fileInterceptors() ?? []
     )
   }
 }
 
-internal final class UploadFile_UploadFileClient: UploadFile_UploadFileClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol UploadFile_UploadFileClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'upload_image'.
+  func makeupload_imageInterceptors() -> [ClientInterceptor<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'upload_file'.
+  func makeupload_fileInterceptors() -> [ClientInterceptor<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'upload_chunked_file'.
+  func makeupload_chunked_fileInterceptors() -> [ClientInterceptor<UploadFile_FileDataBlockRequest, UploadFile_UploadFilesResponse>]
+}
+
+public final class UploadFile_UploadFileClient: UploadFile_UploadFileClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: UploadFile_UploadFileClientInterceptorFactoryProtocol?
 
   /// Creates a client for the upload_file.UploadFile service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: UploadFile_UploadFileClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol UploadFile_UploadFileProvider: CallHandlerProvider {
+public protocol UploadFile_UploadFileProvider: CallHandlerProvider {
+  var interceptors: UploadFile_UploadFileServerInterceptorFactoryProtocol? { get }
+
   func upload_image(request: UploadFile_FileUploadRequest, context: StatusOnlyCallContext) -> EventLoopFuture<UploadFile_UploadFilesResponse>
+
   func upload_file(request: UploadFile_FileUploadRequest, context: StatusOnlyCallContext) -> EventLoopFuture<UploadFile_UploadFilesResponse>
+
   func upload_chunked_file(context: UnaryResponseCallContext<UploadFile_UploadFilesResponse>) -> EventLoopFuture<(StreamEvent<UploadFile_FileDataBlockRequest>) -> Void>
 }
 
 extension UploadFile_UploadFileProvider {
-  internal var serviceName: Substring { return "upload_file.UploadFile" }
+  public var serviceName: Substring { return "upload_file.UploadFile" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "upload_image":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.upload_image(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<UploadFile_FileUploadRequest>(),
+        responseSerializer: ProtobufSerializer<UploadFile_UploadFilesResponse>(),
+        interceptors: self.interceptors?.makeupload_imageInterceptors() ?? [],
+        userFunction: self.upload_image(request:context:)
+      )
 
     case "upload_file":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.upload_file(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<UploadFile_FileUploadRequest>(),
+        responseSerializer: ProtobufSerializer<UploadFile_UploadFilesResponse>(),
+        interceptors: self.interceptors?.makeupload_fileInterceptors() ?? [],
+        userFunction: self.upload_file(request:context:)
+      )
 
     case "upload_chunked_file":
-      return CallHandlerFactory.makeClientStreaming(callHandlerContext: callHandlerContext) { context in
-        return self.upload_chunked_file(context: context)
-      }
+      return ClientStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<UploadFile_FileDataBlockRequest>(),
+        responseSerializer: ProtobufSerializer<UploadFile_UploadFilesResponse>(),
+        interceptors: self.interceptors?.makeupload_chunked_fileInterceptors() ?? [],
+        observerFactory: self.upload_chunked_file(context:)
+      )
 
-    default: return nil
+    default:
+      return nil
     }
   }
 }
 
+public protocol UploadFile_UploadFileServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'upload_image'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupload_imageInterceptors() -> [ServerInterceptor<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'upload_file'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupload_fileInterceptors() -> [ServerInterceptor<UploadFile_FileUploadRequest, UploadFile_UploadFilesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'upload_chunked_file'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupload_chunked_fileInterceptors() -> [ServerInterceptor<UploadFile_FileDataBlockRequest, UploadFile_UploadFilesResponse>]
+}

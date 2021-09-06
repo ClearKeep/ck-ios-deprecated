@@ -97,7 +97,7 @@ struct ProfileView: View {
                   dismissButton: .default(Text("OK")))
         })
         .onAppear() {
-            if let userLogin = Backend.shared.getUserLogin() {
+            if let userLogin = Multiserver.instance.currentServer.getUserLogin() {
                 self.email = userLogin.email
                 self.userName = userLogin.displayName
                 self.phoneNumber = ""
@@ -166,7 +166,7 @@ struct ProfileView: View {
             showPhoneNumberAlert()
         } else {
             // TODO: update info to server
-            if let userLogin = Backend.shared.getUserLogin() {
+            if let userLogin = Multiserver.instance.currentServer.getUserLogin() {
                 var dictOTP = UserDefaults.standard.dictionary(forKey: "OTPEnableInfoKey") as? [String:Bool] ?? [:]
                 dictOTP[userLogin.id] = isToggleOn
                 UserDefaults.standard.setValue(dictOTP, forKey: "OTPEnableInfoKey")

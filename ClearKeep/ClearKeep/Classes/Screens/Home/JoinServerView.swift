@@ -46,13 +46,14 @@ struct JoinServerView: View {
     }
     
     private func validate() -> Bool {
-        guard let first = text.components(separatedBy: ":").first,
-              let last = text.components(separatedBy: ":").last else {
+        let url = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let first = url.components(separatedBy: ":").first,
+              let last = url.components(separatedBy: ":").last else {
             isShowAlert = true
             return false
         }
         
-        let validated = first.textFieldValidatorURL() && (first != last) && text.last! != ":"
+        let validated = first.textFieldValidatorURL() && (first != last) && url.last! != ":"
         isShowAlert = !validated
         
         return validated

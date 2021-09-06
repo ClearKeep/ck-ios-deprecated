@@ -131,9 +131,9 @@ class JanusRole: JanusPlugin {
         var msg: [String: Any]
         if pType == .publish {
             msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "publisher"]
-            msg["display"] = Backend.shared.getUserLogin()?.id
+            msg["display"] = Multiserver.instance.currentServer.getUserLogin()?.id
 //            if let username = username {
-//                msg["display"] = Backend.shared.getUserLogin()?.id ?? username
+//                msg["display"] = Multiserver.instance.currentServer.getUserLogin()?.id ?? username
 //            }
         } else {
             msg = ["request": "join", "room": NSNumber(value: roomId), "ptype": "subscriber"]

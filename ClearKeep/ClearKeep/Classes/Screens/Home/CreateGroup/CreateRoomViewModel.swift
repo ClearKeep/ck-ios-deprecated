@@ -23,15 +23,15 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
         var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName)}
         
         if let account = CKSignalCoordinate.shared.myAccount {
-            let userLogin = Backend.shared.getUserLogin()
+            let userLogin = Multiserver.instance.currentServer.getUserLogin()
             lstClientID.append(GroupMember(id: account.username, username: userLogin?.displayName ?? account.username))
             var req = Group_CreateGroupRequest()
             req.groupName = groupName
             req.groupType = "group"
             req.createdByClientID = account.username
-            req.lstClientID = lstClientID.map{$0.id}
+//            req.lstClientID = lstClientID.map{$0.id}
             
-            Backend.shared.createRoom(req) { (result , error) in
+            Multiserver.instance.currentServer.createRoom(req) { (result , error) in
                 if let result = result {
                     DispatchQueue.main.async {
                         let group = GroupModel(groupID: result.groupID,

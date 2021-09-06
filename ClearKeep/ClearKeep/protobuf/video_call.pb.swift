@@ -21,141 +21,195 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 }
 
 ///errors response
-struct VideoCall_ErrorRes {
+public struct VideoCall_ErrorRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var code: Int64 = 0
+  public var code: Int64 = 0
 
-  var message: String = String()
+  public var message: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VideoCall_BaseResponse {
+public struct VideoCall_BaseResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  public var success: Bool = false
 
-  var errors: VideoCall_ErrorRes {
+  public var errors: VideoCall_ErrorRes {
     get {return _errors ?? VideoCall_ErrorRes()}
     set {_errors = newValue}
   }
   /// Returns true if `errors` has been explicitly set.
-  var hasErrors: Bool {return self._errors != nil}
+  public var hasErrors: Bool {return self._errors != nil}
   /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  mutating func clearErrors() {self._errors = nil}
+  public mutating func clearErrors() {self._errors = nil}
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 
   fileprivate var _errors: VideoCall_ErrorRes? = nil
 }
 
-struct VideoCall_ServerResponse {
+public struct VideoCall_ServerResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var stunServer: VideoCall_StunServer {
+  public var groupRtcURL: String = String()
+
+  public var groupRtcID: Int64 = 0
+
+  public var groupRtcToken: String = String()
+
+  public var stunServer: VideoCall_StunServer {
     get {return _stunServer ?? VideoCall_StunServer()}
     set {_stunServer = newValue}
   }
   /// Returns true if `stunServer` has been explicitly set.
-  var hasStunServer: Bool {return self._stunServer != nil}
+  public var hasStunServer: Bool {return self._stunServer != nil}
   /// Clears the value of `stunServer`. Subsequent reads from it will return its default value.
-  mutating func clearStunServer() {self._stunServer = nil}
+  public mutating func clearStunServer() {self._stunServer = nil}
 
-  var turnServer: VideoCall_TurnServer {
+  public var turnServer: VideoCall_TurnServer {
     get {return _turnServer ?? VideoCall_TurnServer()}
     set {_turnServer = newValue}
   }
   /// Returns true if `turnServer` has been explicitly set.
-  var hasTurnServer: Bool {return self._turnServer != nil}
+  public var hasTurnServer: Bool {return self._turnServer != nil}
   /// Clears the value of `turnServer`. Subsequent reads from it will return its default value.
-  mutating func clearTurnServer() {self._turnServer = nil}
+  public mutating func clearTurnServer() {self._turnServer = nil}
 
-  var groupRtcToken: String = String()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
+  public init() {}
 
   fileprivate var _stunServer: VideoCall_StunServer? = nil
   fileprivate var _turnServer: VideoCall_TurnServer? = nil
 }
 
-struct VideoCall_StunServer {
+public struct VideoCall_StunServer {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var server: String = String()
+  public var server: String = String()
 
-  var port: Int64 = 0
+  public var port: Int64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
-struct VideoCall_TurnServer {
+public struct VideoCall_TurnServer {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var server: String = String()
+  public var server: String = String()
 
-  var port: Int64 = 0
+  public var port: Int64 = 0
 
-  var type: String = String()
+  public var type: String = String()
 
-  var user: String = String()
+  public var user: String = String()
 
-  var pwd: String = String()
+  public var pwd: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
 }
 
 /// Request: new call
-struct VideoCall_VideoCallRequest {
+public struct VideoCall_VideoCallRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var clientID: String = String()
+  public var clientID: String = String()
 
-  var groupID: Int64 = 0
+  public var groupID: Int64 = 0
 
-  ///audio or video
-  var callType: String = String()
+  ///audio or video */
+  public var callType: String = String()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  public init() {}
+}
+
+public struct VideoCall_WorkspaceVideoCallRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var fromClientID: String = String()
+
+  public var fromClientName: String = String()
+
+  public var fromClientAvatar: String = String()
+
+  public var fromClientWorkspaceDomain: String = String()
+
+  public var clientID: String = String()
+
+  public var groupID: Int64 = 0
+
+  public var callType: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 /// Request: call update
-struct VideoCall_UpdateCallRequest {
+public struct VideoCall_UpdateCallRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var groupID: Int64 = 0
+  public var clientID: String = String()
 
-  var updateType: String = String()
+  public var groupID: Int64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  public var updateType: String = String()
 
-  init() {}
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct VideoCall_WorkspaceUpdateCallRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var fromClientID: String = String()
+
+  public var fromClientName: String = String()
+
+  public var fromClientAvatar: String = String()
+
+  public var fromClientWorkspaceDomain: String = String()
+
+  public var clientID: String = String()
+
+  public var groupID: Int64 = 0
+
+  public var updateType: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -163,23 +217,26 @@ struct VideoCall_UpdateCallRequest {
 fileprivate let _protobuf_package = "video_call"
 
 extension VideoCall_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ErrorRes"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".ErrorRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "code"),
     2: .same(proto: "message"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.code != 0 {
       try visitor.visitSingularInt64Field(value: self.code, fieldNumber: 1)
     }
@@ -189,7 +246,7 @@ extension VideoCall_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_ErrorRes, rhs: VideoCall_ErrorRes) -> Bool {
+  public static func ==(lhs: VideoCall_ErrorRes, rhs: VideoCall_ErrorRes) -> Bool {
     if lhs.code != rhs.code {return false}
     if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -198,23 +255,26 @@ extension VideoCall_ErrorRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
 }
 
 extension VideoCall_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".BaseResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".BaseResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
     2: .same(proto: "errors"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularMessageField(value: &self._errors)
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
@@ -224,7 +284,7 @@ extension VideoCall_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_BaseResponse, rhs: VideoCall_BaseResponse) -> Bool {
+  public static func ==(lhs: VideoCall_BaseResponse, rhs: VideoCall_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
     if lhs._errors != rhs._errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -233,64 +293,82 @@ extension VideoCall_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 }
 
 extension VideoCall_ServerResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ServerResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "stun_server"),
-    2: .standard(proto: "turn_server"),
+  public static let protoMessageName: String = _protobuf_package + ".ServerResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "group_rtc_url"),
+    2: .standard(proto: "group_rtc_id"),
     3: .standard(proto: "group_rtc_token"),
+    4: .standard(proto: "stun_server"),
+    5: .standard(proto: "turn_server"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._stunServer)
-      case 2: try decoder.decodeSingularMessageField(value: &self._turnServer)
-      case 3: try decoder.decodeSingularStringField(value: &self.groupRtcToken)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.groupRtcURL) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupRtcID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.groupRtcToken) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._stunServer) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._turnServer) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._stunServer {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.groupRtcURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.groupRtcURL, fieldNumber: 1)
     }
-    if let v = self._turnServer {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if self.groupRtcID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupRtcID, fieldNumber: 2)
     }
     if !self.groupRtcToken.isEmpty {
       try visitor.visitSingularStringField(value: self.groupRtcToken, fieldNumber: 3)
     }
+    if let v = self._stunServer {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    }
+    if let v = self._turnServer {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_ServerResponse, rhs: VideoCall_ServerResponse) -> Bool {
+  public static func ==(lhs: VideoCall_ServerResponse, rhs: VideoCall_ServerResponse) -> Bool {
+    if lhs.groupRtcURL != rhs.groupRtcURL {return false}
+    if lhs.groupRtcID != rhs.groupRtcID {return false}
+    if lhs.groupRtcToken != rhs.groupRtcToken {return false}
     if lhs._stunServer != rhs._stunServer {return false}
     if lhs._turnServer != rhs._turnServer {return false}
-    if lhs.groupRtcToken != rhs.groupRtcToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
 extension VideoCall_StunServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".StunServer"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".StunServer"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "server"),
     2: .same(proto: "port"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.server)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.port)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.server) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.port) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.server.isEmpty {
       try visitor.visitSingularStringField(value: self.server, fieldNumber: 1)
     }
@@ -300,7 +378,7 @@ extension VideoCall_StunServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_StunServer, rhs: VideoCall_StunServer) -> Bool {
+  public static func ==(lhs: VideoCall_StunServer, rhs: VideoCall_StunServer) -> Bool {
     if lhs.server != rhs.server {return false}
     if lhs.port != rhs.port {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -309,8 +387,8 @@ extension VideoCall_StunServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 }
 
 extension VideoCall_TurnServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".TurnServer"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".TurnServer"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "server"),
     2: .same(proto: "port"),
     3: .same(proto: "type"),
@@ -318,20 +396,23 @@ extension VideoCall_TurnServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     5: .same(proto: "pwd"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.server)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.port)
-      case 3: try decoder.decodeSingularStringField(value: &self.type)
-      case 4: try decoder.decodeSingularStringField(value: &self.user)
-      case 5: try decoder.decodeSingularStringField(value: &self.pwd)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.server) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.port) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.type) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.user) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.pwd) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.server.isEmpty {
       try visitor.visitSingularStringField(value: self.server, fieldNumber: 1)
     }
@@ -350,7 +431,7 @@ extension VideoCall_TurnServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_TurnServer, rhs: VideoCall_TurnServer) -> Bool {
+  public static func ==(lhs: VideoCall_TurnServer, rhs: VideoCall_TurnServer) -> Bool {
     if lhs.server != rhs.server {return false}
     if lhs.port != rhs.port {return false}
     if lhs.type != rhs.type {return false}
@@ -362,25 +443,28 @@ extension VideoCall_TurnServer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 }
 
 extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".VideoCallRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+  public static let protoMessageName: String = _protobuf_package + ".VideoCallRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
     2: .standard(proto: "group_id"),
     3: .standard(proto: "call_type"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.clientID)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 3: try decoder.decodeSingularStringField(value: &self.callType)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.callType) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
@@ -393,7 +477,75 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_VideoCallRequest, rhs: VideoCall_VideoCallRequest) -> Bool {
+  public static func ==(lhs: VideoCall_VideoCallRequest, rhs: VideoCall_VideoCallRequest) -> Bool {
+    if lhs.clientID != rhs.clientID {return false}
+    if lhs.groupID != rhs.groupID {return false}
+    if lhs.callType != rhs.callType {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VideoCall_WorkspaceVideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".WorkspaceVideoCallRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "from_client_id"),
+    2: .standard(proto: "from_client_name"),
+    3: .standard(proto: "from_client_avatar"),
+    4: .standard(proto: "from_client_workspace_domain"),
+    5: .standard(proto: "client_id"),
+    6: .standard(proto: "group_id"),
+    7: .standard(proto: "call_type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fromClientID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.fromClientName) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.fromClientAvatar) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.fromClientWorkspaceDomain) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 6: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.callType) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.fromClientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientID, fieldNumber: 1)
+    }
+    if !self.fromClientName.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientName, fieldNumber: 2)
+    }
+    if !self.fromClientAvatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientAvatar, fieldNumber: 3)
+    }
+    if !self.fromClientWorkspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientWorkspaceDomain, fieldNumber: 4)
+    }
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 5)
+    }
+    if self.groupID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 6)
+    }
+    if !self.callType.isEmpty {
+      try visitor.visitSingularStringField(value: self.callType, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VideoCall_WorkspaceVideoCallRequest, rhs: VideoCall_WorkspaceVideoCallRequest) -> Bool {
+    if lhs.fromClientID != rhs.fromClientID {return false}
+    if lhs.fromClientName != rhs.fromClientName {return false}
+    if lhs.fromClientAvatar != rhs.fromClientAvatar {return false}
+    if lhs.fromClientWorkspaceDomain != rhs.fromClientWorkspaceDomain {return false}
     if lhs.clientID != rhs.clientID {return false}
     if lhs.groupID != rhs.groupID {return false}
     if lhs.callType != rhs.callType {return false}
@@ -403,33 +555,110 @@ extension VideoCall_VideoCallRequest: SwiftProtobuf.Message, SwiftProtobuf._Mess
 }
 
 extension VideoCall_UpdateCallRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".UpdateCallRequest"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "group_id"),
-    2: .standard(proto: "update_type"),
+  public static let protoMessageName: String = _protobuf_package + ".UpdateCallRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "client_id"),
+    2: .standard(proto: "group_id"),
+    3: .standard(proto: "update_type"),
   ]
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.groupID)
-      case 2: try decoder.decodeSingularStringField(value: &self.updateType)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.updateType) }()
       default: break
       }
     }
   }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
+    }
     if self.groupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 1)
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 2)
     }
     if !self.updateType.isEmpty {
-      try visitor.visitSingularStringField(value: self.updateType, fieldNumber: 2)
+      try visitor.visitSingularStringField(value: self.updateType, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: VideoCall_UpdateCallRequest, rhs: VideoCall_UpdateCallRequest) -> Bool {
+  public static func ==(lhs: VideoCall_UpdateCallRequest, rhs: VideoCall_UpdateCallRequest) -> Bool {
+    if lhs.clientID != rhs.clientID {return false}
+    if lhs.groupID != rhs.groupID {return false}
+    if lhs.updateType != rhs.updateType {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension VideoCall_WorkspaceUpdateCallRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".WorkspaceUpdateCallRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "from_client_id"),
+    2: .standard(proto: "from_client_name"),
+    3: .standard(proto: "from_client_avatar"),
+    4: .standard(proto: "from_client_workspace_domain"),
+    5: .standard(proto: "client_id"),
+    6: .standard(proto: "group_id"),
+    7: .standard(proto: "update_type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fromClientID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.fromClientName) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.fromClientAvatar) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.fromClientWorkspaceDomain) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 6: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.updateType) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.fromClientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientID, fieldNumber: 1)
+    }
+    if !self.fromClientName.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientName, fieldNumber: 2)
+    }
+    if !self.fromClientAvatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientAvatar, fieldNumber: 3)
+    }
+    if !self.fromClientWorkspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.fromClientWorkspaceDomain, fieldNumber: 4)
+    }
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 5)
+    }
+    if self.groupID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 6)
+    }
+    if !self.updateType.isEmpty {
+      try visitor.visitSingularStringField(value: self.updateType, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: VideoCall_WorkspaceUpdateCallRequest, rhs: VideoCall_WorkspaceUpdateCallRequest) -> Bool {
+    if lhs.fromClientID != rhs.fromClientID {return false}
+    if lhs.fromClientName != rhs.fromClientName {return false}
+    if lhs.fromClientAvatar != rhs.fromClientAvatar {return false}
+    if lhs.fromClientWorkspaceDomain != rhs.fromClientWorkspaceDomain {return false}
+    if lhs.clientID != rhs.clientID {return false}
     if lhs.groupID != rhs.groupID {return false}
     if lhs.updateType != rhs.updateType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

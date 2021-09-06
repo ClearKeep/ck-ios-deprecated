@@ -79,7 +79,7 @@ class RegisterViewModel: ObservableObject {
         if email.isEmpty {
             errorMsgEmail = "This field cannot be empty"
         } else {
-            errorMsgEmail = isEmailValid ? "" : "Email is incorrect"
+            errorMsgEmail = isEmailValid ? "" : "Email is invalid"
         }
     }
     
@@ -94,13 +94,13 @@ class RegisterViewModel: ObservableObject {
     
     fileprivate func verifyPassword() {
         let pwd = passWord.trimmingCharacters(in: .whitespacesAndNewlines)
-        isPasswordValid = !pwd.isEmpty && pwd.count >= 6
+        isPasswordValid = !pwd.isEmpty && pwd.count >= 6 && pwd.count <= 12
         if isPasswordValid {
             errorMsgPassword = ""
         } else if pwd.isEmpty {
             errorMsgPassword = "Password must not be blank"
         } else {
-            errorMsgPassword = "Password must have at least 6 characters"
+            errorMsgPassword = "Password must be between 6 and 12 characters"
         }
     }
     
@@ -112,8 +112,15 @@ class RegisterViewModel: ObservableObject {
         } else if confirmPwd.isEmpty {
             errorMsgConfirmPwd = "This field cannot be empty"
         } else {
-            errorMsgConfirmPwd = "Password and Confirm password do not match"
+            errorMsgConfirmPwd = "Confirm password does not match with password"
         }
+    }
+    
+    func reset() {
+        email = ""
+        userName = ""
+        passWord = ""
+        passWordConfirm = ""
     }
 }
 
@@ -141,24 +148,26 @@ extension RegisterViewModel {
         request.firstName = self.firstName
         request.lastName = self.lastName
         
-        Backend.shared.register(request) { (result , error) in
-            self.hudVisible = false
-            if let result = result {
-                if result.baseResponse.success {
-                    self.isRegisterSuccess = true
-                    self.messageAlert = "Please check your email to activate account"
-                    self.titleAlert = "Register Successfully"
-                    self.isShowAlert = true
+        Multiserver.instance.currentServer.register(request) { (result , error) in
+            DispatchQueue.main.async {
+                self.hudVisible = false
+                if let result = result {
+                    if result.baseResponse.success {
+                        self.isRegisterSuccess = true
+                        self.messageAlert = "Please check your email to activate account"
+                        self.titleAlert = "Register Successfully"
+                        self.isShowAlert = true
+                    } else {
+                        self.titleAlert = "Register Error"
+                        self.messageAlert = result.baseResponse.error.message
+                        self.isShowAlert = true
+                    }
                 } else {
                     self.titleAlert = "Register Error"
-                    self.messageAlert = result.baseResponse.errors.message
+                    self.messageAlert = error.debugDescription
                     self.isShowAlert = true
+                    print("Register account fail")
                 }
-            } else {
-                self.titleAlert = "Register Error"
-                self.messageAlert = error.debugDescription
-                self.isShowAlert = true
-                print("Register account fail")
             }
         }
     }

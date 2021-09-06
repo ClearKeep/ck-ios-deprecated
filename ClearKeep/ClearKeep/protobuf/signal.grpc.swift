@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate Signal_SignalKeyDistributionClient, then call methods of this protocol to make API calls.
-internal protocol Signal_SignalKeyDistributionClientProtocol: GRPCClient {
+/// Usage: instantiate `Signal_SignalKeyDistributionClient`, then call methods of this protocol to make API calls.
+public protocol Signal_SignalKeyDistributionClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: Signal_SignalKeyDistributionClientInterceptorFactoryProtocol? { get }
+
   func peerRegisterClientKey(
     _ request: Signal_PeerRegisterClientKeyRequest,
     callOptions: CallOptions?
@@ -52,9 +55,16 @@ internal protocol Signal_SignalKeyDistributionClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse>
 
+  func workspaceGroupGetClientKey(
+    _ request: Signal_WorkspaceGroupGetClientKeyRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Signal_WorkspaceGroupGetClientKeyRequest, Signal_WorkspaceGroupGetClientKeyResponse>
 }
 
 extension Signal_SignalKeyDistributionClientProtocol {
+  public var serviceName: String {
+    return "signal.SignalKeyDistribution"
+  }
 
   ///peer
   ///
@@ -62,14 +72,15 @@ extension Signal_SignalKeyDistributionClientProtocol {
   ///   - request: Request to send to PeerRegisterClientKey.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func peerRegisterClientKey(
+  public func peerRegisterClientKey(
     _ request: Signal_PeerRegisterClientKeyRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Signal_PeerRegisterClientKeyRequest, Signal_BaseResponse> {
     return self.makeUnaryCall(
       path: "/signal.SignalKeyDistribution/PeerRegisterClientKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePeerRegisterClientKeyInterceptors() ?? []
     )
   }
 
@@ -79,14 +90,15 @@ extension Signal_SignalKeyDistributionClientProtocol {
   ///   - request: Request to send to PeerGetClientKey.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func peerGetClientKey(
+  public func peerGetClientKey(
     _ request: Signal_PeerGetClientKeyRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Signal_PeerGetClientKeyRequest, Signal_PeerGetClientKeyResponse> {
     return self.makeUnaryCall(
       path: "/signal.SignalKeyDistribution/PeerGetClientKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePeerGetClientKeyInterceptors() ?? []
     )
   }
 
@@ -96,14 +108,15 @@ extension Signal_SignalKeyDistributionClientProtocol {
   ///   - request: Request to send to GroupRegisterClientKey.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func groupRegisterClientKey(
+  public func groupRegisterClientKey(
     _ request: Signal_GroupRegisterClientKeyRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Signal_GroupRegisterClientKeyRequest, Signal_BaseResponse> {
     return self.makeUnaryCall(
       path: "/signal.SignalKeyDistribution/GroupRegisterClientKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGroupRegisterClientKeyInterceptors() ?? []
     )
   }
 
@@ -113,14 +126,15 @@ extension Signal_SignalKeyDistributionClientProtocol {
   ///   - request: Request to send to GroupGetClientKey.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func groupGetClientKey(
+  public func groupGetClientKey(
     _ request: Signal_GroupGetClientKeyRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Signal_GroupGetClientKeyRequest, Signal_GroupGetClientKeyResponse> {
     return self.makeUnaryCall(
       path: "/signal.SignalKeyDistribution/GroupGetClientKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGroupGetClientKeyInterceptors() ?? []
     )
   }
 
@@ -130,88 +144,193 @@ extension Signal_SignalKeyDistributionClientProtocol {
   ///   - request: Request to send to GroupGetAllClientKey.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func groupGetAllClientKey(
+  public func groupGetAllClientKey(
     _ request: Signal_GroupGetAllClientKeyRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse> {
     return self.makeUnaryCall(
       path: "/signal.SignalKeyDistribution/GroupGetAllClientKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGroupGetAllClientKeyInterceptors() ?? []
+    )
+  }
+
+  ///workspace
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to WorkspaceGroupGetClientKey.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func workspaceGroupGetClientKey(
+    _ request: Signal_WorkspaceGroupGetClientKeyRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Signal_WorkspaceGroupGetClientKeyRequest, Signal_WorkspaceGroupGetClientKeyResponse> {
+    return self.makeUnaryCall(
+      path: "/signal.SignalKeyDistribution/WorkspaceGroupGetClientKey",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeWorkspaceGroupGetClientKeyInterceptors() ?? []
     )
   }
 }
 
-internal final class Signal_SignalKeyDistributionClient: Signal_SignalKeyDistributionClientProtocol {
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
+public protocol Signal_SignalKeyDistributionClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'peerRegisterClientKey'.
+  func makePeerRegisterClientKeyInterceptors() -> [ClientInterceptor<Signal_PeerRegisterClientKeyRequest, Signal_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'peerGetClientKey'.
+  func makePeerGetClientKeyInterceptors() -> [ClientInterceptor<Signal_PeerGetClientKeyRequest, Signal_PeerGetClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'groupRegisterClientKey'.
+  func makeGroupRegisterClientKeyInterceptors() -> [ClientInterceptor<Signal_GroupRegisterClientKeyRequest, Signal_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'groupGetClientKey'.
+  func makeGroupGetClientKeyInterceptors() -> [ClientInterceptor<Signal_GroupGetClientKeyRequest, Signal_GroupGetClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'groupGetAllClientKey'.
+  func makeGroupGetAllClientKeyInterceptors() -> [ClientInterceptor<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'workspaceGroupGetClientKey'.
+  func makeWorkspaceGroupGetClientKeyInterceptors() -> [ClientInterceptor<Signal_WorkspaceGroupGetClientKeyRequest, Signal_WorkspaceGroupGetClientKeyResponse>]
+}
+
+public final class Signal_SignalKeyDistributionClient: Signal_SignalKeyDistributionClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Signal_SignalKeyDistributionClientInterceptorFactoryProtocol?
 
   /// Creates a client for the signal.SignalKeyDistribution service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: Signal_SignalKeyDistributionClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol Signal_SignalKeyDistributionProvider: CallHandlerProvider {
+public protocol Signal_SignalKeyDistributionProvider: CallHandlerProvider {
+  var interceptors: Signal_SignalKeyDistributionServerInterceptorFactoryProtocol? { get }
+
   ///peer
   func peerRegisterClientKey(request: Signal_PeerRegisterClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_BaseResponse>
+
   func peerGetClientKey(request: Signal_PeerGetClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_PeerGetClientKeyResponse>
+
   ///group
   func groupRegisterClientKey(request: Signal_GroupRegisterClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_BaseResponse>
+
   func groupGetClientKey(request: Signal_GroupGetClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_GroupGetClientKeyResponse>
+
   func groupGetAllClientKey(request: Signal_GroupGetAllClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_GroupGetAllClientKeyResponse>
+
+  ///workspace
+  func workspaceGroupGetClientKey(request: Signal_WorkspaceGroupGetClientKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Signal_WorkspaceGroupGetClientKeyResponse>
 }
 
 extension Signal_SignalKeyDistributionProvider {
-  internal var serviceName: Substring { return "signal.SignalKeyDistribution" }
+  public var serviceName: Substring { return "signal.SignalKeyDistribution" }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "PeerRegisterClientKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.peerRegisterClientKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_PeerRegisterClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_BaseResponse>(),
+        interceptors: self.interceptors?.makePeerRegisterClientKeyInterceptors() ?? [],
+        userFunction: self.peerRegisterClientKey(request:context:)
+      )
 
     case "PeerGetClientKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.peerGetClientKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_PeerGetClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_PeerGetClientKeyResponse>(),
+        interceptors: self.interceptors?.makePeerGetClientKeyInterceptors() ?? [],
+        userFunction: self.peerGetClientKey(request:context:)
+      )
 
     case "GroupRegisterClientKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.groupRegisterClientKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_GroupRegisterClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_BaseResponse>(),
+        interceptors: self.interceptors?.makeGroupRegisterClientKeyInterceptors() ?? [],
+        userFunction: self.groupRegisterClientKey(request:context:)
+      )
 
     case "GroupGetClientKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.groupGetClientKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_GroupGetClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_GroupGetClientKeyResponse>(),
+        interceptors: self.interceptors?.makeGroupGetClientKeyInterceptors() ?? [],
+        userFunction: self.groupGetClientKey(request:context:)
+      )
 
     case "GroupGetAllClientKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.groupGetAllClientKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_GroupGetAllClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_GroupGetAllClientKeyResponse>(),
+        interceptors: self.interceptors?.makeGroupGetAllClientKeyInterceptors() ?? [],
+        userFunction: self.groupGetAllClientKey(request:context:)
+      )
 
-    default: return nil
+    case "WorkspaceGroupGetClientKey":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Signal_WorkspaceGroupGetClientKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Signal_WorkspaceGroupGetClientKeyResponse>(),
+        interceptors: self.interceptors?.makeWorkspaceGroupGetClientKeyInterceptors() ?? [],
+        userFunction: self.workspaceGroupGetClientKey(request:context:)
+      )
+
+    default:
+      return nil
     }
   }
 }
 
+public protocol Signal_SignalKeyDistributionServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'peerRegisterClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePeerRegisterClientKeyInterceptors() -> [ServerInterceptor<Signal_PeerRegisterClientKeyRequest, Signal_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'peerGetClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePeerGetClientKeyInterceptors() -> [ServerInterceptor<Signal_PeerGetClientKeyRequest, Signal_PeerGetClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'groupRegisterClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGroupRegisterClientKeyInterceptors() -> [ServerInterceptor<Signal_GroupRegisterClientKeyRequest, Signal_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'groupGetClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGroupGetClientKeyInterceptors() -> [ServerInterceptor<Signal_GroupGetClientKeyRequest, Signal_GroupGetClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'groupGetAllClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGroupGetAllClientKeyInterceptors() -> [ServerInterceptor<Signal_GroupGetAllClientKeyRequest, Signal_GroupGetAllClientKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'workspaceGroupGetClientKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeWorkspaceGroupGetClientKeyInterceptors() -> [ServerInterceptor<Signal_WorkspaceGroupGetClientKeyRequest, Signal_WorkspaceGroupGetClientKeyResponse>]
+}
