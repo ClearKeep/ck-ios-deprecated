@@ -62,7 +62,7 @@ struct ServerMainView: View {
                         })
                         
                         ListGroupView(titleSection: "Dirrect Messages", groups: viewModel.peers, createNewGroup: PeopleView(), detail: { group in
-                            MessagerView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}), groupId: group.groupID, userName: viewModel.getPeerReceiveName(inGroup: group))
+                            MessagerView(clientId: viewModel.getClientIdFriend(listClientID: group.lstClientID.map{$0.id}), groupId: group.groupID, userName: viewModel.getPeerReceiveName(inGroup: group), workspace_domain: "")
                         }, content: { group in
                             HStack {
                                 ChannelUserAvatar(avatarSize: 24, statusSize: 8, text: viewModel.getPeerReceiveName(inGroup: group), font: AppTheme.fonts.linkSmall.font, image: nil, status: .none, gradientBackgroundType: .accent)

@@ -48,13 +48,16 @@ struct MessagerToolBar: View {
     
     // MARK: - Variables
     var sendAction: (String) -> ()
+    var sharePhoto: VoidCompletion
     
     // MARK: - State
     @State private var messageText: String = ""
     
     var body: some View {
         HStack(spacing: 15) {
-            Button {} label: {
+            Button {
+                sharePhoto()
+            } label: {
                 Image("ic_photo")
                     .foregroundColor(AppTheme.colors.gray1.color)
             }

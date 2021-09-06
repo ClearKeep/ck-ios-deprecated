@@ -28,13 +28,13 @@ final class ChatService {
 
 // MARK: - Peer
 extension ChatService {
-    func sendMessageToPeer(toClientId: String, groupId: Int64, messageData: Data, isForceProcessKey: Bool = false, completion: ((MessageModel) -> ())?) {
+    func sendMessageToPeer(toClientId: String, workspaceDomain: String, groupId: Int64, messageData: Data, isForceProcessKey: Bool = false, completion: ((MessageModel) -> ())?) {
         let fromClientId = getClientId()
         
         if isForceProcessKey {
-            requestKeyPeer(byClientId: toClientId, completion: { isSuccess in
+            requestKeyPeer(byClientId: toClientId, workspaceDomain: workspaceDomain, completion: { isSuccess in
                 if isSuccess {
-                    self.sendMessageToPeer(toClientId: toClientId, groupId: groupId, messageData: messageData, completion: completion)
+                    self.sendMessageToPeer(toClientId: toClientId, workspaceDomain: workspaceDomain, groupId: groupId, messageData: messageData, completion: completion)
                 } else {
                     Debug.DLog("Send message fail - Can't request key peer")
                     return
@@ -72,9 +72,9 @@ extension ChatService {
         }
     }
     
-    func requestKeyPeer(byClientId clientId: String, completion: @escaping (Bool) -> Void) {
+    func requestKeyPeer(byClientId clientId: String, workspaceDomain: String, completion: @escaping (Bool) -> Void) {
         Multiserver.instance.currentServer.authenticator
-            .requestKey(byClientId: clientId) { [weak self] (result, error, response) in
+            .requestKey(byClientId: clientId, workspaceDomain: workspaceDomain) { [weak self] (result, error, response) in
                 
                 guard let recipientResponse = response else {
                     Debug.DLog("Request prekey \(clientId) fail")
@@ -152,7 +152,7 @@ extension ChatService {
         }
     }
     
-    func createPeerGroup(receiveId: String, username: String, completion: ((GroupModel) -> ())?) {
+    func createPeerGroup(receiveId: String, username: String, workspaceDomain: String, completion: ((GroupModel) -> ())?) {
         guard let user = Multiserver.instance.currentServer.getUserLogin() else {
             Debug.DLog("My Account is nil")
             return
@@ -170,13 +170,13 @@ extension ChatService {
         var receiveGroup = Group_ClientInGroupObject()
         receiveGroup.id = receiveId
         receiveGroup.displayName = username
-        receiveGroup.workspaceDomain = user.workspace_domain.workspace_domain
+        receiveGroup.workspaceDomain = workspaceDomain.isEmpty ? user.workspace_domain.workspace_domain : workspaceDomain
         
         req.lstClient = [userGroup, receiveGroup]
         
         Multiserver.instance.currentServer.createRoom(req) { (result , error)  in
             if let result = result {
-                let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
+                let lstClientID = result.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName, workspaceDomain: $0.workspaceDomain)}
                 
                 DispatchQueue.main.async {
                     let group = GroupModel(groupID: result.groupID,
@@ -340,7 +340,8 @@ extension ChatService {
                                 clientID: publication.clientID,
                                 message: message,
                                 createdAt: publication.createdAt,
-                                updatedAt: publication.updatedAt)
+                                updatedAt: publication.updatedAt,
+                                clientWorkspaceDomain: publication.clientWorkspaceDomain)
         RealmManager.shared.updateLastMessage(messageRecord)
         
         return messageRecord
@@ -361,6 +362,7 @@ extension ChatService {
         var groupType: String
         var message: Data
         var createdAt: Int64
+        var clientWorkspaceDomain: String
         
         enum CodingKeys: String, CodingKey {
             case id = "id"
@@ -370,6 +372,7 @@ extension ChatService {
             case groupType = "group_type"
             case message = "message"
             case createdAt = "created_at"
+            case clientWorkspaceDomain = "" //TODO: - replace key
         }
         
         required init(from decoder: Decoder) throws {
@@ -381,6 +384,7 @@ extension ChatService {
             groupType = try container.decode(String.self, forKey: .groupType)
             message = try Data(base64Encoded: container.decode(String.self, forKey: .message).data(using: .utf8) ?? Data()) ?? Data()
             createdAt = try container.decode(Int64.self, forKey: .createdAt)
+            clientWorkspaceDomain = try container.decode(String.self, forKey: .clientWorkspaceDomain)
         }
     }
     
@@ -434,7 +438,8 @@ extension ChatService {
                                 clientID: publication.clientId,
                                 message: message,
                                 createdAt: publication.createdAt,
-                                updatedAt: publication.createdAt)
+                                updatedAt: publication.createdAt,
+                                clientWorkspaceDomain: publication.clientWorkspaceDomain)
         RealmManager.shared.updateLastMessage(messageRecord)
         
         return messageRecord

@@ -11,6 +11,8 @@ struct People: Identifiable , Hashable {
     var id : String
     var userName : String
     var userStatus : Status
+    
+    var workspace_domain: String = ""
 }
 
 enum Status : String {

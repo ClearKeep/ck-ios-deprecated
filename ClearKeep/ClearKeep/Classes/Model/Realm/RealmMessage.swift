@@ -17,6 +17,7 @@ class RealmMessage: Object {
     @objc dynamic var message = Data()
     @objc dynamic var createdAt: Int64 = 0
     @objc dynamic var updatedAt: Int64 = 0
+    @objc dynamic var clientWorkspaceDomain: String = String()
     
     override class func primaryKey() -> String? {
         return "id"

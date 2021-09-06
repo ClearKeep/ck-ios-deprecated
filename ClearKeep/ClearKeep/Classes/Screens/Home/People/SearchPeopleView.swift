@@ -26,7 +26,7 @@ struct SearchPeopleView: View {
                     }
                 }
                 List(viewModel.users){ user in
-                    NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName))
+                    NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName, workspace_domain: user.workspace_domain))
                     {
                         Image(systemName: "person.fill")
                             .resizable()

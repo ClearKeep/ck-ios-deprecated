@@ -17,7 +17,13 @@ struct PeopleView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+    @State var addUserFromOtherServer: Bool = false
+    @State var userURL: String = ""
     
+    @State private var user: People = People(id: "", userName: "", userStatus: .Online)
+    
+    @State private var activeOtherUser = false
+
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading) {
@@ -28,45 +34,79 @@ struct PeopleView: View {
                     }
                 }
 
-                Text("User in this Channel")
-                    .font(AppTheme.fonts.textMedium.font)
-                    .foregroundColor(AppTheme.colors.gray2.color)
-                    .padding([.top , .bottom] , 16)
+                HStack(spacing: 8) {
+                    Button(action: {
+                        addUserFromOtherServer.toggle()
+                    }) {
+                        Image(addUserFromOtherServer ? "Checkbox" : "Ellipse20")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                    }
+                    
+                    Text("Add User From Other Server")
+                        .font(AppTheme.fonts.textMedium.font)
+                        .foregroundColor(AppTheme.colors.black.color)
+                    
+                    Spacer()
+                }
+                .padding(.top, 10)
                 
-                Group {
-                    ScrollView(.vertical, showsIndicators: false, content: {
+                if addUserFromOtherServer {
+                    Group {
+                        WrappedTextFieldWithLeftIcon("Paste your friend's link", text: $userURL, errorMessage: .constant(""), isFocused: .constant(false))
+                        
+                        NavigationLink(destination: MessagerView(clientId: user.id, groupId: 0, userName: user.userName, workspace_domain: user.workspace_domain, isFromPeopleList: true),
+                                       isActive: .constant(activeOtherUser),
+                                       label: { EmptyView() })
+                        
+                        Spacer()
                         HStack {
-                            VStack(alignment:.leading , spacing: 16) {
-                                ForEach(self.peoples , id: \.id) { user in
-                                    NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName, isFromPeopleList: true)) {
-                                        ContactView(people: user)
-                                    }
-                                }
-                            }
-                            
+                            Spacer()
+                            RoundedGradientButton("Next", fixedWidth: 120, disable: .constant(userURL.isEmpty), action: {
+                                getUserInfo()
+                            })
                             Spacer()
                         }
-                        .frame(width: geometry.size.width - 32)
-                    })
+                    }
+                } else {
+                    Group {
+                        ScrollView(.vertical, showsIndicators: false, content: {
+                            HStack {
+                                VStack(alignment:.leading , spacing: 16) {
+                                    ForEach(self.peoples , id: \.id) { user in
+                                        NavigationLink(destination:  MessagerView(clientId: user.id, groupId: 0, userName: user.userName, workspace_domain: user.workspace_domain, isFromPeopleList: true)) {
+                                            ContactView(people: user)
+                                        }
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                            .frame(width: geometry.size.width - 32)
+                        })
+                    }
                 }
-                
                 
             }
             .padding([.trailing , .leading , .bottom] , 16)
-            .applyNavigationBarGradidentStyle(title: "New Message", leftBarItems: {
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image("ic_close")
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(AppTheme.colors.gray1.color)
-                }
+            .applyNavigationBarPlainStyleDark(title: "Create direct message", leftBarItems: {
+                Image("Chev-left")
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(AppTheme.colors.black.color)
+                    .fixedSize()
+                    .scaledToFit()
+                    .onTapGesture {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
             }, rightBarItems: {
                 Spacer()
             })
+
         }
         .onAppear(){
-            self.getListUser()
+            //self.getListUser()
         }
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {
@@ -96,6 +136,31 @@ extension PeopleView {
                 if let result = result {
                     self.peoples = result.lstUser.map {People(id: $0.id, userName: $0.displayName, userStatus: .Online)}.sorted {$0.userName.lowercased() < $1.userName.lowercased()}
                 }
+            }
+        }
+    }
+    
+    func getUserInfo() {
+        //Ex: 54.235.68.160:25000:69b14823-9612-4fa4-9023-f11351e921e2
+        let url = userURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let workspaceDomain = url.components(separatedBy: ":").first,
+              let userId = url.components(separatedBy: ":").last else {
+            return
+        }
+        
+        self.hudVisible = true
+        Multiserver.instance.currentServer.getUserInfo(userId: userId, workspaceDomain: workspaceDomain) { (result, error) in
+            DispatchQueue.main.async {
+                self.hudVisible = false
+                guard let result = result else {
+                    return
+                    
+                }
+                
+                if result.id.isEmpty && result.displayName.isEmpty {return}
+                
+                user = People(id: result.id, userName: result.displayName, userStatus: .Online)
+                activeOtherUser = true
             }
         }
     }

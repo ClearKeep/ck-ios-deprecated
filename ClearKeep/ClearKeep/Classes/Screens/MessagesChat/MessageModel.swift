@@ -29,6 +29,8 @@ struct MessageModel: Identifiable {
     
     var photo: Data?
     
+    var clientWorkspaceDomain: String
+    
     init(id: String,
          groupID: Int64,
          groupType: String,
@@ -36,7 +38,8 @@ struct MessageModel: Identifiable {
          clientID: String,
          message: Data,
          createdAt: Int64,
-         updatedAt: Int64) {
+         updatedAt: Int64,
+         clientWorkspaceDomain: String) {
         self.id = id
         self.groupID = groupID
         self.groupType = groupType
@@ -48,6 +51,7 @@ struct MessageModel: Identifiable {
         if let myAccount = CKSignalCoordinate.shared.myAccount {
             myMsg = myAccount.username == fromClientID
         }
+        self.clientWorkspaceDomain = clientWorkspaceDomain
     }
 }
 
