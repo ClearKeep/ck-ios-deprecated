@@ -61,8 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
         Debug.DLog("------------ enter foreground app")
         if let clientId = SharedDataAppGroup.sharedUserDefaults?.string(forKey: Constants.keySaveUserID) {
-            Multiserver.instance.currentServer.notificationSubscrible(clientId: clientId)
-            Multiserver.instance.currentServer.signalSubscrible(clientId: clientId)
+            Multiserver.instance.listenServers()
         }
     }
 
@@ -72,8 +71,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
         Debug.DLog("------------ enter background app")
         if let clientId = SharedDataAppGroup.sharedUserDefaults?.string(forKey: Constants.keySaveUserID) {
-            Multiserver.instance.currentServer.signalUnsubcrible(clientId: clientId)
-            Multiserver.instance.currentServer.notificationUnSubscrible(clientId: clientId)
+            Multiserver.instance.unListenServers()
         }
     }
 

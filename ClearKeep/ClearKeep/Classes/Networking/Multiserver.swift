@@ -10,11 +10,7 @@ import Foundation
 class Multiserver {
     static let instance = Multiserver()
     
-    lazy var servers = getJoindServers() {
-        didSet {
-            listenServers()
-        }
-    }
+    lazy var servers = getJoindServers()
     lazy var domains = getDomains()
     
     lazy var currentIndex: Int = getCurrentIndex()
@@ -61,14 +57,20 @@ class Multiserver {
     }
     
     func listenServers() {
+        let users = UserDefaultsUsers().users
+
         for (index, server) in servers.enumerated() {
-            print(server)
+            server.signalSubscrible(clientId: users[index].id)
+            server.notificationSubscrible(clientId: users[index].id)
         }
     }
     
     func unListenServers() {
+        let users = UserDefaultsUsers().users
+
         for (index, server) in servers.enumerated() {
-            
+            server.notificationUnSubscrible(clientId: users[index].id)
+            server.signalUnsubcrible(clientId: users[index].id)
         }
     }
 }

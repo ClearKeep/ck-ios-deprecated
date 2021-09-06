@@ -40,7 +40,7 @@ class Backend {
     
     var workspace_domain: WorkspaceDomain
     
-    public init(workspace_domain: WorkspaceDomain = WorkspaceDomain(workspace_domain: "54.235.68.160:25000", workspace_name: "Development Server")) {
+    public init(workspace_domain: WorkspaceDomain) {
         
         self.workspace_domain = workspace_domain
 

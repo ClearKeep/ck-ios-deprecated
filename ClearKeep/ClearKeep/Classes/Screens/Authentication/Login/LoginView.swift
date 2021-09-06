@@ -394,8 +394,9 @@ extension LoginView {
                         
                         CKSignalCoordinate.shared.myAccount = account
                         CKSignalCoordinate.shared.ourEncryptionManager = ourEncryptionManager
-                        Multiserver.instance.currentServer.signalSubscrible(clientId: account.username)
-                        Multiserver.instance.currentServer.notificationSubscrible(clientId: account.username)
+
+                        Multiserver.instance.unListenServers()
+                        Multiserver.instance.listenServers()
                     }
                     if result {
                         Multiserver.instance.currentServer.registerTokenDevice { (response) in
