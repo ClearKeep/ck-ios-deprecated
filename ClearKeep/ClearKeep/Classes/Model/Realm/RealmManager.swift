@@ -114,7 +114,6 @@ extension RealmManager {
     }
     
     func getAllGroups(with id: String) -> [RealmGroup] {
-        let messages = load(listOf: RealmMessage.self)
         let groups = load(listOf: RealmGroup.self, filter: NSPredicate(format: "ANY lstClientID.id == %@", id))
         
         return groups

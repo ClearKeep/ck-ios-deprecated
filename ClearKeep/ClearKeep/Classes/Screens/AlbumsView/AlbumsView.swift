@@ -18,13 +18,8 @@ struct AlbumsView: View {
             Spacer()
         }
         .applyNavigationBarPlainStyleLight(title: "", leftBarItems: {
-            Button {
-                //presentationMode.wrappedValue.dismiss()
+            ButtonClose {
                 dismissAlert = false
-            } label: {
-                Image("ic_close")
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(AppTheme.colors.offWhite.color)
             }
         }, rightBarItems: {
             Button(action: saveInfo) {
