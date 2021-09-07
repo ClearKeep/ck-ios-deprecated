@@ -69,12 +69,8 @@ struct ProfileView: View {
             }
             .padding([.trailing , .leading , .bottom] , 16)
             .applyNavigationBarGradidentStyle(title: "Profile Settings", leftBarItems: {
-                Button {
+                ButtonClose {
                     presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image("ic_close")
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(AppTheme.colors.gray1.color)
                 }
             }, rightBarItems: {
                 Button(action: saveInfo) {
