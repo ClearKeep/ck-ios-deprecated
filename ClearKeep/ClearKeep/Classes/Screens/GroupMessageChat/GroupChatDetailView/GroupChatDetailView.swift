@@ -94,14 +94,9 @@ struct GroupChatDetailView: View {
             Spacer()
         }
         .applyNavigationBarPlainStyleDark(title: groupModel?.groupName ?? "Group", leftBarItems: {
-            Image("Chev-left")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24, alignment: .leading)
-                .foregroundColor(AppTheme.colors.black.color)
-                .onTapGesture(count: 1, perform: {
-                    presentationMode.wrappedValue.dismiss()
-                })
+            ButtonBack(action: {
+                presentationMode.wrappedValue.dismiss()
+            })
         }, rightBarItems: {
             Image("pencil")
                 .resizable()

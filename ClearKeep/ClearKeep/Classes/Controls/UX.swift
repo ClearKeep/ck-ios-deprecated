@@ -108,6 +108,45 @@ struct ButtonWithTitleAction: View {
     }
 }
 
+struct ButtonBack: View {
+    private var width: CGFloat
+    private var action: () -> Void
+    
+    init(width: CGFloat = 24, action: @escaping () -> Void) {
+        self.width = width
+        self.action = action
+    }
+    
+    var body: some View {
+        Image("Chev-left")
+            .resizable()
+            .scaledToFit()
+            .frame(width: width, height: width, alignment: .leading)
+            .foregroundColor(AppTheme.colors.black.color)
+            .onTapGesture(count: 1, perform: {
+                action()
+            })
+    }
+}
+
+struct ButtonClose: View {
+    private var action: () -> Void
+    
+    init(action: @escaping () -> Void) {
+        self.action = action
+    }
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image("ic_close")
+                .frame(width: 24, height: 24)
+                .foregroundColor(AppTheme.colors.offWhite.color)
+        }
+    }
+}
+
 struct ButtonAuth: View {
     
     private var title: String

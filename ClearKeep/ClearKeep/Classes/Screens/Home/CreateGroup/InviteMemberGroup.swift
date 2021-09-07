@@ -99,19 +99,14 @@ struct InviteMemberGroup: View {
         }
         .padding([.trailing , .leading , .bottom] , 16)
         .applyNavigationBarPlainStyleDark(title: "Create group", leftBarItems: {
-            Image("Chev-left")
-                .frame(width: 40, height: 40)
-                .foregroundColor(AppTheme.colors.black.color)
-                .fixedSize()
-                .scaledToFit()
-                .onTapGesture {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
+            ButtonBack(action: {
+                presentationMode.wrappedValue.dismiss()
+            })
         }, rightBarItems: {
             Spacer()
         })
         .onAppear(){
-            //self.getListUser()
+            activeCreateRoomView = false
         }
         .hud(.waiting(.circular, "Waiting..."), show: self.hudVisible)
         .onTapGesture {
