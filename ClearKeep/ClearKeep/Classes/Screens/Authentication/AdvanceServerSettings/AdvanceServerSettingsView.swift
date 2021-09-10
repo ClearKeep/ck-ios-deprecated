@@ -77,15 +77,25 @@ struct AdvanceServerSettingsView: View {
         }       
     }
     
+    private func getWorkspaceDomain(_ url: String) -> (String, String) {
+        if !url.contains(":") { return (url, "") }
+        
+        let host = url.components(separatedBy: ":").first ?? ""
+        let port = url.components(separatedBy: ":").last ?? ""
+        
+        return (host, port)
+    }
+    
     private func useCustomServer() {
         let url = customServerURL.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let first = url.components(separatedBy: ":").first,
-              let last = url.components(separatedBy: ":").last else {
+        let (host, port) = getWorkspaceDomain(url)
+                
+        if host.isEmpty || host.isEmpty {
             isShowAlert = true
             return
         }
         
-        let validated = first.textFieldValidatorURL() && (first != last) && url.last! != ":"
+        let validated = host.textFieldValidatorURL() && (host != port) && port != ":"
         isShowAlert = !validated
         
         if validated {

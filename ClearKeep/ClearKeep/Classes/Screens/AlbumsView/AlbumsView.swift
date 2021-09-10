@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AlbumsView: View {
     
-    //@Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var dismissAlert: Bool
 
     var body: some View {

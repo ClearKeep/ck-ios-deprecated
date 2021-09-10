@@ -174,29 +174,38 @@ extension InviteMemberGroup {
         }
     }
     
-    func getUserInfo() {
-        //Ex: 54.235.68.160:25000:69b14823-9612-4fa4-9023-f11351e921e2
-        let url = "54.235.68.160:25000:69b14823-9612-4fa4-9023-f11351e921e2".trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let workspaceDomain = url.components(separatedBy: ":").first,
-              let userId = url.components(separatedBy: ":").last else {
-            return
+    private func getInfo(from url: String) -> (String, String) {
+        if !url.contains(":") {
+            return (url, "")
         }
         
+        let workspaceDomain = url.components(separatedBy: ":").first ?? ""
+        let userId = url.components(separatedBy: ":").last ?? ""
+        return (workspaceDomain, userId)
+    }
+    
+    private func getUserInfoSuccess(response: User_UserInfoResponse) {
+        if response.id.isEmpty && response.displayName.isEmpty { return }
+        user = People(id: response.id, userName: response.displayName, userStatus: .Online)
+        if !self.selectedRows.contains(user) {
+            self.selectedRows.insert(user)
+        }
+        activeCreateRoomView = true
+    }
+    
+    func getUserInfo() {
+        //Ex: 54.235.68.160:25000:69b14823-9612-4fa4-9023-f11351e921e2
+        let url = userURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        let (workspaceDomain, userId) = getInfo(from: url)
+        
         self.hudVisible = true
-        Multiserver.instance.currentServer.getUserInfo(userId: userId, workspaceDomain: workspaceDomain) { (result, error) in
-            DispatchQueue.main.async {
-                self.hudVisible = false
-                guard let result = result else {
-                    return
-                    
-                }
-                
-                if result.id.isEmpty && result.displayName.isEmpty {return}
-                user = People(id: result.id, userName: result.displayName, userStatus: .Online)
-                if !self.selectedRows.contains(user) {
-                    self.selectedRows.insert(user)
-                }
-                activeCreateRoomView = true
+        Multiserver.instance.currentServer.getUserInfo(userId: userId, workspaceDomain: workspaceDomain) { result in
+            self.hudVisible = false
+            switch result {
+            case .success(let response):
+                getUserInfoSuccess(response: response)
+            case .failure:
+                return
             }
         }
     }
