@@ -372,7 +372,7 @@ extension ChatService {
             case groupType = "group_type"
             case message = "message"
             case createdAt = "created_at"
-            case clientWorkspaceDomain = "" //TODO: - replace key
+            case clientWorkspaceDomain = "client_workspace_domain"
         }
         
         required init(from decoder: Decoder) throws {

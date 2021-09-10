@@ -279,19 +279,14 @@ class Backend {
         }
     }
     
-    func getUserInfo(userId: String, workspaceDomain: String, _ completion: @escaping (User_UserInfoResponse?, Error?) -> Void) {
+    func getUserInfo(userId: String, workspaceDomain: String, _ completion: @escaping (Result<User_UserInfoResponse, Error>) -> Void) {
         let header = self.getHeaderApi()
         var request = User_GetUserRequest()
         request.clientID = userId
         request.workspaceDomain = workspaceDomain
         
         clientUser.get_user_info(request, callOptions: header).response.whenComplete { (result) in
-            switch result {
-            case .success(let response):
-                completion(response, nil)
-            case .failure(let error):
-                completion(nil, error)
-            }
+            completion(result)
         }
         
     }
