@@ -61,7 +61,7 @@ class HomeMainViewModel: ObservableObject {
         }
     }
     
-    func getUsers() -> [User] {
+    private func getUsers() -> [User] {
         let users = UserDefaultsUsers().users
         return users
     }

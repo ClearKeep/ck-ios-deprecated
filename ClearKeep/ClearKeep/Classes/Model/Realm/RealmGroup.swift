@@ -33,6 +33,7 @@ class RealmGroup: Object {
 class RealmGroupMember: Object {
     @objc dynamic var id : String = ""
     @objc dynamic var displayName : String = ""
+    @objc dynamic var workspaceDomain: String = ""
     
     override class func primaryKey() -> String? {
         return "id"

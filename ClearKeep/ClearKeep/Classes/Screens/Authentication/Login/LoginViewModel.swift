@@ -21,13 +21,19 @@ class LoginViewModel: ObservableObject {
     var userLoginResponseInfo = UserLoginResponseInfo(userId: "", userDisplayName: "", userEmail: "", signInType: .email)
     
     func usedCustomServer() -> Bool {
-        guard let first = customServerURL.components(separatedBy: ":").first,
-              let last = customServerURL.components(separatedBy: ":").last else {
-            return false
-        }
-        
-        let validated = first.textFieldValidatorURL() && (first != last) && customServerURL.last! != ":"
+        let (host, port) = getWorkspaceDomain(customServerURL)
+        if host.isEmpty || host.isEmpty { return false }
+        let validated = host.textFieldValidatorURL() && (host != port) && port != ":"
 
         return validated
+    }
+    
+    private func getWorkspaceDomain(_ url: String) -> (String, String) {
+        if !url.contains(":") { return (url, "") }
+        
+        let host = url.components(separatedBy: ":").first ?? ""
+        let port = url.components(separatedBy: ":").last ?? ""
+        
+        return (host,port)
     }
 }

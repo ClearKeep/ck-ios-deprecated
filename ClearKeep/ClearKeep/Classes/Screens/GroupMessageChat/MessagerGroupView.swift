@@ -76,6 +76,8 @@ struct MessagerGroupView: View {
             
             MessagerToolBar(sendAction: { message in
                 self.viewModel.sendMessage(messageStr: message)
+            }, sharePhoto: {
+                
             })
             
         }

@@ -14,7 +14,8 @@ class ServerMainViewModel: ObservableObject {
     
     func reloadData() {
         DispatchQueue.main.async {
-            let convertedAndSortedGroup = self.convertedAndSortedGroup(RealmManager.shared.getAllGroups())
+            guard let user = Multiserver.instance.currentServer.getUserLogin() else {return}
+            let convertedAndSortedGroup = self.convertedAndSortedGroup(RealmManager.shared.getAllGroups(with: user.id))
             self.groups = convertedAndSortedGroup.groups
             self.peers = convertedAndSortedGroup.peers
         }
@@ -32,7 +33,7 @@ class ServerMainViewModel: ObservableObject {
                 var peers: [GroupModel] = []
                 result.lstGroup.forEach { (groupResponse) in
                     dispatchGroup.enter()
-                    let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName)}
+                    let lstClientID = groupResponse.lstClient.map{ GroupMember(id: $0.id, username: $0.displayName, workspaceDomain: $0.workspaceDomain)}
                     let groupModel = GroupModel(groupID: groupResponse.groupID,
                                                 groupName: groupResponse.groupName,
                                                 groupToken: groupResponse.groupRtcToken,
@@ -110,7 +111,7 @@ class ServerMainViewModel: ObservableObject {
         for realmGroup in realmGroups {
             var lstClientId = Array<GroupMember>()
             realmGroup.lstClientID.forEach { (member) in
-                lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+                lstClientId.append(GroupMember(id: member.id, username: member.displayName, workspaceDomain: member.workspaceDomain))
             }
             
             let group = GroupModel(groupID: realmGroup.groupId,

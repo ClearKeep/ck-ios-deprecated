@@ -24,6 +24,9 @@ struct MessagerView: View {
     @State private var alertVisible = false
     @State private var scrollView: UIScrollView?
     
+    @State private var showingAlbumsSheet = false
+    @State private var showAlbumsView = false
+    
     // MARK: - Variables
     private var isFromPeopleList: Bool = false
     
@@ -31,10 +34,10 @@ struct MessagerView: View {
     private init() {
     }
     
-    init(clientId: String, groupId: Int64, userName: String, isFromPeopleList: Bool = false) {
+    init(clientId: String, groupId: Int64, userName: String, workspace_domain: String, isFromPeopleList: Bool = false) {
         self.init()
         self.isFromPeopleList = isFromPeopleList
-        viewModel.setup(receiveId: clientId, groupId: groupId, username: userName, groupType: "peer")
+        viewModel.setup(receiveId: clientId, groupId: groupId, username: userName, workspace_domain: workspace_domain, groupType: "peer")
     }
     
     var body: some View {
@@ -78,6 +81,8 @@ struct MessagerView: View {
                 self.viewModel.sendMessage(messageStr: message) {
                     self.scrollView?.scrollToBottom()
                 }
+            }, sharePhoto: {
+                self.showingAlbumsSheet = true
             })
             
         }
@@ -102,6 +107,17 @@ struct MessagerView: View {
                    }),
                    secondaryButton: .default(Text("Cancel")))
         })
+        .actionSheet(isPresented: $showingAlbumsSheet, content: {
+            ActionSheet(title: Text("Take a photo"),
+                        buttons: [ .default(Text("Albums")) {
+                            self.showAlbumsView = true
+                        },
+                        .cancel()
+                        ])
+        })
+        .compatibleFullScreen(isPresented: showAlbumsView) {
+            AlbumsView(dismissAlert: $showAlbumsView)
+        }
         .onAppear() {
             ChatService.shared.setOpenedGroupId(viewModel.groupId)
             self.viewModel.reloadData()
@@ -124,7 +140,7 @@ struct MessagerView: View {
             if let userInfo = obj.userInfo,
                let publication = userInfo["publication"] as? Notification_NotifyObjectResponse {
                 if publication.notifyType == "peer-update-key" {
-                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
+                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, workspaceDomain: viewModel.workspace_domain, completion: { _ in })
                 }
             }
         })
@@ -132,11 +148,6 @@ struct MessagerView: View {
             self.viewModel.getMessageInRoom(completion: {
                 self.scrollView?.scrollToBottom()
             })
-//            if let userInfo = obj.userInfo , let isNetWork = userInfo["net_work"] as? Bool {
-//                if isNetWork {
-//                    ChatService.shared.requestKeyPeer(byClientId: viewModel.receiveId, completion: { _ in })
-//                }
-//            }
         })
     }
     
@@ -168,5 +179,11 @@ extension MessagerView {
                 }
             })
         })
+    }
+}
+
+struct MessagerView_Provider: PreviewProvider {
+    static var previews: some View {
+        MessagerView(clientId: "fdsfs", groupId: 123, userName: "test", workspace_domain: "54.235.68.160:25000")
     }
 }

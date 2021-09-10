@@ -56,6 +56,7 @@ extension RealmManager {
             realmMessage.message = message.message
             realmMessage.createdAt = message.createdAt
             realmMessage.updatedAt = message.updatedAt
+            realmMessage.clientWorkspaceDomain = message.clientWorkspaceDomain
             
             realm.add(realmMessage, update: .modified)
         }
@@ -112,8 +113,11 @@ extension RealmManager {
         }
     }
     
-    func getAllGroups() -> [RealmGroup] {
-        return load(listOf: RealmGroup.self)
+    func getAllGroups(with id: String) -> [RealmGroup] {
+        let messages = load(listOf: RealmMessage.self)
+        let groups = load(listOf: RealmGroup.self, filter: NSPredicate(format: "ANY lstClientID.id == %@", id))
+        
+        return groups
     }
     
     func getGroup(by clientId: String, type: String) -> RealmGroup? {
