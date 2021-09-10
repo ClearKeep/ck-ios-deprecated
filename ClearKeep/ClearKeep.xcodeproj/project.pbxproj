@@ -753,6 +753,9 @@
 		CBF66E3E266A695000794E44 /* SignalStoreInMemoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 160A08AE253D36CF0030D28E /* SignalStoreInMemoryStorage.m */; };
 		CBF66E42266A9F0800794E44 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBACEF2E266A23B900245DC1 /* NotificationService.swift */; };
 		DCA7A16CC53FEC8C75417DDB /* Pods_NotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 064A2171437A9CCF78191D50 /* Pods_NotificationServiceExtension.framework */; };
+		DF4A56BB26E61DC1006673A8 /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4A56BA26E61DC1006673A8 /* AlbumsView.swift */; };
+		DF4A56BC26E61DC1006673A8 /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4A56BA26E61DC1006673A8 /* AlbumsView.swift */; };
+		DF4A56BD26E61DC1006673A8 /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4A56BA26E61DC1006673A8 /* AlbumsView.swift */; };
 		DF6294EF26D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
 		DF6294F026D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
 		DF6294F126D4F4EF000A7162 /* Multiserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6294EE26D4F4EF000A7162 /* Multiserver.swift */; };
@@ -1108,6 +1111,7 @@
 		CBF66E44266BCDA700794E44 /* NotificationServiceExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionDebug.entitlements; sourceTree = "<group>"; };
 		CBF66E45266BCE6800794E44 /* ClearKeep StagingDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ClearKeep StagingDebug.entitlements"; sourceTree = "<group>"; };
 		CBF66E47266BE8A300794E44 /* NotificationServiceExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationServiceExtensionRelease.entitlements; sourceTree = "<group>"; };
+		DF4A56BA26E61DC1006673A8 /* AlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsView.swift; sourceTree = "<group>"; };
 		DF6294EE26D4F4EF000A7162 /* Multiserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Multiserver.swift; sourceTree = "<group>"; };
 		DF6EE36826D8D61D000A2080 /* UserDefaultsUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsUsers.swift; sourceTree = "<group>"; };
 		E19E5287A8E112878409B496 /* Pods-ClearKeep Development.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClearKeep Development.debug.xcconfig"; path = "Target Support Files/Pods-ClearKeep Development/Pods-ClearKeep Development.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1397,6 +1401,7 @@
 		16208E36252D63F9000A6CE7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				DF4A56B926E61D92006673A8 /* AlbumsView */,
 				10011A0C26539B5A009EAFB3 /* Call */,
 				10AA457E264254A7000EB6E1 /* UserProfile */,
 				56205B4225A2FB7400B39D07 /* ViewCustom */,
@@ -1977,6 +1982,14 @@
 			path = RootView;
 			sourceTree = "<group>";
 		};
+		DF4A56B926E61D92006673A8 /* AlbumsView */ = {
+			isa = PBXGroup;
+			children = (
+				DF4A56BA26E61DC1006673A8 /* AlbumsView.swift */,
+			);
+			path = AlbumsView;
+			sourceTree = "<group>";
+		};
 		DF6EE35626D8D5AB000A2080 /* UserDefault */ = {
 			isa = PBXGroup;
 			children = (
@@ -2496,6 +2509,7 @@
 				10B70B6A2664B9F10066C752 /* Janus+Define.swift in Sources */,
 				10B70B6B2664B9F10066C752 /* ViewExtensions.swift in Sources */,
 				10B70B6C2664B9F10066C752 /* ChannelUserAvatar.swift in Sources */,
+				DF4A56BC26E61DC1006673A8 /* AlbumsView.swift in Sources */,
 				10B70B6D2664B9F10066C752 /* RoundedButton.swift in Sources */,
 				10B70B6E2664B9F10066C752 /* CardViewContainer.swift in Sources */,
 				10B70B6F2664B9F10066C752 /* CallVideoActionView.swift in Sources */,
@@ -2706,6 +2720,7 @@
 				10B70C812664BE040066C752 /* Janus+Define.swift in Sources */,
 				10B70C822664BE040066C752 /* ViewExtensions.swift in Sources */,
 				10B70C832664BE040066C752 /* ChannelUserAvatar.swift in Sources */,
+				DF4A56BD26E61DC1006673A8 /* AlbumsView.swift in Sources */,
 				10B70C842664BE040066C752 /* RoundedButton.swift in Sources */,
 				10B70C852664BE040066C752 /* CardViewContainer.swift in Sources */,
 				10B70C862664BE040066C752 /* CallVideoActionView.swift in Sources */,
@@ -2916,6 +2931,7 @@
 				56205B1325A2C36D00B39D07 /* Janus+Define.swift in Sources */,
 				6881DBE125E7AB32009EDA73 /* ViewExtensions.swift in Sources */,
 				1027ED0D2628463A00731BFE /* ChannelUserAvatar.swift in Sources */,
+				DF4A56BB26E61DC1006673A8 /* AlbumsView.swift in Sources */,
 				1027ED1B26294B1000731BFE /* RoundedButton.swift in Sources */,
 				10D650CC2626BEF60018528B /* CardViewContainer.swift in Sources */,
 				10011A0E26539B9F009EAFB3 /* CallVideoActionView.swift in Sources */,

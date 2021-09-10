@@ -155,7 +155,6 @@ class Backend {
                 $0.clientID = receiveId
                 $0.fromClientID = senderId
                 $0.message = message
-//                $0.groupType = groupType
                 $0.groupID = groupId
             }
             
@@ -278,6 +277,18 @@ class Backend {
                 }
             }
         }
+    }
+    
+    func getUserInfo(userId: String, workspaceDomain: String, _ completion: @escaping (Result<User_UserInfoResponse, Error>) -> Void) {
+        let header = self.getHeaderApi()
+        var request = User_GetUserRequest()
+        request.clientID = userId
+        request.workspaceDomain = workspaceDomain
+        
+        clientUser.get_user_info(request, callOptions: header).response.whenComplete { (result) in
+            completion(result)
+        }
+        
     }
     
     func getJoinnedGroup(_ completion: @escaping (Group_GetJoinedGroupsResponse?, Error?) -> Void){

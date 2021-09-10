@@ -76,19 +76,6 @@ class Authenticator {
                 CKSignalCoordinate.shared.myAccount = myAccount
                 CKSignalCoordinate.shared.ourEncryptionManager = ourSignalEncryptionMng
                 
-                // register request only public key (preKey, signedPreKey)
-                //                let request: Signalc_SignalRegisterKeysRequest = .with {
-                //                    $0.clientID = clientId
-                //                    $0.deviceID = Int32(address.deviceId)
-                //                    $0.registrationID = Int32(ckBundle.deviceId)
-                //                    $0.identityKeyPublic = ckBundle.identityKey
-                //                    $0.preKeyID = Int32(preKey!.preKeyId)
-                //                    $0.preKey = preKey!.publicKey
-                //                    $0.signedPreKeyID = Int32(ckBundle.signedPreKey.preKeyId)
-                //                    $0.signedPreKey = ckBundle.signedPreKey.publicKey
-                //                    $0.signedPreKeySignature = ckBundle.signedPreKey.signature
-                //                }
-                
                 // register request with public and private key (preKey, signedPreKey)
                 let request: Signal_PeerRegisterClientKeyRequest = .with {
                     $0.clientID = clientId
@@ -144,13 +131,14 @@ class Authenticator {
         }
     }
     
-    private func peerGetClientKey(byClientId clientId: String,
+    private func peerGetClientKey(byClientId clientId: String, workspaceDomain: String,
                             _ completion: @escaping (Bool, Error?, Signal_PeerGetClientKeyResponse?) -> Void,
                             submit: @escaping (Signal_PeerGetClientKeyRequest, CallOptions?)
                                 -> UnaryCall<Signal_PeerGetClientKeyRequest, Signal_PeerGetClientKeyResponse>) {
         
         let request: Signal_PeerGetClientKeyRequest = .with {
             $0.clientID = clientId
+            $0.workspaceDomain = workspaceDomain
         }
         
         submit(request, nil).response.whenComplete { (result) in
@@ -215,9 +203,12 @@ extension Authenticator {
 
 extension Authenticator {
     
-    func requestKey(byClientId clientId: String,
+    func requestKey(byClientId clientId: String, workspaceDomain: String,
                     _ completion: @escaping (Bool, Error?, Signal_PeerGetClientKeyResponse?) -> Void) {
-        peerGetClientKey(byClientId: clientId, completion, submit: clientSignal.peerGetClientKey)
+        
+        let workspace_domain: String = workspaceDomain.isEmpty ?  (Multiserver.instance.currentServer.getUserLogin()?.workspace_domain.workspace_domain ?? "") : workspaceDomain
+
+        peerGetClientKey(byClientId: clientId, workspaceDomain: workspace_domain, completion, submit: clientSignal.peerGetClientKey)
     }
     
     func requestKeyGroup(byClientId clientId: String,

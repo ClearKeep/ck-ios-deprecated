@@ -372,7 +372,8 @@ extension LoginView {
     
     private func loginForUser(clientID : String) {
         hudVisible = true
-        Multiserver.instance.currentServer.authenticator.requestKey(byClientId: clientID) { (result, error, response) in
+        
+        Multiserver.instance.currentServer.authenticator.requestKey(byClientId: clientID, workspaceDomain: "") { (result, error, response) in
             hudVisible = false
             guard let dbConnection = CKDatabaseManager.shared.database?.newConnection() else { return }
             do {

@@ -17,6 +17,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     private(set) var groupId: Int64 = Constants.groupIdTemp
     private(set) var receiveId: String = ""
     private(set) var username: String = ""
+    private(set) var workspace_domain: String = ""
     private(set) var groupType: String = "peer"
     private(set) var isGroup: Bool = false
     private(set) var isLatestPeerSignalKeyProcessed: Bool = false
@@ -32,9 +33,10 @@ class MessengerViewModel: ObservableObject, Identifiable {
         Debug.DLog("Deinit \(self)")
     }
     
-    func setup(receiveId: String, groupId: Int64, username: String, groupType: String) {
+    func setup(receiveId: String, groupId: Int64, username: String, workspace_domain: String, groupType: String) {
         self.receiveId = receiveId
         self.username = username
+        self.workspace_domain = workspace_domain
         self.groupId = RealmManager.shared.getGroup(by: receiveId, type: groupType)?.groupId ?? Constants.groupIdTemp
         self.groupType = groupType
         isGroup = false
@@ -71,7 +73,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
         if let realmGroup = RealmManager.shared.getGroup(by: groupId) {
             var lstClientId = Array<GroupMember>()
             realmGroup.lstClientID.forEach { (member) in
-                lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+                lstClientId.append(GroupMember(id: member.id, username: member.displayName, workspaceDomain: member.workspaceDomain))
             }
             
             let group = GroupModel(groupID: realmGroup.groupId,
@@ -202,11 +204,11 @@ class MessengerViewModel: ObservableObject, Identifiable {
             }
         } else {
             if groupId == Constants.groupIdTemp {
-                ChatService.shared.createPeerGroup(receiveId: receiveId, username: username) { [weak self] groupModel in
+                ChatService.shared.createPeerGroup(receiveId: receiveId, username: username, workspaceDomain: workspace_domain) { [weak self] groupModel in
                     guard let self = self else { return }
                     self.setGroupId(groupModel.groupID)
                     
-                    ChatService.shared.sendMessageToPeer(toClientId: self.receiveId, groupId: self.groupId, messageData: payload, isForceProcessKey: !self.isLatestPeerSignalKeyProcessed) { [self] message in
+                    ChatService.shared.sendMessageToPeer(toClientId: self.receiveId, workspaceDomain: self.workspace_domain, groupId: self.groupId, messageData: payload, isForceProcessKey: !self.isLatestPeerSignalKeyProcessed) { [self] message in
                         self.isLatestPeerSignalKeyProcessed = true
                         DispatchQueue.main.async {
                             self.messages.append(message)
@@ -214,7 +216,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
                     }
                 }
             } else {
-                ChatService.shared.sendMessageToPeer(toClientId: receiveId, groupId: groupId, messageData: payload, isForceProcessKey: !isLatestPeerSignalKeyProcessed) { message in
+                ChatService.shared.sendMessageToPeer(toClientId: receiveId, workspaceDomain: workspace_domain, groupId: groupId, messageData: payload, isForceProcessKey: !isLatestPeerSignalKeyProcessed) { message in
                     self.isLatestPeerSignalKeyProcessed = true
                     DispatchQueue.main.async {
                         self.messages.append(message)
@@ -226,7 +228,7 @@ class MessengerViewModel: ObservableObject, Identifiable {
     
     func callPeerToPeer(clientId: String, callType type: Constants.CallType = .audio, completion: (() -> ())? = nil){
         if groupId == Constants.groupIdTemp {
-            ChatService.shared.createPeerGroup(receiveId: receiveId, username: username) { [weak self] groupModel in
+            ChatService.shared.createPeerGroup(receiveId: receiveId, username: username, workspaceDomain: workspace_domain) { [weak self] groupModel in
                 guard let self = self else { return }
                 self.setGroupId(groupModel.groupID)
                 
@@ -287,7 +289,8 @@ class MessengerViewModel: ObservableObject, Identifiable {
                                        clientID: realmMessage.clientID,
                                        message: realmMessage.message,
                                        createdAt: realmMessage.createdAt,
-                                       updatedAt: realmMessage.updatedAt)
+                                       updatedAt: realmMessage.updatedAt,
+                                       clientWorkspaceDomain: realmMessage.clientWorkspaceDomain)
             convertedMessages.append(message)
         }
         return convertedMessages.sorted(by: { (msg1, msg2) -> Bool in

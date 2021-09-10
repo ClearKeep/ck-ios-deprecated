@@ -18,6 +18,13 @@ struct InviteMemberGroup: View {
     @State var users : [People] = []
     @State var hudVisible : Bool = false
     
+    @State var addUserFromOtherServer: Bool = false
+    @State var userURL: String = ""
+    
+    @State private var activeCreateRoomView = false
+    
+    @State private var user: People = People(id: "", userName: "", userStatus: .Online)
+    
     var body: some View {
         VStack(alignment: .leading) {
             SearchBar(text: $searchText) { (changed) in
@@ -29,41 +36,82 @@ struct InviteMemberGroup: View {
             
             listSelectedUserView()
             
-            Text("User in this Channel")
-                .font(AppTheme.fonts.textMedium.font)
-                .foregroundColor(AppTheme.colors.gray2.color)
-                .padding([.top , .bottom] , 16)
+            HStack(spacing: 8) {
+                Button(action: {
+                    addUserFromOtherServer.toggle()
+                }) {
+                    Image(addUserFromOtherServer ? "Checkbox" : "Ellipse20")
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 28, height: 28)
+                }
+                
+                Text("Add User From Other Server")
+                    .font(AppTheme.fonts.textMedium.font)
+                    .foregroundColor(AppTheme.colors.black.color)
+                
+                Spacer()
+            }
+            .padding(.top, 10)
             
-            Group {
-                ScrollView(.vertical, showsIndicators: false, content: {
-                    VStack(alignment:.leading , spacing: 16) {
-                        ForEach(self.users , id: \.id) { user in
-                            MultipleSelectionRow(people: user, selectedItems: $selectedRows)
-                        }
+            if addUserFromOtherServer {
+                Group {
+                    WrappedTextFieldWithLeftIcon("Paste your friend's link", text: $userURL, errorMessage: .constant(""), isFocused: .constant(false))
+                    
+                    NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0}),
+                                   isActive: .constant(activeCreateRoomView),
+                                   label: { EmptyView() })
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        RoundedGradientButton("Add", fixedWidth: 120, disable: .constant(userURL.isEmpty), action: {
+                            getUserInfo()
+                        })
+                        Spacer()
                     }
-                })
+                }
+            } else {
+                Group {
+                    ScrollView(.vertical, showsIndicators: false, content: {
+                        VStack(alignment:.leading , spacing: 16) {
+                            ForEach(self.users , id: \.id) { user in
+                                MultipleSelectionRow(people: user, selectedItems: $selectedRows)
+                            }
+                        }
+                    })
+                    
+                    NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0}),
+                                   isActive: .constant(activeCreateRoomView),
+                                   label: { EmptyView() })
+                    
+                    HStack {
+                        Spacer()
+                        RoundedGradientButton("Next", fixedWidth: 120, disable: .constant(self.selectedRows.count == 0), action: {
+                            activeCreateRoomView = true
+                        })
+                        Spacer()
+                    }
+                }
             }
         }
         .padding([.trailing , .leading , .bottom] , 16)
-        .applyNavigationBarGradidentStyle(title: "New Message", leftBarItems: {
-            Button {
-                self.presentationMode.wrappedValue.dismiss()
-            } label: {
-                Image("ic_close")
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(AppTheme.colors.gray1.color)
-            }
+        .applyNavigationBarPlainStyleDark(title: "Create group", leftBarItems: {
+            Image("Chev-left")
+                .frame(width: 40, height: 40)
+                .foregroundColor(AppTheme.colors.black.color)
+                .fixedSize()
+                .scaledToFit()
+                .onTapGesture {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
         }, rightBarItems: {
-            NavigationLink(destination: CreateRoomView(listMembers: self.selectedRows.map{$0})) {
-                Text("Next")
-                    .font(AppTheme.fonts.linkMedium.font)
-                    .foregroundColor(AppTheme.colors.primary.color)
-            }
-            .opacity(self.selectedRows.isEmpty ? 0.3 : 1.0)
-            .disabled(self.selectedRows.isEmpty)
+            Spacer()
         })
         .onAppear(){
-            self.getListUser()
+            //self.getListUser()
         }
         .hud(.waiting(.circular, "Waiting..."), show: self.hudVisible)
         .onTapGesture {
@@ -130,4 +178,41 @@ extension InviteMemberGroup {
             }
         }
     }
+    
+    private func getInfo(from url: String) -> (String, String) {
+        if !url.contains(":") {
+            return (url, "")
+        }
+        
+        let workspaceDomain = url.components(separatedBy: ":").first ?? ""
+        let userId = url.components(separatedBy: ":").last ?? ""
+        return (workspaceDomain, userId)
+    }
+    
+    private func getUserInfoSuccess(response: User_UserInfoResponse) {
+        if response.id.isEmpty && response.displayName.isEmpty { return }
+        user = People(id: response.id, userName: response.displayName, userStatus: .Online)
+        if !self.selectedRows.contains(user) {
+            self.selectedRows.insert(user)
+        }
+        activeCreateRoomView = true
+    }
+    
+    func getUserInfo() {
+        //Ex: 54.235.68.160:25000:69b14823-9612-4fa4-9023-f11351e921e2
+        let url = userURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        let (workspaceDomain, userId) = getInfo(from: url)
+        
+        self.hudVisible = true
+        Multiserver.instance.currentServer.getUserInfo(userId: userId, workspaceDomain: workspaceDomain) { result in
+            self.hudVisible = false
+            switch result {
+            case .success(let response):
+                getUserInfoSuccess(response: response)
+            case .failure:
+                return
+            }
+        }
+    }
+    
 }

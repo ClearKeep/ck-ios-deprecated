@@ -20,16 +20,26 @@ class CreateRoomViewModel: ObservableObject, Identifiable {
     
     // MARK: - API
     func createRoom(groupName: String, completion: ((Int64) -> ())? = nil) {
-        var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName)}
+        var lstClientID = self.listMembers.map{ GroupMember(id: $0.id, username: $0.userName, workspaceDomain: $0.workspace_domain)}
         
         if let account = CKSignalCoordinate.shared.myAccount {
             let userLogin = Multiserver.instance.currentServer.getUserLogin()
-            lstClientID.append(GroupMember(id: account.username, username: userLogin?.displayName ?? account.username))
+            lstClientID.append(GroupMember(id: account.username, username: userLogin?.displayName ?? account.username, workspaceDomain: userLogin?.workspace_domain.workspace_domain ?? ""))
             var req = Group_CreateGroupRequest()
             req.groupName = groupName
             req.groupType = "group"
             req.createdByClientID = account.username
-//            req.lstClientID = lstClientID.map{$0.id}
+            
+            var lstClients = [Group_ClientInGroupObject]()
+            lstClientID.forEach { member in
+                var userGroup = Group_ClientInGroupObject()
+                userGroup.id = member.id
+                userGroup.displayName = member.username
+                userGroup.workspaceDomain = member.workspaceDomain.isEmpty ? userLogin!.workspace_domain.workspace_domain : member.workspaceDomain
+                lstClients.append(userGroup)
+            }
+            
+            req.lstClient = lstClients
             
             Multiserver.instance.currentServer.createRoom(req) { (result , error) in
                 if let result = result {

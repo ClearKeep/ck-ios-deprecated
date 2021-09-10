@@ -144,7 +144,8 @@ class RealmMessages {
                                    clientID: realmMessage.clientID,
                                    message: realmMessage.message,
                                    createdAt: realmMessage.createdAt,
-                                   updatedAt: realmMessage.updatedAt)
+                                   updatedAt: realmMessage.updatedAt,
+                                   clientWorkspaceDomain: realmMessage.clientWorkspaceDomain)
         return message
     }
 

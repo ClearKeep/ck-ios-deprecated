@@ -201,7 +201,7 @@ class RealmGroups {
         
         var lstClientId = Array<GroupMember>()
         realmGroup.lstClientID.forEach { (member) in
-            lstClientId.append(GroupMember(id: member.id, username: member.displayName))
+            lstClientId.append(GroupMember(id: member.id, username: member.displayName, workspaceDomain: member.workspaceDomain))
         }
         
         let group = GroupModel(groupID: realmGroup.groupId,

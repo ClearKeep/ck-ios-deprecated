@@ -30,6 +30,7 @@ struct GroupModel: Identifiable , Codable {
 struct GroupMember: Identifiable , Codable {
     var id: String
     var username: String
+    var workspaceDomain: String
 }
 
 //protocol GroupChats: ObservableObject{

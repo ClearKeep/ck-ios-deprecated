@@ -63,31 +63,32 @@ struct CreateRoomView: View {
                         }
                     }
                 })
+                
+                HStack {
+                    Spacer()
+                    RoundedGradientButton("Create", fixedWidth: 120, disable: .constant(self.groupName.isEmpty), action: {
+                        hudVisible = true
+                        viewModel.createRoom(groupName: groupName, completion: { groupId in
+                            hudVisible = false
+                            self.groupId = groupId
+                        })
+                    })
+                    Spacer()
+                }
             }
         }
         .padding([.trailing , .leading , .bottom] , 16)
-        .applyNavigationBarGradidentStyle(title: "New Group Message", leftBarItems: {
-            Button {
-                self.presentationMode.wrappedValue.dismiss()
-            } label: {
-                Image("arrow-left")
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(AppTheme.colors.gray1.color)
-            }
+        .applyNavigationBarPlainStyleDark(title: "Create group", leftBarItems: {
+            Image("Chev-left")
+                .frame(width: 40, height: 40)
+                .foregroundColor(AppTheme.colors.black.color)
+                .fixedSize()
+                .scaledToFit()
+                .onTapGesture {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
         }, rightBarItems: {
-            Button {
-                hudVisible = true
-                viewModel.createRoom(groupName: groupName, completion: { groupId in
-                    hudVisible = false
-                    self.groupId = groupId
-                })
-            } label: {
-                Text("Create")
-                    .font(AppTheme.fonts.linkMedium.font)
-                    .foregroundColor(AppTheme.colors.primary.color)
-            }
-            .opacity(self.groupName.isEmpty ? 0.3 : 1.0)
-            .disabled(self.groupName.isEmpty)
+            Spacer()
         })
         .hud(.waiting(.circular, "Waiting..."), show: hudVisible)
         .onTapGesture {
