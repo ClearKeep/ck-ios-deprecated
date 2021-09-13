@@ -83,7 +83,7 @@ extension ForgotPassWordView {
                         self.isShowAlert = true
                     } else {
                         self.titleAlert = "Forgot Pasword Error"
-                        self.messageAlert = result.error.message
+                        self.messageAlert = result.error
                         self.isShowAlert = true
                     }
                 }

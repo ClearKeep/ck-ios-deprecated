@@ -33,7 +33,7 @@ public protocol Workspace_WorkspaceClientProtocol: GRPCClient {
   func workspace_info(
     _ request: Workspace_WorkspaceInfoRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceObjectResponse>
+  ) -> UnaryCall<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceInfoResponse>
 
   func leave_workspace(
     _ request: Workspace_LeaveWorkspaceRequest,
@@ -46,8 +46,7 @@ extension Workspace_WorkspaceClientProtocol {
     return "workspace.Workspace"
   }
 
-  ///    rpc join_workspace(JoinWorkspaceRequest) returns (BaseResponse) {};
-  ///    rpc get_joined_workspaces(GetJoinedWorkspacesRequest) returns (GetJoinedWorkspacesResponse) {};
+  /// Unary call to workspace_info
   ///
   /// - Parameters:
   ///   - request: Request to send to workspace_info.
@@ -56,7 +55,7 @@ extension Workspace_WorkspaceClientProtocol {
   public func workspace_info(
     _ request: Workspace_WorkspaceInfoRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceObjectResponse> {
+  ) -> UnaryCall<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceInfoResponse> {
     return self.makeUnaryCall(
       path: "/workspace.Workspace/workspace_info",
       request: request,
@@ -87,7 +86,7 @@ extension Workspace_WorkspaceClientProtocol {
 public protocol Workspace_WorkspaceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'workspace_info'.
-  func makeworkspace_infoInterceptors() -> [ClientInterceptor<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceObjectResponse>]
+  func makeworkspace_infoInterceptors() -> [ClientInterceptor<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceInfoResponse>]
 
   /// - Returns: Interceptors to use when invoking 'leave_workspace'.
   func makeleave_workspaceInterceptors() -> [ClientInterceptor<Workspace_LeaveWorkspaceRequest, Workspace_BaseResponse>]
@@ -119,9 +118,7 @@ public final class Workspace_WorkspaceClient: Workspace_WorkspaceClientProtocol 
 public protocol Workspace_WorkspaceProvider: CallHandlerProvider {
   var interceptors: Workspace_WorkspaceServerInterceptorFactoryProtocol? { get }
 
-  ///    rpc join_workspace(JoinWorkspaceRequest) returns (BaseResponse) {};
-  ///    rpc get_joined_workspaces(GetJoinedWorkspacesRequest) returns (GetJoinedWorkspacesResponse) {};
-  func workspace_info(request: Workspace_WorkspaceInfoRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Workspace_WorkspaceObjectResponse>
+  func workspace_info(request: Workspace_WorkspaceInfoRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Workspace_WorkspaceInfoResponse>
 
   func leave_workspace(request: Workspace_LeaveWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Workspace_BaseResponse>
 }
@@ -140,7 +137,7 @@ extension Workspace_WorkspaceProvider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Workspace_WorkspaceInfoRequest>(),
-        responseSerializer: ProtobufSerializer<Workspace_WorkspaceObjectResponse>(),
+        responseSerializer: ProtobufSerializer<Workspace_WorkspaceInfoResponse>(),
         interceptors: self.interceptors?.makeworkspace_infoInterceptors() ?? [],
         userFunction: self.workspace_info(request:context:)
       )
@@ -164,7 +161,7 @@ public protocol Workspace_WorkspaceServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'workspace_info'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeworkspace_infoInterceptors() -> [ServerInterceptor<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceObjectResponse>]
+  func makeworkspace_infoInterceptors() -> [ServerInterceptor<Workspace_WorkspaceInfoRequest, Workspace_WorkspaceInfoResponse>]
 
   /// - Returns: Interceptors to use when handling 'leave_workspace'.
   ///   Defaults to calling `self.makeInterceptors()`.

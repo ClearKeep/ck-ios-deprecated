@@ -20,7 +20,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-///errors response
+///error response
 public struct User_ErrorRes {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -42,20 +42,11 @@ public struct User_BaseResponse {
 
   public var success: Bool = false
 
-  public var errors: User_ErrorRes {
-    get {return _errors ?? User_ErrorRes()}
-    set {_errors = newValue}
-  }
-  /// Returns true if `errors` has been explicitly set.
-  public var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  public mutating func clearErrors() {self._errors = nil}
+  public var error: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _errors: User_ErrorRes? = nil
 }
 
 ///----- FROM MY ACCOUNT -----
@@ -70,9 +61,9 @@ public struct User_UserProfileResponse {
 
   public var email: String = String()
 
-  public var firstName: String = String()
+  public var phoneNumber: String = String()
 
-  public var lastName: String = String()
+  public var avatar: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -96,11 +87,11 @@ public struct User_UpdateProfileRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var firstName: String = String()
-
-  public var lastName: String = String()
+  public var displayName: String = String()
 
   public var avatar: String = String()
+
+  public var phoneNumber: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -194,6 +185,210 @@ public struct User_GetUsersResponse {
   public init() {}
 }
 
+/// << Set user status >>
+/// request
+public struct User_SetUserStatusRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// << get user status >>
+/// Request: get my info
+public struct User_PingRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_GetClientsStatusRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var lstClient: [User_MemberInfoRequest] = []
+
+  public var shouldGetProfile: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MemberInfoRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var clientID: String = String()
+
+  public var workspaceDomain: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_GetClientsStatusResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var lstClient: [User_MemberInfoRes] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MemberInfoRes {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var clientID: String = String()
+
+  public var workspaceDomain: String = String()
+
+  public var status: String = String()
+
+  public var displayName: String = String()
+
+  public var avatar: String = String()
+
+  public var phoneNumber: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// << profile >>
+public struct User_UploadAvatarRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var fileName: String = String()
+
+  public var fileContentType: String = String()
+
+  public var fileData: Data = Data()
+
+  public var fileHash: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_UploadAvatarResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var fileURL: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+///----- MFA FLOW -----
+public struct User_MfaBaseResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var success: Bool = false
+
+  public var nextStep: String = String()
+
+  public var error: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaStateResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var mfaEnable: Bool = false
+
+  public var error: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaGetStateRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaChangingStateRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaValidatePasswordRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var password: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaValidateOtpRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var otp: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct User_MfaResendOtpRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "user"
@@ -240,7 +435,7 @@ extension User_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   public static let protoMessageName: String = _protobuf_package + ".BaseResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
-    2: .same(proto: "errors"),
+    2: .same(proto: "error"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -250,7 +445,7 @@ extension User_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.error) }()
       default: break
       }
     }
@@ -260,15 +455,15 @@ extension User_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: User_BaseResponse, rhs: User_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -280,8 +475,8 @@ extension User_UserProfileResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
     1: .same(proto: "id"),
     2: .standard(proto: "display_name"),
     3: .same(proto: "email"),
-    4: .standard(proto: "first_name"),
-    5: .standard(proto: "last_name"),
+    4: .standard(proto: "phone_number"),
+    5: .same(proto: "avatar"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -293,8 +488,8 @@ extension User_UserProfileResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
       case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.displayName) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.email) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.firstName) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.lastName) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.phoneNumber) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.avatar) }()
       default: break
       }
     }
@@ -310,11 +505,11 @@ extension User_UserProfileResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if !self.email.isEmpty {
       try visitor.visitSingularStringField(value: self.email, fieldNumber: 3)
     }
-    if !self.firstName.isEmpty {
-      try visitor.visitSingularStringField(value: self.firstName, fieldNumber: 4)
+    if !self.phoneNumber.isEmpty {
+      try visitor.visitSingularStringField(value: self.phoneNumber, fieldNumber: 4)
     }
-    if !self.lastName.isEmpty {
-      try visitor.visitSingularStringField(value: self.lastName, fieldNumber: 5)
+    if !self.avatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 5)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -323,8 +518,8 @@ extension User_UserProfileResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if lhs.id != rhs.id {return false}
     if lhs.displayName != rhs.displayName {return false}
     if lhs.email != rhs.email {return false}
-    if lhs.firstName != rhs.firstName {return false}
-    if lhs.lastName != rhs.lastName {return false}
+    if lhs.phoneNumber != rhs.phoneNumber {return false}
+    if lhs.avatar != rhs.avatar {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -352,9 +547,9 @@ extension User_Empty: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
 extension User_UpdateProfileRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UpdateProfileRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "first_name"),
-    2: .standard(proto: "last_name"),
-    3: .same(proto: "avatar"),
+    1: .standard(proto: "display_name"),
+    2: .same(proto: "avatar"),
+    3: .standard(proto: "phone_number"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -363,31 +558,31 @@ extension User_UpdateProfileRequest: SwiftProtobuf.Message, SwiftProtobuf._Messa
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.firstName) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.lastName) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.avatar) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.displayName) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.avatar) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.phoneNumber) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.firstName.isEmpty {
-      try visitor.visitSingularStringField(value: self.firstName, fieldNumber: 1)
-    }
-    if !self.lastName.isEmpty {
-      try visitor.visitSingularStringField(value: self.lastName, fieldNumber: 2)
+    if !self.displayName.isEmpty {
+      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 1)
     }
     if !self.avatar.isEmpty {
-      try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 2)
+    }
+    if !self.phoneNumber.isEmpty {
+      try visitor.visitSingularStringField(value: self.phoneNumber, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: User_UpdateProfileRequest, rhs: User_UpdateProfileRequest) -> Bool {
-    if lhs.firstName != rhs.firstName {return false}
-    if lhs.lastName != rhs.lastName {return false}
+    if lhs.displayName != rhs.displayName {return false}
     if lhs.avatar != rhs.avatar {return false}
+    if lhs.phoneNumber != rhs.phoneNumber {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -604,6 +799,512 @@ extension User_GetUsersResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 
   public static func ==(lhs: User_GetUsersResponse, rhs: User_GetUsersResponse) -> Bool {
     if lhs.lstUser != rhs.lstUser {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_SetUserStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SetUserStatusRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.status) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.status.isEmpty {
+      try visitor.visitSingularStringField(value: self.status, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_SetUserStatusRequest, rhs: User_SetUserStatusRequest) -> Bool {
+    if lhs.status != rhs.status {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_PingRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PingRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_PingRequest, rhs: User_PingRequest) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_GetClientsStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetClientsStatusRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "lst_client"),
+    2: .standard(proto: "should_get_profile"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.lstClient) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.shouldGetProfile) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.lstClient.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.lstClient, fieldNumber: 1)
+    }
+    if self.shouldGetProfile != false {
+      try visitor.visitSingularBoolField(value: self.shouldGetProfile, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_GetClientsStatusRequest, rhs: User_GetClientsStatusRequest) -> Bool {
+    if lhs.lstClient != rhs.lstClient {return false}
+    if lhs.shouldGetProfile != rhs.shouldGetProfile {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MemberInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemberInfoRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "client_id"),
+    2: .standard(proto: "workspace_domain"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
+    }
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MemberInfoRequest, rhs: User_MemberInfoRequest) -> Bool {
+    if lhs.clientID != rhs.clientID {return false}
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_GetClientsStatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetClientsStatusResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "lst_client"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.lstClient) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.lstClient.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.lstClient, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_GetClientsStatusResponse, rhs: User_GetClientsStatusResponse) -> Bool {
+    if lhs.lstClient != rhs.lstClient {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MemberInfoRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MemberInfoRes"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "client_id"),
+    2: .standard(proto: "workspace_domain"),
+    3: .same(proto: "status"),
+    4: .standard(proto: "display_name"),
+    5: .same(proto: "avatar"),
+    6: .standard(proto: "phone_number"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.status) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.displayName) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.avatar) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.phoneNumber) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.clientID.isEmpty {
+      try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
+    }
+    if !self.workspaceDomain.isEmpty {
+      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 2)
+    }
+    if !self.status.isEmpty {
+      try visitor.visitSingularStringField(value: self.status, fieldNumber: 3)
+    }
+    if !self.displayName.isEmpty {
+      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 4)
+    }
+    if !self.avatar.isEmpty {
+      try visitor.visitSingularStringField(value: self.avatar, fieldNumber: 5)
+    }
+    if !self.phoneNumber.isEmpty {
+      try visitor.visitSingularStringField(value: self.phoneNumber, fieldNumber: 6)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MemberInfoRes, rhs: User_MemberInfoRes) -> Bool {
+    if lhs.clientID != rhs.clientID {return false}
+    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
+    if lhs.status != rhs.status {return false}
+    if lhs.displayName != rhs.displayName {return false}
+    if lhs.avatar != rhs.avatar {return false}
+    if lhs.phoneNumber != rhs.phoneNumber {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_UploadAvatarRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".UploadAvatarRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "file_name"),
+    2: .standard(proto: "file_content_type"),
+    3: .standard(proto: "file_data"),
+    4: .standard(proto: "file_hash"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fileName) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.fileContentType) }()
+      case 3: try { try decoder.decodeSingularBytesField(value: &self.fileData) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.fileHash) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.fileName.isEmpty {
+      try visitor.visitSingularStringField(value: self.fileName, fieldNumber: 1)
+    }
+    if !self.fileContentType.isEmpty {
+      try visitor.visitSingularStringField(value: self.fileContentType, fieldNumber: 2)
+    }
+    if !self.fileData.isEmpty {
+      try visitor.visitSingularBytesField(value: self.fileData, fieldNumber: 3)
+    }
+    if !self.fileHash.isEmpty {
+      try visitor.visitSingularStringField(value: self.fileHash, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_UploadAvatarRequest, rhs: User_UploadAvatarRequest) -> Bool {
+    if lhs.fileName != rhs.fileName {return false}
+    if lhs.fileContentType != rhs.fileContentType {return false}
+    if lhs.fileData != rhs.fileData {return false}
+    if lhs.fileHash != rhs.fileHash {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_UploadAvatarResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".UploadAvatarResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "file_url"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.fileURL) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.fileURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.fileURL, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_UploadAvatarResponse, rhs: User_UploadAvatarResponse) -> Bool {
+    if lhs.fileURL != rhs.fileURL {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaBaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaBaseResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .standard(proto: "next_step"),
+    3: .same(proto: "error"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.nextStep) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.error) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.nextStep.isEmpty {
+      try visitor.visitSingularStringField(value: self.nextStep, fieldNumber: 2)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaBaseResponse, rhs: User_MfaBaseResponse) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.nextStep != rhs.nextStep {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaStateResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaStateResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "mfa_enable"),
+    2: .same(proto: "error"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.mfaEnable) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.error) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.mfaEnable != false {
+      try visitor.visitSingularBoolField(value: self.mfaEnable, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaStateResponse, rhs: User_MfaStateResponse) -> Bool {
+    if lhs.mfaEnable != rhs.mfaEnable {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaGetStateRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaGetStateRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaGetStateRequest, rhs: User_MfaGetStateRequest) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaChangingStateRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaChangingStateRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaChangingStateRequest, rhs: User_MfaChangingStateRequest) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaValidatePasswordRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaValidatePasswordRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "password"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.password) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.password.isEmpty {
+      try visitor.visitSingularStringField(value: self.password, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaValidatePasswordRequest, rhs: User_MfaValidatePasswordRequest) -> Bool {
+    if lhs.password != rhs.password {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaValidateOtpRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaValidateOtpRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "otp"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.otp) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.otp.isEmpty {
+      try visitor.visitSingularStringField(value: self.otp, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaValidateOtpRequest, rhs: User_MfaValidateOtpRequest) -> Bool {
+    if lhs.otp != rhs.otp {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension User_MfaResendOtpRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MfaResendOtpRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: User_MfaResendOtpRequest, rhs: User_MfaResendOtpRequest) -> Bool {
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

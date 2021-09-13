@@ -401,7 +401,7 @@ extension LoginView {
                     }
                     if result {
                         Multiserver.instance.currentServer.registerTokenDevice { (response) in
-                            if response {
+                            //if response {
                                 UserDefaults.standard.setValue(Date(), forKey: Constants.User.loginDate)
                                 self.viewRouter.current = .home
                                 
@@ -409,11 +409,13 @@ extension LoginView {
                                     let appDelegate: AppDelegate? = UIApplication.shared.delegate as? AppDelegate
                                     appDelegate?.askPermissionForRemoteNotification()
                                 }
-                            }else {
-                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
-                                self.messageAlert = "Something went wrong"
-                                self.isShowAlert = true
-                            }
+                            //}
+                            
+//                            else {
+//                                UserDefaults.standard.removeObject(forKey: Constants.keySaveUser)
+//                                self.messageAlert = "Something went wrong"
+//                                self.isShowAlert = true
+//                            }
                         }
                     }else {
                         print("requestKey Error: \(error?.localizedDescription ?? "")")

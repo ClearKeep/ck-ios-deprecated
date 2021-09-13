@@ -152,14 +152,14 @@ extension RegisterViewModel {
             DispatchQueue.main.async {
                 self.hudVisible = false
                 if let result = result {
-                    if result.baseResponse.success {
+                    if result.success {
                         self.isRegisterSuccess = true
                         self.messageAlert = "Please check your email to activate account"
                         self.titleAlert = "Register Successfully"
                         self.isShowAlert = true
                     } else {
                         self.titleAlert = "Register Error"
-                        self.messageAlert = result.baseResponse.error.message
+                        self.messageAlert = result.error
                         self.isShowAlert = true
                     }
                 } else {

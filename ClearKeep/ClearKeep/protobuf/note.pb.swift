@@ -42,20 +42,11 @@ public struct Note_BaseResponse {
 
   public var success: Bool = false
 
-  public var errors: Note_ErrorRes {
-    get {return _errors ?? Note_ErrorRes()}
-    set {_errors = newValue}
-  }
-  /// Returns true if `errors` has been explicitly set.
-  public var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  public mutating func clearErrors() {self._errors = nil}
+  public var errors: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _errors: Note_ErrorRes? = nil
 }
 
 public struct Note_CreateNoteRequest {
@@ -119,6 +110,8 @@ public struct Note_UserNoteResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  public var id: String = String()
+
   public var title: String = String()
 
   public var content: Data = Data()
@@ -149,20 +142,11 @@ public struct Note_GetUserNotesResponse {
 
   public var userNotes: [Note_UserNoteResponse] = []
 
-  public var baseResponse: Note_BaseResponse {
-    get {return _baseResponse ?? Note_BaseResponse()}
-    set {_baseResponse = newValue}
-  }
-  /// Returns true if `baseResponse` has been explicitly set.
-  public var hasBaseResponse: Bool {return self._baseResponse != nil}
-  /// Clears the value of `baseResponse`. Subsequent reads from it will return its default value.
-  public mutating func clearBaseResponse() {self._baseResponse = nil}
+  public var errors: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _baseResponse: Note_BaseResponse? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -221,7 +205,7 @@ extension Note_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errors) }()
       default: break
       }
     }
@@ -231,15 +215,15 @@ extension Note_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.errors.isEmpty {
+      try visitor.visitSingularStringField(value: self.errors, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Note_BaseResponse, rhs: Note_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs.errors != rhs.errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -393,10 +377,11 @@ extension Note_Empty: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
 extension Note_UserNoteResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UserNoteResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "title"),
-    2: .same(proto: "content"),
-    3: .standard(proto: "note_type"),
-    4: .standard(proto: "created_at"),
+    1: .same(proto: "id"),
+    2: .same(proto: "title"),
+    3: .same(proto: "content"),
+    4: .standard(proto: "note_type"),
+    5: .standard(proto: "created_at"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -405,32 +390,37 @@ extension Note_UserNoteResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.title) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.content) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.noteType) }()
-      case 4: try { try decoder.decodeSingularInt64Field(value: &self.createdAt) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.title) }()
+      case 3: try { try decoder.decodeSingularBytesField(value: &self.content) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.noteType) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.createdAt) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
     if !self.title.isEmpty {
-      try visitor.visitSingularStringField(value: self.title, fieldNumber: 1)
+      try visitor.visitSingularStringField(value: self.title, fieldNumber: 2)
     }
     if !self.content.isEmpty {
-      try visitor.visitSingularBytesField(value: self.content, fieldNumber: 2)
+      try visitor.visitSingularBytesField(value: self.content, fieldNumber: 3)
     }
     if !self.noteType.isEmpty {
-      try visitor.visitSingularStringField(value: self.noteType, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.noteType, fieldNumber: 4)
     }
     if self.createdAt != 0 {
-      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 4)
+      try visitor.visitSingularInt64Field(value: self.createdAt, fieldNumber: 5)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Note_UserNoteResponse, rhs: Note_UserNoteResponse) -> Bool {
+    if lhs.id != rhs.id {return false}
     if lhs.title != rhs.title {return false}
     if lhs.content != rhs.content {return false}
     if lhs.noteType != rhs.noteType {return false}
@@ -463,7 +453,7 @@ extension Note_GetUserNotesResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
   public static let protoMessageName: String = _protobuf_package + ".GetUserNotesResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_notes"),
-    2: .standard(proto: "base_response"),
+    2: .same(proto: "errors"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -473,7 +463,7 @@ extension Note_GetUserNotesResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeRepeatedMessageField(value: &self.userNotes) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._baseResponse) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errors) }()
       default: break
       }
     }
@@ -483,15 +473,15 @@ extension Note_GetUserNotesResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.userNotes.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.userNotes, fieldNumber: 1)
     }
-    if let v = self._baseResponse {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.errors.isEmpty {
+      try visitor.visitSingularStringField(value: self.errors, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Note_GetUserNotesResponse, rhs: Note_GetUserNotesResponse) -> Bool {
     if lhs.userNotes != rhs.userNotes {return false}
-    if lhs._baseResponse != rhs._baseResponse {return false}
+    if lhs.errors != rhs.errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

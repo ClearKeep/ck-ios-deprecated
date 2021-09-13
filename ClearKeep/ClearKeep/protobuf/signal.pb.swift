@@ -42,20 +42,11 @@ public struct Signal_BaseResponse {
 
   public var success: Bool = false
 
-  public var errors: Signal_ErrorRes {
-    get {return _errors ?? Signal_ErrorRes()}
-    set {_errors = newValue}
-  }
-  /// Returns true if `errors` has been explicitly set.
-  public var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  public mutating func clearErrors() {self._errors = nil}
+  public var errors: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _errors: Signal_ErrorRes? = nil
 }
 
 /// ----- SIGNAL PEER TO PEER KEY -----
@@ -335,7 +326,7 @@ extension Signal_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errors) }()
       default: break
       }
     }
@@ -345,15 +336,15 @@ extension Signal_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.errors.isEmpty {
+      try visitor.visitSingularStringField(value: self.errors, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Signal_BaseResponse, rhs: Signal_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs.errors != rhs.errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

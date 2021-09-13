@@ -81,7 +81,9 @@ extension ChatService {
                     completion(false)
                     return
                 }
-//                self?.recipientDeviceId = UInt32(recipientResponse.deviceID)
+                
+                let prekey = response?.preKey.hexadecimal
+                let signkey = response?.signedPreKey.hexadecimal
                 
                 if let connectionDb = self?.connectionDb,
                    let myAccount = CKSignalCoordinate.shared.myAccount {
@@ -443,5 +445,15 @@ extension ChatService {
         RealmManager.shared.updateLastMessage(messageRecord)
         
         return messageRecord
+    }
+}
+
+extension Data {
+    
+    /// Hexadecimal string representation of `Data` object.
+    
+    var hexadecimal: String {
+        return map { String(format: "%02x", $0) }
+            .joined()
     }
 }

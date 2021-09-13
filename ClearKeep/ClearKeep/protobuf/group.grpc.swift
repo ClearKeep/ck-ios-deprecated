@@ -67,25 +67,20 @@ public protocol Group_GroupClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Group_AddMemberRequest, Group_BaseResponse>
 
-  func remove_member(
-    _ request: Group_RemoveMemberRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Group_RemoveMemberRequest, Group_BaseResponse>
-
   func leave_group(
     _ request: Group_LeaveGroupRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Group_LeaveGroupRequest, Group_GroupObjectResponse2>
+  ) -> UnaryCall<Group_LeaveGroupRequest, Group_BaseResponse>
 
   func workspace_add_member(
     _ request: Group_AddMemberWorkspaceRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>
 
-  func remove_member_workspace(
-    _ request: Group_RemoveMemberWorkspaceRequest,
+  func workspace_leave_group(
+    _ request: Group_WorkspaceLeaveGroupRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>
+  ) -> UnaryCall<Group_WorkspaceLeaveGroupRequest, Group_BaseResponse>
 }
 
 extension Group_GroupClientProtocol {
@@ -219,24 +214,6 @@ extension Group_GroupClientProtocol {
     )
   }
 
-  /// Unary call to remove_member
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to remove_member.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func remove_member(
-    _ request: Group_RemoveMemberRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Group_RemoveMemberRequest, Group_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/group.Group/remove_member",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeremove_memberInterceptors() ?? []
-    )
-  }
-
   /// Unary call to leave_group
   ///
   /// - Parameters:
@@ -246,7 +223,7 @@ extension Group_GroupClientProtocol {
   public func leave_group(
     _ request: Group_LeaveGroupRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Group_LeaveGroupRequest, Group_GroupObjectResponse2> {
+  ) -> UnaryCall<Group_LeaveGroupRequest, Group_BaseResponse> {
     return self.makeUnaryCall(
       path: "/group.Group/leave_group",
       request: request,
@@ -273,21 +250,21 @@ extension Group_GroupClientProtocol {
     )
   }
 
-  /// Unary call to remove_member_workspace
+  /// Unary call to workspace_leave_group
   ///
   /// - Parameters:
-  ///   - request: Request to send to remove_member_workspace.
+  ///   - request: Request to send to workspace_leave_group.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func remove_member_workspace(
-    _ request: Group_RemoveMemberWorkspaceRequest,
+  public func workspace_leave_group(
+    _ request: Group_WorkspaceLeaveGroupRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse> {
+  ) -> UnaryCall<Group_WorkspaceLeaveGroupRequest, Group_BaseResponse> {
     return self.makeUnaryCall(
-      path: "/group.Group/remove_member_workspace",
+      path: "/group.Group/workspace_leave_group",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeremove_member_workspaceInterceptors() ?? []
+      interceptors: self.interceptors?.makeworkspace_leave_groupInterceptors() ?? []
     )
   }
 }
@@ -315,17 +292,14 @@ public protocol Group_GroupClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'add_member'.
   func makeadd_memberInterceptors() -> [ClientInterceptor<Group_AddMemberRequest, Group_BaseResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'remove_member'.
-  func makeremove_memberInterceptors() -> [ClientInterceptor<Group_RemoveMemberRequest, Group_BaseResponse>]
-
   /// - Returns: Interceptors to use when invoking 'leave_group'.
-  func makeleave_groupInterceptors() -> [ClientInterceptor<Group_LeaveGroupRequest, Group_GroupObjectResponse2>]
+  func makeleave_groupInterceptors() -> [ClientInterceptor<Group_LeaveGroupRequest, Group_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'workspace_add_member'.
   func makeworkspace_add_memberInterceptors() -> [ClientInterceptor<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'remove_member_workspace'.
-  func makeremove_member_workspaceInterceptors() -> [ClientInterceptor<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>]
+  /// - Returns: Interceptors to use when invoking 'workspace_leave_group'.
+  func makeworkspace_leave_groupInterceptors() -> [ClientInterceptor<Group_WorkspaceLeaveGroupRequest, Group_BaseResponse>]
 }
 
 public final class Group_GroupClient: Group_GroupClientProtocol {
@@ -370,14 +344,12 @@ public protocol Group_GroupProvider: CallHandlerProvider {
 
   func add_member(request: Group_AddMemberRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
 
-  func remove_member(request: Group_RemoveMemberRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
-
-  func leave_group(request: Group_LeaveGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_GroupObjectResponse2>
+  func leave_group(request: Group_LeaveGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
 
   ///workspace call
   func workspace_add_member(request: Group_AddMemberWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_AddMemberWorkspaceResponse>
 
-  func remove_member_workspace(request: Group_RemoveMemberWorkspaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
+  func workspace_leave_group(request: Group_WorkspaceLeaveGroupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Group_BaseResponse>
 }
 
 extension Group_GroupProvider {
@@ -453,20 +425,11 @@ extension Group_GroupProvider {
         userFunction: self.add_member(request:context:)
       )
 
-    case "remove_member":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Group_RemoveMemberRequest>(),
-        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
-        interceptors: self.interceptors?.makeremove_memberInterceptors() ?? [],
-        userFunction: self.remove_member(request:context:)
-      )
-
     case "leave_group":
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Group_LeaveGroupRequest>(),
-        responseSerializer: ProtobufSerializer<Group_GroupObjectResponse2>(),
+        responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
         interceptors: self.interceptors?.makeleave_groupInterceptors() ?? [],
         userFunction: self.leave_group(request:context:)
       )
@@ -480,13 +443,13 @@ extension Group_GroupProvider {
         userFunction: self.workspace_add_member(request:context:)
       )
 
-    case "remove_member_workspace":
+    case "workspace_leave_group":
       return UnaryServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Group_RemoveMemberWorkspaceRequest>(),
+        requestDeserializer: ProtobufDeserializer<Group_WorkspaceLeaveGroupRequest>(),
         responseSerializer: ProtobufSerializer<Group_BaseResponse>(),
-        interceptors: self.interceptors?.makeremove_member_workspaceInterceptors() ?? [],
-        userFunction: self.remove_member_workspace(request:context:)
+        interceptors: self.interceptors?.makeworkspace_leave_groupInterceptors() ?? [],
+        userFunction: self.workspace_leave_group(request:context:)
       )
 
     default:
@@ -525,19 +488,15 @@ public protocol Group_GroupServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeadd_memberInterceptors() -> [ServerInterceptor<Group_AddMemberRequest, Group_BaseResponse>]
 
-  /// - Returns: Interceptors to use when handling 'remove_member'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeremove_memberInterceptors() -> [ServerInterceptor<Group_RemoveMemberRequest, Group_BaseResponse>]
-
   /// - Returns: Interceptors to use when handling 'leave_group'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeleave_groupInterceptors() -> [ServerInterceptor<Group_LeaveGroupRequest, Group_GroupObjectResponse2>]
+  func makeleave_groupInterceptors() -> [ServerInterceptor<Group_LeaveGroupRequest, Group_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'workspace_add_member'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeworkspace_add_memberInterceptors() -> [ServerInterceptor<Group_AddMemberWorkspaceRequest, Group_AddMemberWorkspaceResponse>]
 
-  /// - Returns: Interceptors to use when handling 'remove_member_workspace'.
+  /// - Returns: Interceptors to use when handling 'workspace_leave_group'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeremove_member_workspaceInterceptors() -> [ServerInterceptor<Group_RemoveMemberWorkspaceRequest, Group_BaseResponse>]
+  func makeworkspace_leave_groupInterceptors() -> [ServerInterceptor<Group_WorkspaceLeaveGroupRequest, Group_BaseResponse>]
 }

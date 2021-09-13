@@ -151,6 +151,11 @@ public struct Group_GroupObjectResponse {
     set {_uniqueStorage()._groupRtcToken = newValue}
   }
 
+  public var hasUnreadMessage_p: Bool {
+    get {return _storage._hasUnreadMessage_p}
+    set {_uniqueStorage()._hasUnreadMessage_p = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -180,20 +185,11 @@ public struct Group_BaseResponse {
 
   public var success: Bool = false
 
-  public var errors: Group_ErrorRes {
-    get {return _errors ?? Group_ErrorRes()}
-    set {_errors = newValue}
-  }
-  /// Returns true if `errors` has been explicitly set.
-  public var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  public mutating func clearErrors() {self._errors = nil}
+  public var errors: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _errors: Group_ErrorRes? = nil
 }
 
 /// Request: create group
@@ -369,138 +365,6 @@ public struct Group_AddMemberRequest {
   fileprivate var _addingMemberInfo: Group_MemberInfo? = nil
 }
 
-public struct Group_RemoveMemberRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var removedMemberInfo: Group_MemberInfo {
-    get {return _removedMemberInfo ?? Group_MemberInfo()}
-    set {_removedMemberInfo = newValue}
-  }
-  /// Returns true if `removedMemberInfo` has been explicitly set.
-  public var hasRemovedMemberInfo: Bool {return self._removedMemberInfo != nil}
-  /// Clears the value of `removedMemberInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearRemovedMemberInfo() {self._removedMemberInfo = nil}
-
-  public var removingMemberInfo: Group_MemberInfo {
-    get {return _removingMemberInfo ?? Group_MemberInfo()}
-    set {_removingMemberInfo = newValue}
-  }
-  /// Returns true if `removingMemberInfo` has been explicitly set.
-  public var hasRemovingMemberInfo: Bool {return self._removingMemberInfo != nil}
-  /// Clears the value of `removingMemberInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearRemovingMemberInfo() {self._removingMemberInfo = nil}
-
-  public var groupID: Int64 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _removedMemberInfo: Group_MemberInfo? = nil
-  fileprivate var _removingMemberInfo: Group_MemberInfo? = nil
-}
-
-public struct Group_LeaveGroupRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var memberInfo: Group_MemberInfo {
-    get {return _memberInfo ?? Group_MemberInfo()}
-    set {_memberInfo = newValue}
-  }
-  /// Returns true if `memberInfo` has been explicitly set.
-  public var hasMemberInfo: Bool {return self._memberInfo != nil}
-  /// Clears the value of `memberInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearMemberInfo() {self._memberInfo = nil}
-
-  public var groupID: Int64 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _memberInfo: Group_MemberInfo? = nil
-}
-
-public struct Group_GroupObjectResponse2 {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var groupID: Int64 {
-    get {return _storage._groupID}
-    set {_uniqueStorage()._groupID = newValue}
-  }
-
-  public var groupName: String {
-    get {return _storage._groupName}
-    set {_uniqueStorage()._groupName = newValue}
-  }
-
-  public var groupAvatar: String {
-    get {return _storage._groupAvatar}
-    set {_uniqueStorage()._groupAvatar = newValue}
-  }
-
-  public var groupType: String {
-    get {return _storage._groupType}
-    set {_uniqueStorage()._groupType = newValue}
-  }
-
-  public var lstClient: [Group_MemberInfo] {
-    get {return _storage._lstClient}
-    set {_uniqueStorage()._lstClient = newValue}
-  }
-
-  public var lastMessageAt: Int64 {
-    get {return _storage._lastMessageAt}
-    set {_uniqueStorage()._lastMessageAt = newValue}
-  }
-
-  public var lastMessage: Group_MessageObjectResponse {
-    get {return _storage._lastMessage ?? Group_MessageObjectResponse()}
-    set {_uniqueStorage()._lastMessage = newValue}
-  }
-  /// Returns true if `lastMessage` has been explicitly set.
-  public var hasLastMessage: Bool {return _storage._lastMessage != nil}
-  /// Clears the value of `lastMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearLastMessage() {_uniqueStorage()._lastMessage = nil}
-
-  public var createdByClientID: String {
-    get {return _storage._createdByClientID}
-    set {_uniqueStorage()._createdByClientID = newValue}
-  }
-
-  public var createdAt: Int64 {
-    get {return _storage._createdAt}
-    set {_uniqueStorage()._createdAt = newValue}
-  }
-
-  public var updatedByClientID: String {
-    get {return _storage._updatedByClientID}
-    set {_uniqueStorage()._updatedByClientID = newValue}
-  }
-
-  public var updatedAt: Int64 {
-    get {return _storage._updatedAt}
-    set {_uniqueStorage()._updatedAt = newValue}
-  }
-
-  public var groupRtcToken: String {
-    get {return _storage._groupRtcToken}
-    set {_uniqueStorage()._groupRtcToken = newValue}
-  }
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _storage = _StorageClass.defaultInstance
-}
-
 /// Request: join group
 public struct Group_JoinGroupRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -517,7 +381,6 @@ public struct Group_JoinGroupRequest {
 }
 
 /// Request: CreateGroupWorkspaceRequest
-/// Federation: server create group with client in other workspace
 public struct Group_CreateGroupWorkspaceRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -582,6 +445,7 @@ public struct Group_GroupInfo {
   public init() {}
 }
 
+/// Request: AddMemberWorkspaceRequest
 public struct Group_AddMemberWorkspaceRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -623,6 +487,7 @@ public struct Group_AddMemberWorkspaceRequest {
   fileprivate var _ownerGroup: Group_GroupInfo? = nil
 }
 
+/// Response: AddMemberWorkspaceRequest
 public struct Group_AddMemberWorkspaceResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -637,43 +502,80 @@ public struct Group_AddMemberWorkspaceResponse {
   public init() {}
 }
 
-public struct Group_RemoveMemberWorkspaceRequest {
+/// Request: LeaveGroupRequest
+public struct Group_LeaveGroupRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var fromWorkspaceDomain: String = String()
-
-  public var ownerWorkspaceDomain: String = String()
-
-  public var removedMemberInfo: Group_MemberInfo {
-    get {return _removedMemberInfo ?? Group_MemberInfo()}
-    set {_removedMemberInfo = newValue}
+  public var leaveMember: Group_MemberInfo {
+    get {return _leaveMember ?? Group_MemberInfo()}
+    set {_leaveMember = newValue}
   }
-  /// Returns true if `removedMemberInfo` has been explicitly set.
-  public var hasRemovedMemberInfo: Bool {return self._removedMemberInfo != nil}
-  /// Clears the value of `removedMemberInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearRemovedMemberInfo() {self._removedMemberInfo = nil}
+  /// Returns true if `leaveMember` has been explicitly set.
+  public var hasLeaveMember: Bool {return self._leaveMember != nil}
+  /// Clears the value of `leaveMember`. Subsequent reads from it will return its default value.
+  public mutating func clearLeaveMember() {self._leaveMember = nil}
 
-  public var removingMemberInfo: Group_MemberInfo {
-    get {return _removingMemberInfo ?? Group_MemberInfo()}
-    set {_removingMemberInfo = newValue}
+  public var leaveMemberBy: Group_MemberInfo {
+    get {return _leaveMemberBy ?? Group_MemberInfo()}
+    set {_leaveMemberBy = newValue}
   }
-  /// Returns true if `removingMemberInfo` has been explicitly set.
-  public var hasRemovingMemberInfo: Bool {return self._removingMemberInfo != nil}
-  /// Clears the value of `removingMemberInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearRemovingMemberInfo() {self._removingMemberInfo = nil}
+  /// Returns true if `leaveMemberBy` has been explicitly set.
+  public var hasLeaveMemberBy: Bool {return self._leaveMemberBy != nil}
+  /// Clears the value of `leaveMemberBy`. Subsequent reads from it will return its default value.
+  public mutating func clearLeaveMemberBy() {self._leaveMemberBy = nil}
 
-  public var ownerGroupID: Int64 = 0
-
-  public var groupClientsAfterRemoval: [Group_MemberInfo] = []
+  public var groupID: Int64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _removedMemberInfo: Group_MemberInfo? = nil
-  fileprivate var _removingMemberInfo: Group_MemberInfo? = nil
+  fileprivate var _leaveMember: Group_MemberInfo? = nil
+  fileprivate var _leaveMemberBy: Group_MemberInfo? = nil
+}
+
+/// Response: WorkspaceLeaveGroupRequest
+public struct Group_WorkspaceLeaveGroupRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var leaveMember: Group_MemberInfo {
+    get {return _leaveMember ?? Group_MemberInfo()}
+    set {_leaveMember = newValue}
+  }
+  /// Returns true if `leaveMember` has been explicitly set.
+  public var hasLeaveMember: Bool {return self._leaveMember != nil}
+  /// Clears the value of `leaveMember`. Subsequent reads from it will return its default value.
+  public mutating func clearLeaveMember() {self._leaveMember = nil}
+
+  public var leaveMemberBy: Group_MemberInfo {
+    get {return _leaveMemberBy ?? Group_MemberInfo()}
+    set {_leaveMemberBy = newValue}
+  }
+  /// Returns true if `leaveMemberBy` has been explicitly set.
+  public var hasLeaveMemberBy: Bool {return self._leaveMemberBy != nil}
+  /// Clears the value of `leaveMemberBy`. Subsequent reads from it will return its default value.
+  public mutating func clearLeaveMemberBy() {self._leaveMemberBy = nil}
+
+  public var ownerGroup: Group_GroupInfo {
+    get {return _ownerGroup ?? Group_GroupInfo()}
+    set {_ownerGroup = newValue}
+  }
+  /// Returns true if `ownerGroup` has been explicitly set.
+  public var hasOwnerGroup: Bool {return self._ownerGroup != nil}
+  /// Clears the value of `ownerGroup`. Subsequent reads from it will return its default value.
+  public mutating func clearOwnerGroup() {self._ownerGroup = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _leaveMember: Group_MemberInfo? = nil
+  fileprivate var _leaveMemberBy: Group_MemberInfo? = nil
+  fileprivate var _ownerGroup: Group_GroupInfo? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -869,6 +771,7 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     10: .standard(proto: "updated_by_client_id"),
     11: .standard(proto: "updated_at"),
     12: .standard(proto: "group_rtc_token"),
+    13: .standard(proto: "has_unread_message"),
   ]
 
   fileprivate class _StorageClass {
@@ -884,6 +787,7 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
     var _updatedByClientID: String = String()
     var _updatedAt: Int64 = 0
     var _groupRtcToken: String = String()
+    var _hasUnreadMessage_p: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -902,6 +806,7 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
       _updatedByClientID = source._updatedByClientID
       _updatedAt = source._updatedAt
       _groupRtcToken = source._groupRtcToken
+      _hasUnreadMessage_p = source._hasUnreadMessage_p
     }
   }
 
@@ -932,6 +837,7 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
         case 10: try { try decoder.decodeSingularStringField(value: &_storage._updatedByClientID) }()
         case 11: try { try decoder.decodeSingularInt64Field(value: &_storage._updatedAt) }()
         case 12: try { try decoder.decodeSingularStringField(value: &_storage._groupRtcToken) }()
+        case 13: try { try decoder.decodeSingularBoolField(value: &_storage._hasUnreadMessage_p) }()
         default: break
         }
       }
@@ -976,6 +882,9 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
       if !_storage._groupRtcToken.isEmpty {
         try visitor.visitSingularStringField(value: _storage._groupRtcToken, fieldNumber: 12)
       }
+      if _storage._hasUnreadMessage_p != false {
+        try visitor.visitSingularBoolField(value: _storage._hasUnreadMessage_p, fieldNumber: 13)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -997,6 +906,7 @@ extension Group_GroupObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._Messa
         if _storage._updatedByClientID != rhs_storage._updatedByClientID {return false}
         if _storage._updatedAt != rhs_storage._updatedAt {return false}
         if _storage._groupRtcToken != rhs_storage._groupRtcToken {return false}
+        if _storage._hasUnreadMessage_p != rhs_storage._hasUnreadMessage_p {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -1058,7 +968,7 @@ extension Group_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errors) }()
       default: break
       }
     }
@@ -1068,15 +978,15 @@ extension Group_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.errors.isEmpty {
+      try visitor.visitSingularStringField(value: self.errors, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Group_BaseResponse, rhs: Group_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs.errors != rhs.errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1486,240 +1396,6 @@ extension Group_AddMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Group_RemoveMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".RemoveMemberRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "removed_member_info"),
-    2: .standard(proto: "removing_member_info"),
-    3: .standard(proto: "group_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._removedMemberInfo) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._removingMemberInfo) }()
-      case 3: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._removedMemberInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }
-    if let v = self._removingMemberInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    }
-    if self.groupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Group_RemoveMemberRequest, rhs: Group_RemoveMemberRequest) -> Bool {
-    if lhs._removedMemberInfo != rhs._removedMemberInfo {return false}
-    if lhs._removingMemberInfo != rhs._removingMemberInfo {return false}
-    if lhs.groupID != rhs.groupID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Group_LeaveGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".LeaveGroupRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "member_info"),
-    2: .standard(proto: "group_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._memberInfo) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._memberInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }
-    if self.groupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Group_LeaveGroupRequest, rhs: Group_LeaveGroupRequest) -> Bool {
-    if lhs._memberInfo != rhs._memberInfo {return false}
-    if lhs.groupID != rhs.groupID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Group_GroupObjectResponse2: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".GroupObjectResponse2"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "group_id"),
-    2: .standard(proto: "group_name"),
-    3: .standard(proto: "group_avatar"),
-    4: .standard(proto: "group_type"),
-    5: .standard(proto: "lst_client"),
-    6: .standard(proto: "last_message_at"),
-    7: .standard(proto: "last_message"),
-    8: .standard(proto: "created_by_client_id"),
-    9: .standard(proto: "created_at"),
-    10: .standard(proto: "updated_by_client_id"),
-    11: .standard(proto: "updated_at"),
-    12: .standard(proto: "group_rtc_token"),
-  ]
-
-  fileprivate class _StorageClass {
-    var _groupID: Int64 = 0
-    var _groupName: String = String()
-    var _groupAvatar: String = String()
-    var _groupType: String = String()
-    var _lstClient: [Group_MemberInfo] = []
-    var _lastMessageAt: Int64 = 0
-    var _lastMessage: Group_MessageObjectResponse? = nil
-    var _createdByClientID: String = String()
-    var _createdAt: Int64 = 0
-    var _updatedByClientID: String = String()
-    var _updatedAt: Int64 = 0
-    var _groupRtcToken: String = String()
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _groupID = source._groupID
-      _groupName = source._groupName
-      _groupAvatar = source._groupAvatar
-      _groupType = source._groupType
-      _lstClient = source._lstClient
-      _lastMessageAt = source._lastMessageAt
-      _lastMessage = source._lastMessage
-      _createdByClientID = source._createdByClientID
-      _createdAt = source._createdAt
-      _updatedByClientID = source._updatedByClientID
-      _updatedAt = source._updatedAt
-      _groupRtcToken = source._groupRtcToken
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularInt64Field(value: &_storage._groupID) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._groupName) }()
-        case 3: try { try decoder.decodeSingularStringField(value: &_storage._groupAvatar) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._groupType) }()
-        case 5: try { try decoder.decodeRepeatedMessageField(value: &_storage._lstClient) }()
-        case 6: try { try decoder.decodeSingularInt64Field(value: &_storage._lastMessageAt) }()
-        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._lastMessage) }()
-        case 8: try { try decoder.decodeSingularStringField(value: &_storage._createdByClientID) }()
-        case 9: try { try decoder.decodeSingularInt64Field(value: &_storage._createdAt) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._updatedByClientID) }()
-        case 11: try { try decoder.decodeSingularInt64Field(value: &_storage._updatedAt) }()
-        case 12: try { try decoder.decodeSingularStringField(value: &_storage._groupRtcToken) }()
-        default: break
-        }
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if _storage._groupID != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._groupID, fieldNumber: 1)
-      }
-      if !_storage._groupName.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupName, fieldNumber: 2)
-      }
-      if !_storage._groupAvatar.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupAvatar, fieldNumber: 3)
-      }
-      if !_storage._groupType.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupType, fieldNumber: 4)
-      }
-      if !_storage._lstClient.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._lstClient, fieldNumber: 5)
-      }
-      if _storage._lastMessageAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._lastMessageAt, fieldNumber: 6)
-      }
-      if let v = _storage._lastMessage {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-      }
-      if !_storage._createdByClientID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._createdByClientID, fieldNumber: 8)
-      }
-      if _storage._createdAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._createdAt, fieldNumber: 9)
-      }
-      if !_storage._updatedByClientID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._updatedByClientID, fieldNumber: 10)
-      }
-      if _storage._updatedAt != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._updatedAt, fieldNumber: 11)
-      }
-      if !_storage._groupRtcToken.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._groupRtcToken, fieldNumber: 12)
-      }
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Group_GroupObjectResponse2, rhs: Group_GroupObjectResponse2) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._groupID != rhs_storage._groupID {return false}
-        if _storage._groupName != rhs_storage._groupName {return false}
-        if _storage._groupAvatar != rhs_storage._groupAvatar {return false}
-        if _storage._groupType != rhs_storage._groupType {return false}
-        if _storage._lstClient != rhs_storage._lstClient {return false}
-        if _storage._lastMessageAt != rhs_storage._lastMessageAt {return false}
-        if _storage._lastMessage != rhs_storage._lastMessage {return false}
-        if _storage._createdByClientID != rhs_storage._createdByClientID {return false}
-        if _storage._createdAt != rhs_storage._createdAt {return false}
-        if _storage._updatedByClientID != rhs_storage._updatedByClientID {return false}
-        if _storage._updatedAt != rhs_storage._updatedAt {return false}
-        if _storage._groupRtcToken != rhs_storage._groupRtcToken {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Group_JoinGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".JoinGroupRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -2020,15 +1696,12 @@ extension Group_AddMemberWorkspaceResponse: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Group_RemoveMemberWorkspaceRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".RemoveMemberWorkspaceRequest"
+extension Group_LeaveGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".LeaveGroupRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "from_workspace_domain"),
-    2: .standard(proto: "owner_workspace_domain"),
-    3: .standard(proto: "removed_member_info"),
-    4: .standard(proto: "removing_member_info"),
-    5: .standard(proto: "owner_group_id"),
-    6: .standard(proto: "group_clients_after_removal"),
+    1: .standard(proto: "leave_member"),
+    2: .standard(proto: "leave_member_by"),
+    3: .standard(proto: "group_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2037,46 +1710,75 @@ extension Group_RemoveMemberWorkspaceRequest: SwiftProtobuf.Message, SwiftProtob
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.fromWorkspaceDomain) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.ownerWorkspaceDomain) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._removedMemberInfo) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._removingMemberInfo) }()
-      case 5: try { try decoder.decodeSingularInt64Field(value: &self.ownerGroupID) }()
-      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.groupClientsAfterRemoval) }()
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._leaveMember) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._leaveMemberBy) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.groupID) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.fromWorkspaceDomain.isEmpty {
-      try visitor.visitSingularStringField(value: self.fromWorkspaceDomain, fieldNumber: 1)
+    if let v = self._leaveMember {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     }
-    if !self.ownerWorkspaceDomain.isEmpty {
-      try visitor.visitSingularStringField(value: self.ownerWorkspaceDomain, fieldNumber: 2)
+    if let v = self._leaveMemberBy {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }
-    if let v = self._removedMemberInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }
-    if let v = self._removingMemberInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    }
-    if self.ownerGroupID != 0 {
-      try visitor.visitSingularInt64Field(value: self.ownerGroupID, fieldNumber: 5)
-    }
-    if !self.groupClientsAfterRemoval.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.groupClientsAfterRemoval, fieldNumber: 6)
+    if self.groupID != 0 {
+      try visitor.visitSingularInt64Field(value: self.groupID, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Group_RemoveMemberWorkspaceRequest, rhs: Group_RemoveMemberWorkspaceRequest) -> Bool {
-    if lhs.fromWorkspaceDomain != rhs.fromWorkspaceDomain {return false}
-    if lhs.ownerWorkspaceDomain != rhs.ownerWorkspaceDomain {return false}
-    if lhs._removedMemberInfo != rhs._removedMemberInfo {return false}
-    if lhs._removingMemberInfo != rhs._removingMemberInfo {return false}
-    if lhs.ownerGroupID != rhs.ownerGroupID {return false}
-    if lhs.groupClientsAfterRemoval != rhs.groupClientsAfterRemoval {return false}
+  public static func ==(lhs: Group_LeaveGroupRequest, rhs: Group_LeaveGroupRequest) -> Bool {
+    if lhs._leaveMember != rhs._leaveMember {return false}
+    if lhs._leaveMemberBy != rhs._leaveMemberBy {return false}
+    if lhs.groupID != rhs.groupID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Group_WorkspaceLeaveGroupRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".WorkspaceLeaveGroupRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "leave_member"),
+    2: .standard(proto: "leave_member_by"),
+    3: .standard(proto: "owner_group"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._leaveMember) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._leaveMemberBy) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._ownerGroup) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._leaveMember {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if let v = self._leaveMemberBy {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
+    if let v = self._ownerGroup {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Group_WorkspaceLeaveGroupRequest, rhs: Group_WorkspaceLeaveGroupRequest) -> Bool {
+    if lhs._leaveMember != rhs._leaveMember {return false}
+    if lhs._leaveMemberBy != rhs._leaveMemberBy {return false}
+    if lhs._ownerGroup != rhs._ownerGroup {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

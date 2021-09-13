@@ -178,3 +178,20 @@ fileprivate struct SectionGroupView<Destination>: View where Destination: View {
         }
     }
 }
+
+struct ListGroupView_Previews: PreviewProvider {
+    static var previews: some View {
+        ListGroupView(titleSection: "testssss", groups: [GroupModel(groupID: 123, groupName: "test", groupToken: "ddsfsfs", groupAvatar: "", groupType: "peer", createdByClientID: "123", createdAt: 1234567, updatedByClientID: "fsfsf", updatedAt: 123456, idLastMessage: "", timeSyncMessage: 123456)], createNewGroup: PeopleView()) { group in
+            MessagerView(clientId: "id", groupId: group.groupID, userName: "tes1t", workspace_domain: "54.235.68.160:25000")
+        } content: { group in
+            HStack {
+                ChannelUserAvatar(avatarSize: 24, statusSize: 8, text: "", font: AppTheme.fonts.linkSmall.font, image: nil, status: .none, gradientBackgroundType: .accent)
+                
+                Text("test")
+                    .font(AppTheme.fonts.linkSmall.font)
+                    .foregroundColor(AppTheme.colors.gray1.color)
+            }
+        }
+
+    }
+}

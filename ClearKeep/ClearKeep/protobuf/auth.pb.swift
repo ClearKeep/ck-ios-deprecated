@@ -42,20 +42,11 @@ public struct Auth_BaseResponse {
 
   public var success: Bool = false
 
-  public var error: Auth_ErrorRes {
-    get {return _error ?? Auth_ErrorRes()}
-    set {_error = newValue}
-  }
-  /// Returns true if `error` has been explicitly set.
-  public var hasError: Bool {return self._error != nil}
-  /// Clears the value of `error`. Subsequent reads from it will return its default value.
-  public mutating func clearError() {self._error = nil}
+  public var error: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _error: Auth_ErrorRes? = nil
 }
 
 ///Login message struct
@@ -172,20 +163,13 @@ public struct Auth_RegisterRes {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var baseResponse: Auth_BaseResponse {
-    get {return _baseResponse ?? Auth_BaseResponse()}
-    set {_baseResponse = newValue}
-  }
-  /// Returns true if `baseResponse` has been explicitly set.
-  public var hasBaseResponse: Bool {return self._baseResponse != nil}
-  /// Clears the value of `baseResponse`. Subsequent reads from it will return its default value.
-  public mutating func clearBaseResponse() {self._baseResponse = nil}
+  public var success: Bool = false
+
+  public var error: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _baseResponse: Auth_BaseResponse? = nil
 }
 
 ///Login Google message struct
@@ -336,7 +320,7 @@ extension Auth_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._error) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.error) }()
       default: break
       }
     }
@@ -346,15 +330,15 @@ extension Auth_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._error {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Auth_BaseResponse, rhs: Auth_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._error != rhs._error {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -661,7 +645,8 @@ extension Auth_RegisterReq: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 extension Auth_RegisterRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".RegisterRes"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "base_response"),
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -670,21 +655,26 @@ extension Auth_RegisterRes: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._baseResponse) }()
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.error) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._baseResponse {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Auth_RegisterRes, rhs: Auth_RegisterRes) -> Bool {
-    if lhs._baseResponse != rhs._baseResponse {return false}
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

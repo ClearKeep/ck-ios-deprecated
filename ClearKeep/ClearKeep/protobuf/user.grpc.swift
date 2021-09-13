@@ -40,10 +40,30 @@ public protocol User_UserClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<User_UpdateProfileRequest, User_BaseResponse>
 
+  func upload_avatar(
+    _ request: User_UploadAvatarRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_UploadAvatarRequest, User_UploadAvatarResponse>
+
   func change_password(
     _ request: User_ChangePasswordRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<User_ChangePasswordRequest, User_BaseResponse>
+
+  func update_status(
+    _ request: User_SetUserStatusRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_SetUserStatusRequest, User_BaseResponse>
+
+  func ping_request(
+    _ request: User_PingRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_PingRequest, User_BaseResponse>
+
+  func get_clients_status(
+    _ request: User_GetClientsStatusRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_GetClientsStatusRequest, User_GetClientsStatusResponse>
 
   func get_user_info(
     _ request: User_GetUserRequest,
@@ -59,6 +79,36 @@ public protocol User_UserClientProtocol: GRPCClient {
     _ request: User_Empty,
     callOptions: CallOptions?
   ) -> UnaryCall<User_Empty, User_GetUsersResponse>
+
+  func get_mfa_state(
+    _ request: User_MfaGetStateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaGetStateRequest, User_MfaStateResponse>
+
+  func enable_mfa(
+    _ request: User_MfaChangingStateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaChangingStateRequest, User_MfaBaseResponse>
+
+  func disable_mfa(
+    _ request: User_MfaChangingStateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaChangingStateRequest, User_MfaBaseResponse>
+
+  func mfa_validate_password(
+    _ request: User_MfaValidatePasswordRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaValidatePasswordRequest, User_MfaBaseResponse>
+
+  func mfa_validate_otp(
+    _ request: User_MfaValidateOtpRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaValidateOtpRequest, User_MfaBaseResponse>
+
+  func mfa_resend_otp(
+    _ request: User_MfaResendOtpRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<User_MfaResendOtpRequest, User_MfaBaseResponse>
 }
 
 extension User_UserClientProtocol {
@@ -67,6 +117,7 @@ extension User_UserClientProtocol {
   }
 
   ///----- FROM MY ACCOUNT -----
+  /// => profile api
   ///
   /// - Parameters:
   ///   - request: Request to send to get_profile.
@@ -102,6 +153,24 @@ extension User_UserClientProtocol {
     )
   }
 
+  /// Unary call to upload_avatar
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to upload_avatar.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func upload_avatar(
+    _ request: User_UploadAvatarRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_UploadAvatarRequest, User_UploadAvatarResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/upload_avatar",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupload_avatarInterceptors() ?? []
+    )
+  }
+
   /// Unary call to change_password
   ///
   /// - Parameters:
@@ -117,6 +186,60 @@ extension User_UserClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makechange_passwordInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to update_status
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to update_status.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func update_status(
+    _ request: User_SetUserStatusRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_SetUserStatusRequest, User_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/update_status",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeupdate_statusInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ping_request
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ping_request.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func ping_request(
+    _ request: User_PingRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_PingRequest, User_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/ping_request",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeping_requestInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to get_clients_status
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to get_clients_status.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func get_clients_status(
+    _ request: User_GetClientsStatusRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_GetClientsStatusRequest, User_GetClientsStatusResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/get_clients_status",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_clients_statusInterceptors() ?? []
     )
   }
 
@@ -173,6 +296,114 @@ extension User_UserClientProtocol {
       interceptors: self.interceptors?.makeget_usersInterceptors() ?? []
     )
   }
+
+  ///----- MFA ENABLE FLOW -----
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to get_mfa_state.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func get_mfa_state(
+    _ request: User_MfaGetStateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaGetStateRequest, User_MfaStateResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/get_mfa_state",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeget_mfa_stateInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to enable_mfa
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to enable_mfa.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func enable_mfa(
+    _ request: User_MfaChangingStateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaChangingStateRequest, User_MfaBaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/enable_mfa",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeenable_mfaInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to disable_mfa
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to disable_mfa.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func disable_mfa(
+    _ request: User_MfaChangingStateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaChangingStateRequest, User_MfaBaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/disable_mfa",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makedisable_mfaInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to mfa_validate_password
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to mfa_validate_password.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func mfa_validate_password(
+    _ request: User_MfaValidatePasswordRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaValidatePasswordRequest, User_MfaBaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/mfa_validate_password",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makemfa_validate_passwordInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to mfa_validate_otp
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to mfa_validate_otp.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func mfa_validate_otp(
+    _ request: User_MfaValidateOtpRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaValidateOtpRequest, User_MfaBaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/mfa_validate_otp",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makemfa_validate_otpInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to mfa_resend_otp
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to mfa_resend_otp.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func mfa_resend_otp(
+    _ request: User_MfaResendOtpRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<User_MfaResendOtpRequest, User_MfaBaseResponse> {
+    return self.makeUnaryCall(
+      path: "/user.User/mfa_resend_otp",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makemfa_resend_otpInterceptors() ?? []
+    )
+  }
 }
 
 public protocol User_UserClientInterceptorFactoryProtocol {
@@ -183,8 +414,20 @@ public protocol User_UserClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'update_profile'.
   func makeupdate_profileInterceptors() -> [ClientInterceptor<User_UpdateProfileRequest, User_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'upload_avatar'.
+  func makeupload_avatarInterceptors() -> [ClientInterceptor<User_UploadAvatarRequest, User_UploadAvatarResponse>]
+
   /// - Returns: Interceptors to use when invoking 'change_password'.
   func makechange_passwordInterceptors() -> [ClientInterceptor<User_ChangePasswordRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'update_status'.
+  func makeupdate_statusInterceptors() -> [ClientInterceptor<User_SetUserStatusRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'ping_request'.
+  func makeping_requestInterceptors() -> [ClientInterceptor<User_PingRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_clients_status'.
+  func makeget_clients_statusInterceptors() -> [ClientInterceptor<User_GetClientsStatusRequest, User_GetClientsStatusResponse>]
 
   /// - Returns: Interceptors to use when invoking 'get_user_info'.
   func makeget_user_infoInterceptors() -> [ClientInterceptor<User_GetUserRequest, User_UserInfoResponse>]
@@ -194,6 +437,24 @@ public protocol User_UserClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'get_users'.
   func makeget_usersInterceptors() -> [ClientInterceptor<User_Empty, User_GetUsersResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'get_mfa_state'.
+  func makeget_mfa_stateInterceptors() -> [ClientInterceptor<User_MfaGetStateRequest, User_MfaStateResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'enable_mfa'.
+  func makeenable_mfaInterceptors() -> [ClientInterceptor<User_MfaChangingStateRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'disable_mfa'.
+  func makedisable_mfaInterceptors() -> [ClientInterceptor<User_MfaChangingStateRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'mfa_validate_password'.
+  func makemfa_validate_passwordInterceptors() -> [ClientInterceptor<User_MfaValidatePasswordRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'mfa_validate_otp'.
+  func makemfa_validate_otpInterceptors() -> [ClientInterceptor<User_MfaValidateOtpRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'mfa_resend_otp'.
+  func makemfa_resend_otpInterceptors() -> [ClientInterceptor<User_MfaResendOtpRequest, User_MfaBaseResponse>]
 }
 
 public final class User_UserClient: User_UserClientProtocol {
@@ -223,11 +484,20 @@ public protocol User_UserProvider: CallHandlerProvider {
   var interceptors: User_UserServerInterceptorFactoryProtocol? { get }
 
   ///----- FROM MY ACCOUNT -----
+  /// => profile api
   func get_profile(request: User_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<User_UserProfileResponse>
 
   func update_profile(request: User_UpdateProfileRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
 
+  func upload_avatar(request: User_UploadAvatarRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_UploadAvatarResponse>
+
   func change_password(request: User_ChangePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
+
+  func update_status(request: User_SetUserStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
+
+  func ping_request(request: User_PingRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_BaseResponse>
+
+  func get_clients_status(request: User_GetClientsStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_GetClientsStatusResponse>
 
   ///----- FROM OTHER ACCOUNT -----
   func get_user_info(request: User_GetUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_UserInfoResponse>
@@ -235,6 +505,19 @@ public protocol User_UserProvider: CallHandlerProvider {
   func search_user(request: User_SearchUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_SearchUserResponse>
 
   func get_users(request: User_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<User_GetUsersResponse>
+
+  ///----- MFA ENABLE FLOW -----
+  func get_mfa_state(request: User_MfaGetStateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaStateResponse>
+
+  func enable_mfa(request: User_MfaChangingStateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaBaseResponse>
+
+  func disable_mfa(request: User_MfaChangingStateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaBaseResponse>
+
+  func mfa_validate_password(request: User_MfaValidatePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaBaseResponse>
+
+  func mfa_validate_otp(request: User_MfaValidateOtpRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaBaseResponse>
+
+  func mfa_resend_otp(request: User_MfaResendOtpRequest, context: StatusOnlyCallContext) -> EventLoopFuture<User_MfaBaseResponse>
 }
 
 extension User_UserProvider {
@@ -265,6 +548,15 @@ extension User_UserProvider {
         userFunction: self.update_profile(request:context:)
       )
 
+    case "upload_avatar":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_UploadAvatarRequest>(),
+        responseSerializer: ProtobufSerializer<User_UploadAvatarResponse>(),
+        interceptors: self.interceptors?.makeupload_avatarInterceptors() ?? [],
+        userFunction: self.upload_avatar(request:context:)
+      )
+
     case "change_password":
       return UnaryServerHandler(
         context: context,
@@ -272,6 +564,33 @@ extension User_UserProvider {
         responseSerializer: ProtobufSerializer<User_BaseResponse>(),
         interceptors: self.interceptors?.makechange_passwordInterceptors() ?? [],
         userFunction: self.change_password(request:context:)
+      )
+
+    case "update_status":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_SetUserStatusRequest>(),
+        responseSerializer: ProtobufSerializer<User_BaseResponse>(),
+        interceptors: self.interceptors?.makeupdate_statusInterceptors() ?? [],
+        userFunction: self.update_status(request:context:)
+      )
+
+    case "ping_request":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_PingRequest>(),
+        responseSerializer: ProtobufSerializer<User_BaseResponse>(),
+        interceptors: self.interceptors?.makeping_requestInterceptors() ?? [],
+        userFunction: self.ping_request(request:context:)
+      )
+
+    case "get_clients_status":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_GetClientsStatusRequest>(),
+        responseSerializer: ProtobufSerializer<User_GetClientsStatusResponse>(),
+        interceptors: self.interceptors?.makeget_clients_statusInterceptors() ?? [],
+        userFunction: self.get_clients_status(request:context:)
       )
 
     case "get_user_info":
@@ -301,6 +620,60 @@ extension User_UserProvider {
         userFunction: self.get_users(request:context:)
       )
 
+    case "get_mfa_state":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaGetStateRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaStateResponse>(),
+        interceptors: self.interceptors?.makeget_mfa_stateInterceptors() ?? [],
+        userFunction: self.get_mfa_state(request:context:)
+      )
+
+    case "enable_mfa":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaChangingStateRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaBaseResponse>(),
+        interceptors: self.interceptors?.makeenable_mfaInterceptors() ?? [],
+        userFunction: self.enable_mfa(request:context:)
+      )
+
+    case "disable_mfa":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaChangingStateRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaBaseResponse>(),
+        interceptors: self.interceptors?.makedisable_mfaInterceptors() ?? [],
+        userFunction: self.disable_mfa(request:context:)
+      )
+
+    case "mfa_validate_password":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaValidatePasswordRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaBaseResponse>(),
+        interceptors: self.interceptors?.makemfa_validate_passwordInterceptors() ?? [],
+        userFunction: self.mfa_validate_password(request:context:)
+      )
+
+    case "mfa_validate_otp":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaValidateOtpRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaBaseResponse>(),
+        interceptors: self.interceptors?.makemfa_validate_otpInterceptors() ?? [],
+        userFunction: self.mfa_validate_otp(request:context:)
+      )
+
+    case "mfa_resend_otp":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<User_MfaResendOtpRequest>(),
+        responseSerializer: ProtobufSerializer<User_MfaBaseResponse>(),
+        interceptors: self.interceptors?.makemfa_resend_otpInterceptors() ?? [],
+        userFunction: self.mfa_resend_otp(request:context:)
+      )
+
     default:
       return nil
     }
@@ -317,9 +690,25 @@ public protocol User_UserServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeupdate_profileInterceptors() -> [ServerInterceptor<User_UpdateProfileRequest, User_BaseResponse>]
 
+  /// - Returns: Interceptors to use when handling 'upload_avatar'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupload_avatarInterceptors() -> [ServerInterceptor<User_UploadAvatarRequest, User_UploadAvatarResponse>]
+
   /// - Returns: Interceptors to use when handling 'change_password'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makechange_passwordInterceptors() -> [ServerInterceptor<User_ChangePasswordRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'update_status'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeupdate_statusInterceptors() -> [ServerInterceptor<User_SetUserStatusRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'ping_request'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeping_requestInterceptors() -> [ServerInterceptor<User_PingRequest, User_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_clients_status'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_clients_statusInterceptors() -> [ServerInterceptor<User_GetClientsStatusRequest, User_GetClientsStatusResponse>]
 
   /// - Returns: Interceptors to use when handling 'get_user_info'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -332,4 +721,28 @@ public protocol User_UserServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'get_users'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeget_usersInterceptors() -> [ServerInterceptor<User_Empty, User_GetUsersResponse>]
+
+  /// - Returns: Interceptors to use when handling 'get_mfa_state'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeget_mfa_stateInterceptors() -> [ServerInterceptor<User_MfaGetStateRequest, User_MfaStateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'enable_mfa'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeenable_mfaInterceptors() -> [ServerInterceptor<User_MfaChangingStateRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'disable_mfa'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makedisable_mfaInterceptors() -> [ServerInterceptor<User_MfaChangingStateRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'mfa_validate_password'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makemfa_validate_passwordInterceptors() -> [ServerInterceptor<User_MfaValidatePasswordRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'mfa_validate_otp'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makemfa_validate_otpInterceptors() -> [ServerInterceptor<User_MfaValidateOtpRequest, User_MfaBaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'mfa_resend_otp'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makemfa_resend_otpInterceptors() -> [ServerInterceptor<User_MfaResendOtpRequest, User_MfaBaseResponse>]
 }

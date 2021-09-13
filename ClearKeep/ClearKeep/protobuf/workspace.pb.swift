@@ -42,20 +42,11 @@ public struct Workspace_BaseResponse {
 
   public var success: Bool = false
 
-  public var errors: Workspace_ErrorRes {
-    get {return _errors ?? Workspace_ErrorRes()}
-    set {_errors = newValue}
-  }
-  /// Returns true if `errors` has been explicitly set.
-  public var hasErrors: Bool {return self._errors != nil}
-  /// Clears the value of `errors`. Subsequent reads from it will return its default value.
-  public mutating func clearErrors() {self._errors = nil}
+  public var errors: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _errors: Workspace_ErrorRes? = nil
 }
 
 /// Request: get workspace info
@@ -66,31 +57,17 @@ public struct Workspace_WorkspaceInfoRequest {
 
   public var workspaceDomain: String = String()
 
-  public var baseResponse: Workspace_BaseResponse {
-    get {return _baseResponse ?? Workspace_BaseResponse()}
-    set {_baseResponse = newValue}
-  }
-  /// Returns true if `baseResponse` has been explicitly set.
-  public var hasBaseResponse: Bool {return self._baseResponse != nil}
-  /// Clears the value of `baseResponse`. Subsequent reads from it will return its default value.
-  public mutating func clearBaseResponse() {self._baseResponse = nil}
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _baseResponse: Workspace_BaseResponse? = nil
 }
 
-/// Response: workspace info response
-public struct Workspace_WorkspaceObjectResponse {
+public struct Workspace_WorkspaceInfoResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var workspaceDomain: String = String()
-
-  public var isDefaultWorkspace: Bool = false
+  public var error: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -164,7 +141,7 @@ extension Workspace_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self.success) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._errors) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errors) }()
       default: break
       }
     }
@@ -174,15 +151,15 @@ extension Workspace_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if self.success != false {
       try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
     }
-    if let v = self._errors {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if !self.errors.isEmpty {
+      try visitor.visitSingularStringField(value: self.errors, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Workspace_BaseResponse, rhs: Workspace_BaseResponse) -> Bool {
     if lhs.success != rhs.success {return false}
-    if lhs._errors != rhs._errors {return false}
+    if lhs.errors != rhs.errors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -192,7 +169,6 @@ extension Workspace_WorkspaceInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._
   public static let protoMessageName: String = _protobuf_package + ".WorkspaceInfoRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "workspace_domain"),
-    2: .standard(proto: "base_response"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -202,7 +178,6 @@ extension Workspace_WorkspaceInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._baseResponse) }()
       default: break
       }
     }
@@ -211,26 +186,21 @@ extension Workspace_WorkspaceInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.workspaceDomain.isEmpty {
       try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
-    }
-    if let v = self._baseResponse {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Workspace_WorkspaceInfoRequest, rhs: Workspace_WorkspaceInfoRequest) -> Bool {
     if lhs.workspaceDomain != rhs.workspaceDomain {return false}
-    if lhs._baseResponse != rhs._baseResponse {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Workspace_WorkspaceObjectResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".WorkspaceObjectResponse"
+extension Workspace_WorkspaceInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".WorkspaceInfoResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "workspace_domain"),
-    2: .standard(proto: "is_default_workspace"),
+    1: .same(proto: "error"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -239,26 +209,21 @@ extension Workspace_WorkspaceObjectResponse: SwiftProtobuf.Message, SwiftProtobu
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.workspaceDomain) }()
-      case 2: try { try decoder.decodeSingularBoolField(value: &self.isDefaultWorkspace) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.error) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.workspaceDomain.isEmpty {
-      try visitor.visitSingularStringField(value: self.workspaceDomain, fieldNumber: 1)
-    }
-    if self.isDefaultWorkspace != false {
-      try visitor.visitSingularBoolField(value: self.isDefaultWorkspace, fieldNumber: 2)
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Workspace_WorkspaceObjectResponse, rhs: Workspace_WorkspaceObjectResponse) -> Bool {
-    if lhs.workspaceDomain != rhs.workspaceDomain {return false}
-    if lhs.isDefaultWorkspace != rhs.isDefaultWorkspace {return false}
+  public static func ==(lhs: Workspace_WorkspaceInfoResponse, rhs: Workspace_WorkspaceInfoResponse) -> Bool {
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
